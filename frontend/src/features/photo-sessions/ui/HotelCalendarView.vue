@@ -342,7 +342,109 @@ function getInitialCalendarView(): string {
   return isMobileView ? 'listWeek' : 'timeGridWeek'
 }
 
+interface ExtendedEventProps {
+  type?: 'session' | 'sale'
+  rawSession?: SesionFotografica
+  rawSale?: CitaVenta
+  paxStr?: string
+  [key: string]: unknown
+}
+
+interface EventTooltipInfo {
+  hotelNombre: string
+  fotografoPrimerNombre: string
+  fotografoNombreCompleto: string
+  fotografoNombre?: string | null
+  fotografoApellidos?: string | null
+  fotografoImagen?: string | null
+  fotografoColor?: string | null
+  fechaCabecera: string
+  habitacion: string
+  clienteNombre: string
+  checkout: string
+  fechaCitaVenta: string
+  adultosYNinos: string
+  telefono: string
+  email: string
+  agendadoPor: string
+  type: 'session' | 'sale'
+  rawSession?: SesionFotografica
+  rawSale?: CitaVenta
+}
+
+type DeletableCalendarEvent = EventApi | EventTooltipInfo | ExtendedEventProps
+
+function getAssociatedEventId(
+  event: EventApi | { id?: string; extendedProps?: ExtendedEventProps },
+): string | null {
+  const extendedProps = event.extendedProps
+  if (!extendedProps) return null
+
+  if (extendedProps.type === 'session' && extendedProps.rawSession) {
+    const rawSession = extendedProps.rawSession
+    if (rawSession.citaVenta?.id) {
+      return `sale-${rawSession.citaVenta.id}`
+    }
+    const matchedSale = saleStore.citasVenta.find(
+      (c) => Number(c.sesionId) === Number(rawSession.id),
+    )
+    if (matchedSale?.id) {
+      return `sale-${matchedSale.id}`
+    }
+  } else if (extendedProps.type === 'sale' && extendedProps.rawSale) {
+    const rawSale = extendedProps.rawSale
+    if (rawSale.sesionId) {
+      return `session-${rawSale.sesionId}`
+    }
+    const matchedSession = sessionStore.sessions.find(
+      (s) => s.citaVenta && Number(s.citaVenta.id) === Number(rawSale.id),
+    )
+    if (matchedSession?.id) {
+      return `session-${matchedSession.id}`
+    }
+  }
+
+  return null
+}
+
+function highlightEventAndAssociated(hoveredEvent: EventApi) {
+  const hoveredId = hoveredEvent.id
+  const associatedId = getAssociatedEventId(hoveredEvent)
+
+  const calendarEl = calendarRef.value?.getApi()?.el || document.querySelector('.calendar-card')
+  if (!calendarEl) return
+
+  const allEventEls = calendarEl.querySelectorAll<HTMLElement>('.fc-event')
+  allEventEls.forEach((el) => {
+    const eventId =
+      el.getAttribute('data-fc-event-id') ||
+      el.querySelector('.jj-event-card-content')?.getAttribute('data-event-id')
+
+    if (eventId === hoveredId) {
+      el.classList.add('fc-event-hovered')
+      el.classList.remove('fc-event-dimmed', 'fc-event-associated')
+    } else if (associatedId && eventId === associatedId) {
+      el.classList.add('fc-event-associated')
+      el.classList.remove('fc-event-dimmed', 'fc-event-hovered')
+    } else {
+      el.classList.add('fc-event-dimmed')
+      el.classList.remove('fc-event-hovered', 'fc-event-associated')
+    }
+  })
+}
+
+function clearEventHighlights() {
+  const calendarEl = calendarRef.value?.getApi()?.el || document.querySelector('.calendar-card')
+  if (!calendarEl) return
+
+  const allEventEls = calendarEl.querySelectorAll<HTMLElement>('.fc-event')
+  allEventEls.forEach((el) => {
+    el.classList.remove('fc-event-dimmed', 'fc-event-hovered', 'fc-event-associated')
+  })
+}
+
 function handleDatesSet(dateInfo: DatesSetArg) {
+  clearEventHighlights()
   if (dateInfo.view?.type) {
     localStorage.setItem(CALENDAR_VIEW_STORAGE_KEY, dateInfo.view.type)
   }
@@ -400,6 +502,15 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   height: 'auto',
   select: handleDateSelect,
   eventClick: handleEventClick,
+  eventDidMount: (info) => {
+    info.el.setAttribute('data-fc-event-id', info.event.id)
+  },
+  eventMouseEnter: (info) => {
+    highlightEventAndAssociated(info.event)
+  },
+  eventMouseLeave: () => {
+    clearEventHighlights()
+  },
   datesSet: handleDatesSet,
   events: calendarEvents.value,
 }))
@@ -417,38 +528,6 @@ function getEventTimeText(arg: EventContentArg): string {
   }
   return arg.timeText ?? ''
 }
-
-interface ExtendedEventProps {
-  type?: 'session' | 'sale'
-  rawSession?: SesionFotografica
-  rawSale?: CitaVenta
-  paxStr?: string
-  [key: string]: unknown
-}
-
-interface EventTooltipInfo {
-  hotelNombre: string
-  fotografoPrimerNombre: string
-  fotografoNombreCompleto: string
-  fotografoNombre?: string | null
-  fotografoApellidos?: string | null
-  fotografoImagen?: string | null
-  fotografoColor?: string | null
-  fechaCabecera: string
-  habitacion: string
-  clienteNombre: string
-  checkout: string
-  fechaCitaVenta: string
-  adultosYNinos: string
-  telefono: string
-  email: string
-  agendadoPor: string
-  type: 'session' | 'sale'
-  rawSession?: SesionFotografica
-  rawSale?: CitaVenta
-}
-
-type DeletableCalendarEvent = EventApi | EventTooltipInfo | ExtendedEventProps
 
 // Estado para Popover de Confirmación de Borrado con Checkbox
 const deletePopoverVisible = ref(false)
@@ -611,6 +690,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
+  clearEventHighlights()
   window.removeEventListener('resize', checkMobile)
 })
 
@@ -971,7 +1051,7 @@ function handleEventClick(clickInfo: EventClickArg) {
     <div class="calendar-card">
       <FullCalendar ref="calendarRef" :options="calendarOptions" :events="calendarEvents">
         <template #eventContent="arg">
-          <div class="jj-event-card-content">
+          <div class="jj-event-card-content" :data-event-id="arg.event.id">
             <!-- Icono de Cámara para Sesiones -->
             <img
               v-if="arg.event.extendedProps.type !== 'sale'"
@@ -1609,15 +1689,37 @@ function handleEventClick(clickInfo: EventClickArg) {
   padding: 6px 8px !important;
   border: none !important;
   transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease !important;
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.2s ease,
+    filter 0.2s ease !important;
   overflow: visible !important;
 }
 
-:deep(.fc-event:hover) {
+:deep(.fc-event:hover),
+:deep(.fc-event.fc-event-hovered) {
   transform: translateY(-2px) scale(1.01) !important;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25) !important;
   z-index: 10 !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+:deep(.fc-event.fc-event-associated) {
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.25),
+    0 0 0 2.5px rgba(255, 255, 255, 0.9) !important;
+  z-index: 9 !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+:deep(.fc-event.fc-event-dimmed) {
+  opacity: 0.2 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  filter: grayscale(15%) !important;
 }
 
 :deep(.fc-timegrid-event) {
