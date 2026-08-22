@@ -160,7 +160,7 @@ const calendarEvents = computed(() => {
   })
 
   const sessionEvents = sessionList.map((session) => {
-    let color = '#10b981' // Verde esmeralda por defecto para sesiones
+    let color = '#94a3b8' // Gris para sesiones sin fotógrafo asignado
     let fotografoPrimerNombre = ''
     let fotografoNombre: string | null = null
     let fotografoApellidos: string | null = null
@@ -173,11 +173,7 @@ const calendarEvents = computed(() => {
         fotografoApellidos = fotografo.apellidos || null
         fotografoImagen = fotografo.imagen || null
         fotografoColor = fotografo.color || null
-        if (fotografo.color) {
-          color = fotografo.color
-        } else {
-          color = '#10b981'
-        }
+        color = fotografo.color || '#10b981'
         fotografoPrimerNombre = (fotografo.nombre ? fotografo.nombre.split(' ')[0] : '') || ''
       }
     }
@@ -281,7 +277,7 @@ const calendarEvents = computed(() => {
       }
     }
 
-    let color = '#2563eb' // Azul por defecto para citas de venta
+    let color = '#94a3b8' // Gris para citas de venta sin fotógrafo asignado
     let fotografoPrimerNombre = ''
     let fotografoNombre: string | null = null
     let fotografoApellidos: string | null = null
@@ -294,11 +290,7 @@ const calendarEvents = computed(() => {
         fotografoApellidos = fotografo.apellidos || null
         fotografoImagen = fotografo.imagen || null
         fotografoColor = fotografo.color || null
-        if (fotografo.color) {
-          color = fotografo.color
-        } else {
-          color = '#2563eb'
-        }
+        color = fotografo.color || '#2563eb'
         fotografoPrimerNombre = (fotografo.nombre ? fotografo.nombre.split(' ')[0] : '') || ''
       }
     }
