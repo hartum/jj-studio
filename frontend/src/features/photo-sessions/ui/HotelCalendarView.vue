@@ -45,7 +45,7 @@ const authStore = useAuthStore()
 const userStore = useUserStore()
 const profileStore = useProfileStore()
 
-const isMobile = ref(false)
+const isMobile = ref(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
 const mobileDialogVisible = ref(false)
 
 function checkMobile() {
@@ -941,6 +941,7 @@ function handleEventClick(clickInfo: EventClickArg) {
           class="hotel-selector"
           filterable
           clearable
+          :size="isMobile ? 'large' : 'default'"
         >
           <el-option
             v-for="hotel in userHotels"
@@ -951,12 +952,22 @@ function handleEventClick(clickInfo: EventClickArg) {
         </el-select>
 
         <!-- Botón Nueva Sesión Fotográfica -->
-        <el-button type="primary" :icon="Plus" @click="navigateToNewSessionForm()">
+        <el-button
+          type="primary"
+          :icon="Plus"
+          :size="isMobile ? 'large' : 'default'"
+          @click="navigateToNewSessionForm()"
+        >
           Nueva Sesión
         </el-button>
 
         <!-- Botón Nueva Cita de Venta -->
-        <el-button type="success" :icon="Plus" @click="navigateToNewSaleForm()">
+        <el-button
+          type="success"
+          :icon="Plus"
+          :size="isMobile ? 'large' : 'default'"
+          @click="navigateToNewSaleForm()"
+        >
           Nueva Cita de Venta
         </el-button>
       </div>
@@ -1567,6 +1578,10 @@ function handleEventClick(clickInfo: EventClickArg) {
   gap: 1rem;
 }
 
+.header-actions .el-button + .el-button {
+  margin-left: 0;
+}
+
 .hotel-selector {
   width: 220px;
 }
@@ -2025,10 +2040,17 @@ function handleEventClick(clickInfo: EventClickArg) {
   .header-actions {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.65rem;
   }
 
-  .hotel-selector {
-    width: 100%;
+  .header-actions .hotel-selector,
+  .header-actions .el-button {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .header-actions .el-button + .el-button {
+    margin-left: 0 !important;
   }
 
   .fab-btn {
