@@ -630,7 +630,6 @@ async function confirmDelete() {
   }
 }
 
-
 const STORAGE_KEY = 'jj_selected_hotel_id'
 
 function initSelectedHotel() {
@@ -720,8 +719,6 @@ function handleDateSelect(selectInfo: { startStr: string }) {
   navigateToNewSessionForm(startIso)
 }
 
-
-
 const tooltipVisible = ref(false)
 const tooltipTarget = ref<HTMLElement | null>(null)
 const activeTooltipInfo = ref<EventTooltipInfo | null>(null)
@@ -783,8 +780,6 @@ function formatDateTimeStr(dateStr?: string | null): string {
   const minutes = String(d.getMinutes()).padStart(2, '0')
   return `${day}/${month}/${year} ${hours}:${minutes}`
 }
-
-
 
 function buildTooltipInfo(extendedProps: ExtendedEventProps): EventTooltipInfo {
   const { rawSession, rawSale, type } = extendedProps
@@ -1688,6 +1683,18 @@ function handleEventClick(clickInfo: EventClickArg) {
   color: #ffffff !important;
   padding: 6px 8px !important;
   border: none !important;
+  /*
+  background-image: linear-gradient(
+    to top right,
+    rgba(0, 0, 0, 0.32) 0%,
+    rgba(0, 0, 0, 0.14) 42%,
+    rgba(0, 0, 0, 0) 82%
+  ) !important;*/
+  background-image: linear-gradient(
+    11deg,
+    rgba(64, 64, 64, 0.51) 0%,
+    rgba(255, 255, 255, 0) 86%
+  ) !important;
   transition:
     transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
@@ -1961,6 +1968,7 @@ function handleEventClick(clickInfo: EventClickArg) {
 :deep(.fc-list-event) {
   cursor: pointer;
   font-size: 0.9rem;
+  background-image: none !important;
 }
 
 :deep(.fc-list-event td),
