@@ -49,11 +49,6 @@ function handleHotelClick(hotelId: number) {
       <span>Inicio</span>
     </RouterLink>
 
-    <RouterLink v-if="canSeeAgenda" to="/agenda" class="nav-link" @click="handleNavClick">
-      <el-icon :size="18"><Calendar /></el-icon>
-      <span>Agenda</span>
-    </RouterLink>
-
     <RouterLink v-if="canSeeConfig" to="/configuracion" class="nav-link" @click="handleNavClick">
       <el-icon :size="18"><Setting /></el-icon>
       <span>Configuración</span>
@@ -65,7 +60,12 @@ function handleHotelClick(hotelId: number) {
     </RouterLink>
 
     <!-- Línea de separación -->
-    <div class="sidebar-divider" v-if="filteredCountriesTree.length > 0"></div>
+    <div class="sidebar-divider" v-if="canSeeAgenda || filteredCountriesTree.length > 0"></div>
+
+    <RouterLink v-if="canSeeAgenda" to="/agenda" class="nav-link" @click="handleNavClick">
+      <el-icon :size="18"><Calendar /></el-icon>
+      <span>Agenda</span>
+    </RouterLink>
 
     <!-- Estructura Jerárquica: Países -> Áreas -> Hoteles -->
     <div class="sidebar-tree" v-if="filteredCountriesTree.length > 0">
