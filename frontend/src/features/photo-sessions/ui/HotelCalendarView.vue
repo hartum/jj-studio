@@ -1000,25 +1000,29 @@ function handleEventClick(clickInfo: EventClickArg) {
           />
         </el-select>
 
-        <!-- Botón Nueva Sesión Fotográfica -->
-        <el-button
-          type="primary"
-          :icon="Plus"
-          :size="isMobile ? 'large' : 'default'"
-          @click="navigateToNewSessionForm()"
-        >
-          Nueva Sesión
-        </el-button>
+        <div class="header-buttons-row">
+          <!-- Botón Nueva Sesión Fotográfica -->
+          <el-button
+            type="primary"
+            :size="isMobile ? 'large' : 'default'"
+            class="header-action-btn"
+            @click="navigateToNewSessionForm()"
+          >
+            <img :src="iconoCamara" alt="Cámara" class="btn-action-icon btn-icon-camara" />
+            <span class="btn-action-label">Nueva Sesión</span>
+          </el-button>
 
-        <!-- Botón Nueva Cita de Venta -->
-        <el-button
-          type="success"
-          :icon="Plus"
-          :size="isMobile ? 'large' : 'default'"
-          @click="navigateToNewSaleForm()"
-        >
-          Nueva Cita de Venta
-        </el-button>
+          <!-- Botón Nueva Cita de Venta -->
+          <el-button
+            type="primary"
+            :size="isMobile ? 'large' : 'default'"
+            class="header-action-btn"
+            @click="navigateToNewSaleForm()"
+          >
+            <img :src="iconoCita" alt="Cita" class="btn-action-icon btn-icon-calendar" />
+            <span class="btn-action-label">Nueva Cita de Venta</span>
+          </el-button>
+        </div>
       </div>
     </div>
 
@@ -1651,8 +1655,33 @@ function handleEventClick(clickInfo: EventClickArg) {
   gap: 1rem;
 }
 
-.header-actions .el-button + .el-button {
-  margin-left: 0;
+.header-buttons-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-action-btn {
+  display: inline-flex;
+  align-items: center;
+}
+
+.header-action-btn :deep(> span) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-action-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.btn-icon-calendar {
+  width: 25px;
+  height: 25px;
 }
 
 .hotel-selector {
@@ -2179,14 +2208,55 @@ function handleEventClick(clickInfo: EventClickArg) {
     gap: 0.65rem;
   }
 
-  .header-actions .hotel-selector,
-  .header-actions .el-button {
+  .header-actions .hotel-selector {
     width: 100% !important;
-    margin-left: 0 !important;
   }
 
-  .header-actions .el-button + .el-button {
-    margin-left: 0 !important;
+  .header-buttons-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 0.65rem;
+  }
+
+  .header-buttons-row .header-action-btn {
+    flex: 1 1 0;
+    width: 50% !important;
+    height: auto !important;
+    min-height: 78px;
+    padding: 10px 6px !important;
+    margin: 0 !important;
+    border-radius: 8px !important;
+  }
+
+  .header-buttons-row .header-action-btn :deep(> span) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .btn-action-icon {
+    width: 38px !important;
+    height: 38px !important;
+    margin: 0 !important;
+  }
+
+  .btn-icon-calendar {
+    width: 32px !important;
+    height: 32px !important;
+    margin: 0 !important;
+  }
+
+  .btn-action-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal;
   }
 
   .fab-btn {
