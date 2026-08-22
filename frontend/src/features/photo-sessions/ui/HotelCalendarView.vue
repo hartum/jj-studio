@@ -380,6 +380,16 @@ const mobilePickerType = computed<'week' | 'date'>(() =>
   currentCalendarView.value === 'listWeek' ? 'week' : 'date',
 )
 
+function handleMobileViewChange(val: string | number | boolean | undefined) {
+  if (typeof val === 'string') {
+    currentCalendarView.value = val
+    const calendarApi = calendarRef.value?.getApi()
+    if (calendarApi) {
+      calendarApi.changeView(val)
+    }
+  }
+}
+
 interface ExtendedEventProps {
   type?: 'session' | 'sale'
   rawSession?: SesionFotografica
@@ -513,11 +523,7 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   initialView: getInitialCalendarView(),
   locale: esLocale,
   headerToolbar: isMobile.value
-    ? {
-        left: '',
-        center: '',
-        right: 'timeGridDay,listWeek',
-      }
+    ? false
     : {
         left: 'prev,next today',
         center: 'title',
@@ -1109,28 +1115,44 @@ function handleEventClick(clickInfo: EventClickArg) {
 
     <!-- Calendario de FullCalendar -->
     <div class="calendar-card">
-      <!-- Selector de fecha para móvil (DatePickerPanel sin bordes con badges) -->
-      <div v-if="isMobile" class="mobile-picker-panel-wrapper">
-        <el-date-picker-panel
-          :key="mobilePickerType"
-          :border="false"
-          v-model="mobileSelectedDate"
-          :type="mobilePickerType"
-          value-format="YYYY-MM-DD"
-          date-format="YYYY-MM-DD"
-        >
-          <template #default="cell">
-            <div class="el-date-table-cell" :class="{ current: cell.isCurrent }">
-              <span class="el-date-table-cell__text">{{ cell.text }}</span>
-              <span
-                v-if="getEventCountForDate(cell.date || cell.dayjs) > 0"
-                class="mobile-picker-day-badge"
-              >
-                {{ getEventCountForDate(cell.date || cell.dayjs) }}
-              </span>
-            </div>
-          </template>
-        </el-date-picker-panel>
+      <!-- Encabezado Fijo/Sticky para Móvil: Selector de Fecha + Botones de Vista -->
+      <div v-if="isMobile" class="mobile-sticky-calendar-header">
+        <!-- Selector de fecha para móvil (DatePickerPanel sin bordes con badges) -->
+        <div class="mobile-picker-panel-wrapper">
+          <el-date-picker-panel
+            :key="mobilePickerType"
+            :border="false"
+            v-model="mobileSelectedDate"
+            :type="mobilePickerType"
+            value-format="YYYY-MM-DD"
+            date-format="YYYY-MM-DD"
+          >
+            <template #default="cell">
+              <div class="el-date-table-cell" :class="{ current: cell.isCurrent }">
+                <span class="el-date-table-cell__text">{{ cell.text }}</span>
+                <span
+                  v-if="getEventCountForDate(cell.date || cell.dayjs) > 0"
+                  class="mobile-picker-day-badge"
+                >
+                  {{ getEventCountForDate(cell.date || cell.dayjs) }}
+                </span>
+              </div>
+            </template>
+          </el-date-picker-panel>
+        </div>
+
+        <!-- Botones de Cambio de Vista Móvil: Día | Agenda -->
+        <div class="mobile-view-buttons-wrapper">
+          <el-radio-group
+            v-model="currentCalendarView"
+            size="default"
+            class="mobile-view-segmented"
+            @change="handleMobileViewChange"
+          >
+            <el-radio-button value="timeGridDay">Día</el-radio-button>
+            <el-radio-button value="listWeek">Agenda</el-radio-button>
+          </el-radio-group>
+        </div>
       </div>
 
       <FullCalendar ref="calendarRef" :options="calendarOptions" :events="calendarEvents">
@@ -2129,11 +2151,27 @@ function handleEventClick(clickInfo: EventClickArg) {
   z-index: 99;
 }
 
+.mobile-sticky-calendar-header {
+  width: calc(100vw - 50px);
+}
+
+.mobile-view-buttons-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+}
+
+.mobile-view-segmented :deep(.el-radio-button__inner) {
+  padding: 8px 24px;
+  font-weight: 500;
+  font-size: 0.88rem;
+}
+
 .mobile-picker-panel-wrapper {
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
   overflow: hidden;
 }
 
@@ -2195,6 +2233,26 @@ function handleEventClick(clickInfo: EventClickArg) {
 @media (max-width: 768px) {
   .calendar-container {
     padding: 1rem;
+  }
+
+  .calendar-card {
+    padding: 0;
+    overflow: visible;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .mobile-sticky-calendar-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background-color: var(--toolbar-bg, #ffffff);
+    padding: 0.5rem 0.5rem 0.65rem 0.5rem;
+    border: 1px solid var(--toolbar-border, #e2e8f0);
+    border-radius: var(--el-card-border-radius, 8px) var(--el-card-border-radius, 8px) 0 0;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.06);
   }
 
   .calendar-header {
