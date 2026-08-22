@@ -14,10 +14,26 @@ import { useUserStore } from '@/features/users/stores/user.store'
 import { useProfileStore } from '@/features/users/stores/profile.store'
 import type { SesionFotografica } from '../domain/session.model'
 import type { CitaVenta } from '@/features/sales/domain/sale.model'
-import type { EventContentArg, DatesSetArg, EventClickArg, CalendarOptions } from '@fullcalendar/core'
-import { Plus, Bell, User, InfoFilled, Calendar, Delete, WarningFilled } from '@element-plus/icons-vue'
+import type {
+  EventContentArg,
+  DatesSetArg,
+  EventClickArg,
+  CalendarOptions,
+  EventApi,
+} from '@fullcalendar/core'
+import {
+  Plus,
+  Bell,
+  User,
+  InfoFilled,
+  Calendar,
+  Delete,
+  WarningFilled,
+} from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
+import iconoCamara from '@/assets/icono_camara.png'
+import iconoCita from '@/assets/icono_cita.png'
 import { ElMessage } from 'element-plus'
 
 const route = useRoute()
@@ -144,15 +160,23 @@ const calendarEvents = computed(() => {
   })
 
   const sessionEvents = sessionList.map((session) => {
-    let color = '#9ca3af' // Gris por defecto si no hay fotógrafo asignado
+    let color = '#10b981' // Verde esmeralda por defecto para sesiones
     let fotografoPrimerNombre = ''
+    let fotografoNombre: string | null = null
+    let fotografoApellidos: string | null = null
+    let fotografoImagen: string | null = null
+    let fotografoColor: string | null = null
     if (session.fotografoId) {
       const fotografo = userStore.users.find((u) => String(u.id) === String(session.fotografoId))
       if (fotografo) {
+        fotografoNombre = fotografo.nombre || null
+        fotografoApellidos = fotografo.apellidos || null
+        fotografoImagen = fotografo.imagen || null
+        fotografoColor = fotografo.color || null
         if (fotografo.color) {
           color = fotografo.color
         } else {
-          color = '#3b82f6'
+          color = '#10b981'
         }
         fotografoPrimerNombre = (fotografo.nombre ? fotografo.nombre.split(' ')[0] : '') || ''
       }
@@ -172,6 +196,10 @@ const calendarEvents = computed(() => {
         rawSession: session,
         type: 'session',
         fotografoPrimerNombre,
+        fotografoNombre,
+        fotografoApellidos,
+        fotografoImagen,
+        fotografoColor,
         roomStr,
         clienteNombre,
         paxStr,
@@ -253,15 +281,23 @@ const calendarEvents = computed(() => {
       }
     }
 
-    let color = '#9ca3af' // Gris si no hay fotógrafo asignado
+    let color = '#2563eb' // Azul por defecto para citas de venta
     let fotografoPrimerNombre = ''
+    let fotografoNombre: string | null = null
+    let fotografoApellidos: string | null = null
+    let fotografoImagen: string | null = null
+    let fotografoColor: string | null = null
     if (fotografoId) {
       const fotografo = userStore.users.find((u) => String(u.id) === String(fotografoId))
       if (fotografo) {
+        fotografoNombre = fotografo.nombre || null
+        fotografoApellidos = fotografo.apellidos || null
+        fotografoImagen = fotografo.imagen || null
+        fotografoColor = fotografo.color || null
         if (fotografo.color) {
           color = fotografo.color
         } else {
-          color = '#3b82f6'
+          color = '#2563eb'
         }
         fotografoPrimerNombre = (fotografo.nombre ? fotografo.nombre.split(' ')[0] : '') || ''
       }
@@ -285,6 +321,10 @@ const calendarEvents = computed(() => {
         type: 'sale',
         iconType: 'money',
         fotografoPrimerNombre,
+        fotografoNombre,
+        fotografoApellidos,
+        fotografoImagen,
+        fotografoColor,
         roomStr,
         clienteNombre,
         paxStr,
@@ -386,22 +426,57 @@ function getEventTimeText(arg: EventContentArg): string {
   return arg.timeText ?? ''
 }
 
+interface ExtendedEventProps {
+  type?: 'session' | 'sale'
+  rawSession?: SesionFotografica
+  rawSale?: CitaVenta
+  paxStr?: string
+  [key: string]: unknown
+}
+
+interface EventTooltipInfo {
+  hotelNombre: string
+  fotografoPrimerNombre: string
+  fotografoNombreCompleto: string
+  fotografoNombre?: string | null
+  fotografoApellidos?: string | null
+  fotografoImagen?: string | null
+  fotografoColor?: string | null
+  fechaCabecera: string
+  habitacion: string
+  clienteNombre: string
+  checkout: string
+  fechaCitaVenta: string
+  adultosYNinos: string
+  telefono: string
+  email: string
+  agendadoPor: string
+  type: 'session' | 'sale'
+  rawSession?: SesionFotografica
+  rawSale?: CitaVenta
+}
+
+type DeletableCalendarEvent = EventApi | EventTooltipInfo | ExtendedEventProps
+
 // Estado para Popover de Confirmación de Borrado con Checkbox
 const deletePopoverVisible = ref(false)
 const deletePopoverTarget = ref<HTMLElement | null>(null)
-const pendingDeleteEvent = ref<any>(null)
+const pendingDeleteEvent = ref<DeletableCalendarEvent | null>(null)
 const deleteAssociated = ref(false)
 const isDeleting = ref(false)
 
-function hasAssociatedEvent(eventObj: any): boolean {
+function hasAssociatedEvent(eventObj: DeletableCalendarEvent | null | undefined): boolean {
   if (!eventObj) return false
-  const extendedProps = eventObj.extendedProps || eventObj
+  const extendedProps =
+    'extendedProps' in eventObj
+      ? (eventObj.extendedProps as ExtendedEventProps)
+      : (eventObj as ExtendedEventProps)
   const type = extendedProps?.type
   const rawSession = extendedProps?.rawSession
   const rawSale = extendedProps?.rawSale
 
   if (type === 'session' && rawSession) {
-    if (rawSession.citaVenta && !rawSession.citaVenta.deletedAt) return true
+    if (rawSession.citaVenta) return true
     return saleStore.citasVenta.some((c) => Number(c.sesionId) === Number(rawSession.id))
   }
 
@@ -416,7 +491,10 @@ function hasAssociatedEvent(eventObj: any): boolean {
 
 const associatedCheckboxLabel = computed(() => {
   if (!pendingDeleteEvent.value) return ''
-  const extendedProps = pendingDeleteEvent.value.extendedProps || pendingDeleteEvent.value
+  const extendedProps =
+    'extendedProps' in pendingDeleteEvent.value
+      ? (pendingDeleteEvent.value.extendedProps as ExtendedEventProps)
+      : (pendingDeleteEvent.value as ExtendedEventProps)
   const type = extendedProps?.type
 
   if (type === 'session') {
@@ -428,7 +506,7 @@ const associatedCheckboxLabel = computed(() => {
   return ''
 })
 
-function openDeleteConfirm(eventObj: any, e: MouseEvent) {
+function openDeleteConfirm(eventObj: DeletableCalendarEvent, e: MouseEvent) {
   e.stopPropagation()
   pendingDeleteEvent.value = eventObj
   deleteAssociated.value = false
@@ -439,7 +517,10 @@ function openDeleteConfirm(eventObj: any, e: MouseEvent) {
 async function confirmDelete() {
   if (!pendingDeleteEvent.value) return
   isDeleting.value = true
-  const extendedProps = pendingDeleteEvent.value.extendedProps || pendingDeleteEvent.value
+  const extendedProps =
+    'extendedProps' in pendingDeleteEvent.value
+      ? (pendingDeleteEvent.value.extendedProps as ExtendedEventProps)
+      : (pendingDeleteEvent.value as ExtendedEventProps)
   const type = extendedProps?.type
   const rawSession = extendedProps?.rawSession
   const rawSale = extendedProps?.rawSale
@@ -470,25 +551,14 @@ async function confirmDelete() {
       sessionStore.fetchSessions(selectedHotelId.value ? Number(selectedHotelId.value) : undefined),
       saleStore.fetchCitasVenta(selectedHotelId.value ? Number(selectedHotelId.value) : undefined),
     ])
-  } catch (err: any) {
-    ElMessage.error(err.message || 'Error al eliminar el evento')
+  } catch (err: unknown) {
+    ElMessage.error(err instanceof Error ? err.message : 'Error al eliminar el evento')
   } finally {
     isDeleting.value = false
     pendingDeleteEvent.value = null
   }
 }
 
-// SVGs extraídos para el renderizado del calendario
-const ICON_SVG: Record<string, string> = {
-  // Lucide: clock-8 (citas de venta)
-  clock8: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l-4 2"/></svg>`,
-  // Lucide: camera (sesiones fotográficas)
-  camera: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg>`,
-  // Filled: reloj sólido sin anillo outline
-  clock: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="16" height="16" fill="currentColor" style="flex-shrink:0;vertical-align:middle;"><path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm176.5 585.7l-28.6 39a7.99 7.99 0 0 1-11.2 1.7L483.3 569.8a7.92 7.92 0 0 1-3.3-6.5V288c0-4.4 3.6-8 8-8h48.1c4.4 0 8 3.6 8 8v247.5l142.6 103.1c3.6 2.5 4.4 7.5 1.8 11.1z"/></svg>`,
-  // Filled: triángulo sólido con exclamación dentro
-  warning: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="16" height="16" fill="currentColor" style="flex-shrink:0;vertical-align:middle;"><path d="M955.7 856l-416-720c-12.2-21.2-45.2-21.2-57.4 0l-416 720c-12.2 21.1 3 47.5 28.7 47.5h832c25.7.1 40.9-26.3 28.7-47.5zM480 416c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v184c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8zm32 352a48.01 48.01 0 0 1 0-96 48.01 48.01 0 0 1 0 96z"/></svg>`,
-}
 
 const STORAGE_KEY = 'jj_selected_hotel_id'
 
@@ -578,27 +648,7 @@ function handleDateSelect(selectInfo: { startStr: string }) {
   navigateToNewSessionForm(startIso)
 }
 
-interface EventTooltipInfo {
-  hotelNombre: string
-  fotografoPrimerNombre: string
-  fotografoNombreCompleto: string
-  fotografoNombre?: string | null
-  fotografoApellidos?: string | null
-  fotografoImagen?: string | null
-  fotografoColor?: string | null
-  fechaCabecera: string
-  habitacion: string
-  clienteNombre: string
-  checkout: string
-  fechaCitaVenta: string
-  adultosYNinos: string
-  telefono: string
-  email: string
-  agendadoPor: string
-  type: 'session' | 'sale'
-  rawSession?: SesionFotografica
-  rawSale?: CitaVenta
-}
+
 
 const tooltipVisible = ref(false)
 const tooltipTarget = ref<HTMLElement | null>(null)
@@ -662,13 +712,7 @@ function formatDateTimeStr(dateStr?: string | null): string {
   return `${day}/${month}/${year} ${hours}:${minutes}`
 }
 
-interface ExtendedEventProps {
-  type?: 'session' | 'sale'
-  rawSession?: SesionFotografica
-  rawSale?: CitaVenta
-  paxStr?: string
-  [key: string]: unknown
-}
+
 
 function buildTooltipInfo(extendedProps: ExtendedEventProps): EventTooltipInfo {
   const { rawSession, rawSale, type } = extendedProps
@@ -816,7 +860,8 @@ function handleEventClick(clickInfo: EventClickArg) {
       <div class="header-info">
         <h1 class="page-title">Agenda de Sesiones Fotográficas</h1>
         <p class="page-subtitle">
-          Hotel: <strong>{{ selectedHotelName }}</strong>
+          Hotel:
+          <strong>{{ selectedHotelName }}</strong>
         </p>
       </div>
 
@@ -871,10 +916,10 @@ function handleEventClick(clickInfo: EventClickArg) {
                 <div v-for="s in overdueSessions" :key="s.id" class="alert-item-card">
                   <div class="item-details">
                     <span class="item-name">{{ s.clienteNombre }}</span>
-                    <span class="item-sub"
-                      >{{ formatDateTime(s.fechaHoraInicio)
-                      }}{{ s.numeroHabitacion ? ` | Hab ${s.numeroHabitacion}` : '' }}</span
-                    >
+                    <span class="item-sub">
+                      {{ formatDateTime(s.fechaHoraInicio)
+                      }}{{ s.numeroHabitacion ? ` | Hab ${s.numeroHabitacion}` : '' }}
+                    </span>
                   </div>
                   <el-button type="warning" @click="router.push(`/agenda/${s.id}/editar`)">
                     Cambiar Estado
@@ -892,10 +937,10 @@ function handleEventClick(clickInfo: EventClickArg) {
                 <div v-for="s in missingSaleSessions" :key="s.id" class="alert-item-card">
                   <div class="item-details">
                     <span class="item-name">{{ s.clienteNombre }}</span>
-                    <span class="item-sub"
-                      >{{ formatDateTime(s.fechaHoraInicio)
-                      }}{{ s.numeroHabitacion ? ` | Hab ${s.numeroHabitacion}` : '' }}</span
-                    >
+                    <span class="item-sub">
+                      {{ formatDateTime(s.fechaHoraInicio)
+                      }}{{ s.numeroHabitacion ? ` | Hab ${s.numeroHabitacion}` : '' }}
+                    </span>
                   </div>
                   <el-button type="primary" @click="router.push(`/ventas/nueva?sesionId=${s.id}`)">
                     Agendar Venta
@@ -911,10 +956,10 @@ function handleEventClick(clickInfo: EventClickArg) {
                 <div v-for="s in overdueSales" :key="s.id" class="alert-item-card">
                   <div class="item-details">
                     <span class="item-name">{{ s.clienteNombre }}</span>
-                    <span class="item-sub"
-                      >{{ formatDateTime(s.citaVenta?.fechaHoraCita)
-                      }}{{ s.numeroHabitacion ? ` | Hab ${s.numeroHabitacion}` : '' }}</span
-                    >
+                    <span class="item-sub">
+                      {{ formatDateTime(s.citaVenta?.fechaHoraCita)
+                      }}{{ s.numeroHabitacion ? ` | Hab ${s.numeroHabitacion}` : '' }}
+                    </span>
                   </div>
                   <el-button
                     type="warning"
@@ -935,14 +980,77 @@ function handleEventClick(clickInfo: EventClickArg) {
       <FullCalendar ref="calendarRef" :options="calendarOptions" :events="calendarEvents">
         <template #eventContent="arg">
           <div class="jj-event-card-content">
-            <!-- Cabecera -->
+            <!-- Icono de Cámara para Sesiones -->
+            <img
+              v-if="arg.event.extendedProps.type !== 'sale'"
+              :src="iconoCamara"
+              alt="Sesión Fotográfica"
+              class="jj-event-type-badge jj-badge-camara"
+            />
+            <!-- Icono de Cita para Citas de Venta -->
+            <img
+              v-else
+              :src="iconoCita"
+              alt="Cita de Venta"
+              class="jj-event-type-badge jj-badge-cita"
+            />
+
+            <!-- Cabecera: Avatar + (Hora y Nombre Fotógrafo) -->
             <div class="jj-event-header">
               <div class="jj-event-header-left">
-                <span class="jj-event-icon" v-html="arg.event.extendedProps.type === 'sale' ? ICON_SVG.clock8 : ICON_SVG.camera"></span>
-                <span v-if="getEventTimeText(arg)" class="jj-event-time">{{ getEventTimeText(arg) }}</span>
-                <span v-if="arg.event.extendedProps.fotografoPrimerNombre" class="jj-event-photographer">
-                  - {{ arg.event.extendedProps.fotografoPrimerNombre }}
-                </span>
+                <!-- Avatar del fotógrafo (Foto o Iniciales con color de fondo) -->
+                <el-avatar
+                  v-if="arg.event.extendedProps.fotografoPrimerNombre"
+                  :src="arg.event.extendedProps.fotografoImagen || undefined"
+                  shape="circle"
+                  :size="30"
+                  :style="{
+                    backgroundColor: getUserBgColor(arg.event.extendedProps.fotografoColor),
+                    color: '#ffffff',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    flexShrink: 0,
+                    border: '1.5px solid rgba(255, 255, 255, 0.85)',
+                  }"
+                  class="jj-event-avatar"
+                >
+                  {{
+                    getUserInitials(
+                      arg.event.extendedProps.fotografoNombre,
+                      arg.event.extendedProps.fotografoApellidos,
+                    )
+                  }}
+                </el-avatar>
+                <el-avatar
+                  v-else
+                  shape="circle"
+                  :size="30"
+                  :style="{
+                    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                    color: '#ffffff',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    flexShrink: 0,
+                    border: '1.5px solid rgba(255, 255, 255, 0.6)',
+                  }"
+                  class="jj-event-avatar"
+                >
+                  <el-icon :size="16"><User /></el-icon>
+                </el-avatar>
+
+                <!-- Hora y Fotógrafo apilados -->
+                <div class="jj-event-header-titles">
+                  <span v-if="getEventTimeText(arg)" class="jj-event-time">
+                    {{ getEventTimeText(arg) }}
+                  </span>
+                  <span
+                    v-if="arg.event.extendedProps.fotografoPrimerNombre"
+                    class="jj-event-photographer"
+                  >
+                    {{ arg.event.extendedProps.fotografoPrimerNombre }}
+                  </span>
+                  <span v-else class="jj-event-photographer jj-event-unassigned">Sin asignar</span>
+                </div>
               </div>
 
               <!-- Icono Cubo de Basura (Solo ADMIN y SUPERUSUARIO) -->
@@ -953,12 +1061,15 @@ function handleEventClick(clickInfo: EventClickArg) {
                   title="Eliminar evento"
                   @click.stop="openDeleteConfirm(arg.event, $event)"
                 >
-                  <el-icon :size="13"><Delete /></el-icon>
+                  <el-icon :size="12"><Delete /></el-icon>
                 </button>
               </div>
             </div>
 
-            <!-- Cuerpo -->
+            <!-- Separador punteado -->
+            <div class="jj-event-divider"></div>
+
+            <!-- Cuerpo: Habitación, Cliente y PAX -->
             <div class="jj-event-body">
               <div v-if="arg.event.extendedProps.roomStr" class="jj-event-room">
                 {{ arg.event.extendedProps.roomStr }}
@@ -986,7 +1097,9 @@ function handleEventClick(clickInfo: EventClickArg) {
       >
         <div class="delete-popconfirm-box">
           <div class="delete-popconfirm-header">
-            <el-icon class="delete-warning-icon" :size="16" color="#e6a23c"><WarningFilled /></el-icon>
+            <el-icon class="delete-warning-icon" :size="16" color="#e6a23c">
+              <WarningFilled />
+            </el-icon>
             <span class="delete-popconfirm-title">¿Eliminar este evento?</span>
           </div>
 
@@ -1037,7 +1150,12 @@ function handleEventClick(clickInfo: EventClickArg) {
                   fontSize: '11px',
                 }"
               >
-                {{ getUserInitials(activeTooltipInfo.fotografoNombre, activeTooltipInfo.fotografoApellidos) }}
+                {{
+                  getUserInitials(
+                    activeTooltipInfo.fotografoNombre,
+                    activeTooltipInfo.fotografoApellidos,
+                  )
+                }}
               </el-avatar>
               <el-icon v-else :size="16"><User /></el-icon>
               <span>{{ activeTooltipInfo.fotografoPrimerNombre }}</span>
@@ -1146,7 +1264,12 @@ function handleEventClick(clickInfo: EventClickArg) {
                   fontSize: '11px',
                 }"
               >
-                {{ getUserInitials(activeTooltipInfo.fotografoNombre, activeTooltipInfo.fotografoApellidos) }}
+                {{
+                  getUserInitials(
+                    activeTooltipInfo.fotografoNombre,
+                    activeTooltipInfo.fotografoApellidos,
+                  )
+                }}
               </el-avatar>
               <el-icon v-else :size="16"><User /></el-icon>
               <span>{{ activeTooltipInfo.fotografoPrimerNombre }}</span>
@@ -1488,33 +1611,36 @@ function handleEventClick(clickInfo: EventClickArg) {
 }
 
 :deep(.fc-event) {
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   cursor: pointer !important;
   color: #ffffff !important;
-  padding: 0.5rem;
+  padding: 6px 8px !important;
+  border: none !important;
   transition:
     transform 0.15s ease,
     box-shadow 0.15s ease !important;
+  overflow: visible !important;
 }
 
 :deep(.fc-event:hover) {
-  transform: translateY(-1px) scale(1.01) !important;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25) !important;
   z-index: 10 !important;
 }
 
 :deep(.fc-timegrid-event) {
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   margin: 1px 2px !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
   color: #ffffff !important;
+  min-height: 86px !important;
 }
 
 :deep(.fc-daygrid-event) {
   margin: 2px 4px !important;
-  padding: 3px 6px !important;
-  border-radius: 5px !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+  padding: 6px 8px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
   color: #ffffff !important;
 }
 
@@ -1527,68 +1653,162 @@ function handleEventClick(clickInfo: EventClickArg) {
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow: hidden;
+  position: relative;
   line-height: 1.25;
+  box-sizing: border-box;
+}
+
+:deep(.jj-event-type-badge) {
+  position: absolute;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.28));
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Offset y dimensiones para el icono de Cámara (Sesiones) */
+:deep(.jj-badge-camara) {
+  top: -20px;
+  right: -14px;
+  width: 38px;
+  height: 38px;
+}
+
+/* Offset y dimensiones para el icono de Cita (Ventas) */
+:deep(.jj-badge-cita) {
+  top: -10px;
+  right: -14px;
+  width: 38px;
+  height: 38px;
 }
 
 :deep(.jj-event-header) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4px;
-  font-weight: bold;
-  flex-shrink: 0;
-  padding-bottom: 0.25rem;
-  margin-bottom: 0.25rem;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.6);
-}
-
-:deep(.fc-list-event .jj-event-header) {
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.15);
+  gap: 6px;
+  position: relative;
+  padding-right: 34px; /* espacio para el icono de tipo de evento */
 }
 
 :deep(.jj-event-header-left) {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+:deep(.jj-event-avatar) {
+  flex-shrink: 0;
+}
+
+:deep(.jj-event-header-titles) {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  justify-content: center;
+}
+
+:deep(.jj-event-time) {
+  font-size: 1.22rem;
+  font-weight: 800;
+  line-height: 1.05;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+:deep(.jj-event-photographer) {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.15;
+  color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1;
-  min-width: 0;
+  margin-top: 1px;
+}
+
+:deep(.jj-event-unassigned) {
+  opacity: 0.85;
+  font-style: italic;
+  font-size: 0.85rem;
 }
 
 :deep(.jj-event-delete-wrapper) {
   display: inline-flex;
   align-items: center;
-  flex-shrink: 0;
-  margin-left: auto;
+  position: absolute;
+  bottom: 0;
+  right: -2px;
   z-index: 10;
 }
 
 :deep(.jj-event-trash-btn) {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.25);
   border: none;
   border-radius: 4px;
   color: #ffffff;
   cursor: pointer;
-  padding: 2px 4px;
+  padding: 3px 4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: all 0.15s ease;
   line-height: 1;
+  opacity: 0.8;
 }
 
 :deep(.fc-list-event .jj-event-trash-btn) {
   background: rgba(0, 0, 0, 0.08);
   color: #64748b;
+  opacity: 1;
 }
 
 :deep(.jj-event-trash-btn:hover) {
   background: #ef4444 !important;
   color: #ffffff !important;
   transform: scale(1.15);
+  opacity: 1;
+}
+
+:deep(.jj-event-divider) {
+  width: 100%;
+  border-top: 1px dashed rgba(255, 255, 255, 0.48);
+  margin: 6px 0 5px 0;
+}
+
+:deep(.jj-event-body) {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+:deep(.jj-event-room) {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+:deep(.jj-event-client) {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:deep(.jj-event-pax) {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #ffffff;
+  opacity: 0.95;
 }
 
 /* ── Popover de Confirmación de Borrado con Checkbox ── */
@@ -1653,8 +1873,28 @@ function handleEventClick(clickInfo: EventClickArg) {
 :deep(.fc-list-event-title),
 :deep(.fc-list-event-title a),
 :deep(.fc-list-event-time),
-:deep(.fc-list-event .jj-event-card-content) {
+:deep(.fc-list-event .jj-event-card-content),
+:deep(.fc-list-event .jj-event-time),
+:deep(.fc-list-event .jj-event-photographer),
+:deep(.fc-list-event .jj-event-room),
+:deep(.fc-list-event .jj-event-client),
+:deep(.fc-list-event .jj-event-pax) {
   color: var(--el-text-color-primary, #0f172a) !important;
+}
+
+:deep(.fc-list-event .jj-event-divider) {
+  border-top: 1px dashed rgba(0, 0, 0, 0.15) !important;
+}
+
+:deep(.fc-list-event .jj-event-type-badge) {
+  position: static;
+  width: 22px;
+  height: 22px;
+  filter: none;
+}
+
+:deep(.fc-list-event .jj-event-header) {
+  padding-right: 0;
 }
 
 .fab-btn {

@@ -2,8 +2,8 @@
 import { useRouter } from 'vue-router'
 import { useDashboard, monthsOptions } from '@/features/home/composables/useDashboard'
 import AgendadorHotelGoalCard from '@/features/goals/ui/AgendadorHotelGoalCard.vue'
-import { Calendar, Money, Camera, Plus, Check } from '@element-plus/icons-vue'
-import { Building2, CalendarCheck, UserCheck } from '@lucide/vue'
+import { Calendar, Money, Camera } from '@element-plus/icons-vue'
+import { Building2, CalendarCheck } from '@lucide/vue'
 
 const router = useRouter()
 
