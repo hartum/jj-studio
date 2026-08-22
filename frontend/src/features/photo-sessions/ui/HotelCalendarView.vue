@@ -489,6 +489,7 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   slotMaxTime: '24:00:00',
   scrollTime: '08:00:00',
   slotDuration: '00:30:00',
+  defaultTimedEventDuration: '01:00:00',
   expandRows: true,
   selectable: true,
   selectMirror: true,
@@ -1658,8 +1659,9 @@ function handleEventClick(clickInfo: EventClickArg) {
 }
 
 /* ── Celdas / Huecos más grandes para FullCalendar ── */
-:deep(.fc-timegrid-slot) {
-  height: 48px !important;
+:deep(.fc-timegrid-slot),
+:deep(.fc-timegrid-slot-lane) {
+  height: 60px !important;
 }
 
 :deep(.fc-timegrid-slot-label) {
@@ -1734,7 +1736,7 @@ function handleEventClick(clickInfo: EventClickArg) {
   margin: 1px 2px !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
   color: #ffffff !important;
-  min-height: 86px !important;
+  min-height: 104px !important;
 }
 
 :deep(.fc-daygrid-event) {
