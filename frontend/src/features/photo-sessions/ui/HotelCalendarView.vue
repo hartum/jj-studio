@@ -975,7 +975,7 @@ function handleEventClick(clickInfo: EventClickArg) {
     <!-- Header principal -->
     <div class="calendar-header">
       <div class="header-info">
-        <h1 class="page-title">Agenda de Sesiones Fotográficas</h1>
+        <h1 class="page-title">Agenda</h1>
         <p class="page-subtitle">
           Hotel:
           <strong>{{ selectedHotelName }}</strong>
