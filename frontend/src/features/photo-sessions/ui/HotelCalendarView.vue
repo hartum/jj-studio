@@ -35,6 +35,7 @@ import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-ava
 import iconoCamara from '@/assets/icono_camara.png'
 import iconoCita from '@/assets/icono_cita.png'
 import { ElMessage } from 'element-plus'
+import dayjs from 'dayjs'
 
 const route = useRoute()
 const router = useRouter()
@@ -47,6 +48,16 @@ const profileStore = useProfileStore()
 
 const isMobile = ref(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
 const mobileDialogVisible = ref(false)
+const mobileSelectedDate = ref<string>(dayjs().format('YYYY-MM-DD'))
+
+watch(mobileSelectedDate, (newDateStr) => {
+  if (newDateStr) {
+    const calendarApi = calendarRef.value?.getApi()
+    if (calendarApi) {
+      calendarApi.gotoDate(newDateStr)
+    }
+  }
+})
 
 function checkMobile() {
   isMobile.value = window.innerWidth <= 768
@@ -327,6 +338,28 @@ const calendarEvents = computed(() => {
   return [...sessionEvents, ...salesEvents]
 })
 
+// Map of ISO date (YYYY-MM-DD) -> total events count for mobile picker badges
+const eventsCountByDate = computed(() => {
+  const map: Record<string, number> = {}
+  for (const evt of calendarEvents.value) {
+    if (!evt.start) continue
+    const dateStr =
+      typeof evt.start === 'string'
+        ? evt.start.split('T')[0]
+        : dayjs(evt.start).format('YYYY-MM-DD')
+    if (dateStr) {
+      map[dateStr] = (map[dateStr] || 0) + 1
+    }
+  }
+  return map
+})
+
+function getEventCountForDate(dateOrDayjs: unknown): number {
+  if (!dateOrDayjs) return 0
+  const dateStr = dayjs(dateOrDayjs as Date | string).format('YYYY-MM-DD')
+  return eventsCountByDate.value[dateStr] || 0
+}
+
 const CALENDAR_VIEW_STORAGE_KEY = 'jj_calendar_view'
 const calendarRef = ref<InstanceType<typeof FullCalendar> | null>(null)
 
@@ -341,6 +374,11 @@ function getInitialCalendarView(): string {
   }
   return isMobileView ? 'listWeek' : 'timeGridWeek'
 }
+
+const currentCalendarView = ref<string>(getInitialCalendarView())
+const mobilePickerType = computed<'week' | 'date'>(() =>
+  currentCalendarView.value === 'listWeek' ? 'week' : 'date',
+)
 
 interface ExtendedEventProps {
   type?: 'session' | 'sale'
@@ -446,7 +484,14 @@ function clearEventHighlights() {
 function handleDatesSet(dateInfo: DatesSetArg) {
   clearEventHighlights()
   if (dateInfo.view?.type) {
+    currentCalendarView.value = dateInfo.view.type
     localStorage.setItem(CALENDAR_VIEW_STORAGE_KEY, dateInfo.view.type)
+  }
+  if (dateInfo.view?.currentStart && isMobile.value) {
+    const viewDateStr = dayjs(dateInfo.view.currentStart).format('YYYY-MM-DD')
+    if (mobileSelectedDate.value !== viewDateStr) {
+      mobileSelectedDate.value = viewDateStr
+    }
   }
 }
 
@@ -467,13 +512,17 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
   initialView: getInitialCalendarView(),
   locale: esLocale,
-  headerToolbar: {
-    left: 'prev,next today',
-    center: 'title',
-    right: isMobile.value
-      ? 'timeGridDay,listWeek'
-      : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
-  },
+  headerToolbar: isMobile.value
+    ? {
+        left: '',
+        center: '',
+        right: 'timeGridDay,listWeek',
+      }
+    : {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+      },
   eventDisplay: 'block',
   eventTimeFormat: {
     hour: '2-digit',
@@ -1056,6 +1105,30 @@ function handleEventClick(clickInfo: EventClickArg) {
 
     <!-- Calendario de FullCalendar -->
     <div class="calendar-card">
+      <!-- Selector de fecha para móvil (DatePickerPanel sin bordes con badges) -->
+      <div v-if="isMobile" class="mobile-picker-panel-wrapper">
+        <el-date-picker-panel
+          :key="mobilePickerType"
+          :border="false"
+          v-model="mobileSelectedDate"
+          :type="mobilePickerType"
+          value-format="YYYY-MM-DD"
+          date-format="YYYY-MM-DD"
+        >
+          <template #default="cell">
+            <div class="el-date-table-cell" :class="{ current: cell.isCurrent }">
+              <span class="el-date-table-cell__text">{{ cell.text }}</span>
+              <span
+                v-if="getEventCountForDate(cell.date || cell.dayjs) > 0"
+                class="mobile-picker-day-badge"
+              >
+                {{ getEventCountForDate(cell.date || cell.dayjs) }}
+              </span>
+            </div>
+          </template>
+        </el-date-picker-panel>
+      </div>
+
       <FullCalendar ref="calendarRef" :options="calendarOptions" :events="calendarEvents">
         <template #eventContent="arg">
           <div class="jj-event-card-content" :data-event-id="arg.event.id">
@@ -2027,6 +2100,69 @@ function handleEventClick(clickInfo: EventClickArg) {
   z-index: 99;
 }
 
+.mobile-picker-panel-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.mobile-picker-panel-wrapper :deep(.el-picker-panel) {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.mobile-picker-panel-wrapper :deep(.el-picker-panel__body-wrapper),
+.mobile-picker-panel-wrapper :deep(.el-picker-panel__body) {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.mobile-picker-panel-wrapper :deep(.el-date-table-cell) {
+  position: relative;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-picker-day-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background-color: var(--el-color-danger, #ef4444);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 700;
+  min-width: 14px;
+  height: 14px;
+  line-height: 14px;
+  padding: 0 3px;
+  border-radius: 7px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.mobile-picker-panel-wrapper :deep(.current) .mobile-picker-day-badge,
+.mobile-picker-panel-wrapper :deep(.start-date) .mobile-picker-day-badge,
+.mobile-picker-panel-wrapper :deep(.end-date) .mobile-picker-day-badge,
+.mobile-picker-panel-wrapper :deep(.in-range) .mobile-picker-day-badge,
+.mobile-picker-panel-wrapper :deep(.is-week-mode) .mobile-picker-day-badge {
+  background-color: var(--el-color-danger, #ef4444);
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.mobile-picker-panel-wrapper :deep(.prev-month) .mobile-picker-day-badge,
+.mobile-picker-panel-wrapper :deep(.next-month) .mobile-picker-day-badge {
+  opacity: 0.4;
+}
+
 @media (max-width: 768px) {
   .calendar-container {
     padding: 1rem;
@@ -2061,7 +2197,9 @@ function handleEventClick(clickInfo: EventClickArg) {
   :deep(.fc .fc-toolbar.fc-header-toolbar) {
     flex-direction: column;
     gap: 0.5rem;
-    align-items: stretch;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem !important;
   }
 
   :deep(.fc-toolbar.fc-header-toolbar .fc-toolbar-chunk) {
@@ -2069,6 +2207,14 @@ function handleEventClick(clickInfo: EventClickArg) {
     justify-content: center;
     flex-wrap: wrap;
     gap: 4px;
+  }
+
+  /* Ocultar navegador de tiempo nativo (flechas, hoy y título) en móvil */
+  :deep(.fc-prev-button),
+  :deep(.fc-next-button),
+  :deep(.fc-today-button),
+  :deep(.fc-toolbar-title) {
+    display: none !important;
   }
 
   /* ── Ocultar vistas de Mes y Semana en móvil ── */
