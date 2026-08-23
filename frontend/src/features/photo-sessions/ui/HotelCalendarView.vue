@@ -2133,7 +2133,6 @@ function handleEventClick(clickInfo: EventClickArg) {
   position: absolute;
   top: 0px;
   right: 0px;
-  /*left: -32px;*/
   width: 32px;
   height: 32px;
   filter: none;
