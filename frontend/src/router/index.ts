@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
 import { canAccessRoute } from '@/shared/permissions'
 import LoginView from '@/features/auth/ui/LoginView.vue'
+import ForgotPasswordView from '@/features/auth/ui/ForgotPasswordView.vue'
+import ResetPasswordView from '@/features/auth/ui/ResetPasswordView.vue'
 import InicioView from '@/features/home/ui/InicioView.vue'
 import ConfiguracionView from '@/features/configuration/ui/ConfiguracionView.vue'
 import UsuariosView from '@/features/users/ui/UsuariosView.vue'
@@ -22,6 +24,18 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
+      meta: { guestOnly: true },
+    },
+    {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: ForgotPasswordView,
+      meta: { guestOnly: true },
+    },
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      component: ResetPasswordView,
       meta: { guestOnly: true },
     },
     {
@@ -108,8 +122,8 @@ router.beforeEach((to) => {
     return '/login'
   }
 
-  if (to.path === '/login' && authStore.isAuthenticated) {
-    // Si ya está autenticado e intenta ir a /inicio, redirige por defecto a /inicio
+  if (to.meta.guestOnly && authStore.isAuthenticated) {
+    // Si ya está autenticado e intenta ir a login o recuperar contraseña, redirige a /inicio
     return '/inicio'
   }
 

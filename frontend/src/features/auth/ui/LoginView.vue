@@ -107,7 +107,7 @@ async function handleLogin() {
           </div>
 
           <div class="form-footer-links">
-            <a href="#" class="footer-link" @click.prevent>¿Olvidaste tu contraseña?</a>
+            <router-link to="/forgot-password" class="footer-link">¿Olvidaste tu contraseña?</router-link>
           </div>
         </el-form>
       </div>

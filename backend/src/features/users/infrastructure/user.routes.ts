@@ -1,4 +1,5 @@
 import type { FastifyInstance } from 'fastify'
+import crypto from 'node:crypto'
 import bcrypt from 'bcryptjs'
 import { prisma } from '../../../shared/db.js'
 import {
@@ -8,6 +9,7 @@ import {
   decryptUser,
   decryptUsers,
 } from '../../../shared/encryption.js'
+import { sendPasswordResetEmail } from '../../../shared/email.service.js'
 import {
   getRolePermissions,
   canEditUser,
@@ -114,13 +116,154 @@ export async function userRoutes(fastify: FastifyInstance) {
           color: user.colorAsignado?.color || null,
           areaIds: user.areasAsignadas.map((a: any) => a.areaId),
           hotelIds: user.hotelesAsignados.map((h: any) => h.hotelId),
+          permisos: getRolePermissions(user.role.codigo as RoleCode),
         },
       })
-    } catch (err: any) {
+    } catch (err: unknown) {
       fastify.log.error(err)
-      return reply
-        .status(500)
-        .send({ error: err.message || 'Error durante el inicio de sesión' })
+      const message = err instanceof Error ? err.message : 'Error en el inicio de sesión'
+      return reply.status(500).send({ error: message })
+    }
+  })
+
+  // POST /api/auth/forgot-password (Solicita restablecimiento de contraseña)
+  fastify.post('/api/auth/forgot-password', async (request, reply) => {
+    try {
+      const { email } = request.body as { email?: string }
+
+      if (!email || typeof email !== 'string' || !email.includes('@')) {
+        return reply.status(400).send({ error: 'Debes proporcionar un correo electrónico válido' })
+      }
+
+      const normalizedEmail = email.trim()
+      const searchHash = blindIndex(normalizedEmail)
+
+      const rawUser = await prisma.usuario.findFirst({
+        where: {
+          OR: [
+            ...(searchHash ? [{ emailHash: searchHash }] : []),
+            { email: normalizedEmail },
+          ],
+          deletedAt: null,
+        },
+      })
+
+      if (rawUser && rawUser.activo) {
+        const user = decryptUser(rawUser)!
+        const rawToken = crypto.randomBytes(32).toString('hex')
+        const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex')
+        const expiresAt = new Date(Date.now() + 30 * 60 * 1000) // 30 minutos de validez
+
+        // Eliminar tokens previos del usuario
+        await prisma.passwordResetToken.deleteMany({
+          where: { usuarioId: user.id },
+        })
+
+        // Guardar token hasheado
+        await prisma.passwordResetToken.create({
+          data: {
+            usuarioId: user.id,
+            tokenHash,
+            expiresAt,
+          },
+        })
+
+        // Enviar correo electrónico
+        await sendPasswordResetEmail({
+          toEmail: user.email,
+          nombre: user.nombre,
+          resetToken: rawToken,
+        })
+      }
+
+      // Respuesta neutral estándar de seguridad para prevenir enumeración de usuarios
+      return reply.send({
+        message: 'Si el correo electrónico está registrado, recibirás un enlace para restablecer tu contraseña en unos minutos.',
+      })
+    } catch (err: unknown) {
+      fastify.log.error(err)
+      return reply.status(500).send({ error: 'Error al procesar la solicitud de recuperación' })
+    }
+  })
+
+  // GET /api/auth/verify-reset-token (Verifica la validez de un token antes de mostrar formulario)
+  fastify.get('/api/auth/verify-reset-token', async (request, reply) => {
+    try {
+      const { token } = request.query as { token?: string }
+
+      if (!token || typeof token !== 'string') {
+        return reply.status(400).send({ valid: false, error: 'Token no proporcionado' })
+      }
+
+      const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
+      const resetToken = await prisma.passwordResetToken.findUnique({
+        where: { tokenHash },
+        include: { usuario: true },
+      })
+
+      if (!resetToken || resetToken.usedAt !== null || resetToken.expiresAt < new Date()) {
+        return reply.status(400).send({
+          valid: false,
+          error: 'El enlace de recuperación es inválido o ha expirado. Por favor, solicita uno nuevo.',
+        })
+      }
+
+      const user = decryptUser(resetToken.usuario)!
+      return reply.send({
+        valid: true,
+        email: user.email,
+        nombre: user.nombre,
+      })
+    } catch (err: unknown) {
+      fastify.log.error(err)
+      return reply.status(500).send({ valid: false, error: 'Error al verificar el token' })
+    }
+  })
+
+  // POST /api/auth/reset-password (Establece la nueva contraseña usando el token)
+  fastify.post('/api/auth/reset-password', async (request, reply) => {
+    try {
+      const { token, password } = request.body as { token?: string; password?: string }
+
+      if (!token || !password) {
+        return reply.status(400).send({ error: 'Debes proporcionar el token y la nueva contraseña' })
+      }
+
+      if (password.length < 6) {
+        return reply.status(400).send({ error: 'La contraseña debe tener al menos 6 caracteres' })
+      }
+
+      const tokenHash = crypto.createHash('sha256').update(token).digest('hex')
+      const resetToken = await prisma.passwordResetToken.findUnique({
+        where: { tokenHash },
+      })
+
+      if (!resetToken || resetToken.usedAt !== null || resetToken.expiresAt < new Date()) {
+        return reply.status(400).send({
+          error: 'El enlace de recuperación es inválido o ha expirado. Por favor, solicita uno nuevo.',
+        })
+      }
+
+      const newPasswordHash = await bcrypt.hash(password, 10)
+
+      // Actualizar contraseña del usuario e invalidar token en una transacción
+      await prisma.$transaction([
+        prisma.usuario.update({
+          where: { id: resetToken.usuarioId },
+          data: { passwordHash: newPasswordHash },
+        }),
+        prisma.passwordResetToken.update({
+          where: { id: resetToken.id },
+          data: { usedAt: new Date() },
+        }),
+      ])
+
+      return reply.send({
+        message: '¡Tu contraseña ha sido restablecida exitosamente! Ya puedes iniciar sesión con tu nueva contraseña.',
+      })
+    } catch (err: unknown) {
+      fastify.log.error(err)
+      return reply.status(500).send({ error: 'Error al restablecer la contraseña' })
     }
   })
 
