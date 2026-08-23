@@ -40,6 +40,7 @@ jobs:
             # Install, Update DB Schema & Restart Backend with PM2
             cd $TARGET_DIR/backend
             pnpm install
+            npx prisma generate
             npx prisma db push
             pm2 restart jjstudio-backend || pm2 start src/index.ts --name jjstudio-backend --interpreter ./node_modules/.bin/tsx
 
