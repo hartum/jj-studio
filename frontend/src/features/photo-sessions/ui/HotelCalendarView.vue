@@ -2130,9 +2130,12 @@ function handleEventClick(clickInfo: EventClickArg) {
 }
 
 :deep(.fc-list-event .jj-event-type-badge) {
-  position: static;
-  width: 22px;
-  height: 22px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  /*left: -32px;*/
+  width: 32px;
+  height: 32px;
   filter: none;
 }
 
