@@ -22,10 +22,11 @@ model Role {
 
 model Usuario {
   id                    String              @id @default(uuid())
-  nombre                String
-  apellidos             String
-  email                 String              @unique
-  telefono              String?
+  nombre                String              @db.VarChar(512)
+  apellidos             String              @db.VarChar(512)
+  email                 String              @db.VarChar(512)
+  emailHash             String?             @unique @map("email_hash")
+  telefono              String?             @db.VarChar(512)
   passwordHash          String?             @map("password_hash")
   imagen                String?             @db.LongText
   tipoContrato          String              @default("ASALARIADO") @map("tipo_contrato")

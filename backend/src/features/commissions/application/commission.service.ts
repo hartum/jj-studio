@@ -1,4 +1,5 @@
 import { prisma } from '../../../shared/db.js'
+import { decryptUser } from '../../../shared/encryption.js'
 import type { ComisionConfigDTO, ResumenComisionesDTO } from '../domain/commission.model.js'
 
 const DEFAULT_GLOBAL_CONFIG: ComisionConfigDTO = {
@@ -498,9 +499,10 @@ export async function getResumenComisiones(params: {
     // Por usuario
     const uKey = c.usuarioId
     if (!porUsuarioMap[uKey]) {
+      const u = decryptUser(c.usuario)
       porUsuarioMap[uKey] = {
         usuarioId: c.usuarioId,
-        nombreCompleto: `${c.usuario.nombre} ${c.usuario.apellidos}`.trim(),
+        nombreCompleto: u ? `${u.nombre} ${u.apellidos}`.trim() : 'Usuario',
         rol: c.rolEnVenta,
         tipoContrato: c.tipoContrato || c.usuario.tipoContrato || 'ASALARIADO',
         totalUsd: 0,

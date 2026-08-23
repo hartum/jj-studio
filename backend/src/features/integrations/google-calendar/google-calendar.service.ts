@@ -2,6 +2,7 @@ import { google } from 'googleapis'
 import path from 'node:path'
 import fs from 'node:fs'
 import { prisma } from '../../../shared/db.js'
+import { decryptUser } from '../../../shared/encryption.js'
 
 // Paleta oficial de Google Calendar para eventos (colorId 1..11)
 interface GoogleColor {
@@ -198,11 +199,13 @@ export async function syncSesionToGoogle(sesionId: number): Promise<string | nul
 
   const hotelName = sesion.hotel?.nombre || 'Hotel'
   const clienteNombre = sesion.clienteNombre || 'Cliente'
-  const fotografoNombre = sesion.fotografo
-    ? `${sesion.fotografo.nombre} ${sesion.fotografo.apellidos}`.trim()
+  const fotoUser = decryptUser(sesion.fotografo)
+  const creadorUser = decryptUser(sesion.creador)
+  const fotografoNombre = fotoUser
+    ? `${fotoUser.nombre} ${fotoUser.apellidos}`.trim()
     : 'Sin asignar'
-  const creadorNombre = sesion.creador
-    ? `${sesion.creador.nombre} ${sesion.creador.apellidos}`.trim()
+  const creadorNombre = creadorUser
+    ? `${creadorUser.nombre} ${creadorUser.apellidos}`.trim()
     : 'Sistema'
 
   // Título: [Hotel] [Cliente] | [Fotógrafo]
@@ -383,14 +386,17 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
 
   const hotelName = cita.hotel?.nombre || 'Hotel'
   const clienteNombre = cita.sesion?.clienteNombre || 'Cliente'
-  const vendedorNombre = cita.vendedor
-    ? `${cita.vendedor.nombre} ${cita.vendedor.apellidos}`.trim()
+  const vendUser = decryptUser(cita.vendedor)
+  const fotoUser = decryptUser(cita.sesion?.fotografo)
+  const creadorUser = decryptUser(cita.sesion?.creador)
+  const vendedorNombre = vendUser
+    ? `${vendUser.nombre} ${vendUser.apellidos}`.trim()
     : 'Sin asignar'
-  const fotografoNombre = cita.sesion?.fotografo
-    ? `${cita.sesion.fotografo.nombre} ${cita.sesion.fotografo.apellidos}`.trim()
+  const fotografoNombre = fotoUser
+    ? `${fotoUser.nombre} ${fotoUser.apellidos}`.trim()
     : 'Sin asignar'
-  const creadorNombre = cita.sesion?.creador
-    ? `${cita.sesion.creador.nombre} ${cita.sesion.creador.apellidos}`.trim()
+  const creadorNombre = creadorUser
+    ? `${creadorUser.nombre} ${creadorUser.apellidos}`.trim()
     : 'Sistema'
 
   // Título: [Hotel] CITA VENTA [Cliente] | [Vendedor]

@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { prisma } from '../../../shared/db.js'
+import { decryptUser } from '../../../shared/encryption.js'
 import {
   syncSesionToGoogle,
   deleteSesionFromGoogle,
@@ -66,12 +67,15 @@ async function getHotelAvailability(
     },
   })
 
-  const fotografosDetalle = fotografoUsers.map((u) => ({
-    id: u.id,
-    nombre: `${u.nombre} ${u.apellidos}`.trim(),
-    disponible: u.calendarioLaboral.length === 0,
-    motivoAusencia: u.calendarioLaboral[0]?.motivo || null,
-  }))
+  const fotografosDetalle = fotografoUsers.map((rawUser) => {
+    const u = decryptUser(rawUser)!
+    return {
+      id: u.id,
+      nombre: `${u.nombre} ${u.apellidos}`.trim(),
+      disponible: u.calendarioLaboral.length === 0,
+      motivoAusencia: u.calendarioLaboral[0]?.motivo || null,
+    }
+  })
 
   const disponiblesCount = fotografosDetalle.filter((f) => f.disponible).length
 

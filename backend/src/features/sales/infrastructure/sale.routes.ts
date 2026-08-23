@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { prisma } from '../../../shared/db.js'
+import { decryptUser } from '../../../shared/encryption.js'
 import { calculateAndSaveCommissionsForSale } from '../../commissions/application/commission.service.js'
 import {
   syncCitaVentaToGoogle,
@@ -123,28 +124,31 @@ export async function saleRoutes(fastify: FastifyInstance) {
         orderBy: { fechaHoraCita: 'asc' },
       })
 
-      const mapped = citas.map((c) => ({
-        id: c.id,
-        sesionId: c.sesionId,
-        hotelId: c.sesion?.hotelId || c.hotelId,
-        hotelNombre: c.hotel?.nombre || '',
-        vendedorId: c.vendedorId || null,
-        vendedorNombre: c.vendedor ? `${c.vendedor.nombre} ${c.vendedor.apellidos}` : null,
-        fechaHoraCita: c.fechaHoraCita.toISOString().slice(0, 16),
-        estado: c.estado,
-        numFotosVendidas: c.numFotosVendidas,
-        totalVentaUsd: c.totalVentaUsd,
-        notas: c.notas || '',
-        clienteNombre: c.sesion.clienteNombre,
-        clienteEmail: c.sesion.clienteEmail || '',
-        clienteTelefono: c.sesion.clienteTelefono || '',
-        numeroHabitacion: c.sesion.numeroHabitacion || '',
-        fotografoId: c.sesion.fotografoId || null,
-        sesionFechaHoraInicio: c.sesion.fechaHoraInicio.toISOString().slice(0, 16),
-        googleCalendarEventId: c.googleCalendarEventId || null,
-        createdAt: c.createdAt.toISOString(),
-        updatedAt: c.updatedAt.toISOString(),
-      }))
+      const mapped = citas.map((c) => {
+        const v = decryptUser(c.vendedor)
+        return {
+          id: c.id,
+          sesionId: c.sesionId,
+          hotelId: c.sesion?.hotelId || c.hotelId,
+          hotelNombre: c.hotel?.nombre || '',
+          vendedorId: c.vendedorId || null,
+          vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
+          fechaHoraCita: c.fechaHoraCita.toISOString().slice(0, 16),
+          estado: c.estado,
+          numFotosVendidas: c.numFotosVendidas,
+          totalVentaUsd: c.totalVentaUsd,
+          notas: c.notas || '',
+          clienteNombre: c.sesion.clienteNombre,
+          clienteEmail: c.sesion.clienteEmail || '',
+          clienteTelefono: c.sesion.clienteTelefono || '',
+          numeroHabitacion: c.sesion.numeroHabitacion || '',
+          fotografoId: c.sesion.fotografoId || null,
+          sesionFechaHoraInicio: c.sesion.fechaHoraInicio.toISOString().slice(0, 16),
+          googleCalendarEventId: c.googleCalendarEventId || null,
+          createdAt: c.createdAt.toISOString(),
+          updatedAt: c.updatedAt.toISOString(),
+        }
+      })
 
       return reply.send(mapped)
     } catch (err: unknown) {
@@ -200,12 +204,13 @@ export async function saleRoutes(fastify: FastifyInstance) {
         return reply.status(404).send({ error: 'Cita de venta no encontrada' })
       }
 
+      const v = decryptUser(cita.vendedor)
       return reply.send({
         id: cita.id,
         sesionId: cita.sesionId,
         hotelId: cita.hotelId,
         vendedorId: cita.vendedorId || null,
-        vendedorNombre: cita.vendedor ? `${cita.vendedor.nombre} ${cita.vendedor.apellidos}` : null,
+        vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
         fechaHoraCita: cita.fechaHoraCita.toISOString().slice(0, 16),
         estado: cita.estado,
         numFotosVendidas: cita.numFotosVendidas,
@@ -305,12 +310,13 @@ export async function saleRoutes(fastify: FastifyInstance) {
         fastify.log.error(gErr, 'Error al sincronizar cita de venta con Google Calendar')
       }
 
+      const v = decryptUser(nueva.vendedor)
       const response: any = {
         id: nueva.id,
         sesionId: nueva.sesionId,
         hotelId: nueva.hotelId,
         vendedorId: nueva.vendedorId || null,
-        vendedorNombre: nueva.vendedor ? `${nueva.vendedor.nombre} ${nueva.vendedor.apellidos}` : null,
+        vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
         fechaHoraCita: nueva.fechaHoraCita.toISOString().slice(0, 16),
         estado: nueva.estado,
         numFotosVendidas: nueva.numFotosVendidas,
@@ -413,14 +419,13 @@ export async function saleRoutes(fastify: FastifyInstance) {
         fastify.log.error(gErr, 'Error al sincronizar actualización de cita de venta con Google Calendar')
       }
 
+      const v = decryptUser(actualizada.vendedor)
       const response: any = {
         id: actualizada.id,
         sesionId: actualizada.sesionId,
         hotelId: actualizada.hotelId,
         vendedorId: actualizada.vendedorId || null,
-        vendedorNombre: actualizada.vendedor
-          ? `${actualizada.vendedor.nombre} ${actualizada.vendedor.apellidos}`
-          : null,
+        vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
         fechaHoraCita: actualizada.fechaHoraCita.toISOString().slice(0, 16),
         estado: actualizada.estado,
         numFotosVendidas: actualizada.numFotosVendidas,

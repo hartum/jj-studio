@@ -2,6 +2,13 @@ import type { FastifyInstance } from 'fastify'
 import bcrypt from 'bcryptjs'
 import { prisma } from '../../../shared/db.js'
 import {
+  encrypt,
+  decrypt,
+  blindIndex,
+  decryptUser,
+  decryptUsers,
+} from '../../../shared/encryption.js'
+import {
   getRolePermissions,
   canEditUser,
   canDeleteUser,
@@ -16,7 +23,7 @@ async function getAuthUser(request: any) {
     const decoded = request.server.jwt.decode(token) as { id: string } | null
     if (!decoded || !decoded.id) return null
 
-    return await prisma.usuario.findUnique({
+    const user = await prisma.usuario.findUnique({
       where: { id: decoded.id },
       include: {
         role: true,
@@ -25,6 +32,8 @@ async function getAuthUser(request: any) {
         colorAsignado: true,
       },
     })
+
+    return decryptUser(user)
   } catch {
     return null
   }
@@ -40,8 +49,16 @@ export async function userRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ error: 'Debes proporcionar correo y contraseña' })
       }
 
-      const user = await prisma.usuario.findUnique({
-        where: { email: email.trim() },
+      const normalizedEmail = email.trim()
+      const searchHash = blindIndex(normalizedEmail)
+
+      const rawUser = await prisma.usuario.findFirst({
+        where: {
+          OR: [
+            ...(searchHash ? [{ emailHash: searchHash }] : []),
+            { email: normalizedEmail },
+          ],
+        },
         include: {
           role: true,
           areasAsignadas: true,
@@ -50,28 +67,30 @@ export async function userRoutes(fastify: FastifyInstance) {
         },
       })
 
-      if (!user || user.deletedAt !== null) {
+      if (!rawUser || rawUser.deletedAt !== null) {
         return reply
           .status(401)
           .send({ error: 'Credenciales incorrectas o usuario no encontrado' })
       }
 
-      if (!user.activo) {
+      if (!rawUser.activo) {
         return reply.status(401).send({ error: 'El usuario se encuentra inactivo' })
       }
 
       let isMatch = false
-      if (user.passwordHash) {
-        if (user.passwordHash.startsWith('$2a$') || user.passwordHash.startsWith('$2b$')) {
-          isMatch = await bcrypt.compare(password, user.passwordHash)
+      if (rawUser.passwordHash) {
+        if (rawUser.passwordHash.startsWith('$2a$') || rawUser.passwordHash.startsWith('$2b$')) {
+          isMatch = await bcrypt.compare(password, rawUser.passwordHash)
         } else {
-          isMatch = user.passwordHash === password
+          isMatch = rawUser.passwordHash === password
         }
       }
 
       if (!isMatch) {
         return reply.status(401).send({ error: 'Credenciales incorrectas' })
       }
+
+      const user = decryptUser(rawUser)!
 
       const token = fastify.jwt.sign({
         id: user.id,
@@ -93,8 +112,8 @@ export async function userRoutes(fastify: FastifyInstance) {
           tipoContrato: user.tipoContrato || 'ASALARIADO',
           imagen: user.imagen || null,
           color: user.colorAsignado?.color || null,
-          areaIds: user.areasAsignadas.map((a) => a.areaId),
-          hotelIds: user.hotelesAsignados.map((h) => h.hotelId),
+          areaIds: user.areasAsignadas.map((a: any) => a.areaId),
+          hotelIds: user.hotelesAsignados.map((h: any) => h.hotelId),
         },
       })
     } catch (err: any) {
@@ -146,7 +165,7 @@ export async function userRoutes(fastify: FastifyInstance) {
       const roleCode = executor?.role.codigo.toUpperCase() as RoleCode | undefined
       const perm = getRolePermissions(roleCode)
 
-      const usuarios = await prisma.usuario.findMany({
+      const rawUsuarios = await prisma.usuario.findMany({
         where: { deletedAt: null },
         include: {
           role: true,
@@ -157,6 +176,8 @@ export async function userRoutes(fastify: FastifyInstance) {
         orderBy: { createdAt: 'desc' },
       })
 
+      const usuarios = decryptUsers(rawUsuarios)
+
       let filtered = usuarios
 
       if (executor) {
@@ -166,16 +187,16 @@ export async function userRoutes(fastify: FastifyInstance) {
           if (perm.scopeType === 'GLOBAL') return true
 
           if (perm.scopeType === 'AREAS') {
-            const myAreaIds = new Set(executor.areasAsignadas.map((a) => a.areaId))
+            const myAreaIds = new Set(executor.areasAsignadas.map((a: any) => a.areaId))
             if (u.id === executor.id) return true
-            if (u.areasAsignadas.some((a) => myAreaIds.has(a.areaId))) return true
+            if (u.areasAsignadas.some((a: any) => myAreaIds.has(a.areaId))) return true
             return true
           }
 
           if (perm.scopeType === 'HOTELS') {
-            const myHotelIds = new Set(executor.hotelesAsignados.map((h) => h.hotelId))
+            const myHotelIds = new Set(executor.hotelesAsignados.map((h: any) => h.hotelId))
             if (u.id === executor.id) return true
-            if (u.hotelesAsignados.some((h) => myHotelIds.has(h.hotelId))) return true
+            if (u.hotelesAsignados.some((h: any) => myHotelIds.has(h.hotelId))) return true
             return false
           }
 
@@ -194,8 +215,8 @@ export async function userRoutes(fastify: FastifyInstance) {
         tipoContrato: u.tipoContrato || 'ASALARIADO',
         imagen: u.imagen || null,
         color: u.colorAsignado?.color || null,
-        areaIds: u.areasAsignadas.map((a) => a.areaId),
-        hotelIds: u.hotelesAsignados.map((h) => h.hotelId),
+        areaIds: u.areasAsignadas.map((a: any) => a.areaId),
+        hotelIds: u.hotelesAsignados.map((h: any) => h.hotelId),
         createdAt: u.createdAt.toISOString().split('T')[0],
         deletedAt: u.deletedAt ? u.deletedAt.toISOString() : null,
       }))
@@ -248,9 +269,15 @@ export async function userRoutes(fastify: FastifyInstance) {
       }
 
       const normalizedEmail = body.email.trim()
+      const emailHash = blindIndex(normalizedEmail)
 
-      const existingUser = await prisma.usuario.findUnique({
-        where: { email: normalizedEmail },
+      const existingUser = await prisma.usuario.findFirst({
+        where: {
+          OR: [
+            ...(emailHash ? [{ emailHash }] : []),
+            { email: normalizedEmail },
+          ],
+        },
       })
 
       if (existingUser) {
@@ -283,8 +310,9 @@ export async function userRoutes(fastify: FastifyInstance) {
           include: { area: true, usuario: true },
         })
         if (conflict) {
+          const conflictUser = decryptUser(conflict.usuario)
           return reply.status(400).send({
-            error: `El área "${conflict.area.nombre}" ya está asignada al gerente ${conflict.usuario.nombre} ${conflict.usuario.apellidos}`,
+            error: `El área "${conflict.area.nombre}" ya está asignada al gerente ${conflictUser?.nombre} ${conflictUser?.apellidos}`,
           })
         }
       }
@@ -301,18 +329,20 @@ export async function userRoutes(fastify: FastifyInstance) {
           include: { hotel: true, usuario: true },
         })
         if (conflict) {
+          const conflictUser = decryptUser(conflict.usuario)
           return reply.status(400).send({
-            error: `El hotel "${conflict.hotel.nombre}" ya está asignado al supervisor ${conflict.usuario.nombre} ${conflict.usuario.apellidos}`,
+            error: `El hotel "${conflict.hotel.nombre}" ya está asignado al supervisor ${conflictUser?.nombre} ${conflictUser?.apellidos}`,
           })
         }
       }
 
       const nuevo = await prisma.usuario.create({
         data: {
-          nombre: body.nombre.trim(),
-          apellidos: body.apellidos ? body.apellidos.trim() : '',
-          email: normalizedEmail,
-          telefono: body.telefono ? body.telefono.trim() : '',
+          nombre: encrypt(body.nombre.trim()) || '',
+          apellidos: encrypt(body.apellidos ? body.apellidos.trim() : '') || '',
+          email: encrypt(normalizedEmail) || '',
+          emailHash,
+          telefono: body.telefono ? encrypt(body.telefono.trim()) : null,
           passwordHash,
           imagen: body.imagen || null,
           roleId: Number(body.profileId),
@@ -345,24 +375,26 @@ export async function userRoutes(fastify: FastifyInstance) {
         })
       }
 
+      const decryptedNuevo = decryptUser(nuevo)!
+
       return reply.status(201).send({
-        id: nuevo.id,
-        nombre: nuevo.nombre,
-        apellidos: nuevo.apellidos,
-        email: nuevo.email,
-        telefono: nuevo.telefono || '',
-        profileId: nuevo.roleId,
-        status: nuevo.activo ? 'Activo' : 'Inactivo',
-        tipoContrato: nuevo.tipoContrato,
-        imagen: nuevo.imagen || null,
+        id: decryptedNuevo.id,
+        nombre: decryptedNuevo.nombre,
+        apellidos: decryptedNuevo.apellidos,
+        email: decryptedNuevo.email,
+        telefono: decryptedNuevo.telefono || '',
+        profileId: decryptedNuevo.roleId,
+        status: decryptedNuevo.activo ? 'Activo' : 'Inactivo',
+        tipoContrato: decryptedNuevo.tipoContrato,
+        imagen: decryptedNuevo.imagen || null,
         color: body.color || null,
-        areaIds: nuevo.areasAsignadas.map((a) => a.areaId),
-        hotelIds: nuevo.hotelesAsignados.map((h) => h.hotelId),
-        createdAt: nuevo.createdAt.toISOString().split('T')[0],
+        areaIds: decryptedNuevo.areasAsignadas.map((a: any) => a.areaId),
+        hotelIds: decryptedNuevo.hotelesAsignados.map((h: any) => h.hotelId),
+        createdAt: decryptedNuevo.createdAt.toISOString().split('T')[0],
       })
     } catch (err: any) {
       fastify.log.error(err)
-      if (err.code === 'P2002' || err.message?.includes('usuarios_email_key')) {
+      if (err.code === 'P2002' || err.message?.includes('usuarios_email_key') || err.message?.includes('email_hash')) {
         return reply.status(400).send({
           error: 'El correo electrónico ya se encuentra registrado por otro usuario',
         })
@@ -393,12 +425,18 @@ export async function userRoutes(fastify: FastifyInstance) {
       }
 
       const executor = await getAuthUser(request)
-      const currentUser = await prisma.usuario.findUnique({
+      const currentUserRaw = await prisma.usuario.findUnique({
         where: { id },
         include: { role: true },
       })
 
-      if (executor && currentUser) {
+      if (!currentUserRaw) {
+        return reply.status(404).send({ error: 'Usuario no encontrado' })
+      }
+
+      const currentUser = decryptUser(currentUserRaw)!
+
+      if (executor) {
         const isAllowed = canEditUser(
           executor.role.codigo,
           currentUser.role.codigo,
@@ -412,10 +450,18 @@ export async function userRoutes(fastify: FastifyInstance) {
         }
       }
 
+      let emailHash: string | undefined = undefined
       if (body.email) {
         const normalizedEmail = body.email.trim()
-        const existingUser = await prisma.usuario.findUnique({
-          where: { email: normalizedEmail },
+        emailHash = blindIndex(normalizedEmail) || undefined
+
+        const existingUser = await prisma.usuario.findFirst({
+          where: {
+            OR: [
+              ...(emailHash ? [{ emailHash }] : []),
+              { email: normalizedEmail },
+            ],
+          },
         })
         if (existingUser && existingUser.id !== id) {
           return reply.status(400).send({
@@ -449,8 +495,9 @@ export async function userRoutes(fastify: FastifyInstance) {
             include: { area: true, usuario: true },
           })
           if (conflict) {
+            const conflictUser = decryptUser(conflict.usuario)
             return reply.status(400).send({
-              error: `El área "${conflict.area.nombre}" ya está asignada al gerente ${conflict.usuario.nombre} ${conflict.usuario.apellidos}`,
+              error: `El área "${conflict.area.nombre}" ya está asignada al gerente ${conflictUser?.nombre} ${conflictUser?.apellidos}`,
             })
           }
         }
@@ -478,8 +525,9 @@ export async function userRoutes(fastify: FastifyInstance) {
             include: { hotel: true, usuario: true },
           })
           if (conflict) {
+            const conflictUser = decryptUser(conflict.usuario)
             return reply.status(400).send({
-              error: `El hotel "${conflict.hotel.nombre}" ya está asignado al supervisor ${conflict.usuario.nombre} ${conflict.usuario.apellidos}`,
+              error: `El hotel "${conflict.hotel.nombre}" ya está asignado al supervisor ${conflictUser?.nombre} ${conflictUser?.apellidos}`,
             })
           }
         }
@@ -506,19 +554,21 @@ export async function userRoutes(fastify: FastifyInstance) {
         }
       }
 
-      const actualizado = await prisma.usuario.update({
+      const dataToUpdate: any = {
+        ...(body.nombre && { nombre: encrypt(body.nombre.trim()) }),
+        ...(body.apellidos !== undefined && { apellidos: encrypt(body.apellidos.trim()) }),
+        ...(body.email && { email: encrypt(body.email.trim()), emailHash }),
+        ...(body.telefono !== undefined && { telefono: body.telefono ? encrypt(body.telefono.trim()) : null }),
+        ...(passwordHash && { passwordHash }),
+        ...(body.imagen !== undefined && { imagen: body.imagen }),
+        ...(body.profileId !== undefined && { roleId: Number(body.profileId) }),
+        ...(body.tipoContrato !== undefined && { tipoContrato: body.tipoContrato }),
+        ...(body.status !== undefined && { activo: body.status === 'Activo' }),
+      }
+
+      const actualizadoRaw = await prisma.usuario.update({
         where: { id },
-        data: {
-          ...(body.nombre && { nombre: body.nombre.trim() }),
-          ...(body.apellidos !== undefined && { apellidos: body.apellidos.trim() }),
-          ...(body.email && { email: body.email.trim() }),
-          ...(body.telefono !== undefined && { telefono: body.telefono.trim() }),
-          ...(passwordHash && { passwordHash }),
-          ...(body.imagen !== undefined && { imagen: body.imagen }),
-          ...(body.profileId !== undefined && { roleId: Number(body.profileId) }),
-          ...(body.tipoContrato !== undefined && { tipoContrato: body.tipoContrato }),
-          ...(body.status !== undefined && { activo: body.status === 'Activo' }),
-        },
+        data: dataToUpdate,
         include: {
           role: true,
           areasAsignadas: true,
@@ -526,6 +576,8 @@ export async function userRoutes(fastify: FastifyInstance) {
           colorAsignado: true,
         },
       })
+
+      const actualizado = decryptUser(actualizadoRaw)!
 
       return reply.send({
         id: actualizado.id,
@@ -538,13 +590,13 @@ export async function userRoutes(fastify: FastifyInstance) {
         tipoContrato: actualizado.tipoContrato,
         imagen: actualizado.imagen || null,
         color: actualizado.colorAsignado?.color || null,
-        areaIds: actualizado.areasAsignadas.map((a) => a.areaId),
-        hotelIds: actualizado.hotelesAsignados.map((h) => h.hotelId),
+        areaIds: actualizado.areasAsignadas.map((a: any) => a.areaId),
+        hotelIds: actualizado.hotelesAsignados.map((h: any) => h.hotelId),
         createdAt: actualizado.createdAt.toISOString().split('T')[0],
       })
     } catch (err: any) {
       fastify.log.error(err)
-      if (err.code === 'P2002' || err.message?.includes('usuarios_email_key')) {
+      if (err.code === 'P2002' || err.message?.includes('usuarios_email_key') || err.message?.includes('email_hash')) {
         return reply.status(400).send({
           error: 'El correo electrónico ya se encuentra registrado por otro usuario',
         })

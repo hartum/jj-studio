@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { prisma } from '../../../shared/db.js'
+import { decryptUser } from '../../../shared/encryption.js'
 import type {
   AlcanceTipo,
   SemaforoEstado,
@@ -128,22 +129,25 @@ export async function goalRoutes(fastify: FastifyInstance) {
         orderBy: [{ anio: 'desc' }, { mes: 'desc' }, { hotelId: 'asc' }],
       })
 
-      const mapped = metas.map((m) => ({
-        id: m.id,
-        alcanceTipo: m.alcanceTipo as AlcanceTipo,
-        hotelId: m.hotelId,
-        hotelNombre: m.hotel.nombre,
-        usuarioId: m.usuarioId,
-        usuarioNombre: m.usuario ? `${m.usuario.nombre} ${m.usuario.apellidos}` : null,
-        anio: m.anio,
-        mes: m.mes,
-        importeObjetivo: m.importeObjetivo,
-        sesionesObjetivo: m.sesionesObjetivo,
-        ventasObjetivo: m.ventasObjetivo,
-        activo: m.activo,
-        createdAt: m.createdAt.toISOString(),
-        updatedAt: m.updatedAt.toISOString(),
-      }))
+      const mapped = metas.map((m) => {
+        const u = decryptUser(m.usuario)
+        return {
+          id: m.id,
+          alcanceTipo: m.alcanceTipo as AlcanceTipo,
+          hotelId: m.hotelId,
+          hotelNombre: m.hotel.nombre,
+          usuarioId: m.usuarioId,
+          usuarioNombre: u ? `${u.nombre} ${u.apellidos}`.trim() : null,
+          anio: m.anio,
+          mes: m.mes,
+          importeObjetivo: m.importeObjetivo,
+          sesionesObjetivo: m.sesionesObjetivo,
+          ventasObjetivo: m.ventasObjetivo,
+          activo: m.activo,
+          createdAt: m.createdAt.toISOString(),
+          updatedAt: m.updatedAt.toISOString(),
+        }
+      })
 
       return reply.send(mapped)
     } catch (err: unknown) {
@@ -242,13 +246,14 @@ export async function goalRoutes(fastify: FastifyInstance) {
         })
       }
 
+      const u = decryptUser(result.usuario)
       return reply.status(201).send({
         id: result.id,
         alcanceTipo: result.alcanceTipo as AlcanceTipo,
         hotelId: result.hotelId,
         hotelNombre: result.hotel.nombre,
         usuarioId: result.usuarioId,
-        usuarioNombre: result.usuario ? `${result.usuario.nombre} ${result.usuario.apellidos}` : null,
+        usuarioNombre: u ? `${u.nombre} ${u.apellidos}`.trim() : null,
         anio: result.anio,
         mes: result.mes,
         importeObjetivo: result.importeObjetivo,
@@ -309,13 +314,14 @@ export async function goalRoutes(fastify: FastifyInstance) {
         include: { hotel: true, usuario: true },
       })
 
+      const u = decryptUser(updated.usuario)
       return reply.send({
         id: updated.id,
         alcanceTipo: updated.alcanceTipo as AlcanceTipo,
         hotelId: updated.hotelId,
         hotelNombre: updated.hotel.nombre,
         usuarioId: updated.usuarioId,
-        usuarioNombre: updated.usuario ? `${updated.usuario.nombre} ${updated.usuario.apellidos}` : null,
+        usuarioNombre: u ? `${u.nombre} ${u.apellidos}`.trim() : null,
         anio: updated.anio,
         mes: updated.mes,
         importeObjetivo: updated.importeObjetivo,
@@ -497,7 +503,8 @@ export async function goalRoutes(fastify: FastifyInstance) {
 
         const fotografosProgreso: FotografoProgreso[] = []
 
-        for (const fotografo of fotografosAsignados) {
+        for (const rawFotografo of fotografosAsignados) {
+          const fotografo = decryptUser(rawFotografo)!
           const metaPersonal = metasConfiguradas.find(
             (m) =>
               m.hotelId === hotel.id &&

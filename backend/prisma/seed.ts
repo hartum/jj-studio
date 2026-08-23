@@ -1,7 +1,57 @@
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
+import { encrypt, blindIndex } from '../src/shared/encryption.js'
 
 const prisma = new PrismaClient()
+
+async function seedUser(data: {
+  nombre: string
+  apellidos: string
+  email: string
+  telefono: string
+  passwordHash: string
+  roleId: number
+  activo: boolean
+}) {
+  const hash = blindIndex(data.email)!
+  const existing = await prisma.usuario.findFirst({
+    where: {
+      OR: [
+        { emailHash: hash },
+        { email: data.email },
+      ],
+    },
+  })
+
+  if (existing) {
+    return await prisma.usuario.update({
+      where: { id: existing.id },
+      data: {
+        nombre: encrypt(data.nombre)!,
+        apellidos: encrypt(data.apellidos)!,
+        email: encrypt(data.email)!,
+        emailHash: hash,
+        telefono: encrypt(data.telefono),
+        passwordHash: data.passwordHash,
+        roleId: data.roleId,
+        activo: data.activo,
+      },
+    })
+  }
+
+  return await prisma.usuario.create({
+    data: {
+      nombre: encrypt(data.nombre)!,
+      apellidos: encrypt(data.apellidos)!,
+      email: encrypt(data.email)!,
+      emailHash: hash,
+      telefono: encrypt(data.telefono),
+      passwordHash: data.passwordHash,
+      roleId: data.roleId,
+      activo: data.activo,
+    },
+  })
+}
 
 async function main() {
   console.log('🌱 Seeding database...')
@@ -87,78 +137,58 @@ async function main() {
   const passContable = await bcrypt.hash('contable', 10)
 
   // SuperUsuario principal
-  await prisma.usuario.upsert({
-    where: { email: 'hartum@gmail.com' },
-    update: { passwordHash: passSuperuser },
-    create: {
-      nombre: 'Ivan',
-      apellidos: 'Gascón',
-      email: 'hartum@gmail.com',
-      telefono: '+34 645 584 470',
-      passwordHash: passSuperuser,
-      roleId: superuserRole.id,
-      activo: true,
-    },
+  await seedUser({
+    nombre: 'Ivan',
+    apellidos: 'Gascón',
+    email: 'hartum@gmail.com',
+    telefono: '+34 645 584 470',
+    passwordHash: passSuperuser,
+    roleId: superuserRole.id,
+    activo: true,
   })
 
   // Admin
-  await prisma.usuario.upsert({
-    where: { email: 'admin@admin.com' },
-    update: { passwordHash: passAdmin },
-    create: {
-      nombre: 'Joaquín',
-      apellidos: 'Rodriguez',
-      email: 'admin@admin.com',
-      telefono: '+34 612 345 678',
-      passwordHash: passAdmin,
-      roleId: adminRole.id,
-      activo: true,
-    },
+  await seedUser({
+    nombre: 'Joaquín',
+    apellidos: 'Rodriguez',
+    email: 'admin@admin.com',
+    telefono: '+34 612 345 678',
+    passwordHash: passAdmin,
+    roleId: adminRole.id,
+    activo: true,
   })
 
   // Gerente
-  await prisma.usuario.upsert({
-    where: { email: 'gerente@gerente.com' },
-    update: { passwordHash: passGerente },
-    create: {
-      nombre: 'Alberto',
-      apellidos: 'Morales',
-      email: 'gerente@gerente.com',
-      telefono: '+34 644 332 211',
-      passwordHash: passGerente,
-      roleId: gerenteRole.id,
-      activo: true,
-    },
+  await seedUser({
+    nombre: 'Alberto',
+    apellidos: 'Morales',
+    email: 'gerente@gerente.com',
+    telefono: '+34 644 332 211',
+    passwordHash: passGerente,
+    roleId: gerenteRole.id,
+    activo: true,
   })
 
   // Supervisor
-  await prisma.usuario.upsert({
-    where: { email: 'supervisor@supervisor.com' },
-    update: { passwordHash: passSupervisor },
-    create: {
-      nombre: 'María',
-      apellidos: 'Ruiz',
-      email: 'supervisor@supervisor.com',
-      telefono: '+34 655 443 322',
-      passwordHash: passSupervisor,
-      roleId: supervisorRole.id,
-      activo: true,
-    },
+  await seedUser({
+    nombre: 'María',
+    apellidos: 'Ruiz',
+    email: 'supervisor@supervisor.com',
+    telefono: '+34 655 443 322',
+    passwordHash: passSupervisor,
+    roleId: supervisorRole.id,
+    activo: true,
   })
 
   // Fotógrafo
-  const fotografoUser = await prisma.usuario.upsert({
-    where: { email: 'fotografo@fotografo.com' },
-    update: { passwordHash: passFotografo },
-    create: {
-      nombre: 'Laura',
-      apellidos: 'Fernández',
-      email: 'fotografo@fotografo.com',
-      telefono: '+34 699 887 766',
-      passwordHash: passFotografo,
-      roleId: fotografoRole.id,
-      activo: true,
-    },
+  const fotografoUser = await seedUser({
+    nombre: 'Laura',
+    apellidos: 'Fernández',
+    email: 'fotografo@fotografo.com',
+    telefono: '+34 699 887 766',
+    passwordHash: passFotografo,
+    roleId: fotografoRole.id,
+    activo: true,
   })
 
   await prisma.usuarioColor.upsert({
@@ -168,33 +198,25 @@ async function main() {
   })
 
   // Agendador
-  const agendadorUser = await prisma.usuario.upsert({
-    where: { email: 'agendador@agendador.com' },
-    update: { passwordHash: passAgendador },
-    create: {
-      nombre: 'David',
-      apellidos: 'López',
-      email: 'agendador@agendador.com',
-      telefono: '+34 688 776 655',
-      passwordHash: passAgendador,
-      roleId: agendadorRole.id,
-      activo: true,
-    },
+  const agendadorUser = await seedUser({
+    nombre: 'David',
+    apellidos: 'López',
+    email: 'agendador@agendador.com',
+    telefono: '+34 688 776 655',
+    passwordHash: passAgendador,
+    roleId: agendadorRole.id,
+    activo: true,
   })
 
   // Contable
-  await prisma.usuario.upsert({
-    where: { email: 'contable@contable.com' },
-    update: { passwordHash: passContable },
-    create: {
-      nombre: 'Pedro',
-      apellidos: 'Escalona',
-      email: 'contable@contable.com',
-      telefono: '+34 633 221 100',
-      passwordHash: passContable,
-      roleId: contableRole.id,
-      activo: true,
-    },
+  await seedUser({
+    nombre: 'Pedro',
+    apellidos: 'Escalona',
+    email: 'contable@contable.com',
+    telefono: '+34 633 221 100',
+    passwordHash: passContable,
+    roleId: contableRole.id,
+    activo: true,
   })
 
   // Seeding de Países
