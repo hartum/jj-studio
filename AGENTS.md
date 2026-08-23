@@ -48,6 +48,7 @@ Todas las pantallas del sistema deben seguir las directrices globales de [.agent
 - **[docs/guia_iconos_lucide.md](file:///Users/hartumia/workspace/JJ%20Studio/docs/guia_iconos_lucide.md)**: Guía y ejemplos de uso de la librería de iconos Lucide (`@lucide/vue`) en componentes Vue y Element Plus.
 - **[docs/detalles_perfil_fotografos.md](file:///Users/hartumia/workspace/JJ%20Studio/docs/detalles_perfil_fotografos.md)**: Requisitos acordados para el módulo de fotógrafos, visibilidad completa del calendario del hotel, datos mínimos para agendar sesiones y la matriz de comisiones (incluyendo tabla de porcentajes para México).
 - **[docs/requisitos_y_plan_trabajo.md](file:///Users/hartumia/workspace/JJ%20Studio/docs/requisitos_y_plan_trabajo.md)**: Documento integral de análisis de requisitos, arquitectura de base de datos (ERD), flujos de usuario detallados y plan de desarrollo en 8 fases.
+- **[docs/arquitectura_seguridad_y_cifrado.md](file:///Users/hartumia/workspace/JJ%20Studio/docs/arquitectura_seguridad_y_cifrado.md)**: Arquitectura de seguridad, cifrado AES-256-GCM de datos sensibles (usuarios y sesiones), blind indexing HMAC-SHA256 y hashing de contraseñas con bcrypt.
 - **[Control_acceso segun roles.md](file:///Users/hartumia/workspace/JJ%20Studio/Control_acceso%20segun%20roles.md)**: Resumen de la matriz de permisos RBAC y multi-tenancy.
 
 ---
