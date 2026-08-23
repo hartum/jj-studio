@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { prisma } from '../../../shared/db.js'
+import { decrypt } from '../../../shared/encryption.js'
 import {
   getAllCommissionConfigs,
   getEffectiveCommissionConfig,
@@ -231,9 +232,9 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         hotelId: c.hotelId,
         hotelNombre: c.hotel?.nombre || '',
         usuarioId: c.usuarioId,
-        usuarioNombre: c.usuario?.nombre || '',
-        usuarioApellidos: c.usuario?.apellidos || '',
-        usuarioEmail: c.usuario?.email || '',
+        usuarioNombre: decrypt(c.usuario?.nombre) || '',
+        usuarioApellidos: decrypt(c.usuario?.apellidos) || '',
+        usuarioEmail: decrypt(c.usuario?.email) || '',
         rolEnVenta: c.rolEnVenta,
         tipoContrato: c.tipoContrato || c.usuario?.tipoContrato || 'ASALARIADO',
         porcentajeAplicado: c.porcentajeAplicado,
@@ -241,7 +242,7 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         importeComisionUsd: c.importeComisionUsd,
         estado: c.estado,
         fechaVenta: c.fechaVenta.toISOString().slice(0, 10),
-        clienteNombre: c.citaVenta?.sesion?.clienteNombre || '',
+        clienteNombre: decrypt(c.citaVenta?.sesion?.clienteNombre) || '',
         numFotosVendidas: c.citaVenta?.numFotosVendidas || null,
         createdAt: c.createdAt.toISOString(),
       }))

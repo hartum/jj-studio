@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { prisma } from '../../../shared/db.js'
-import { decryptUser } from '../../../shared/encryption.js'
+import { encrypt, decryptUser, decryptSesion } from '../../../shared/encryption.js'
 import {
   syncSesionToGoogle,
   deleteSesionFromGoogle,
@@ -216,36 +216,40 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         orderBy: { fechaHoraInicio: 'asc' },
       })
 
-      const mapped = sesiones.map((s) => ({
-        id: s.id,
-        hotelId: s.hotelId,
-        fotografoId: s.fotografoId || null,
-        creadorId: s.creadorId,
-        clienteNombre: s.clienteNombre,
-        clienteEmail: s.clienteEmail || '',
-        clienteTelefono: s.clienteTelefono || '',
-        numeroHabitacion: s.numeroHabitacion || '',
-        numAdultos: s.numAdultos ?? 1,
-        numNinos: s.numNinos ?? 0,
-        fechaSalida: s.fechaSalida ? s.fechaSalida.toISOString().slice(0, 10) : '',
-        concepto: s.concepto || '',
-        fechaHoraInicio: s.fechaHoraInicio.toISOString().slice(0, 16),
-        estado: s.estado,
-        origen: s.origen,
-        notas: s.notas || '',
-        googleCalendarEventId: s.googleCalendarEventId || null,
-        citaVenta: s.citaVenta && !s.citaVenta.deletedAt
-          ? {
-              id: s.citaVenta.id,
-              fechaHoraCita: s.citaVenta.fechaHoraCita.toISOString().slice(0, 16),
-              estado: s.citaVenta.estado,
-              numFotosVendidas: s.citaVenta.numFotosVendidas,
-              totalVentaUsd: s.citaVenta.totalVentaUsd,
-            }
-          : null,
-        createdAt: s.createdAt.toISOString(),
-        updatedAt: s.updatedAt.toISOString(),
-      }))
+      const mapped = sesiones.map((raw) => {
+        const s = decryptSesion(raw)!
+        return {
+          id: s.id,
+          hotelId: s.hotelId,
+          fotografoId: s.fotografoId || null,
+          creadorId: s.creadorId,
+          clienteNombre: s.clienteNombre,
+          clienteEmail: s.clienteEmail || '',
+          clienteTelefono: s.clienteTelefono || '',
+          numeroHabitacion: s.numeroHabitacion || '',
+          numAdultos: s.numAdultos ?? 1,
+          numNinos: s.numNinos ?? 0,
+          fechaSalida: s.fechaSalida ? s.fechaSalida.toISOString().slice(0, 10) : '',
+          concepto: s.concepto || '',
+          fechaHoraInicio: s.fechaHoraInicio.toISOString().slice(0, 16),
+          estado: s.estado,
+          origen: s.origen,
+          notas: s.notas || '',
+          googleCalendarEventId: s.googleCalendarEventId || null,
+          citaVenta:
+            s.citaVenta && !s.citaVenta.deletedAt
+              ? {
+                  id: s.citaVenta.id,
+                  fechaHoraCita: s.citaVenta.fechaHoraCita.toISOString().slice(0, 16),
+                  estado: s.citaVenta.estado,
+                  numFotosVendidas: s.citaVenta.numFotosVendidas,
+                  totalVentaUsd: s.citaVenta.totalVentaUsd,
+                }
+              : null,
+          createdAt: s.createdAt.toISOString(),
+          updatedAt: s.updatedAt.toISOString(),
+        }
+      })
 
       return reply.send(mapped)
     } catch (err: unknown) {
@@ -263,7 +267,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ error: 'ID de sesión inválido' })
       }
 
-      const s = await prisma.sesionFotografica.findUnique({
+      const rawSession = await prisma.sesionFotografica.findUnique({
         where: { id },
         include: {
           hotel: true,
@@ -273,9 +277,11 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         },
       })
 
-      if (!s || s.deletedAt) {
+      if (!rawSession || rawSession.deletedAt) {
         return reply.status(404).send({ error: 'Sesión fotográfica no encontrada' })
       }
+
+      const s = decryptSesion(rawSession)!
 
       return reply.send({
         id: s.id,
@@ -295,15 +301,16 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         origen: s.origen,
         notas: s.notas || '',
         googleCalendarEventId: s.googleCalendarEventId || null,
-        citaVenta: s.citaVenta && !s.citaVenta.deletedAt
-          ? {
-              id: s.citaVenta.id,
-              fechaHoraCita: s.citaVenta.fechaHoraCita.toISOString().slice(0, 16),
-              estado: s.citaVenta.estado,
-              numFotosVendidas: s.citaVenta.numFotosVendidas,
-              totalVentaUsd: s.citaVenta.totalVentaUsd,
-            }
-          : null,
+        citaVenta:
+          s.citaVenta && !s.citaVenta.deletedAt
+            ? {
+                id: s.citaVenta.id,
+                fechaHoraCita: s.citaVenta.fechaHoraCita.toISOString().slice(0, 16),
+                estado: s.citaVenta.estado,
+                numFotosVendidas: s.citaVenta.numFotosVendidas,
+                totalVentaUsd: s.citaVenta.totalVentaUsd,
+              }
+            : null,
         createdAt: s.createdAt.toISOString(),
         updatedAt: s.updatedAt.toISOString(),
       })
@@ -334,11 +341,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         notas?: string
       }
 
-      if (
-        !body.hotelId ||
-        !body.clienteNombre ||
-        !body.fechaHoraInicio
-      ) {
+      if (!body.hotelId || !body.clienteNombre || !body.fechaHoraInicio) {
         return reply
           .status(400)
           .send({ error: 'Faltan campos obligatorios (hotelId, clienteNombre, fechaHoraInicio)' })
@@ -415,9 +418,9 @@ export async function sessionRoutes(fastify: FastifyInstance) {
           hotelId: Number(body.hotelId),
           fotografoId: fotografoId,
           creadorId: creadorId,
-          clienteNombre: body.clienteNombre.trim(),
-          clienteEmail: body.clienteEmail ? body.clienteEmail.trim() : null,
-          clienteTelefono: body.clienteTelefono ? body.clienteTelefono.trim() : null,
+          clienteNombre: encrypt(body.clienteNombre.trim()) || '',
+          clienteEmail: body.clienteEmail ? encrypt(body.clienteEmail.trim()) : null,
+          clienteTelefono: body.clienteTelefono ? encrypt(body.clienteTelefono.trim()) : null,
           numeroHabitacion: body.numeroHabitacion ? body.numeroHabitacion.trim() : null,
           numAdultos: body.numAdultos !== undefined ? Number(body.numAdultos) : 1,
           numNinos: body.numNinos !== undefined ? Number(body.numNinos) : 0,
@@ -438,26 +441,28 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         fastify.log.error(gErr, 'Error al sincronizar sesión con Google Calendar')
       }
 
+      const decNueva = decryptSesion(nueva)!
+
       return reply.status(201).send({
-        id: nueva.id,
-        hotelId: nueva.hotelId,
-        fotografoId: nueva.fotografoId || null,
-        creadorId: nueva.creadorId,
-        clienteNombre: nueva.clienteNombre,
-        clienteEmail: nueva.clienteEmail || '',
-        clienteTelefono: nueva.clienteTelefono || '',
-        numeroHabitacion: nueva.numeroHabitacion || '',
-        numAdultos: nueva.numAdultos ?? 1,
-        numNinos: nueva.numNinos ?? 0,
-        fechaSalida: nueva.fechaSalida ? nueva.fechaSalida.toISOString().slice(0, 10) : '',
-        concepto: nueva.concepto || '',
-        fechaHoraInicio: nueva.fechaHoraInicio.toISOString().slice(0, 16),
-        estado: nueva.estado,
-        origen: nueva.origen,
-        notas: nueva.notas || '',
-        googleCalendarEventId: googleEventId || nueva.googleCalendarEventId || null,
-        createdAt: nueva.createdAt.toISOString(),
-        updatedAt: nueva.updatedAt.toISOString(),
+        id: decNueva.id,
+        hotelId: decNueva.hotelId,
+        fotografoId: decNueva.fotografoId || null,
+        creadorId: decNueva.creadorId,
+        clienteNombre: decNueva.clienteNombre,
+        clienteEmail: decNueva.clienteEmail || '',
+        clienteTelefono: decNueva.clienteTelefono || '',
+        numeroHabitacion: decNueva.numeroHabitacion || '',
+        numAdultos: decNueva.numAdultos ?? 1,
+        numNinos: decNueva.numNinos ?? 0,
+        fechaSalida: decNueva.fechaSalida ? decNueva.fechaSalida.toISOString().slice(0, 10) : '',
+        concepto: decNueva.concepto || '',
+        fechaHoraInicio: decNueva.fechaHoraInicio.toISOString().slice(0, 16),
+        estado: decNueva.estado,
+        origen: decNueva.origen,
+        notas: decNueva.notas || '',
+        googleCalendarEventId: googleEventId || decNueva.googleCalendarEventId || null,
+        createdAt: decNueva.createdAt.toISOString(),
+        updatedAt: decNueva.updatedAt.toISOString(),
       })
     } catch (err: unknown) {
       fastify.log.error(err)
@@ -504,9 +509,10 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         const role = user?.role?.codigo?.toUpperCase()
         const canEdit = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role || '')
         if (!canEdit) {
-          return reply
-            .status(403)
-            .send({ error: 'Solo supervisores, gerentes, administradores y superusuarios pueden editar sesiones cerradas' })
+          return reply.status(403).send({
+            error:
+              'Solo supervisores, gerentes, administradores y superusuarios pueden editar sesiones cerradas',
+          })
         }
       }
 
@@ -568,16 +574,30 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         where: { id },
         data: {
           ...(body.hotelId !== undefined && { hotelId: Number(body.hotelId) }),
-          ...(body.fotografoId !== undefined && { fotografoId: body.fotografoId ? body.fotografoId : null }),
-          ...(body.clienteNombre && { clienteNombre: body.clienteNombre.trim() }),
-          ...(body.clienteEmail !== undefined && { clienteEmail: body.clienteEmail ? body.clienteEmail.trim() : null }),
-          ...(body.clienteTelefono !== undefined && { clienteTelefono: body.clienteTelefono ? body.clienteTelefono.trim() : null }),
-          ...(body.numeroHabitacion !== undefined && { numeroHabitacion: body.numeroHabitacion ? body.numeroHabitacion.trim() : null }),
+          ...(body.fotografoId !== undefined && {
+            fotografoId: body.fotografoId ? body.fotografoId : null,
+          }),
+          ...(body.clienteNombre && { clienteNombre: encrypt(body.clienteNombre.trim()) || '' }),
+          ...(body.clienteEmail !== undefined && {
+            clienteEmail: body.clienteEmail ? encrypt(body.clienteEmail.trim()) : null,
+          }),
+          ...(body.clienteTelefono !== undefined && {
+            clienteTelefono: body.clienteTelefono ? encrypt(body.clienteTelefono.trim()) : null,
+          }),
+          ...(body.numeroHabitacion !== undefined && {
+            numeroHabitacion: body.numeroHabitacion ? body.numeroHabitacion.trim() : null,
+          }),
           ...(body.numAdultos !== undefined && { numAdultos: Number(body.numAdultos) }),
           ...(body.numNinos !== undefined && { numNinos: Number(body.numNinos) }),
-          ...(body.fechaSalida !== undefined && { fechaSalida: body.fechaSalida ? new Date(body.fechaSalida) : null }),
-          ...(body.concepto !== undefined && { concepto: body.concepto ? body.concepto.trim() : null }),
-          ...(body.fechaHoraInicio && { fechaHoraInicio: parseLocalDateTime(body.fechaHoraInicio) }),
+          ...(body.fechaSalida !== undefined && {
+            fechaSalida: body.fechaSalida ? new Date(body.fechaSalida) : null,
+          }),
+          ...(body.concepto !== undefined && {
+            concepto: body.concepto ? body.concepto.trim() : null,
+          }),
+          ...(body.fechaHoraInicio && {
+            fechaHoraInicio: parseLocalDateTime(body.fechaHoraInicio),
+          }),
           ...(body.estado && { estado: body.estado }),
           ...(body.notas !== undefined && { notas: body.notas ? body.notas.trim() : null }),
         },
@@ -591,26 +611,30 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         fastify.log.error(gErr, 'Error al actualizar sesión en Google Calendar')
       }
 
+      const decActualizada = decryptSesion(actualizada)!
+
       return reply.send({
-        id: actualizada.id,
-        hotelId: actualizada.hotelId,
-        fotografoId: actualizada.fotografoId || null,
-        creadorId: actualizada.creadorId || null,
-        clienteNombre: actualizada.clienteNombre,
-        clienteEmail: actualizada.clienteEmail || '',
-        clienteTelefono: actualizada.clienteTelefono || '',
-        numeroHabitacion: actualizada.numeroHabitacion || '',
-        numAdultos: actualizada.numAdultos ?? 1,
-        numNinos: actualizada.numNinos ?? 0,
-        fechaSalida: actualizada.fechaSalida ? actualizada.fechaSalida.toISOString().slice(0, 10) : '',
-        concepto: actualizada.concepto || '',
-        fechaHoraInicio: actualizada.fechaHoraInicio.toISOString().slice(0, 16),
-        estado: actualizada.estado,
-        origen: actualizada.origen,
-        notas: actualizada.notas || '',
+        id: decActualizada.id,
+        hotelId: decActualizada.hotelId,
+        fotografoId: decActualizada.fotografoId || null,
+        creadorId: decActualizada.creadorId || null,
+        clienteNombre: decActualizada.clienteNombre,
+        clienteEmail: decActualizada.clienteEmail || '',
+        clienteTelefono: decActualizada.clienteTelefono || '',
+        numeroHabitacion: decActualizada.numeroHabitacion || '',
+        numAdultos: decActualizada.numAdultos ?? 1,
+        numNinos: decActualizada.numNinos ?? 0,
+        fechaSalida: decActualizada.fechaSalida
+          ? decActualizada.fechaSalida.toISOString().slice(0, 10)
+          : '',
+        concepto: decActualizada.concepto || '',
+        fechaHoraInicio: decActualizada.fechaHoraInicio.toISOString().slice(0, 16),
+        estado: decActualizada.estado,
+        origen: decActualizada.origen,
+        notas: decActualizada.notas || '',
         googleCalendarEventId: googleEventId || null,
-        createdAt: actualizada.createdAt.toISOString(),
-        updatedAt: actualizada.updatedAt.toISOString(),
+        createdAt: decActualizada.createdAt.toISOString(),
+        updatedAt: decActualizada.updatedAt.toISOString(),
       })
     } catch (err: unknown) {
       fastify.log.error(err)

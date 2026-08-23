@@ -2,7 +2,7 @@ import { google } from 'googleapis'
 import path from 'node:path'
 import fs from 'node:fs'
 import { prisma } from '../../../shared/db.js'
-import { decryptUser } from '../../../shared/encryption.js'
+import { decrypt, decryptUser } from '../../../shared/encryption.js'
 
 // Paleta oficial de Google Calendar para eventos (colorId 1..11)
 interface GoogleColor {
@@ -198,7 +198,7 @@ export async function syncSesionToGoogle(sesionId: number): Promise<string | nul
   }
 
   const hotelName = sesion.hotel?.nombre || 'Hotel'
-  const clienteNombre = sesion.clienteNombre || 'Cliente'
+  const clienteNombre = decrypt(sesion.clienteNombre) || 'Cliente'
   const fotoUser = decryptUser(sesion.fotografo)
   const creadorUser = decryptUser(sesion.creador)
   const fotografoNombre = fotoUser
@@ -222,8 +222,8 @@ export async function syncSesionToGoogle(sesionId: number): Promise<string | nul
   const checkoutFormatted = formatDateLongSpanish(sesion.fechaSalida)
   const roomValue = formatRoomDisplay(sesion.numeroHabitacion)
   const paxValue = formatPaxDisplay(sesion.numAdultos ?? 1, sesion.numNinos ?? 0)
-  const phoneHtml = formatPhoneHtml(sesion.clienteTelefono)
-  const emailHtml = formatEmailHtml(sesion.clienteEmail)
+  const phoneHtml = formatPhoneHtml(decrypt(sesion.clienteTelefono))
+  const emailHtml = formatEmailHtml(decrypt(sesion.clienteEmail))
 
   let description = `<b>HABITACIÓN:</b> ${roomValue}
 <b>CLIENTE:</b> ${clienteNombre}
@@ -385,7 +385,7 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
   }
 
   const hotelName = cita.hotel?.nombre || 'Hotel'
-  const clienteNombre = cita.sesion?.clienteNombre || 'Cliente'
+  const clienteNombre = decrypt(cita.sesion?.clienteNombre) || 'Cliente'
   const vendUser = decryptUser(cita.vendedor)
   const fotoUser = decryptUser(cita.sesion?.fotografo)
   const creadorUser = decryptUser(cita.sesion?.creador)
@@ -413,8 +413,8 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
   const checkoutFormatted = formatDateLongSpanish(cita.sesion?.fechaSalida)
   const roomValue = formatRoomDisplay(cita.sesion?.numeroHabitacion)
   const paxValue = formatPaxDisplay(cita.sesion?.numAdultos ?? 1, cita.sesion?.numNinos ?? 0)
-  const phoneHtml = formatPhoneHtml(cita.sesion?.clienteTelefono)
-  const emailHtml = formatEmailHtml(cita.sesion?.clienteEmail)
+  const phoneHtml = formatPhoneHtml(decrypt(cita.sesion?.clienteTelefono))
+  const emailHtml = formatEmailHtml(decrypt(cita.sesion?.clienteEmail))
 
   let description = `<b>[CITA DE VENTA]</b>
 <b>HABITACIÓN:</b> ${roomValue}

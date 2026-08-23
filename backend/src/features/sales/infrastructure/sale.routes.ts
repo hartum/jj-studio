@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify'
 import { prisma } from '../../../shared/db.js'
-import { decryptUser } from '../../../shared/encryption.js'
+import { decrypt, decryptUser } from '../../../shared/encryption.js'
 import { calculateAndSaveCommissionsForSale } from '../../commissions/application/commission.service.js'
 import {
   syncCitaVentaToGoogle,
@@ -138,9 +138,9 @@ export async function saleRoutes(fastify: FastifyInstance) {
           numFotosVendidas: c.numFotosVendidas,
           totalVentaUsd: c.totalVentaUsd,
           notas: c.notas || '',
-          clienteNombre: c.sesion.clienteNombre,
-          clienteEmail: c.sesion.clienteEmail || '',
-          clienteTelefono: c.sesion.clienteTelefono || '',
+          clienteNombre: decrypt(c.sesion.clienteNombre) || '',
+          clienteEmail: decrypt(c.sesion.clienteEmail) || '',
+          clienteTelefono: decrypt(c.sesion.clienteTelefono) || '',
           numeroHabitacion: c.sesion.numeroHabitacion || '',
           fotografoId: c.sesion.fotografoId || null,
           sesionFechaHoraInicio: c.sesion.fechaHoraInicio.toISOString().slice(0, 16),
@@ -178,7 +178,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const mapped = conflicts.map((c) => ({
         id: c.id,
         fechaHoraCita: c.fechaHoraCita.toISOString().slice(0, 16),
-        clienteNombre: c.sesion.clienteNombre,
+        clienteNombre: decrypt(c.sesion.clienteNombre) || '',
         numeroHabitacion: c.sesion.numeroHabitacion || '',
       }))
 
@@ -216,9 +216,9 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas: cita.numFotosVendidas,
         totalVentaUsd: cita.totalVentaUsd,
         notas: cita.notas || '',
-        clienteNombre: cita.sesion.clienteNombre,
-        clienteEmail: cita.sesion.clienteEmail || '',
-        clienteTelefono: cita.sesion.clienteTelefono || '',
+        clienteNombre: decrypt(cita.sesion.clienteNombre) || '',
+        clienteEmail: decrypt(cita.sesion.clienteEmail) || '',
+        clienteTelefono: decrypt(cita.sesion.clienteTelefono) || '',
         numeroHabitacion: cita.sesion.numeroHabitacion || '',
         fotografoId: cita.sesion.fotografoId || null,
         numAdultos: cita.sesion.numAdultos ?? 1,
@@ -322,7 +322,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas: nueva.numFotosVendidas,
         totalVentaUsd: nueva.totalVentaUsd,
         notas: nueva.notas || '',
-        clienteNombre: nueva.sesion.clienteNombre,
+        clienteNombre: decrypt(nueva.sesion.clienteNombre) || '',
         googleCalendarEventId: googleEventId || null,
         createdAt: nueva.createdAt.toISOString(),
         updatedAt: nueva.updatedAt.toISOString(),
@@ -332,7 +332,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         response.conflictos = conflicts.map((c) => ({
           id: c.id,
           fechaHoraCita: c.fechaHoraCita.toISOString().slice(0, 16),
-          clienteNombre: c.sesion.clienteNombre,
+          clienteNombre: decrypt(c.sesion.clienteNombre) || '',
         }))
       }
 
@@ -431,7 +431,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas: actualizada.numFotosVendidas,
         totalVentaUsd: actualizada.totalVentaUsd,
         notas: actualizada.notas || '',
-        clienteNombre: actualizada.sesion.clienteNombre,
+        clienteNombre: decrypt(actualizada.sesion.clienteNombre) || '',
         googleCalendarEventId: googleEventId || null,
         createdAt: actualizada.createdAt.toISOString(),
         updatedAt: actualizada.updatedAt.toISOString(),
@@ -444,7 +444,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           response.conflictos = conflicts.map((c) => ({
             id: c.id,
             fechaHoraCita: c.fechaHoraCita.toISOString().slice(0, 16),
-            clienteNombre: c.sesion.clienteNombre,
+            clienteNombre: decrypt(c.sesion.clienteNombre) || '',
           }))
         }
       }

@@ -137,3 +137,46 @@ export function decryptUser<T extends Record<string, any>>(user: T | null | unde
 export function decryptUsers<T extends Record<string, any>>(items: T[]): T[] {
   return items.map((item) => decryptUser(item) as T)
 }
+
+/**
+ * Desencripta de forma recursiva o directa las propiedades sensibles de una sesión fotográfica.
+ */
+export function decryptSesion<T extends Record<string, any>>(sesion: T | null | undefined): T | null {
+  if (!sesion) return null
+
+  const decrypted: any = { ...sesion }
+
+  if ('clienteNombre' in decrypted && typeof decrypted.clienteNombre === 'string') {
+    decrypted.clienteNombre = decrypt(decrypted.clienteNombre)
+  }
+  if ('clienteEmail' in decrypted && typeof decrypted.clienteEmail === 'string') {
+    decrypted.clienteEmail = decrypt(decrypted.clienteEmail)
+  }
+  if ('clienteTelefono' in decrypted && typeof decrypted.clienteTelefono === 'string') {
+    decrypted.clienteTelefono = decrypt(decrypted.clienteTelefono)
+  }
+
+  // Desencriptar relaciones si están presentes
+  if (decrypted.fotografo && typeof decrypted.fotografo === 'object') {
+    decrypted.fotografo = decryptUser(decrypted.fotografo)
+  }
+  if (decrypted.creador && typeof decrypted.creador === 'object') {
+    decrypted.creador = decryptUser(decrypted.creador)
+  }
+  if (decrypted.vendedor && typeof decrypted.vendedor === 'object') {
+    decrypted.vendedor = decryptUser(decrypted.vendedor)
+  }
+  if (decrypted.sesion && typeof decrypted.sesion === 'object') {
+    decrypted.sesion = decryptSesion(decrypted.sesion)
+  }
+
+  return decrypted as T
+}
+
+/**
+ * Desencripta una lista de sesiones fotográficas.
+ */
+export function decryptSesiones<T extends Record<string, any>>(items: T[]): T[] {
+  return items.map((item) => decryptSesion(item) as T)
+}
+
