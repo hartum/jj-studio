@@ -165,103 +165,109 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
       </div>
     </div>
 
-    <!-- Barra de Progreso Semafórica Global / Hoteles Seleccionados -->
-    <div class="goals-summary-block">
-      <GoalProgressCard
-        v-if="!currentHotelProgreso"
-        :titulo="selectedHotelFilters.length > 1 ? 'Objetivo Consolidado' : 'Objetivo Global'"
-        :subtitulo="`Mes de ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio} — Consolidado de ${globalProgresoTotals.numHoteles} ${globalProgresoTotals.numHoteles === 1 ? 'hotel' : 'hoteles'}${selectedHotelFilters.length > 1 ? ` (${selectedHotelsSummary})` : ''}`"
-        :meta-importe="globalProgresoTotals.metaTotal"
-        :ventas-reales-usd="globalProgresoTotals.ventasTotal"
-        :porcentaje-cumplimiento="globalProgresoTotals.porcentaje"
-        :meta-esperada-hoy="globalProgresoTotals.metaEsperadaTotal"
-        :desviacion-monetaria="globalProgresoTotals.desviacion"
-        :semaforo="globalProgresoTotals.semaforo"
-      >
-        <template #actions>
-          <el-button
-            type="primary"
-            :icon="Setting"
-            size="default"
-            @click="handleNavigateToGoalForm(selectedHotelFilters[0] || null)"
+    <!-- Fila 50% - 50%: Objetivo Global / Consolidado + Resumen Financiero de Comisiones -->
+    <el-row :gutter="20" class="top-cards-row">
+      <el-col :xs="24" :lg="12" class="top-card-col">
+        <div class="goals-summary-block">
+          <GoalProgressCard
+            v-if="!currentHotelProgreso"
+            :titulo="selectedHotelFilters.length > 1 ? 'Objetivo Consolidado' : 'Objetivo Global'"
+            :subtitulo="`Mes de ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio} — Consolidado de ${globalProgresoTotals.numHoteles} ${globalProgresoTotals.numHoteles === 1 ? 'hotel' : 'hoteles'}${selectedHotelFilters.length > 1 ? ` (${selectedHotelsSummary})` : ''}`"
+            :meta-importe="globalProgresoTotals.metaTotal"
+            :ventas-reales-usd="globalProgresoTotals.ventasTotal"
+            :porcentaje-cumplimiento="globalProgresoTotals.porcentaje"
+            :meta-esperada-hoy="globalProgresoTotals.metaEsperadaTotal"
+            :desviacion-monetaria="globalProgresoTotals.desviacion"
+            :semaforo="globalProgresoTotals.semaforo"
           >
-            Configurar Metas
-          </el-button>
-        </template>
-      </GoalProgressCard>
+            <template #actions>
+              <el-button
+                type="primary"
+                :icon="Setting"
+                size="default"
+                @click="handleNavigateToGoalForm(selectedHotelFilters[0] || null)"
+              >
+                Configurar Metas
+              </el-button>
+            </template>
+          </GoalProgressCard>
 
-      <GoalProgressCard
-        v-else
-        :titulo="`Meta Mensual: ${currentHotelProgreso.hotelNombre}`"
-        :subtitulo="`${currentHotelProgreso.areaNombre} (${currentHotelProgreso.paisNombre}) — ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio}`"
-        :meta-importe="currentHotelProgreso.metaImporte"
-        :ventas-reales-usd="currentHotelProgreso.ventasRealesUsd"
-        :porcentaje-cumplimiento="currentHotelProgreso.porcentajeCumplimiento"
-        :meta-esperada-hoy="currentHotelProgreso.metaEsperadaHoy"
-        :desviacion-monetaria="currentHotelProgreso.desviacionMonetaria"
-        :semaforo="currentHotelProgreso.semaforo"
-        :num-ventas="currentHotelProgreso.numVentas"
-        :num-sesiones="currentHotelProgreso.numSesiones"
-      >
-        <template #actions>
-          <el-button
-            type="primary"
-            :icon="Setting"
-            size="default"
-            @click="handleNavigateToGoalForm(currentHotelProgreso.hotelId)"
+          <GoalProgressCard
+            v-else
+            :titulo="`Meta Mensual: ${currentHotelProgreso.hotelNombre}`"
+            :subtitulo="`${currentHotelProgreso.areaNombre} (${currentHotelProgreso.paisNombre}) — ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio}`"
+            :meta-importe="currentHotelProgreso.metaImporte"
+            :ventas-reales-usd="currentHotelProgreso.ventasRealesUsd"
+            :porcentaje-cumplimiento="currentHotelProgreso.porcentajeCumplimiento"
+            :meta-esperada-hoy="currentHotelProgreso.metaEsperadaHoy"
+            :desviacion-monetaria="currentHotelProgreso.desviacionMonetaria"
+            :semaforo="currentHotelProgreso.semaforo"
+            :num-ventas="currentHotelProgreso.numVentas"
+            :num-sesiones="currentHotelProgreso.numSesiones"
           >
-            Configurar Metas
-          </el-button>
-        </template>
-      </GoalProgressCard>
-    </div>
-
-    <!-- Resumen Ejecutivo Financiero de Comisiones para Admin -->
-    <el-card class="dashboard-card mb-4" shadow="hover">
-      <template #header>
-        <div style="display: flex; justify-content: space-between; align-items: center">
-          <span class="font-bold">
-            <el-icon style="vertical-align: middle; margin-right: 6px; color: #10b981"
-              ><Money
-            /></el-icon>
-            Resumen Financiero de Comisiones —
-            {{ monthsOptions.find((m) => m.value === selectedMes)?.label }} {{ selectedAnio }}
-          </span>
+            <template #actions>
+              <el-button
+                type="primary"
+                :icon="Setting"
+                size="default"
+                @click="handleNavigateToGoalForm(currentHotelProgreso.hotelId)"
+              >
+                Configurar Metas
+              </el-button>
+            </template>
+          </GoalProgressCard>
         </div>
-      </template>
-      <el-row :gutter="20">
-        <el-col :xs="24" :sm="8">
-          <div class="stat-box-comm">
-            <span class="stat-box-label">Total Comisiones Generadas</span>
-            <span class="stat-box-val text-success">{{
-              formatCurrency(globalMonthlyCommissions)
-            }}</span>
+      </el-col>
+
+      <el-col :xs="24" :lg="12" class="top-card-col">
+        <!-- Resumen Ejecutivo Financiero de Comisiones para Admin -->
+        <el-card class="dashboard-card comm-summary-card" shadow="hover">
+          <template #header>
+            <div style="display: flex; justify-content: space-between; align-items: center">
+              <span class="font-bold">
+                <el-icon style="vertical-align: middle; margin-right: 6px; color: #10b981"
+                  ><Money
+                /></el-icon>
+                Resumen Financiero de Comisiones —
+                {{ monthsOptions.find((m) => m.value === selectedMes)?.label }} {{ selectedAnio }}
+              </span>
+            </div>
+          </template>
+          <el-row :gutter="12" class="comm-stats-row">
+            <el-col :xs="24" :sm="8">
+              <div class="stat-box-comm">
+                <span class="stat-box-label">Total Comisiones</span>
+                <span class="stat-box-val text-success">{{
+                  formatCurrency(globalMonthlyCommissions)
+                }}</span>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="8">
+              <div class="stat-box-comm">
+                <span class="stat-box-label">Ventas con Comisión</span>
+                <span class="stat-box-val">{{
+                  formatCurrency(commissionStore.resumen?.totalVentasUsd || 0)
+                }}</span>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="8">
+              <div class="stat-box-comm">
+                <span class="stat-box-label">Comisiones Pendientes</span>
+                <span class="stat-box-val text-warning">
+                  {{ commissionStore.comisiones.filter((c) => c.estado === 'PENDIENTE').length }}
+                  pendientes
+                </span>
+              </div>
+            </el-col>
+          </el-row>
+          <div class="comm-card-footer">
+            <el-button type="primary" :icon="Setting" size="default" @click="goToConfig('comisiones')">
+              Configurar Comisiones
+            </el-button>
           </div>
-        </el-col>
-        <el-col :xs="24" :sm="8">
-          <div class="stat-box-comm">
-            <span class="stat-box-label">Ventas con Comisión</span>
-            <span class="stat-box-val">{{
-              formatCurrency(commissionStore.resumen?.totalVentasUsd || 0)
-            }}</span>
-          </div>
-        </el-col>
-        <el-col :xs="24" :sm="8">
-          <div class="stat-box-comm">
-            <span class="stat-box-label">Comisiones Pendientes de Pago</span>
-            <span class="stat-box-val text-warning">
-              {{ commissionStore.comisiones.filter((c) => c.estado === 'PENDIENTE').length }}
-              pendientes
-            </span>
-          </div>
-        </el-col>
-      </el-row>
-      <div class="comm-card-footer">
-        <el-button type="primary" :icon="Setting" size="default" @click="goToConfig('comisiones')">
-          Configurar Comisiones
-        </el-button>
-      </div>
-    </el-card>
+        </el-card>
+      </el-col>
+    </el-row>
 
     <!-- Gráficas de Línea (Line Charts): Mes a Día y Año a Mes -->
     <GoalEvolutionChart
@@ -403,6 +409,40 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
 </template>
 
 <style scoped>
+.top-cards-row {
+  margin-bottom: 1rem;
+}
+
+.top-card-col {
+  margin-bottom: 1rem;
+}
+
+.comm-stats-row {
+  margin-top: 0.5rem;
+}
+
+.stat-box-comm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background-color: var(--el-fill-color-blank, #f8fafc);
+  border: 1px solid var(--el-border-color-lighter, #f1f5f9);
+}
+
+.stat-box-label {
+  font-size: 0.75rem;
+  color: var(--nav-link-color, #64748b);
+  font-weight: 500;
+}
+
+.stat-box-val {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--heading-color, #0f172a);
+}
+
 .comm-card-footer {
   display: flex;
   justify-content: flex-end;

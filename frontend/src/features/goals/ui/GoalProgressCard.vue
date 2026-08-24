@@ -9,6 +9,7 @@ import {
   Money,
   TrendCharts,
   Calendar,
+  Flag,
 } from '@element-plus/icons-vue'
 
 const props = withDefaults(
@@ -25,6 +26,7 @@ const props = withDefaults(
     numSesiones?: number
     badgeText?: string
     isCompact?: boolean
+    showFlag?: boolean
   }>(),
   {
     subtitulo: '',
@@ -32,6 +34,7 @@ const props = withDefaults(
     numSesiones: undefined,
     badgeText: '',
     isCompact: false,
+    showFlag: true,
   },
 )
 
@@ -85,13 +88,20 @@ function formatCurrency(val: number): string {
     <!-- Header -->
     <div class="goal-card-header">
       <div class="header-titles">
-        <h3 class="goal-title">{{ titulo }}</h3>
+        <h3 class="goal-title">
+          <el-icon v-if="showFlag" class="title-flag-icon"><Flag /></el-icon>
+          <span>{{ titulo }}</span>
+        </h3>
         <p v-if="subtitulo" class="goal-subtitle">{{ subtitulo }}</p>
       </div>
 
       <div
         class="semaforo-badge"
-        :style="{ backgroundColor: semaforoBgLight, color: semaforoColor, borderColor: semaforoColor }"
+        :style="{
+          backgroundColor: semaforoBgLight,
+          color: semaforoColor,
+          borderColor: semaforoColor,
+        }"
       >
         <el-icon :size="14"><component :is="semaforoIcon" /></el-icon>
         <span class="badge-text">{{ badgeText || semaforoLabel }}</span>
@@ -107,7 +117,10 @@ function formatCurrency(val: number): string {
         <span class="target-value">/ {{ formatCurrency(metaImporte) }}</span>
       </div>
 
-      <div class="percentage-pill" :style="{ backgroundColor: semaforoBgLight, color: semaforoColor }">
+      <div
+        class="percentage-pill"
+        :style="{ backgroundColor: semaforoBgLight, color: semaforoColor }"
+      >
         {{ porcentajeCumplimiento }}%
       </div>
     </div>
@@ -217,6 +230,15 @@ function formatCurrency(val: number): string {
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--heading-color, #0f172a);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.title-flag-icon {
+  color: #11b981;
+  font-size: 1.15rem;
+  flex-shrink: 0;
 }
 
 .goal-subtitle {
@@ -244,6 +266,7 @@ function formatCurrency(val: number): string {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  margin-top: 0.5rem;
   margin-bottom: 0.75rem;
 }
 
@@ -251,6 +274,7 @@ function formatCurrency(val: number): string {
   display: flex;
   align-items: baseline;
   gap: 0.35rem;
+  margin-top: 1.7rem;
 }
 
 .current-value {
@@ -289,7 +313,9 @@ function formatCurrency(val: number): string {
 .progress-fill {
   height: 100%;
   border-radius: 9999px;
-  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.4s ease;
+  transition:
+    width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.4s ease;
 }
 
 /* Pacing metrics */
