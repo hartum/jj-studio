@@ -29,6 +29,8 @@ import {
   Calendar,
   Delete,
   WarningFilled,
+  ArrowLeft,
+  ArrowRight,
 } from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
@@ -491,12 +493,80 @@ function clearEventHighlights() {
   })
 }
 
+const currentCalendarTitle = ref<string>('')
+const currentVisibleStart = ref<Date | null>(null)
+const currentVisibleEnd = ref<Date | null>(null)
+
+const currentPeriodStats = computed(() => {
+  if (!currentVisibleStart.value || !currentVisibleEnd.value) {
+    const sessionsCount = calendarEvents.value.filter(
+      (e) => e.extendedProps?.type === 'session',
+    ).length
+    const salesCount = calendarEvents.value.filter((e) => e.extendedProps?.type === 'sale').length
+    return {
+      total: calendarEvents.value.length,
+      sessions: sessionsCount,
+      sales: salesCount,
+    }
+  }
+
+  const startMs = currentVisibleStart.value.getTime()
+  const endMs = currentVisibleEnd.value.getTime()
+
+  let sessions = 0
+  let sales = 0
+
+  for (const evt of calendarEvents.value) {
+    if (!evt.start) continue
+    const evtTime = new Date(evt.start).getTime()
+    if (evtTime >= startMs && evtTime < endMs) {
+      if (evt.extendedProps?.type === 'sale') {
+        sales++
+      } else {
+        sessions++
+      }
+    }
+  }
+
+  return {
+    total: sessions + sales,
+    sessions,
+    sales,
+  }
+})
+
+function handleCalendarNav(action: 'prev' | 'next' | 'today') {
+  const calendarApi = calendarRef.value?.getApi()
+  if (!calendarApi) return
+  if (action === 'prev') {
+    calendarApi.prev()
+  } else if (action === 'next') {
+    calendarApi.next()
+  } else if (action === 'today') {
+    calendarApi.today()
+  }
+}
+
+function handleViewChange(viewName: string) {
+  currentCalendarView.value = viewName
+  const calendarApi = calendarRef.value?.getApi()
+  if (calendarApi) {
+    calendarApi.changeView(viewName)
+  }
+}
+
 function handleDatesSet(dateInfo: DatesSetArg) {
   clearEventHighlights()
   if (dateInfo.view?.type) {
     currentCalendarView.value = dateInfo.view.type
     localStorage.setItem(CALENDAR_VIEW_STORAGE_KEY, dateInfo.view.type)
   }
+  if (dateInfo.view?.title) {
+    currentCalendarTitle.value = dateInfo.view.title
+  }
+  currentVisibleStart.value = dateInfo.view.currentStart || dateInfo.start
+  currentVisibleEnd.value = dateInfo.view.currentEnd || dateInfo.end
+
   if (dateInfo.view?.currentStart && isMobile.value) {
     const viewDateStr = dayjs(dateInfo.view.currentStart).format('YYYY-MM-DD')
     if (mobileSelectedDate.value !== viewDateStr) {
@@ -522,13 +592,7 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
   initialView: getInitialCalendarView(),
   locale: esLocale,
-  headerToolbar: isMobile.value
-    ? false
-    : {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
-      },
+  headerToolbar: false,
   eventDisplay: 'block',
   eventTimeFormat: {
     hour: '2-digit',
@@ -1115,6 +1179,91 @@ function handleEventClick(clickInfo: EventClickArg) {
 
     <!-- Calendario de FullCalendar -->
     <div class="calendar-card">
+      <!-- Encabezado de Calendario para Desktop: Navegación, Título + Badge de Eventos y Selector de Vistas -->
+      <div v-if="!isMobile" class="desktop-calendar-toolbar">
+        <!-- Izquierda: Controles de navegación (<, >, Hoy) -->
+        <div class="calendar-toolbar-left">
+          <el-button-group class="nav-button-group">
+            <el-button
+              type="primary"
+              :icon="ArrowLeft"
+              class="toolbar-btn nav-btn"
+              @click="handleCalendarNav('prev')"
+              title="Periodo anterior"
+            />
+            <el-button
+              type="primary"
+              :icon="ArrowRight"
+              class="toolbar-btn nav-btn"
+              @click="handleCalendarNav('next')"
+              title="Periodo siguiente"
+            />
+          </el-button-group>
+          <el-button
+            type="primary"
+            class="toolbar-btn today-btn"
+            @click="handleCalendarNav('today')"
+          >
+            Hoy
+          </el-button>
+        </div>
+
+        <!-- Centro: Título del Periodo + Badge de Total de Sesiones / Citas -->
+        <div class="calendar-toolbar-center">
+          <h2 class="calendar-period-title">{{ currentCalendarTitle }}</h2>
+          <el-tooltip
+            effect="dark"
+            placement="bottom"
+            :content="`${currentPeriodStats.sessions} sesiones fotográficas y ${currentPeriodStats.sales} citas de venta programadas`"
+          >
+            <el-tag type="success" effect="light" round size="large" class="calendar-period-badge">
+              <span class="badge-count">{{ currentPeriodStats.total }}</span>
+              <span class="badge-label">
+                {{ currentPeriodStats.total === 1 ? 'Sesión / Cita' : 'Sesiones / Citas' }}
+              </span>
+            </el-tag>
+          </el-tooltip>
+        </div>
+
+        <!-- Derecha: Selector de Vistas (Mes, Semana, Día, Agenda) -->
+        <div class="calendar-toolbar-right">
+          <el-button-group class="view-button-group">
+            <el-button
+              :type="currentCalendarView === 'dayGridMonth' ? 'primary' : 'default'"
+              :class="{ 'is-active': currentCalendarView === 'dayGridMonth' }"
+              class="toolbar-btn view-btn"
+              @click="handleViewChange('dayGridMonth')"
+            >
+              Mes
+            </el-button>
+            <el-button
+              :type="currentCalendarView === 'timeGridWeek' ? 'primary' : 'default'"
+              :class="{ 'is-active': currentCalendarView === 'timeGridWeek' }"
+              class="toolbar-btn view-btn"
+              @click="handleViewChange('timeGridWeek')"
+            >
+              Semana
+            </el-button>
+            <el-button
+              :type="currentCalendarView === 'timeGridDay' ? 'primary' : 'default'"
+              :class="{ 'is-active': currentCalendarView === 'timeGridDay' }"
+              class="toolbar-btn view-btn"
+              @click="handleViewChange('timeGridDay')"
+            >
+              Día
+            </el-button>
+            <el-button
+              :type="currentCalendarView === 'listWeek' ? 'primary' : 'default'"
+              :class="{ 'is-active': currentCalendarView === 'listWeek' }"
+              class="toolbar-btn view-btn"
+              @click="handleViewChange('listWeek')"
+            >
+              Agenda
+            </el-button>
+          </el-button-group>
+        </div>
+      </div>
+
       <!-- Encabezado Fijo/Sticky para Móvil: Selector de Fecha + Botones de Vista -->
       <div v-if="isMobile" class="mobile-sticky-calendar-header">
         <!-- Selector de fecha para móvil (DatePickerPanel sin bordes con badges) -->
@@ -1718,6 +1867,137 @@ function handleEventClick(clickInfo: EventClickArg) {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
+/* ── Toolbar Personalizado para Desktop ── */
+.desktop-calendar-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.25rem;
+  gap: 1rem;
+}
+
+.calendar-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.nav-button-group :deep(.toolbar-btn.nav-btn) {
+  padding: 10px 18px;
+  height: 38px;
+  background-color: var(--el-color-primary, #409eff);
+  border-color: var(--el-color-primary, #409eff);
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.nav-button-group :deep(.toolbar-btn.nav-btn:hover) {
+  background-color: var(--el-color-primary-light-3, #66b1ff);
+  border-color: var(--el-color-primary-light-3, #66b1ff);
+}
+
+.today-btn {
+  padding: 10px 22px !important;
+  height: 38px !important;
+  background-color: var(--el-color-primary-light-9, #ecf5ff) !important;
+  border-color: var(--el-color-primary-light-6, #b3d8ff) !important;
+  color: var(--el-color-primary, #409eff) !important;
+  font-weight: 500 !important;
+  border-radius: var(--el-border-radius-base, 4px) !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.today-btn:hover {
+  background-color: var(--el-color-primary, #409eff) !important;
+  border-color: var(--el-color-primary, #409eff) !important;
+  color: #ffffff !important;
+}
+
+.calendar-toolbar-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+}
+
+.calendar-period-title {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--heading-color, #0f172a);
+  letter-spacing: -0.01em;
+}
+
+.calendar-period-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: default;
+  background-color: var(--el-color-success-light-9, #f0fdf4);
+  border: 1px solid var(--el-color-success-light-5, #86efac);
+  color: var(--el-color-success-dark-2, #15803d);
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.12);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.calendar-period-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(16, 185, 129, 0.22);
+}
+
+.calendar-period-badge .badge-count {
+  font-weight: 700;
+  font-size: 0.92rem;
+  background-color: var(--el-color-success, #10b981);
+  color: #ffffff;
+  padding: 1px 7px;
+  border-radius: 10px;
+  line-height: 1.2;
+  margin-right: 0.5rem;
+}
+
+.calendar-period-badge .badge-label {
+  font-weight: 600;
+  color: var(--el-color-success-dark-2, #15803d);
+}
+
+.calendar-toolbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.view-button-group :deep(.toolbar-btn.view-btn) {
+  padding: 10px 20px;
+  height: 38px;
+  font-size: var(--el-font-size-base, 14px);
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.view-button-group :deep(.toolbar-btn.view-btn.is-active) {
+  background-color: var(--el-color-primary, #409eff) !important;
+  border-color: var(--el-color-primary, #409eff) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.view-button-group :deep(.toolbar-btn.view-btn:not(.is-active)) {
+  background-color: var(--toolbar-bg, #ffffff);
+  border-color: var(--toolbar-border, #e2e8f0);
+  color: var(--nav-link-color, #64748b);
+}
+
+.view-button-group :deep(.toolbar-btn.view-btn:not(.is-active):hover) {
+  background-color: var(--el-color-primary-light-9, #ecf5ff);
+  border-color: var(--el-color-primary-light-5, #a0cfff);
+  color: var(--el-color-primary, #409eff);
+}
+
 :deep(.fc) {
   font-family: inherit;
 }
@@ -2202,7 +2482,7 @@ function handleEventClick(clickInfo: EventClickArg) {
   position: absolute;
   top: -2px;
   right: -2px;
-  background-color: var(--el-color-danger, #ef4444);
+  background-color: var(--el-color-success, #10b981);
   color: #ffffff;
   font-size: 9px;
   font-weight: 700;
@@ -2222,7 +2502,7 @@ function handleEventClick(clickInfo: EventClickArg) {
 .mobile-picker-panel-wrapper :deep(.end-date) .mobile-picker-day-badge,
 .mobile-picker-panel-wrapper :deep(.in-range) .mobile-picker-day-badge,
 .mobile-picker-panel-wrapper :deep(.is-week-mode) .mobile-picker-day-badge {
-  background-color: var(--el-color-danger, #ef4444);
+  background-color: var(--el-color-success, #10b981);
   color: #ffffff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
