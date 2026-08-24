@@ -4,7 +4,7 @@ import type { Hotel } from '@/features/hotels/domain/hotel.model'
 
 export function useCalendarAlerts(
   userHotels: Ref<Hotel[]> | ComputedRef<Hotel[]>,
-  selectedHotelId: Ref<number | null>,
+  selectedHotelIds: Ref<number[]>,
 ) {
   const sessionStore = useSessionStore()
   const activeAlertPanels = ref<string[]>([])
@@ -14,7 +14,12 @@ export function useCalendarAlerts(
     const now = new Date()
     return sessionStore.sessions.filter((s) => {
       if (!allowedHotelIds.has(Number(s.hotelId))) return false
-      if (selectedHotelId.value && Number(s.hotelId) !== Number(selectedHotelId.value)) return false
+      if (
+        selectedHotelIds.value.length > 0 &&
+        !selectedHotelIds.value.includes(Number(s.hotelId))
+      ) {
+        return false
+      }
       return s.estado === 'PROGRAMADA' && new Date(s.fechaHoraInicio) < now
     })
   })
@@ -24,7 +29,12 @@ export function useCalendarAlerts(
     const ESTADOS_NO_PERMITIDOS = ['CANCELADA', 'NO_SHOW']
     return sessionStore.sessions.filter((s) => {
       if (!allowedHotelIds.has(Number(s.hotelId))) return false
-      if (selectedHotelId.value && Number(s.hotelId) !== Number(selectedHotelId.value)) return false
+      if (
+        selectedHotelIds.value.length > 0 &&
+        !selectedHotelIds.value.includes(Number(s.hotelId))
+      ) {
+        return false
+      }
       return !ESTADOS_NO_PERMITIDOS.includes(s.estado) && !s.citaVenta
     })
   })
@@ -34,7 +44,12 @@ export function useCalendarAlerts(
     const now = new Date()
     return sessionStore.sessions.filter((s) => {
       if (!allowedHotelIds.has(Number(s.hotelId))) return false
-      if (selectedHotelId.value && Number(s.hotelId) !== Number(selectedHotelId.value)) return false
+      if (
+        selectedHotelIds.value.length > 0 &&
+        !selectedHotelIds.value.includes(Number(s.hotelId))
+      ) {
+        return false
+      }
       if (!s.citaVenta) return false
       return s.citaVenta.estado === 'PROGRAMADA' && new Date(s.citaVenta.fechaHoraCita) < now
     })

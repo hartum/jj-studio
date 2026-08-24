@@ -59,13 +59,13 @@ function getCalendarEl(): HTMLElement | null {
 }
 
 // 3. Composable: Alcance y Filtros de Hotel (RBAC)
-const { currentUser, userHotels, selectedHotelId, selectedHotelName, initSelectedHotel } =
+const { currentUser, userHotels, selectedHotelIds, selectedHotelName, initSelectedHotel } =
   useCalendarScope()
 
 // 4. Composable: Alertas Pendientes
 const { overdueSessions, missingSaleSessions, overdueSales, totalAlertsCount } = useCalendarAlerts(
   userHotels,
-  selectedHotelId,
+  selectedHotelIds,
 )
 
 // 5. Composable: Eventos y Mapeo de FullCalendar
@@ -75,7 +75,7 @@ const {
   highlightEventAndAssociated,
   clearEventHighlights,
   buildTooltipInfo,
-} = useCalendarEvents(userHotels, selectedHotelId, getCalendarEl)
+} = useCalendarEvents(userHotels, selectedHotelIds, getCalendarEl)
 
 // 6. Composable: Borrado de Eventos
 const {
@@ -88,7 +88,7 @@ const {
   associatedCheckboxLabel,
   openDeleteConfirm,
   confirmDelete,
-} = useCalendarDelete(selectedHotelId, () => {
+} = useCalendarDelete(selectedHotelIds, () => {
   tooltipVisible.value = false
   mobileDialogVisible.value = false
 })
@@ -227,7 +227,11 @@ const canDeleteEvents = computed(() => {
 
 function navigateToNewSessionForm(startIso?: string) {
   const query: Record<string, string> = {}
-  if (selectedHotelId.value) query.hotelId = String(selectedHotelId.value)
+  if (selectedHotelIds.value.length === 1 && selectedHotelIds.value[0]) {
+    query.hotelId = String(selectedHotelIds.value[0])
+  } else if (userHotels.value.length === 1 && userHotels.value[0]) {
+    query.hotelId = String(userHotels.value[0].id)
+  }
   if (startIso) query.start = startIso
 
   router.push({ path: '/agenda/nueva', query })
@@ -235,7 +239,11 @@ function navigateToNewSessionForm(startIso?: string) {
 
 function navigateToNewSaleForm() {
   const query: Record<string, string> = {}
-  if (selectedHotelId.value) query.hotelId = String(selectedHotelId.value)
+  if (selectedHotelIds.value.length === 1 && selectedHotelIds.value[0]) {
+    query.hotelId = String(selectedHotelIds.value[0])
+  } else if (userHotels.value.length === 1 && userHotels.value[0]) {
+    query.hotelId = String(userHotels.value[0].id)
+  }
   router.push({ path: '/ventas/nueva', query })
 }
 
@@ -388,11 +396,11 @@ onUnmounted(() => {
   <div class="calendar-container">
     <!-- 1. Cabecera principal: Título, selector de hotel y botones de acción -->
     <CalendarHeader
-      :hotel-id="selectedHotelId"
+      :hotel-ids="selectedHotelIds"
       :hotels="userHotels"
       :selected-hotel-name="selectedHotelName"
       :is-mobile="isMobile"
-      @update:hotel-id="selectedHotelId = $event"
+      @update:hotel-ids="selectedHotelIds = $event"
       @new-session="navigateToNewSessionForm()"
       @new-sale="navigateToNewSaleForm()"
     />

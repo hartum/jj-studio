@@ -4,7 +4,7 @@ import iconoCamara from '@/assets/icono_camara.png'
 import iconoCita from '@/assets/icono_cita.png'
 
 interface Props {
-  hotelId: number | null
+  hotelIds: number[]
   hotels: Hotel[]
   selectedHotelName: string
   isMobile?: boolean
@@ -13,7 +13,7 @@ interface Props {
 defineProps<Props>()
 
 const emit = defineEmits<{
-  (e: 'update:hotelId', value: number | null): void
+  (e: 'update:hotelIds', value: number[]): void
   (e: 'newSession'): void
   (e: 'newSale'): void
 }>()
@@ -30,15 +30,20 @@ const emit = defineEmits<{
     </div>
 
     <div class="header-actions">
-      <!-- Selector de Hotel -->
+      <!-- Selector de Hotel (Oculto si solo hay 1 hotel asignado o ninguno) -->
       <el-select
-        :model-value="hotelId"
+        v-if="hotels.length > 1"
+        :model-value="hotelIds"
         placeholder="Filtrar por Hotel"
         class="hotel-selector"
+        multiple
+        collapse-tags
+        collapse-tags-tooltip
+        :max-collapse-tags="2"
         filterable
         clearable
         :size="isMobile ? 'large' : 'default'"
-        @update:model-value="emit('update:hotelId', $event)"
+        @update:model-value="emit('update:hotelIds', $event)"
       >
         <el-option
           v-for="hotel in hotels"
@@ -134,7 +139,8 @@ const emit = defineEmits<{
 }
 
 .hotel-selector {
-  width: 220px;
+  min-width: 220px;
+  max-width: 320px;
 }
 
 @media (max-width: 768px) {

@@ -8,7 +8,7 @@ import type { ExtendedEventProps, EventTooltipInfo } from './useCalendarEvents'
 export type DeletableCalendarEvent = EventApi | EventTooltipInfo | ExtendedEventProps
 
 export function useCalendarDelete(
-  selectedHotelId: Ref<number | null>,
+  _selectedHotelIds?: Ref<number[]>,
   onSuccess?: () => void,
 ) {
   const sessionStore = useSessionStore()
@@ -104,8 +104,8 @@ export function useCalendarDelete(
       }
 
       await Promise.all([
-        sessionStore.fetchSessions(selectedHotelId.value ? Number(selectedHotelId.value) : undefined),
-        saleStore.fetchCitasVenta(selectedHotelId.value ? Number(selectedHotelId.value) : undefined),
+        sessionStore.fetchSessions(),
+        saleStore.fetchCitasVenta(),
       ])
     } catch (err: unknown) {
       ElMessage.error(err instanceof Error ? err.message : 'Error al eliminar el evento')

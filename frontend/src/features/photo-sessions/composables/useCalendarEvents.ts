@@ -49,7 +49,7 @@ export interface EventTooltipInfo {
 
 export function useCalendarEvents(
   userHotels: Ref<Hotel[]> | ComputedRef<Hotel[]>,
-  selectedHotelId: Ref<number | null>,
+  selectedHotelIds: Ref<number[]>,
   getCalendarEl: () => HTMLElement | null,
 ) {
   const sessionStore = useSessionStore()
@@ -64,8 +64,8 @@ export function useCalendarEvents(
     // 1. Photo Session events
     const sessionList = sessionStore.sessions.filter((s) => {
       if (!allowedHotelIds.has(Number(s.hotelId))) return false
-      if (selectedHotelId.value) {
-        return Number(s.hotelId) === Number(selectedHotelId.value)
+      if (selectedHotelIds.value.length > 0) {
+        return selectedHotelIds.value.includes(Number(s.hotelId))
       }
       return true
     })
@@ -172,8 +172,8 @@ export function useCalendarEvents(
 
     const salesList = Array.from(salesMap.values()).filter((c) => {
       if (!allowedHotelIds.has(Number(c.hotelId))) return false
-      if (selectedHotelId.value) {
-        return Number(c.hotelId) === Number(selectedHotelId.value)
+      if (selectedHotelIds.value.length > 0) {
+        return selectedHotelIds.value.includes(Number(c.hotelId))
       }
       return true
     })
