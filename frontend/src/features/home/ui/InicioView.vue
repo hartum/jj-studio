@@ -131,8 +131,14 @@ const userRole = computed(() => currentUser.value?.roleCode?.toUpperCase() || ''
 .controls-bar {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+}
+
+@media (max-width: 640px) {
+  .controls-bar {
+    flex-wrap: wrap;
+  }
 }
 
 .goals-summary-block {

@@ -93,7 +93,7 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
         multiple
         collapse-tags
         collapse-tags-tooltip
-        :max-collapse-tags="2"
+        :max-collapse-tags="1"
         filterable
         clearable
         :size="isMobile ? 'large' : 'default'"

@@ -374,8 +374,14 @@ export async function goalRoutes(fastify: FastifyInstance) {
   // GET /api/metas/progreso - Real-time progress, pacing, semaphors and photographer breakdown
   fastify.get('/api/metas/progreso', async (request, reply) => {
     try {
-      const { hotelId, anio, mes } = request.query as {
+      const {
+        hotelId: queryHotelId,
+        hotelIds: queryHotelIds,
+        anio,
+        mes,
+      } = request.query as {
         hotelId?: string
+        hotelIds?: string
         anio?: string
         mes?: string
       }
@@ -413,18 +419,32 @@ export async function goalRoutes(fastify: FastifyInstance) {
         }
       }
 
-      const hotelWhere: any = { deletedAt: null }
-      if (hotelId) {
-        hotelWhere.id = Number(hotelId)
+      const rawHotelIds = queryHotelIds || queryHotelId
+      let requestedIds: number[] | null = null
+      if (rawHotelIds) {
+        if (Array.isArray(rawHotelIds)) {
+          requestedIds = rawHotelIds.map(Number).filter((n) => !isNaN(n))
+        } else if (typeof rawHotelIds === 'string') {
+          requestedIds = rawHotelIds
+            .split(',')
+            .map((s) => Number(s.trim()))
+            .filter((n) => !isNaN(n))
+        }
       }
-      if (allowedHotelIds !== null) {
-        if (hotelWhere.id) {
-          if (!allowedHotelIds.includes(hotelWhere.id)) {
+
+      const hotelWhere: any = { deletedAt: null }
+      if (requestedIds && requestedIds.length > 0) {
+        if (allowedHotelIds !== null) {
+          const valid = requestedIds.filter((id) => allowedHotelIds.includes(id))
+          if (valid.length === 0) {
             return reply.send([])
           }
+          hotelWhere.id = { in: valid }
         } else {
-          hotelWhere.id = { in: allowedHotelIds }
+          hotelWhere.id = { in: requestedIds }
         }
+      } else if (allowedHotelIds !== null) {
+        hotelWhere.id = { in: allowedHotelIds }
       }
 
       const hoteles = await prisma.hotel.findMany({
@@ -515,7 +535,7 @@ export async function goalRoutes(fastify: FastifyInstance) {
           const metaImporteFoto = metaPersonal ? metaPersonal.importeObjetivo : cuotaEquitativaSugerida
           const esMetaPersonalizada = Boolean(metaPersonal)
 
-          const ventasFoto = ventasHotel.filter((c) => c.sesion?.fotografoId === fotografo.id)
+          const ventasFoto = ventasHotel.filter((c: any) => c.sesion?.fotografoId === fotografo.id)
           const ventasRealesFoto = ventasFoto.reduce((sum, c) => sum + (c.totalVentaUsd || 0), 0)
           const numVentasFoto = ventasFoto.length
           const numSesionesFoto = new Set(ventasFoto.map((c) => c.sesionId)).size
@@ -582,8 +602,14 @@ export async function goalRoutes(fastify: FastifyInstance) {
   // GET /api/metas/evolucion - Time series data for Line Charts (Day-by-Day for current month & Month-by-Month for current year)
   fastify.get('/api/metas/evolucion', async (request, reply) => {
     try {
-      const { hotelId, anio, mes } = request.query as {
+      const {
+        hotelId: queryHotelId,
+        hotelIds: queryHotelIds,
+        anio,
+        mes,
+      } = request.query as {
         hotelId?: string
+        hotelIds?: string
         anio?: string
         mes?: string
       }
@@ -602,15 +628,30 @@ export async function goalRoutes(fastify: FastifyInstance) {
         }
       }
 
-      const selectedHotelId = hotelId ? Number(hotelId) : undefined
-      if (allowedHotelIds !== null && selectedHotelId && !allowedHotelIds.includes(selectedHotelId)) {
-        return reply.status(403).send({ error: 'No tienes permisos sobre este hotel' })
+      const rawHotelIds = queryHotelIds || queryHotelId
+      let requestedIds: number[] | null = null
+      if (rawHotelIds) {
+        if (Array.isArray(rawHotelIds)) {
+          requestedIds = rawHotelIds.map(Number).filter((n) => !isNaN(n))
+        } else if (typeof rawHotelIds === 'string') {
+          requestedIds = rawHotelIds
+            .split(',')
+            .map((s) => Number(s.trim()))
+            .filter((n) => !isNaN(n))
+        }
       }
 
-      // Filter hotels
       const hotelWhere: any = { deletedAt: null }
-      if (selectedHotelId) {
-        hotelWhere.id = selectedHotelId
+      if (requestedIds && requestedIds.length > 0) {
+        if (allowedHotelIds !== null) {
+          const valid = requestedIds.filter((id) => allowedHotelIds.includes(id))
+          if (valid.length === 0) {
+            return reply.status(403).send({ error: 'No tienes permisos sobre los hoteles seleccionados' })
+          }
+          hotelWhere.id = { in: valid }
+        } else {
+          hotelWhere.id = { in: requestedIds }
+        }
       } else if (allowedHotelIds !== null) {
         hotelWhere.id = { in: allowedHotelIds }
       }

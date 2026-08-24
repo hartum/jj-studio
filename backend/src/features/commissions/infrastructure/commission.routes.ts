@@ -131,8 +131,9 @@ export async function commissionRoutes(fastify: FastifyInstance) {
   // GET /api/comisiones/resumen - Resumen de comisiones para dashboards
   fastify.get('/api/comisiones/resumen', async (request, reply) => {
     try {
-      const { hotelId, anio, mes } = request.query as {
+      const { hotelId, hotelIds, anio, mes } = request.query as {
         hotelId?: string
+        hotelIds?: string
         anio?: string
         mes?: string
       }
@@ -156,9 +157,30 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         }
       }
 
+      const rawHotelIds = hotelIds || hotelId
+      let reqIds: number[] | undefined = undefined
+      if (rawHotelIds) {
+        if (Array.isArray(rawHotelIds)) {
+          reqIds = rawHotelIds.map(Number).filter((n) => !isNaN(n))
+        } else if (typeof rawHotelIds === 'string') {
+          reqIds = rawHotelIds
+            .split(',')
+            .map((s) => Number(s.trim()))
+            .filter((n) => !isNaN(n))
+        }
+      }
+
+      let effectiveHotelIds = allowedHotelIds
+      if (reqIds && reqIds.length > 0) {
+        if (allowedHotelIds) {
+          effectiveHotelIds = reqIds.filter((id) => allowedHotelIds.includes(id))
+        } else {
+          effectiveHotelIds = reqIds
+        }
+      }
+
       const resumen = await getResumenComisiones({
-        hotelId: hotelId ? Number(hotelId) : undefined,
-        hotelIds: allowedHotelIds,
+        hotelIds: effectiveHotelIds,
         usuarioId: filterUserId,
         anio: targetAnio,
         mes: targetMes,
@@ -176,8 +198,9 @@ export async function commissionRoutes(fastify: FastifyInstance) {
   // GET /api/comisiones - Listado de comisiones detalladas
   fastify.get('/api/comisiones', async (request, reply) => {
     try {
-      const { hotelId, usuarioId, anio, mes, rolEnVenta, estado } = request.query as {
+      const { hotelId, hotelIds, usuarioId, anio, mes, rolEnVenta, estado } = request.query as {
         hotelId?: string
+        hotelIds?: string
         usuarioId?: string
         anio?: string
         mes?: string
@@ -188,18 +211,41 @@ export async function commissionRoutes(fastify: FastifyInstance) {
       const authId = getAuthUserId(request)
       const where: any = { deletedAt: null }
 
+      let allowedHotelIds: number[] | null = null
       if (authId) {
         const ctx = await getUserContext(authId)
         if (ctx) {
           if (['FOTOGRAFO', 'AGENDADOR'].includes(ctx.roleCode)) {
             where.usuarioId = authId
           } else if (ctx.allowedHotelIds !== null) {
-            where.hotelId = { in: ctx.allowedHotelIds }
+            allowedHotelIds = ctx.allowedHotelIds
           }
         }
       }
 
-      if (hotelId) where.hotelId = Number(hotelId)
+      const rawHotelIds = hotelIds || hotelId
+      let reqIds: number[] | null = null
+      if (rawHotelIds) {
+        if (Array.isArray(rawHotelIds)) {
+          reqIds = rawHotelIds.map(Number).filter((n) => !isNaN(n))
+        } else if (typeof rawHotelIds === 'string') {
+          reqIds = rawHotelIds
+            .split(',')
+            .map((s) => Number(s.trim()))
+            .filter((n) => !isNaN(n))
+        }
+      }
+
+      if (reqIds && reqIds.length > 0) {
+        if (allowedHotelIds !== null) {
+          const valid = reqIds.filter((id) => allowedHotelIds.includes(id))
+          where.hotelId = { in: valid }
+        } else {
+          where.hotelId = { in: reqIds }
+        }
+      } else if (allowedHotelIds !== null) {
+        where.hotelId = { in: allowedHotelIds }
+      }
       if (usuarioId && !where.usuarioId) where.usuarioId = usuarioId
       if (rolEnVenta) where.rolEnVenta = rolEnVenta
       if (estado) where.estado = estado

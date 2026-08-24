@@ -15,7 +15,7 @@ const {
   commissionStore,
   selectedAnio,
   selectedMes,
-  selectedHotelFilter,
+  selectedHotelFilters,
   yearsOptions,
   totalUsers,
   activeUsers,
@@ -23,7 +23,9 @@ const {
   totalAreas,
   totalHotels,
   currentHotelProgreso,
+  filteredProgresoHoteles,
   globalProgresoTotals,
+  selectedHotelsSummary,
   getSemaforoTagType,
   getSemaforoText,
   getProgressColor,
@@ -107,12 +109,16 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
       <h2 class="section-title">Panel Ejecutivo y Metas Globales</h2>
       <div class="controls-bar">
         <el-select
-          v-model="selectedHotelFilter"
+          v-model="selectedHotelFilters"
           placeholder="Todos los Hoteles"
+          multiple
+          collapse-tags
+          collapse-tags-tooltip
+          :max-collapse-tags="1"
           filterable
           clearable
           size="default"
-          style="width: 250px"
+          style="width: 220px"
           popper-class="custom-group-select-dropdown"
         >
           <el-option-group
@@ -150,21 +156,21 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
             </template>
           </el-option-group>
         </el-select>
-        <el-select v-model="selectedMes" size="default" style="width: 140px">
+        <el-select v-model="selectedMes" size="default" style="width: 130px">
           <el-option v-for="m in monthsOptions" :key="m.value" :label="m.label" :value="m.value" />
         </el-select>
-        <el-select v-model="selectedAnio" size="default" style="width: 100px">
+        <el-select v-model="selectedAnio" size="default" style="width: 95px">
           <el-option v-for="y in yearsOptions" :key="y" :label="String(y)" :value="y" />
         </el-select>
       </div>
     </div>
 
-    <!-- Barra de Progreso Semafórica Global / Hotel Seleccionado -->
+    <!-- Barra de Progreso Semafórica Global / Hoteles Seleccionados -->
     <div class="goals-summary-block">
       <GoalProgressCard
-        v-if="!selectedHotelFilter"
-        titulo="Objetivo Global"
-        :subtitulo="`Mes de ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio} — Consolidado de ${globalProgresoTotals.numHoteles} hoteles`"
+        v-if="!currentHotelProgreso"
+        :titulo="selectedHotelFilters.length > 1 ? 'Objetivo Consolidado' : 'Objetivo Global'"
+        :subtitulo="`Mes de ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio} — Consolidado de ${globalProgresoTotals.numHoteles} ${globalProgresoTotals.numHoteles === 1 ? 'hotel' : 'hoteles'}${selectedHotelFilters.length > 1 ? ` (${selectedHotelsSummary})` : ''}`"
         :meta-importe="globalProgresoTotals.metaTotal"
         :ventas-reales-usd="globalProgresoTotals.ventasTotal"
         :porcentaje-cumplimiento="globalProgresoTotals.porcentaje"
@@ -177,7 +183,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
             type="primary"
             :icon="Setting"
             size="default"
-            @click="handleNavigateToGoalForm(selectedHotelFilter)"
+            @click="handleNavigateToGoalForm(selectedHotelFilters[0] || null)"
           >
             Configurar Metas
           </el-button>
@@ -185,7 +191,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
       </GoalProgressCard>
 
       <GoalProgressCard
-        v-else-if="currentHotelProgreso"
+        v-else
         :titulo="`Meta Mensual: ${currentHotelProgreso.hotelNombre}`"
         :subtitulo="`${currentHotelProgreso.areaNombre} (${currentHotelProgreso.paisNombre}) — ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio}`"
         :meta-importe="currentHotelProgreso.metaImporte"
@@ -202,7 +208,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
             type="primary"
             :icon="Setting"
             size="default"
-            @click="handleNavigateToGoalForm(selectedHotelFilter)"
+            @click="handleNavigateToGoalForm(currentHotelProgreso.hotelId)"
           >
             Configurar Metas
           </el-button>
@@ -261,7 +267,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
     <GoalEvolutionChart
       :data="goalStore.evolucion"
       :loading="goalStore.isLoading"
-      :hotel-name="currentHotelProgreso?.hotelNombre"
+      :hotel-name="selectedHotelFilters.length > 0 ? selectedHotelsSummary : undefined"
     />
 
     <!-- Tabla Comparativa de Hoteles con Semáforos -->
@@ -271,7 +277,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
       shadow="hover"
     >
       <el-table
-        :data="goalStore.progresoHoteles"
+        :data="filteredProgresoHoteles"
         :default-sort="{ prop: 'porcentajeCumplimiento', order: 'descending' }"
         style="width: 100%"
         size="small"

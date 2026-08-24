@@ -73,12 +73,21 @@ export const useCommissionStore = defineStore('commission', () => {
     }
   }
 
-  async function fetchResumen(params?: { hotelId?: number; anio?: number; mes?: number }) {
+  async function fetchResumen(params?: {
+    hotelId?: number
+    hotelIds?: number[]
+    anio?: number
+    mes?: number
+  }) {
     isLoading.value = true
     error.value = null
     try {
       const query = new URLSearchParams()
-      if (params?.hotelId) query.append('hotelId', String(params.hotelId))
+      if (params?.hotelIds && params.hotelIds.length > 0) {
+        query.append('hotelIds', params.hotelIds.join(','))
+      } else if (params?.hotelId) {
+        query.append('hotelId', String(params.hotelId))
+      }
       if (params?.anio) query.append('anio', String(params.anio))
       if (params?.mes) query.append('mes', String(params.mes))
 
@@ -99,6 +108,7 @@ export const useCommissionStore = defineStore('commission', () => {
 
   async function fetchComisiones(params?: {
     hotelId?: number
+    hotelIds?: number[]
     usuarioId?: string
     anio?: number
     mes?: number
@@ -109,7 +119,11 @@ export const useCommissionStore = defineStore('commission', () => {
     error.value = null
     try {
       const query = new URLSearchParams()
-      if (params?.hotelId) query.append('hotelId', String(params.hotelId))
+      if (params?.hotelIds && params.hotelIds.length > 0) {
+        query.append('hotelIds', params.hotelIds.join(','))
+      } else if (params?.hotelId) {
+        query.append('hotelId', String(params.hotelId))
+      }
       if (params?.usuarioId) query.append('usuarioId', params.usuarioId)
       if (params?.anio) query.append('anio', String(params.anio))
       if (params?.mes) query.append('mes', String(params.mes))

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useDashboard, monthsOptions } from '@/features/home/composables/useDashboard'
 import GoalProgressCard from '@/features/goals/ui/GoalProgressCard.vue'
 import GoalEvolutionChart from '@/features/goals/ui/GoalEvolutionChart.vue'
@@ -11,14 +12,18 @@ import {
 import { Building2 } from '@lucide/vue'
 
 const {
+  countryStore,
+  hotelStore,
   goalStore,
   commissionStore,
   selectedAnio,
   selectedMes,
-  selectedHotelFilter,
+  selectedHotelFilters,
   yearsOptions,
   currentHotelProgreso,
+  filteredProgresoHoteles,
   globalProgresoTotals,
+  selectedHotelsSummary,
   getSemaforoTagType,
   getSemaforoText,
   getProgressColor,
@@ -29,6 +34,42 @@ const {
   managerTeam,
   gerenteMonthlyCommissions,
 } = useDashboard()
+
+interface AreaGroup {
+  id: number
+  nombre: string
+  hoteles: any[]
+}
+
+interface CountryGroup {
+  id: number
+  nombre: string
+  codigo: string
+  areas: AreaGroup[]
+}
+
+const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
+  const groups: CountryGroup[] = []
+  const areaIds = managerAreas.value.map((a) => a.id)
+  const areaSet = new Set(areaIds)
+
+  for (const pais of countryStore.countries) {
+    const matchingAreas = (pais.areas || []).filter((a) => areaSet.has(a.id))
+    if (matchingAreas.length > 0) {
+      groups.push({
+        id: pais.id,
+        nombre: pais.nombre,
+        codigo: pais.codigo,
+        areas: matchingAreas.map((a) => ({
+          id: a.id,
+          nombre: a.nombre,
+          hoteles: a.hoteles || [],
+        })),
+      })
+    }
+  }
+  return groups
+})
 </script>
 
 <template>
@@ -37,15 +78,54 @@ const {
       <h2 class="section-title">Control de Áreas, Metas y Comisiones</h2>
       <div class="controls-bar">
         <el-select
-          v-model="selectedHotelFilter"
+          v-model="selectedHotelFilters"
           placeholder="Todos tus Hoteles"
+          multiple
+          collapse-tags
+          collapse-tags-tooltip
+          :max-collapse-tags="1"
+          filterable
           clearable
           size="default"
           style="width: 220px"
+          popper-class="custom-group-select-dropdown"
         >
-          <el-option v-for="h in managerHotels" :key="h.id" :label="h.nombre" :value="h.id" />
+          <el-option-group
+            v-for="pais in groupedManagerHotelsByCountry"
+            :key="pais.id"
+            :label="pais.codigo ? `${pais.nombre} (${pais.codigo})` : pais.nombre"
+          >
+            <template v-for="area in pais.areas" :key="area.id">
+              <!-- Item no seleccionable por cada Área -->
+              <el-option
+                :value="`area-${area.id}`"
+                :label="area.nombre"
+                disabled
+                class="area-header-option"
+              >
+                <div class="area-option-header">
+                  <el-icon :size="18" class="area-icon"><Location /></el-icon>
+                  <span class="area-title">{{ area.nombre }}</span>
+                </div>
+              </el-option>
+
+              <!-- Hoteles pertenecientes a este área -->
+              <el-option
+                v-for="h in area.hoteles"
+                :key="h.id"
+                :label="`${h.nombre} (${area.nombre})`"
+                :value="h.id"
+                class="hotel-sub-option"
+              >
+                <div class="option-item-content hotel-option-item">
+                  <el-icon :size="18" class="hotel-option-icon"><Building2 /></el-icon>
+                  <span class="hotel-name">{{ h.nombre }}</span>
+                </div>
+              </el-option>
+            </template>
+          </el-option-group>
         </el-select>
-        <el-select v-model="selectedMes" size="default" style="width: 140px">
+        <el-select v-model="selectedMes" size="default" style="width: 130px">
           <el-option
             v-for="m in monthsOptions"
             :key="m.value"
@@ -53,7 +133,7 @@ const {
             :value="m.value"
           />
         </el-select>
-        <el-select v-model="selectedAnio" size="default" style="width: 100px">
+        <el-select v-model="selectedAnio" size="default" style="width: 95px">
           <el-option v-for="y in yearsOptions" :key="y" :label="String(y)" :value="y" />
         </el-select>
       </div>
@@ -126,9 +206,9 @@ const {
     <!-- Barra de Progreso Semafórica Consolidada de las Áreas -->
     <div class="goals-summary-block">
       <GoalProgressCard
-        v-if="!selectedHotelFilter"
-        titulo="Objetivo Comercial de tus Áreas"
-        :subtitulo="`Mes de ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio}`"
+        v-if="!currentHotelProgreso"
+        :titulo="selectedHotelFilters.length > 1 ? 'Objetivo Consolidado de tus Áreas' : 'Objetivo Comercial de tus Áreas'"
+        :subtitulo="`Mes de ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio} — Consolidado de ${globalProgresoTotals.numHoteles} ${globalProgresoTotals.numHoteles === 1 ? 'hotel' : 'hoteles'}${selectedHotelFilters.length > 1 ? ` (${selectedHotelsSummary})` : ''}`"
         :meta-importe="globalProgresoTotals.metaTotal"
         :ventas-reales-usd="globalProgresoTotals.ventasTotal"
         :porcentaje-cumplimiento="globalProgresoTotals.porcentaje"
@@ -141,14 +221,14 @@ const {
             type="primary"
             :icon="Setting"
             size="default"
-            @click="handleNavigateToGoalForm(selectedHotelFilter)"
+            @click="handleNavigateToGoalForm(selectedHotelFilters[0] || null)"
           >
             Configurar Metas
           </el-button>
         </template>
       </GoalProgressCard>
       <GoalProgressCard
-        v-else-if="currentHotelProgreso"
+        v-else
         :titulo="`Meta Mensual: ${currentHotelProgreso.hotelNombre}`"
         :subtitulo="`${currentHotelProgreso.areaNombre} — ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio}`"
         :meta-importe="currentHotelProgreso.metaImporte"
@@ -163,7 +243,7 @@ const {
             type="primary"
             :icon="Setting"
             size="default"
-            @click="handleNavigateToGoalForm(selectedHotelFilter)"
+            @click="handleNavigateToGoalForm(currentHotelProgreso.hotelId)"
           >
             Configurar Metas
           </el-button>
@@ -175,7 +255,7 @@ const {
     <GoalEvolutionChart
       :data="goalStore.evolucion"
       :loading="goalStore.isLoading"
-      :hotel-name="currentHotelProgreso?.hotelNombre"
+      :hotel-name="selectedHotelFilters.length > 0 ? selectedHotelsSummary : undefined"
     />
 
     <!-- Tabla de Hoteles en tus Áreas con Semáforos -->
@@ -184,7 +264,7 @@ const {
       header="Rendimiento de Hoteles en tus Áreas"
       shadow="hover"
     >
-      <el-table :data="goalStore.progresoHoteles" style="width: 100%" size="small" stripe>
+      <el-table :data="filteredProgresoHoteles" style="width: 100%" size="small" stripe>
         <el-table-column prop="hotelNombre" label="Hotel" min-width="160" />
         <el-table-column prop="areaNombre" label="Área" min-width="120" />
         <el-table-column label="Meta Mensual" width="130" align="right">

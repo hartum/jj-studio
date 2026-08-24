@@ -60,7 +60,14 @@ export function useDashboard() {
   const now = new Date()
   const selectedAnio = ref(now.getFullYear())
   const selectedMes = ref(now.getMonth() + 1)
-  const selectedHotelFilter = ref<number | null>(null)
+  const selectedHotelFilters = ref<number[]>([])
+
+  const selectedHotelFilter = computed<number | null>({
+    get: () => (selectedHotelFilters.value.length > 0 ? selectedHotelFilters.value[0]! : null),
+    set: (val) => {
+      selectedHotelFilters.value = val !== null && val !== undefined ? [val] : []
+    },
+  })
 
   const yearsOptions = computed(() => {
     const currentYear = now.getFullYear()
@@ -73,24 +80,26 @@ export function useDashboard() {
 
   // --- Carga de datos ---
   async function loadGoalsData() {
+    const hotelIdsParam =
+      selectedHotelFilters.value.length > 0 ? selectedHotelFilters.value : undefined
     await Promise.all([
       goalStore.fetchProgreso({
-        hotelId: selectedHotelFilter.value || undefined,
+        hotelIds: hotelIdsParam,
         anio: selectedAnio.value,
         mes: selectedMes.value,
       }),
       goalStore.fetchEvolucion({
-        hotelId: selectedHotelFilter.value || undefined,
+        hotelIds: hotelIdsParam,
         anio: selectedAnio.value,
         mes: selectedMes.value,
       }),
       commissionStore.fetchResumen({
-        hotelId: selectedHotelFilter.value || undefined,
+        hotelIds: hotelIdsParam,
         anio: selectedAnio.value,
         mes: selectedMes.value,
       }),
       commissionStore.fetchComisiones({
-        hotelId: selectedHotelFilter.value || undefined,
+        hotelIds: hotelIdsParam,
         anio: selectedAnio.value,
         mes: selectedMes.value,
       }),
@@ -109,7 +118,7 @@ export function useDashboard() {
     await loadGoalsData()
   })
 
-  watch([selectedAnio, selectedMes, selectedHotelFilter], async () => {
+  watch([selectedAnio, selectedMes, selectedHotelFilters], async () => {
     await loadGoalsData()
   })
 
@@ -155,16 +164,43 @@ export function useDashboard() {
     ),
   )
 
-  // --- Metas consolidadas ---
+  // --- Metas consolidadas y filtradas ---
+  const filteredProgresoHoteles = computed(() => {
+    if (selectedHotelFilters.value.length === 0) {
+      return goalStore.progresoHoteles
+    }
+    const filterSet = new Set(selectedHotelFilters.value)
+    return goalStore.progresoHoteles.filter((p) => filterSet.has(p.hotelId))
+  })
+
   const currentHotelProgreso = computed(() => {
-    if (selectedHotelFilter.value) {
-      return goalStore.progresoHoteles.find((p) => p.hotelId === selectedHotelFilter.value) || null
+    if (selectedHotelFilters.value.length === 1) {
+      return (
+        goalStore.progresoHoteles.find((p) => p.hotelId === selectedHotelFilters.value[0]) || null
+      )
     }
     return null
   })
 
+  const selectedHotelsSummary = computed(() => {
+    if (selectedHotelFilters.value.length === 0) {
+      return 'Consolidado general'
+    }
+    if (selectedHotelFilters.value.length === 1) {
+      const h = hotelStore.hotels.find((item) => item.id === selectedHotelFilters.value[0])
+      return h ? h.nombre : '1 hotel seleccionado'
+    }
+    const names = hotelStore.hotels
+      .filter((item) => selectedHotelFilters.value.includes(item.id))
+      .map((item) => item.nombre)
+    if (names.length <= 2) {
+      return names.join(', ')
+    }
+    return `${names.length} hoteles seleccionados`
+  })
+
   const globalProgresoTotals = computed(() => {
-    const list = goalStore.progresoHoteles
+    const list = filteredProgresoHoteles.value
     const metaTotal = list.reduce((sum, h) => sum + h.metaImporte, 0)
     const ventasTotal = list.reduce((sum, h) => sum + h.ventasRealesUsd, 0)
     const metaEsperadaTotal = list.reduce((sum, h) => sum + h.metaEsperadaHoy, 0)
@@ -419,7 +455,7 @@ export function useDashboard() {
       await commissionStore.updateEstadoComision(id, nuevoEstado)
       ElMessage.success(`Comisión marcada como ${nuevoEstado}`)
       await commissionStore.fetchResumen({
-        hotelId: selectedHotelFilter.value || undefined,
+        hotelIds: selectedHotelFilters.value.length > 0 ? selectedHotelFilters.value : undefined,
         anio: selectedAnio.value,
         mes: selectedMes.value,
       })
@@ -442,6 +478,7 @@ export function useDashboard() {
     selectedAnio,
     selectedMes,
     selectedHotelFilter,
+    selectedHotelFilters,
     yearsOptions,
     // KPIs
     totalUsers,
@@ -451,7 +488,9 @@ export function useDashboard() {
     totalHotels,
     // Metas
     currentHotelProgreso,
+    filteredProgresoHoteles,
     globalProgresoTotals,
+    selectedHotelsSummary,
     // Helpers semáforo
     getSemaforoTagType,
     getSemaforoText,

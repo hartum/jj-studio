@@ -50,11 +50,20 @@ export const useGoalStore = defineStore('goals', () => {
     }
   }
 
-  async function fetchProgreso(params?: { hotelId?: number; anio?: number; mes?: number }) {
+  async function fetchProgreso(params?: {
+    hotelId?: number
+    hotelIds?: number[]
+    anio?: number
+    mes?: number
+  }) {
     isLoading.value = true
     try {
       const query = new URLSearchParams()
-      if (params?.hotelId) query.set('hotelId', String(params.hotelId))
+      if (params?.hotelIds && params.hotelIds.length > 0) {
+        query.set('hotelIds', params.hotelIds.join(','))
+      } else if (params?.hotelId) {
+        query.set('hotelId', String(params.hotelId))
+      }
       if (params?.anio) query.set('anio', String(params.anio))
       if (params?.mes) query.set('mes', String(params.mes))
 
@@ -70,11 +79,20 @@ export const useGoalStore = defineStore('goals', () => {
     }
   }
 
-  async function fetchEvolucion(params?: { hotelId?: number; anio?: number; mes?: number }) {
+  async function fetchEvolucion(params?: {
+    hotelId?: number
+    hotelIds?: number[]
+    anio?: number
+    mes?: number
+  }) {
     isLoading.value = true
     try {
       const query = new URLSearchParams()
-      if (params?.hotelId) query.set('hotelId', String(params.hotelId))
+      if (params?.hotelIds && params.hotelIds.length > 0) {
+        query.set('hotelIds', params.hotelIds.join(','))
+      } else if (params?.hotelId) {
+        query.set('hotelId', String(params.hotelId))
+      }
       if (params?.anio) query.set('anio', String(params.anio))
       if (params?.mes) query.set('mes', String(params.mes))
 
