@@ -15,7 +15,9 @@ const router = useRouter()
 const authStore = useAuthStore()
 const countryStore = useCountryStore()
 
-const isLoginPage = computed(() => route.path === '/login')
+const isFullScreenAuthPage = computed(
+  () => Boolean(route.meta.guestOnly) || ['/login', '/forgot-password', '/reset-password'].includes(route.path),
+)
 const isDark = ref(false)
 const isMobileDrawerOpen = ref(false)
 
@@ -101,8 +103,8 @@ onMounted(async () => {
 
 <template>
   <el-config-provider :locale="es">
-    <!-- Vista de Login sin Sidebar/Toolbar -->
-    <div v-if="isLoginPage" class="full-screen-wrapper">
+    <!-- Vistas de Autenticación a pantalla completa sin Sidebar/Toolbar -->
+    <div v-if="isFullScreenAuthPage" class="full-screen-wrapper">
       <RouterView />
     </div>
 
