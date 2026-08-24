@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { Location } from '@element-plus/icons-vue'
+import { Building2 } from '@lucide/vue'
 import type { Hotel } from '@/features/hotels/domain/hotel.model'
 import iconoCamara from '@/assets/icono_camara.png'
 import iconoCita from '@/assets/icono_cita.png'
@@ -10,13 +13,64 @@ interface Props {
   isMobile?: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'update:hotelIds', value: number[]): void
   (e: 'newSession'): void
   (e: 'newSale'): void
 }>()
+
+interface AreaGroup {
+  id: number
+  nombre: string
+  hoteles: Hotel[]
+}
+
+interface CountryGroup {
+  id: number
+  nombre: string
+  codigo: string
+  areas: AreaGroup[]
+}
+
+const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
+  const hotels = props.hotels || []
+  const groupsMap = new Map<number, CountryGroup>()
+
+  for (const h of hotels) {
+    const countryId = h.paisId || 0
+    const countryName = h.paisNombre || 'Sin País'
+    const countryCode = h.paisCodigo || ''
+
+    if (!groupsMap.has(countryId)) {
+      groupsMap.set(countryId, {
+        id: countryId,
+        nombre: countryName,
+        codigo: countryCode,
+        areas: [],
+      })
+    }
+
+    const countryGroup = groupsMap.get(countryId)!
+    const areaId = h.areaId || 0
+    const areaName = h.areaNombre || 'Sin Área'
+
+    let areaGroup = countryGroup.areas.find((a) => a.id === areaId)
+    if (!areaGroup) {
+      areaGroup = {
+        id: areaId,
+        nombre: areaName,
+        hoteles: [],
+      }
+      countryGroup.areas.push(areaGroup)
+    }
+
+    areaGroup.hoteles.push(h)
+  }
+
+  return Array.from(groupsMap.values())
+})
 </script>
 
 <template>
@@ -43,14 +97,43 @@ const emit = defineEmits<{
         filterable
         clearable
         :size="isMobile ? 'large' : 'default'"
+        popper-class="custom-group-select-dropdown"
         @update:model-value="emit('update:hotelIds', $event)"
       >
-        <el-option
-          v-for="hotel in hotels"
-          :key="hotel.id"
-          :label="hotel.nombre"
-          :value="hotel.id"
-        />
+        <el-option-group
+          v-for="pais in groupedHotelsByCountry"
+          :key="pais.id"
+          :label="pais.codigo ? `${pais.nombre} (${pais.codigo})` : pais.nombre"
+        >
+          <template v-for="area in pais.areas" :key="area.id">
+            <!-- Item no seleccionable por cada Área -->
+            <el-option
+              :value="`area-${area.id}`"
+              :label="area.nombre"
+              disabled
+              class="area-header-option"
+            >
+              <div class="area-option-header">
+                <el-icon :size="18" class="area-icon"><Location /></el-icon>
+                <span class="area-title">{{ area.nombre }}</span>
+              </div>
+            </el-option>
+
+            <!-- Hoteles pertenecientes a este área -->
+            <el-option
+              v-for="hotel in area.hoteles"
+              :key="hotel.id"
+              :label="`${hotel.nombre} (${area.nombre})`"
+              :value="hotel.id"
+              class="hotel-sub-option"
+            >
+              <div class="option-item-content hotel-option-item">
+                <el-icon :size="18" class="hotel-option-icon"><Building2 /></el-icon>
+                <span class="hotel-name">{{ hotel.nombre }}</span>
+              </div>
+            </el-option>
+          </template>
+        </el-option-group>
       </el-select>
 
       <div class="header-buttons-row">
