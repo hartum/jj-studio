@@ -147,7 +147,7 @@ function getEventTimeText(arg: EventContentArg): string {
   object-fit: contain;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.28));
   pointer-events: none;
-  z-index: 4;
+  z-index: 1;
 }
 
 /* Offset y dimensiones para el icono de Cámara (Sesiones) */
@@ -171,6 +171,8 @@ function getEventTimeText(arg: EventContentArg): string {
   align-items: center;
   justify-content: space-between;
   gap: 6px;
+  position: relative;
+  z-index: 2;
 }
 
 .jj-event-header-left {
@@ -216,6 +218,8 @@ function getEventTimeText(arg: EventContentArg): string {
 }
 
 .jj-event-delete-wrapper {
+  position: relative;
+  z-index: 10;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -223,10 +227,12 @@ function getEventTimeText(arg: EventContentArg): string {
 }
 
 .jj-event-trash-btn {
-  background: rgba(0, 0, 0, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.95);
   cursor: pointer;
   padding: 3px 5px;
   display: flex;
