@@ -42,6 +42,16 @@ function getMailTransporter() {
   return nodemailer.createTransport(transportConfig)
 }
 
+function escapeHtml(str: string): string {
+  return str.replace(/[&<>"']/g, (m) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;',
+  }[m] || m))
+}
+
 /**
  * Envía el correo electrónico con el enlace para restablecer la contraseña.
  */
@@ -53,6 +63,9 @@ export async function sendPasswordResetEmail({
   const baseUrl = getAppBaseUrl()
   const resetLink = `${baseUrl}/reset-password?token=${encodeURIComponent(resetToken)}`
   const fromAddress = process.env.SMTP_FROM || '"JJ Studio" <no-reply@jjstudio.hartum.net>'
+
+  const safeNombre = escapeHtml(nombre ? nombre.trim() : 'Usuario')
+  const safeResetLink = escapeHtml(resetLink)
 
   const htmlContent = `
 <!DOCTYPE html>
@@ -142,14 +155,14 @@ export async function sendPasswordResetEmail({
       <div class="logo-text">JJ <span class="logo-accent">STUDIO</span></div>
     </div>
     
-    <h2>Hola ${nombre || 'Usuario'},</h2>
+    <h2>Hola ${safeNombre},</h2>
     
     <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en <strong>JJ Studio</strong>.</p>
     
     <p>Haz clic en el siguiente botón para definir una nueva contraseña:</p>
     
     <div class="button-container">
-      <a href="${resetLink}" target="_blank" class="reset-button">Restablecer mi Contraseña</a>
+      <a href="${safeResetLink}" target="_blank" class="reset-button">Restablecer mi Contraseña</a>
     </div>
     
     <p style="font-size: 13px; color: #64748b;">
@@ -162,7 +175,7 @@ export async function sendPasswordResetEmail({
     
     <div class="footer">
       <p style="margin-bottom: 8px;">Si el botón no funciona, copia y pega el siguiente enlace en tu navegador:</p>
-      <a href="${resetLink}" class="fallback-link">${resetLink}</a>
+      <a href="${safeResetLink}" class="fallback-link">${safeResetLink}</a>
       <p style="margin-top: 16px; font-size: 11px;">© ${new Date().getFullYear()} JJ Studio. Todos los derechos reservados.</p>
     </div>
   </div>
