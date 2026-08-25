@@ -67,18 +67,6 @@ async function getHotelAvailability(
     },
   })
 
-  const fotografosDetalle = fotografoUsers.map((rawUser) => {
-    const u = decryptUser(rawUser)!
-    return {
-      id: u.id,
-      nombre: `${u.nombre} ${u.apellidos}`.trim(),
-      disponible: u.calendarioLaboral.length === 0,
-      motivoAusencia: u.calendarioLaboral[0]?.motivo || null,
-    }
-  })
-
-  const disponiblesCount = fotografosDetalle.filter((f) => f.disponible).length
-
   // Ventana de 1 hora para sesiones simultáneas
   // Una sesión que empieza en T colisiona con cualquier sesión en (T - 60min, T + 60min)
   const windowStart = new Date(fechaHoraInicio.getTime() - 59 * 60 * 1000)
@@ -107,6 +95,25 @@ async function getHotelAvailability(
       fotografoId: true,
     },
   })
+
+  const fotografosDetalle = fotografoUsers.map((rawUser) => {
+    const u = decryptUser(rawUser)!
+    const isAusente = u.calendarioLaboral.length > 0
+    const tieneSesionAsignada = sesionesSimultaneas.some((s) => s.fotografoId === u.id)
+    return {
+      id: u.id,
+      nombre: `${u.nombre} ${u.apellidos}`.trim(),
+      disponible: !isAusente && !tieneSesionAsignada,
+      isAusente,
+      motivoAusencia: u.calendarioLaboral[0]?.motivo || null,
+      ocupado: tieneSesionAsignada,
+    }
+  })
+
+  const disponiblesCount = fotografoUsers.filter((rawUser) => {
+    const u = decryptUser(rawUser)!
+    return u.calendarioLaboral.length === 0
+  }).length
 
   const simultaneasCount = sesionesSimultaneas.length
   const cupoLibre = Math.max(0, disponiblesCount - simultaneasCount)
