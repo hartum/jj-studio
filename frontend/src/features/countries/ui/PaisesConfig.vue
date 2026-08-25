@@ -3,7 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useCountryStore } from '../stores/country.store'
 import { WORLD_COUNTRIES } from '../domain/world-countries.data'
 import type { Pais, AreaItem, HotelItem } from '../domain/country.model'
-import { getFlagEmoji } from '@/components/flagEmoji'
+import { getFlagEmoji } from '@/shared/flagEmoji'
 import {
   Plus,
   Delete,

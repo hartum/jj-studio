@@ -3,7 +3,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useHotelStore } from '../stores/hotel.store'
 import { useCountryStore } from '@/features/countries/stores/country.store'
-import { getFlagEmoji } from '@/components/flagEmoji'
+import { getFlagEmoji } from '@/shared/flagEmoji'
 import { ArrowLeft, Check, Close } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
