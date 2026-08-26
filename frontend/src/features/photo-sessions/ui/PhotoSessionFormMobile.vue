@@ -1432,7 +1432,17 @@ function handleNextStep() {
 .mobile-client-form {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
+}
+
+.mobile-client-form :deep(.el-form-item) {
+  margin-bottom: 0.65rem;
+}
+
+.mobile-client-form :deep(.el-form-item__label) {
+  margin-bottom: 4px;
+  padding-bottom: 0;
+  line-height: 1.25;
 }
 
 /* Switch beside Nombre del Cliente label */
@@ -1440,7 +1450,7 @@ function handleNextStep() {
   width: 100% !important;
   display: block !important;
   padding-right: 0 !important;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .client-name-label-row {
@@ -1457,13 +1467,13 @@ function handleNextStep() {
 .mobile-form-row-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  gap: 0.65rem;
 }
 
 .mobile-form-row-pax {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  gap: 0.65rem;
   width: 100%;
 }
 
@@ -1478,7 +1488,7 @@ function handleNextStep() {
 .mobile-switch-row {
   display: flex;
   align-items: center;
-  padding: 0.5rem 0 0.25rem 0;
+  padding: 0.35rem 0 0.2rem 0;
 }
 
 .switch-label {
@@ -1491,8 +1501,12 @@ function handleNextStep() {
 .mobile-form-extra-fields {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
   width: 100%;
+}
+
+.mobile-form-extra-fields :deep(.el-form-item) {
+  margin-bottom: 0.65rem;
 }
 
 .pax-item-label {
@@ -2112,7 +2126,11 @@ function handleNextStep() {
 .mobile-details-form {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 0.85rem;
+}
+
+.mobile-details-form :deep(.el-form-item) {
+  margin-bottom: 0.65rem;
 }
 
 .motivo-section {

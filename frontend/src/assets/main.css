@@ -40,7 +40,9 @@ html.dark {
 }
 
 /* Global reset for full viewport application */
-html, body, #app {
+html,
+body,
+#app {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -49,7 +51,9 @@ html, body, #app {
   font-family: Inter, var(--font-family, system-ui, -apple-system, sans-serif);
   background-color: var(--app-bg);
   color: var(--app-text);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 body {
@@ -112,6 +116,25 @@ body {
   border: 1px solid var(--toolbar-border, #e2e8f0);
   border-radius: 10px;
   overflow: hidden;
+}
+
+/* =========================================================
+   ESTÁNDARES DE FORMULARIOS E INPUTS GLOBALES
+   ========================================================= */
+
+.el-form-item {
+  margin-bottom: 0.65rem !important;
+}
+
+.el-form-item__label {
+  margin-bottom: 4px !important;
+  padding-bottom: 0 !important;
+  line-height: 1.25 !important;
+  font-weight: 600;
+}
+
+.el-form-item__content {
+  line-height: normal;
 }
 
 /* Diálogos de confirmación modales */
