@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { PhotoSessionFormContext } from '../composables/usePhotoSessionForm'
 import {
   User,
@@ -65,7 +66,110 @@ const {
   router,
   getUserInitials,
   getUserBgColor,
+  sessionStore,
+  saleStore,
 } = props.form
+
+// Mapa de cantidad de sesiones por hora para el día seleccionado
+const sessionsCountByHour = computed<Record<string, number>>(() => {
+  const counts: Record<string, number> = {}
+  const targetDate = selectedDateOnly.value
+  if (!targetDate) return counts
+
+  const currentHotelId = formData.value.hotelId ? Number(formData.value.hotelId) : null
+  const allowedHotelIds = new Set(userHotels.value.map((h) => Number(h.id)))
+
+  for (const s of sessionStore.sessions) {
+    if (s.estado === 'CANCELADA') continue
+    if (currentHotelId) {
+      if (Number(s.hotelId) !== currentHotelId) continue
+    } else if (allowedHotelIds.size > 0 && !allowedHotelIds.has(Number(s.hotelId))) {
+      continue
+    }
+    if (!s.fechaHoraInicio) continue
+
+    const sDate = s.fechaHoraInicio.slice(0, 10)
+    if (sDate !== targetDate) continue
+
+    const timePart = s.fechaHoraInicio.includes('T')
+      ? s.fechaHoraInicio.split('T')[1]
+      : s.fechaHoraInicio.split(' ')[1]
+    if (timePart) {
+      const hourKey = `${timePart.substring(0, 2)}:00`
+      counts[hourKey] = (counts[hourKey] || 0) + 1
+    }
+  }
+
+  return counts
+})
+
+function getTimeSlotStatusClass(time: string): string {
+  const count = sessionsCountByHour.value[time] || 0
+  if (count === 0) return 'time-slot-btn--empty'
+
+  const totalCap = photographers.value.length || 1
+  if (count >= totalCap) {
+    return 'time-slot-btn--full'
+  }
+  return 'time-slot-btn--partial'
+}
+
+// Mapa de cantidad de citas de venta por hora para la fecha de venta seleccionada
+const salesCountByHour = computed<Record<string, number>>(() => {
+  const counts: Record<string, number> = {}
+  const targetDate = selectedCitaVentaDateOnly.value
+  if (!targetDate) return counts
+
+  const currentHotelId = formData.value.hotelId ? Number(formData.value.hotelId) : null
+  const allowedHotelIds = new Set(userHotels.value.map((h) => Number(h.id)))
+  const currentCitaId = loadedSession.value?.citaVenta?.id
+
+  for (const c of saleStore.citasVenta) {
+    if (c.estado === 'CANCELADA') continue
+    if (currentCitaId && c.id === currentCitaId) continue
+    if (currentHotelId) {
+      if (Number(c.hotelId) !== currentHotelId) continue
+    } else if (allowedHotelIds.size > 0 && !allowedHotelIds.has(Number(c.hotelId))) {
+      continue
+    }
+    if (!c.fechaHoraCita) continue
+
+    const cDate = c.fechaHoraCita.slice(0, 10)
+    if (cDate !== targetDate) continue
+
+    const timePart = c.fechaHoraCita.includes('T')
+      ? c.fechaHoraCita.split('T')[1]
+      : c.fechaHoraCita.split(' ')[1]
+    if (timePart) {
+      const hourKey = `${timePart.substring(0, 2)}:00`
+      counts[hourKey] = (counts[hourKey] || 0) + 1
+    }
+  }
+
+  return counts
+})
+
+function getCitaVentaTimeSlotStatusClass(time: string): string {
+  // 1. Si la hora tiene una venta directa -> ROJO
+  if (salesCountByHour.value[time] && salesCountByHour.value[time] > 0) {
+    return 'time-slot-btn--full'
+  }
+
+  // 2. Si la hora anterior o posterior tiene una venta -> AMARILLO (margen de conflicto ±1h)
+  const hourNum = parseInt(time.split(':')[0] ?? '0', 10)
+  const prevHourKey = `${String(hourNum - 1).padStart(2, '0')}:00`
+  const nextHourKey = `${String(hourNum + 1).padStart(2, '0')}:00`
+
+  if (
+    (salesCountByHour.value[prevHourKey] && salesCountByHour.value[prevHourKey] > 0) ||
+    (salesCountByHour.value[nextHourKey] && salesCountByHour.value[nextHourKey] > 0)
+  ) {
+    return 'time-slot-btn--partial'
+  }
+
+  // 3. El resto -> color neutro por defecto
+  return 'time-slot-btn--empty'
+}
 </script>
 
 <template>
@@ -442,16 +546,25 @@ const {
                           <span>SELECCIONA HORARIO</span>
                         </div>
                         <div class="time-slots-grid">
-                          <button
+                          <el-badge
                             v-for="time in timeSlots"
                             :key="time"
-                            type="button"
-                            class="time-slot-btn"
-                            :class="{ active: selectedTimeOnly === time }"
-                            @click="selectTimeSlot(time)"
+                            :value="sessionsCountByHour[time]"
+                            :hidden="!sessionsCountByHour[time]"
+                            class="time-slot-badge-wrapper"
                           >
-                            {{ time }}
-                          </button>
+                            <button
+                              type="button"
+                              class="time-slot-btn"
+                              :class="[
+                                getTimeSlotStatusClass(time),
+                                { active: selectedTimeOnly === time },
+                              ]"
+                              @click="selectTimeSlot(time)"
+                            >
+                              {{ time }}
+                            </button>
+                          </el-badge>
                         </div>
                       </div>
 
@@ -609,16 +722,25 @@ const {
                           <span>SELECCIONA HORARIO DE VENTA</span>
                         </div>
                         <div class="time-slots-grid">
-                          <button
+                          <el-badge
                             v-for="time in timeSlots"
                             :key="`cita-${time}`"
-                            type="button"
-                            class="time-slot-btn"
-                            :class="{ active: selectedCitaVentaTimeOnly === time }"
-                            @click="selectCitaVentaTimeSlot(time)"
+                            :value="salesCountByHour[time]"
+                            :hidden="!salesCountByHour[time]"
+                            class="time-slot-badge-wrapper"
                           >
-                            {{ time }}
-                          </button>
+                            <button
+                              type="button"
+                              class="time-slot-btn"
+                              :class="[
+                                getCitaVentaTimeSlotStatusClass(time),
+                                { active: selectedCitaVentaTimeOnly === time },
+                              ]"
+                              @click="selectCitaVentaTimeSlot(time)"
+                            >
+                              {{ time }}
+                            </button>
+                          </el-badge>
                         </div>
                       </div>
                     </div>
@@ -1023,10 +1145,26 @@ const {
 .time-slots-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
-  gap: 0.45rem;
+  gap: 0.65rem 0.45rem;
+  padding-top: 0.35rem;
+}
+
+.time-slot-badge-wrapper {
+  width: 100%;
+  display: block;
+}
+
+.time-slot-badge-wrapper :deep(.el-badge__content) {
+  background-color: #475569;
+  color: #ffffff;
+  border: 1.5px solid var(--toolbar-bg, #ffffff);
+  font-weight: 700;
+  font-size: 0.65rem;
 }
 
 .time-slot-btn {
+  width: 100%;
+  box-sizing: border-box;
   padding: 0.5rem 0.4rem;
   font-size: 0.82rem;
   font-weight: 600;
@@ -1039,6 +1177,30 @@ const {
   text-align: center;
 }
 
+.time-slot-btn--partial {
+  background-color: #fef9c3 !important;
+  border-color: #fde047 !important;
+  color: #854d0e !important;
+}
+
+.time-slot-btn--partial:hover {
+  background-color: #fef08a !important;
+  border-color: #eab308 !important;
+  color: #713f12 !important;
+}
+
+.time-slot-btn--full {
+  background-color: #fee2e2 !important;
+  border-color: #fca5a5 !important;
+  color: #991b1b !important;
+}
+
+.time-slot-btn--full:hover {
+  background-color: #fecaca !important;
+  border-color: #ef4444 !important;
+  color: #7f1d1d !important;
+}
+
 .time-slot-btn:hover {
   border-color: var(--el-color-primary, #3b82f6);
   background: rgba(59, 130, 246, 0.08);
@@ -1046,9 +1208,9 @@ const {
 }
 
 .time-slot-btn.active {
-  background: var(--el-color-primary, #3b82f6);
-  border-color: var(--el-color-primary, #3b82f6);
-  color: #ffffff;
+  background-color: var(--el-color-primary, #3b82f6) !important;
+  border-color: var(--el-color-primary, #3b82f6) !important;
+  color: #ffffff !important;
   font-weight: 700;
   box-shadow: 0 2px 6px rgba(59, 130, 246, 0.35);
 }
@@ -1395,6 +1557,45 @@ const {
 }
 
 /* Dark mode overrides */
+html.dark .time-slot-badge-wrapper :deep(.el-badge__content) {
+  background-color: #475569;
+  border-color: var(--toolbar-bg, #1d1e1f);
+}
+
+html.dark .time-slot-btn {
+  background: var(--toolbar-bg, #1d1e1f);
+  border-color: var(--toolbar-border, #363637);
+  color: var(--heading-color, #ffffff);
+}
+
+html.dark .time-slot-btn--partial {
+  background-color: rgba(234, 179, 8, 0.18) !important;
+  border-color: rgba(234, 179, 8, 0.45) !important;
+  color: #fef08a !important;
+}
+
+html.dark .time-slot-btn--partial:hover {
+  background-color: rgba(234, 179, 8, 0.28) !important;
+  border-color: #eab308 !important;
+}
+
+html.dark .time-slot-btn--full {
+  background-color: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.45) !important;
+  color: #fca5a5 !important;
+}
+
+html.dark .time-slot-btn--full:hover {
+  background-color: rgba(239, 68, 68, 0.28) !important;
+  border-color: #ef4444 !important;
+}
+
+html.dark .time-slot-btn.active {
+  background-color: var(--el-color-primary, #3b82f6) !important;
+  border-color: var(--el-color-primary, #3b82f6) !important;
+  color: #ffffff !important;
+}
+
 html.dark .back-btn {
   background-color: var(--toolbar-bg, #1d1e1f);
   border-color: var(--toolbar-border, #363637);

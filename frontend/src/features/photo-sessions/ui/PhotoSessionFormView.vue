@@ -100,7 +100,7 @@ html.dark .el-date-table td.cell-highlight-permiso .el-date-table-cell {
   height: 15px;
   padding: 0 3px;
   border-radius: 999px;
-  background-color: #ef4444;
+  background-color: #475569;
   color: #ffffff;
   font-size: 0.62rem;
   font-weight: 700;
