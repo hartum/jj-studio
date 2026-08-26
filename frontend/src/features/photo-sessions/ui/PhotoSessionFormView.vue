@@ -18,11 +18,9 @@ import {
   Check,
   ArrowLeft,
   Close,
-  Money,
-  Calendar,
   Edit,
 } from '@element-plus/icons-vue'
-import { Building2, PlaneTakeoff, Users, Baby, UserX } from '@lucide/vue'
+import { Building2, PlaneTakeoff, Users, Baby, UserX, Camera, Calendar } from '@lucide/vue'
 import { ElMessage } from 'element-plus'
 import { IosDatepicker } from 'vue-ios-style-datepicker'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
@@ -1046,15 +1044,8 @@ async function handleSaveSession() {
         <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleGoBack" />
         <div class="header-titles">
           <h1 class="page-title">
-            {{ isEditing ? 'Editar Sesión Fotográfica' : 'Agendar Nueva Sesión Fotográfica' }}
+            {{ isEditing ? 'Editar Sesión Fotográfica' : 'Nueva Sesión Fotográfica' }}
           </h1>
-          <p class="page-subtitle">
-            {{
-              isEditing
-                ? 'Modifica los detalles de la sesión fotográfica existente y sincroniza los cambios.'
-                : 'Completa los detalles para reservar el espacio y asignar los recursos.'
-            }}
-          </p>
         </div>
       </div>
     </div>
@@ -1253,7 +1244,7 @@ async function handleSaveSession() {
                 <template #title>
                   <div class="accordion-header-title">
                     <div class="card-header-title-group">
-                      <el-icon class="card-section-icon"><Calendar /></el-icon>
+                      <el-icon class="card-section-icon"><Camera :size="18" /></el-icon>
                       <h2 class="card-section-title">Fecha y Hora de la Sesión</h2>
                     </div>
                     <div class="header-datetime-preview">
@@ -1528,7 +1519,7 @@ async function handleSaveSession() {
                 <template #title>
                   <div class="accordion-header-title">
                     <div class="card-header-title-group">
-                      <el-icon class="card-section-icon"><Money /></el-icon>
+                      <el-icon class="card-section-icon"><Calendar :size="18" /></el-icon>
                       <el-button
                         v-if="loadedSession?.citaVenta?.id"
                         text
@@ -1869,12 +1860,6 @@ async function handleSaveSession() {
   color: var(--heading-color, #0f172a);
   margin: 0;
   line-height: 1.25;
-}
-
-.page-subtitle {
-  font-size: 0.9rem;
-  color: var(--nav-link-color, #64748b);
-  margin: 0;
 }
 
 .lock-banner {
