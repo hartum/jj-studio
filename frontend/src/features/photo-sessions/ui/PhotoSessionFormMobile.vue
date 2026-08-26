@@ -472,7 +472,9 @@ function handleNextStep() {
               :disabled="isReadOnly"
               @click="handleStatusClick(opt.value)"
             >
-              <el-icon class="status-screen-btn-icon"><component :is="opt.icon" :size="20" /></el-icon>
+              <el-icon class="status-screen-btn-icon">
+                <component :is="opt.icon" :size="20" />
+              </el-icon>
               <span>{{ opt.label }}</span>
             </button>
           </div>
@@ -490,12 +492,7 @@ function handleNextStep() {
           @click="handleGoBack"
         />
 
-        <el-button
-          type="primary"
-          class="mobile-next-btn"
-          size="large"
-          @click="goToEditSteps"
-        >
+        <el-button type="primary" class="mobile-next-btn" size="large" @click="goToEditSteps">
           <span>Editar sesión</span>
           <el-icon class="btn-icon-right"><ArrowRight :size="18" /></el-icon>
         </el-button>
@@ -512,808 +509,822 @@ function handleNextStep() {
         </h1>
       </div>
 
-    <!-- Barra de Pasos (Steps) Móvil -->
-    <div class="mobile-steps-wrapper">
-      <div class="mobile-stepper">
-        <!-- Paso 1: Cliente -->
-        <div
-          class="stepper-item"
-          :class="{
-            active: currentStep === 0,
-            completed: currentStep > 0,
-          }"
-        >
-          <div class="stepper-icon-wrap">
-            <User :size="24" :stroke-width="2" />
+      <!-- Barra de Pasos (Steps) Móvil -->
+      <div class="mobile-steps-wrapper">
+        <div class="mobile-stepper">
+          <!-- Paso 1: Cliente -->
+          <div
+            class="stepper-item"
+            :class="{
+              active: currentStep === 0,
+              completed: currentStep > 0,
+            }"
+          >
+            <div class="stepper-icon-wrap">
+              <User :size="24" :stroke-width="2" />
+            </div>
+            <span class="stepper-label">Cliente</span>
           </div>
-          <span class="stepper-label">Cliente</span>
-        </div>
 
-        <!-- Conector 1-2 -->
-        <div class="stepper-connector" :class="{ completed: currentStep > 0 }"></div>
+          <!-- Conector 1-2 -->
+          <div class="stepper-connector" :class="{ completed: currentStep > 0 }"></div>
 
-        <!-- Paso 2: Sesión -->
-        <div
-          class="stepper-item"
-          :class="{
-            active: currentStep === 1,
-            completed: currentStep > 1,
-          }"
-        >
-          <div class="stepper-icon-wrap">
-            <Camera :size="24" :stroke-width="2" />
+          <!-- Paso 2: Sesión -->
+          <div
+            class="stepper-item"
+            :class="{
+              active: currentStep === 1,
+              completed: currentStep > 1,
+            }"
+          >
+            <div class="stepper-icon-wrap">
+              <Camera :size="24" :stroke-width="2" />
+            </div>
+            <span class="stepper-label">Sesión</span>
           </div>
-          <span class="stepper-label">Sesión</span>
-        </div>
 
-        <!-- Conector 2-3 -->
-        <div class="stepper-connector" :class="{ completed: currentStep > 1 }"></div>
+          <!-- Conector 2-3 -->
+          <div class="stepper-connector" :class="{ completed: currentStep > 1 }"></div>
 
-        <!-- Paso 3: Detalles -->
-        <div
-          class="stepper-item"
-          :class="{
-            active: currentStep === 2,
-            completed: currentStep > 2,
-          }"
-        >
-          <div class="stepper-icon-wrap">
-            <SquarePen :size="24" :stroke-width="2" />
+          <!-- Paso 3: Detalles -->
+          <div
+            class="stepper-item"
+            :class="{
+              active: currentStep === 2,
+              completed: currentStep > 2,
+            }"
+          >
+            <div class="stepper-icon-wrap">
+              <SquarePen :size="24" :stroke-width="2" />
+            </div>
+            <span class="stepper-label">Detalles</span>
           </div>
-          <span class="stepper-label">Detalles</span>
         </div>
       </div>
-    </div>
 
-    <!-- Contenido Dinámico del Paso Activo -->
-    <div class="mobile-step-body">
-      <!-- Paso 1: Información del Cliente -->
-      <div v-if="currentStep === 0" class="step-pane step-pane-client">
-        <el-form
-          :model="formData"
-          label-position="top"
-          size="large"
-          :disabled="isReadOnly"
-          class="mobile-client-form"
-        >
-          <!-- Fila 1: Nombre del Cliente -->
-          <el-form-item label="Nombre del Cliente" required>
-            <el-input
-              v-model="formData.clienteNombre"
-              size="large"
-              placeholder="Ej. Familia López / Pareja Smith"
-              :prefix-icon="User"
-            />
-          </el-form-item>
-
-          <!-- Fila 2: Hotel y Nº de Habitación -->
-          <div class="mobile-form-row-2">
-            <el-form-item label="Hotel" required>
-              <el-select
-                v-model="formData.hotelId"
-                size="large"
-                style="width: 100%"
-                placeholder="Selecciona hotel"
-              >
-                <el-option
-                  v-for="hotel in userHotels"
-                  :key="hotel.id"
-                  :label="hotel.nombre"
-                  :value="hotel.id"
-                />
-              </el-select>
-            </el-form-item>
-
-            <el-form-item label="Nº de Habitación">
+      <!-- Contenido Dinámico del Paso Activo -->
+      <div class="mobile-step-body">
+        <!-- Paso 1: Información del Cliente -->
+        <div v-if="currentStep === 0" class="step-pane step-pane-client">
+          <el-form
+            :model="formData"
+            label-position="top"
+            size="large"
+            :disabled="isReadOnly"
+            class="mobile-client-form"
+          >
+            <!-- Fila 1: Nombre del Cliente -->
+            <el-form-item label="Nombre del Cliente" required>
               <el-input
-                v-model="formData.numeroHabitacion"
+                v-model="formData.clienteNombre"
                 size="large"
-                placeholder="Ej. 304B / Villa 12"
-                :prefix-icon="Building2"
-              />
-            </el-form-item>
-          </div>
-
-          <!-- Fila 3: Participantes (Adultos y Niños) en 2 columnas al 50% -->
-          <div class="mobile-form-row-pax">
-            <el-form-item>
-              <template #label>
-                <span class="pax-item-label">
-                  <el-icon class="pax-label-icon"><Users :size="16" /></el-icon>
-                  <span>Adultos</span>
-                </span>
-              </template>
-              <el-input-number
-                v-model="formData.numAdultos"
-                size="large"
-                :min="0"
-                :max="99"
-                :step="1"
-                class="mobile-pax-input"
+                placeholder="Ej. Familia López / Pareja Smith"
+                :prefix-icon="User"
               />
             </el-form-item>
 
-            <el-form-item>
-              <template #label>
-                <span class="pax-item-label">
-                  <el-icon class="pax-label-icon"><Baby :size="16" /></el-icon>
-                  <span>Niños</span>
-                </span>
-              </template>
-              <el-input-number
-                v-model="formData.numNinos"
-                size="large"
-                :min="0"
-                :max="99"
-                :step="1"
-                class="mobile-pax-input"
-              />
-            </el-form-item>
-          </div>
-
-          <!-- Switch para mostrar/ocultar campos adicionales -->
-          <div class="mobile-switch-row">
-            <el-switch v-model="showAllClientFields" size="default" />
-            <span class="switch-label">Más datos</span>
-          </div>
-
-          <!-- Fila 4 Condicional: Email y Teléfono al 100% de ancho -->
-          <transition name="el-fade-in">
-            <div v-if="showAllClientFields" class="mobile-form-extra-fields">
-              <el-form-item label="Email del Cliente">
-                <el-input
-                  v-model="formData.clienteEmail"
+            <!-- Fila 2: Hotel y Nº de Habitación -->
+            <div class="mobile-form-row-2">
+              <el-form-item label="Hotel" required>
+                <el-select
+                  v-model="formData.hotelId"
                   size="large"
-                  placeholder="cliente@ejemplo.com"
-                  :prefix-icon="Message"
-                />
+                  style="width: 100%"
+                  placeholder="Selecciona hotel"
+                >
+                  <el-option
+                    v-for="hotel in userHotels"
+                    :key="hotel.id"
+                    :label="hotel.nombre"
+                    :value="hotel.id"
+                  />
+                </el-select>
               </el-form-item>
 
-              <el-form-item label="Teléfono del Cliente">
+              <el-form-item label="Nº de Habitación">
                 <el-input
-                  v-model="formData.clienteTelefono"
+                  v-model="formData.numeroHabitacion"
                   size="large"
-                  placeholder="+34 600 000 000"
-                  :prefix-icon="Phone"
+                  placeholder="Ej. 304B / Villa 12"
+                  :prefix-icon="Building2"
                 />
               </el-form-item>
             </div>
-          </transition>
-        </el-form>
-      </div>
 
-      <!-- Paso 2: Planificación con Acordeón (3 Secciones) -->
-      <div v-else-if="currentStep === 1" class="step-pane step-pane-schedule">
-        <el-collapse
-          v-model="activeScheduleAccordion"
-          accordion
-          class="mobile-schedule-accordion"
-          @change="handleAccordionChange"
-        >
-          <!-- 1. Sesión -->
-          <el-collapse-item name="sesion">
-            <template #title>
-              <div class="mobile-accordion-header">
-                <div class="accordion-title-group">
-                  <el-icon class="accordion-icon"><Camera :size="24" :stroke-width="2" /></el-icon>
-                  <span class="accordion-title-text">Sesión</span>
-                </div>
-                <el-tag
-                  :type="activeScheduleAccordion === 'sesion' ? sessionStateTagType : 'info'"
-                  effect="light"
-                  round
-                  size="small"
-                  class="header-datetime-tag"
-                  :class="{ 'is-active': activeScheduleAccordion === 'sesion' }"
-                >
-                  {{ mobileSessionPreview }}
-                </el-tag>
+            <!-- Fila 3: Participantes (Adultos y Niños) en 2 columnas al 50% -->
+            <div class="mobile-form-row-pax">
+              <el-form-item>
+                <template #label>
+                  <span class="pax-item-label">
+                    <el-icon class="pax-label-icon"><Users :size="16" /></el-icon>
+                    <span>Adultos</span>
+                  </span>
+                </template>
+                <el-input-number
+                  v-model="formData.numAdultos"
+                  size="large"
+                  :min="0"
+                  :max="99"
+                  :step="1"
+                  class="mobile-pax-input"
+                />
+              </el-form-item>
+
+              <el-form-item>
+                <template #label>
+                  <span class="pax-item-label">
+                    <el-icon class="pax-label-icon"><Baby :size="16" /></el-icon>
+                    <span>Niños</span>
+                  </span>
+                </template>
+                <el-input-number
+                  v-model="formData.numNinos"
+                  size="large"
+                  :min="0"
+                  :max="99"
+                  :step="1"
+                  class="mobile-pax-input"
+                />
+              </el-form-item>
+            </div>
+
+            <!-- Switch para mostrar/ocultar campos adicionales -->
+            <div class="mobile-switch-row">
+              <el-switch v-model="showAllClientFields" size="default" />
+              <span class="switch-label">Más datos</span>
+            </div>
+
+            <!-- Fila 4 Condicional: Email y Teléfono al 100% de ancho -->
+            <transition name="el-fade-in">
+              <div v-if="showAllClientFields" class="mobile-form-extra-fields">
+                <el-form-item label="Email del Cliente">
+                  <el-input
+                    v-model="formData.clienteEmail"
+                    size="large"
+                    placeholder="cliente@ejemplo.com"
+                    :prefix-icon="Message"
+                  />
+                </el-form-item>
+
+                <el-form-item label="Teléfono del Cliente">
+                  <el-input
+                    v-model="formData.clienteTelefono"
+                    size="large"
+                    placeholder="+34 600 000 000"
+                    :prefix-icon="Phone"
+                  />
+                </el-form-item>
               </div>
-            </template>
+            </transition>
+          </el-form>
+        </div>
 
-            <div class="mobile-schedule-container">
-              <!-- 1. Bloque de Calendario -->
-              <div class="mobile-calendar-section">
-                <div class="schedule-subheading">
-                  <span class="step-badge-num">1</span>
-                  <span>SELECCIONA FECHA</span>
-                </div>
-
-                <div class="calendar-panel-box">
-                  <div class="inline-calendar-picker">
-                    <el-date-picker-panel
-                      :border="false"
-                      v-model="selectedDateOnly"
-                      type="date"
-                      value-format="YYYY-MM-DD"
-                      date-format="YYYY-MM-DD"
-                      :disabled-date="disabledPastDates"
-                      :cell-class-name="getFotografoCellClassName"
-                      @panel-change="handlePanelChange"
-                    />
+        <!-- Paso 2: Planificación con Acordeón (3 Secciones) -->
+        <div v-else-if="currentStep === 1" class="step-pane step-pane-schedule">
+          <el-collapse
+            v-model="activeScheduleAccordion"
+            accordion
+            class="mobile-schedule-accordion"
+            @change="handleAccordionChange"
+          >
+            <!-- 1. Sesión -->
+            <el-collapse-item name="sesion">
+              <template #title>
+                <div class="mobile-accordion-header">
+                  <div class="accordion-title-group">
+                    <el-icon class="accordion-icon">
+                      <Camera :size="24" :stroke-width="2" />
+                    </el-icon>
+                    <span class="accordion-title-text">Sesión</span>
                   </div>
-                </div>
-
-                <!-- Contenedor de Avisos e Información bajo el Calendario -->
-                <div class="calendar-info-boxes">
-                  <!-- Leyenda de colores de ausencias del fotógrafo seleccionado -->
-                  <div
-                    v-if="formData.fotografoId && hasAusenciasInVisibleMonth"
-                    class="fotografo-absence-legend uniform-box"
+                  <el-tag
+                    :type="activeScheduleAccordion === 'sesion' ? sessionStateTagType : 'info'"
+                    effect="light"
+                    round
+                    size="small"
+                    class="header-datetime-tag"
+                    :class="{ 'is-active': activeScheduleAccordion === 'sesion' }"
                   >
-                    <span class="legend-label">Ausencias de {{ selectedPhotographerName }}:</span>
-                    <div class="calendar-legend">
-                      <div class="legend-item">
-                        <span class="legend-dot dot-baja"></span>
-                        <span>Baja Médica</span>
-                      </div>
-                      <div class="legend-item">
-                        <span class="legend-dot dot-vacaciones"></span>
-                        <span>Vacaciones</span>
-                      </div>
-                      <div class="legend-item">
-                        <span class="legend-dot dot-permiso"></span>
-                        <span>Permiso</span>
-                      </div>
-                      <div class="legend-item">
-                        <span class="legend-dot dot-otro"></span>
-                        <span>Otro</span>
-                      </div>
-                    </div>
+                    {{ mobileSessionPreview }}
+                  </el-tag>
+                </div>
+              </template>
+
+              <div class="mobile-schedule-container">
+                <!-- 1. Bloque de Calendario -->
+                <div class="mobile-calendar-section">
+                  <div class="schedule-subheading">
+                    <span class="step-badge-num">1</span>
+                    <span>SELECCIONA FECHA</span>
                   </div>
 
-                  <!-- Alerta de Bloqueo por Ausencia Individual del Fotógrafo -->
-                  <el-alert
-                    v-if="formData.fechaHoraInicio && isFotografoAusente && ausenciaFotografoActual"
-                    type="error"
-                    show-icon
-                    :closable="false"
-                    class="fotografo-absence-alert uniform-box"
-                  >
-                    <template #title>
-                      <span>
-                        <strong>{{ selectedPhotographerName }}</strong>
-                        tiene una ausencia registrada (
-                        <strong>{{ ausenciaFotografoActual.motivo }}</strong>
-                        ) en la fecha seleccionada. No es posible asignarlo a esta sesión.
-                      </span>
-                    </template>
-                  </el-alert>
+                  <div class="calendar-panel-box">
+                    <div class="inline-calendar-picker">
+                      <el-date-picker-panel
+                        :border="false"
+                        v-model="selectedDateOnly"
+                        type="date"
+                        value-format="YYYY-MM-DD"
+                        date-format="YYYY-MM-DD"
+                        :disabled-date="disabledPastDates"
+                        :cell-class-name="getFotografoCellClassName"
+                        @panel-change="handlePanelChange"
+                      />
+                    </div>
+                  </div>
 
-                  <!-- Indicador de Disponibilidad y Cupo del Hotel -->
-                  <div
-                    v-if="formData.fechaHoraInicio && disponibilidadHotel"
-                    class="disponibilidad-indicator-card uniform-box"
-                    :class="{ 'quota-full': isTopeAlcanzado }"
-                  >
-                    <div class="disponibilidad-header">
-                      <div class="disponibilidad-title">
-                        <span
-                          class="status-indicator-dot"
-                          :class="isTopeAlcanzado ? 'dot-danger' : 'dot-success'"
-                        ></span>
-                        <span>Sesiones disponibles:</span>
-                      </div>
-                      <div class="disponibilidad-badge">
-                        <el-tag
-                          :type="isTopeAlcanzado ? 'danger' : 'success'"
-                          effect="light"
-                          size="small"
-                          round
-                        >
-                          {{
-                            isTopeAlcanzado
-                              ? 'Tope alcanzado'
-                              : `${disponibilidadHotel.cupoLibre} ${
-                                  disponibilidadHotel.cupoLibre === 1
-                                    ? 'sesión libre'
-                                    : 'sesiones libres'
-                                }`
-                          }}
-                        </el-tag>
+                  <!-- Contenedor de Avisos e Información bajo el Calendario -->
+                  <div class="calendar-info-boxes">
+                    <!-- Leyenda de colores de ausencias del fotógrafo seleccionado -->
+                    <div
+                      v-if="formData.fotografoId && hasAusenciasInVisibleMonth"
+                      class="fotografo-absence-legend uniform-box"
+                    >
+                      <span class="legend-label">Ausencias de {{ selectedPhotographerName }}:</span>
+                      <div class="calendar-legend">
+                        <div class="legend-item">
+                          <span class="legend-dot dot-baja"></span>
+                          <span>Baja Médica</span>
+                        </div>
+                        <div class="legend-item">
+                          <span class="legend-dot dot-vacaciones"></span>
+                          <span>Vacaciones</span>
+                        </div>
+                        <div class="legend-item">
+                          <span class="legend-dot dot-permiso"></span>
+                          <span>Permiso</span>
+                        </div>
+                        <div class="legend-item">
+                          <span class="legend-dot dot-otro"></span>
+                          <span>Otro</span>
+                        </div>
                       </div>
                     </div>
-                    <div class="disponibilidad-details">
-                      <span class="detail-item">
-                        <strong>{{ disponibilidadHotel.disponibles }}</strong>
-                        / {{ disponibilidadHotel.totalFotografos }} fotógrafos activos
-                      </span>
-                      <span class="detail-separator">•</span>
-                      <span class="detail-item">
-                        <strong>{{ disponibilidadHotel.sesionesSimultaneas }}</strong>
-                        sesiones a esta hora
-                      </span>
-                    </div>
 
-                    <!-- Alerta de Bloqueo si no hay cupo -->
+                    <!-- Alerta de Bloqueo por Ausencia Individual del Fotógrafo -->
                     <el-alert
-                      v-if="isTopeAlcanzado"
+                      v-if="
+                        formData.fechaHoraInicio && isFotografoAusente && ausenciaFotografoActual
+                      "
                       type="error"
                       show-icon
                       :closable="false"
-                      class="quota-alert"
+                      class="fotografo-absence-alert uniform-box"
                     >
                       <template #title>
-                        <span v-if="disponibilidadHotel.disponibles === 0">
-                          No hay fotógrafos disponibles en este hotel para la fecha seleccionada.
+                        <span>
+                          <strong>{{ selectedPhotographerName }}</strong>
+                          tiene una ausencia registrada (
+                          <strong>{{ ausenciaFotografoActual.motivo }}</strong>
+                          ) en la fecha seleccionada. No es posible asignarlo a esta sesión.
                         </span>
-                        <span v-else>
-                          Tope de {{ disponibilidadHotel.disponibles }} sesiones simultáneas
-                          alcanzado para esta hora.
+                      </template>
+                    </el-alert>
+
+                    <!-- Indicador de Disponibilidad y Cupo del Hotel -->
+                    <div
+                      v-if="formData.fechaHoraInicio && disponibilidadHotel"
+                      class="disponibilidad-indicator-card uniform-box"
+                      :class="{ 'quota-full': isTopeAlcanzado }"
+                    >
+                      <div class="disponibilidad-header">
+                        <div class="disponibilidad-title">
+                          <span
+                            class="status-indicator-dot"
+                            :class="isTopeAlcanzado ? 'dot-danger' : 'dot-success'"
+                          ></span>
+                          <span>Sesiones disponibles:</span>
+                        </div>
+                        <div class="disponibilidad-badge">
+                          <el-tag
+                            :type="isTopeAlcanzado ? 'danger' : 'success'"
+                            effect="light"
+                            size="small"
+                            round
+                          >
+                            {{
+                              isTopeAlcanzado
+                                ? 'Tope alcanzado'
+                                : `${disponibilidadHotel.cupoLibre} ${
+                                    disponibilidadHotel.cupoLibre === 1
+                                      ? 'sesión libre'
+                                      : 'sesiones libres'
+                                  }`
+                            }}
+                          </el-tag>
+                        </div>
+                      </div>
+                      <div class="disponibilidad-details">
+                        <span class="detail-item">
+                          <strong>{{ disponibilidadHotel.disponibles }}</strong>
+                          / {{ disponibilidadHotel.totalFotografos }} fotógrafos activos
+                        </span>
+                        <span class="detail-separator">•</span>
+                        <span class="detail-item">
+                          <strong>{{ disponibilidadHotel.sesionesSimultaneas }}</strong>
+                          sesiones a esta hora
+                        </span>
+                      </div>
+
+                      <!-- Alerta de Bloqueo si no hay cupo -->
+                      <el-alert
+                        v-if="isTopeAlcanzado"
+                        type="error"
+                        show-icon
+                        :closable="false"
+                        class="quota-alert"
+                      >
+                        <template #title>
+                          <span v-if="disponibilidadHotel.disponibles === 0">
+                            No hay fotógrafos disponibles en este hotel para la fecha seleccionada.
+                          </span>
+                          <span v-else>
+                            Tope de {{ disponibilidadHotel.disponibles }} sesiones simultáneas
+                            alcanzado para esta hora.
+                          </span>
+                        </template>
+                      </el-alert>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2. Bloque de Horas: 2 SELECCIONA HORARIO (Recuadro Verde) -->
+                <div class="schedule-section-block">
+                  <div class="schedule-section-header-row">
+                    <div class="schedule-subheading">
+                      <span class="step-badge-num">2</span>
+                      <span>SELECCIONA HORARIO</span>
+                    </div>
+                    <el-switch v-model="showAllTimeSlots" size="default" />
+                  </div>
+                  <div class="time-slots-grid">
+                    <el-badge
+                      v-for="time in visibleTimeSlots"
+                      :key="time"
+                      :value="sessionsCountByHour[time]"
+                      :hidden="!sessionsCountByHour[time]"
+                      class="time-slot-badge-wrapper"
+                    >
+                      <button
+                        type="button"
+                        class="time-slot-btn"
+                        :class="[
+                          getTimeSlotStatusClass(time),
+                          { active: selectedTimeOnly === time },
+                        ]"
+                        @click="selectTimeSlot(time)"
+                      >
+                        {{ time }}
+                      </button>
+                    </el-badge>
+                  </div>
+                </div>
+
+                <!-- 3. Bloque de Fotógrafos:  FOTÓGRAFOS DISPONIBLES (Recuadro Morado) -->
+                <div class="schedule-section-block">
+                  <div class="schedule-subheading">
+                    <span class="step-badge-num">3</span>
+                    <span>FOTÓGRAFOS DISPONIBLES</span>
+                  </div>
+
+                  <div v-if="photographers.length === 0" class="empty-photographers-msg">
+                    <span v-if="!formData.hotelId">
+                      Selecciona un hotel primero para consultar disponibilidad.
+                    </span>
+                    <span v-else>No hay fotógrafos activos en este hotel.</span>
+                  </div>
+
+                  <div v-else class="photographers-card-list">
+                    <div
+                      v-for="photographer in photographers"
+                      :key="photographer.id"
+                      class="photographer-selection-card"
+                      :class="{
+                        selected: String(formData.fotografoId) === String(photographer.id),
+                        disabled: getPhotographerStatus(photographer.id).disabled,
+                      }"
+                      @click="
+                        !getPhotographerStatus(photographer.id).disabled &&
+                        selectPhotographerCard(photographer.id)
+                      "
+                    >
+                      <div class="photographer-card-info">
+                        <el-avatar
+                          :src="photographer.imagen || undefined"
+                          :size="36"
+                          :style="{
+                            backgroundColor: getUserBgColor(photographer.color),
+                            color: '#ffffff',
+                            fontWeight: '700',
+                            fontSize: '13px',
+                          }"
+                          class="photographer-avatar-preview"
+                        >
+                          {{ getUserInitials(photographer.nombre, photographer.apellidos) }}
+                        </el-avatar>
+                        <div class="photographer-text-meta">
+                          <span class="photographer-card-name">
+                            {{ photographer.nombre }} {{ photographer.apellidos }}
+                          </span>
+                          <span
+                            class="photographer-card-tag"
+                            :class="getPhotographerStatus(photographer.id).tagClass"
+                          >
+                            {{ getPhotographerStatus(photographer.id).label }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="photographer-card-action">
+                        <el-button
+                          size="small"
+                          :type="
+                            String(formData.fotografoId) === String(photographer.id)
+                              ? 'primary'
+                              : 'default'
+                          "
+                          :disabled="getPhotographerStatus(photographer.id).disabled"
+                          round
+                        >
+                          {{
+                            String(formData.fotografoId) === String(photographer.id)
+                              ? 'Seleccionado'
+                              : 'Seleccionar'
+                          }}
+                        </el-button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </el-collapse-item>
+
+            <!-- 2. Venta -->
+            <el-collapse-item name="cita-venta">
+              <template #title>
+                <div class="mobile-accordion-header">
+                  <div class="accordion-title-group">
+                    <el-icon class="accordion-icon">
+                      <Calendar :size="24" :stroke-width="2" />
+                    </el-icon>
+                    <span class="accordion-title-text">Venta</span>
+                  </div>
+                  <el-tag
+                    :type="activeScheduleAccordion === 'cita-venta' ? 'primary' : 'info'"
+                    effect="light"
+                    round
+                    size="small"
+                    class="header-datetime-tag"
+                    :class="{ 'is-active': activeScheduleAccordion === 'cita-venta' }"
+                  >
+                    {{ mobileCitaVentaPreview }}
+                  </el-tag>
+                </div>
+              </template>
+
+              <div class="mobile-schedule-container">
+                <!-- 1. Bloque de Calendario Cita de Ventas -->
+                <div class="mobile-calendar-section">
+                  <div class="schedule-subheading">
+                    <span class="step-badge-num">1</span>
+                    <span>SELECCIONA FECHA</span>
+                  </div>
+
+                  <div class="calendar-panel-box">
+                    <div class="inline-calendar-picker">
+                      <el-date-picker-panel
+                        :border="false"
+                        v-model="selectedCitaVentaDateOnly"
+                        type="date"
+                        value-format="YYYY-MM-DD"
+                        date-format="YYYY-MM-DD"
+                        :disabled-date="disabledPastDates"
+                        :cell-class-name="getCitaVentaCellClassName"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2. Bloque de Horas de Venta -->
+                <div class="schedule-section-block">
+                  <div class="schedule-section-header-row">
+                    <div class="schedule-subheading">
+                      <span class="step-badge-num">2</span>
+                      <span>SELECCIONA HORARIO VENTA</span>
+                    </div>
+                    <el-switch v-model="showAllCitaVentaTimeSlots" size="default" />
+                  </div>
+                  <div class="time-slots-grid">
+                    <el-badge
+                      v-for="time in visibleCitaVentaTimeSlots"
+                      :key="`cita-${time}`"
+                      :value="salesCountByHour[time]"
+                      :hidden="!salesCountByHour[time]"
+                      class="time-slot-badge-wrapper"
+                    >
+                      <button
+                        type="button"
+                        class="time-slot-btn"
+                        :class="[
+                          getCitaVentaTimeSlotStatusClass(time),
+                          { active: selectedCitaVentaTimeOnly === time },
+                        ]"
+                        @click="selectCitaVentaTimeSlot(time)"
+                      >
+                        {{ time }}
+                      </button>
+                    </el-badge>
+                  </div>
+
+                  <!-- Alerta de conflictos de Cita de Venta -->
+                  <div
+                    v-if="conflictsCitaVenta.length > 0"
+                    class="conflict-alert-box uniform-box"
+                    style="margin-top: 0.75rem"
+                  >
+                    <el-alert type="warning" show-icon :closable="false">
+                      <template #title>
+                        <span>
+                          <strong>{{ conflictsCitaVenta.length }}</strong>
+                          cita(s) de venta en el mismo hotel en esta franja (±1h)
                         </span>
                       </template>
                     </el-alert>
                   </div>
                 </div>
               </div>
+            </el-collapse-item>
 
-              <!-- 2. Bloque de Horas: 2 SELECCIONA HORARIO (Recuadro Verde) -->
-              <div class="schedule-section-block">
-                <div class="schedule-section-header-row">
-                  <div class="schedule-subheading">
-                    <span class="step-badge-num">2</span>
-                    <span>SELECCIONA HORARIO</span>
+            <!-- 3. Checkout -->
+            <el-collapse-item name="checkout">
+              <template #title>
+                <div class="mobile-accordion-header">
+                  <div class="accordion-title-group">
+                    <el-icon class="accordion-icon">
+                      <PlaneTakeoff :size="24" :stroke-width="2" />
+                    </el-icon>
+                    <span class="accordion-title-text">Checkout</span>
                   </div>
-                  <el-switch v-model="showAllTimeSlots" size="default" />
-                </div>
-                <div class="time-slots-grid">
-                  <el-badge
-                    v-for="time in visibleTimeSlots"
-                    :key="time"
-                    :value="sessionsCountByHour[time]"
-                    :hidden="!sessionsCountByHour[time]"
-                    class="time-slot-badge-wrapper"
+                  <el-tag
+                    :type="activeScheduleAccordion === 'checkout' ? 'primary' : 'info'"
+                    effect="light"
+                    round
+                    size="small"
+                    class="header-datetime-tag"
+                    :class="{ 'is-active': activeScheduleAccordion === 'checkout' }"
                   >
-                    <button
-                      type="button"
-                      class="time-slot-btn"
-                      :class="[getTimeSlotStatusClass(time), { active: selectedTimeOnly === time }]"
-                      @click="selectTimeSlot(time)"
-                    >
-                      {{ time }}
-                    </button>
-                  </el-badge>
+                    {{ mobileCheckoutPreview }}
+                  </el-tag>
                 </div>
-              </div>
+              </template>
 
-              <!-- 3. Bloque de Fotógrafos:  FOTÓGRAFOS DISPONIBLES (Recuadro Morado) -->
-              <div class="schedule-section-block">
-                <div class="schedule-subheading">
-                  <span class="step-badge-num">3</span>
-                  <span>FOTÓGRAFOS DISPONIBLES</span>
-                </div>
+              <div class="mobile-schedule-container">
+                <!-- Bloque de Calendario de Checkout -->
+                <div class="mobile-calendar-section">
+                  <div class="schedule-subheading">
+                    <span class="step-badge-num">1</span>
+                    <span>SELECCIONA CHECKOUT</span>
+                  </div>
 
-                <div v-if="photographers.length === 0" class="empty-photographers-msg">
-                  <span v-if="!formData.hotelId">
-                    Selecciona un hotel primero para consultar disponibilidad.
-                  </span>
-                  <span v-else>No hay fotógrafos activos en este hotel.</span>
-                </div>
-
-                <div v-else class="photographers-card-list">
-                  <div
-                    v-for="photographer in photographers"
-                    :key="photographer.id"
-                    class="photographer-selection-card"
-                    :class="{
-                      selected: String(formData.fotografoId) === String(photographer.id),
-                      disabled: getPhotographerStatus(photographer.id).disabled,
-                    }"
-                    @click="
-                      !getPhotographerStatus(photographer.id).disabled &&
-                      selectPhotographerCard(photographer.id)
-                    "
-                  >
-                    <div class="photographer-card-info">
-                      <el-avatar
-                        :src="photographer.imagen || undefined"
-                        :size="36"
-                        :style="{
-                          backgroundColor: getUserBgColor(photographer.color),
-                          color: '#ffffff',
-                          fontWeight: '700',
-                          fontSize: '13px',
-                        }"
-                        class="photographer-avatar-preview"
-                      >
-                        {{ getUserInitials(photographer.nombre, photographer.apellidos) }}
-                      </el-avatar>
-                      <div class="photographer-text-meta">
-                        <span class="photographer-card-name">
-                          {{ photographer.nombre }} {{ photographer.apellidos }}
-                        </span>
-                        <span
-                          class="photographer-card-tag"
-                          :class="getPhotographerStatus(photographer.id).tagClass"
-                        >
-                          {{ getPhotographerStatus(photographer.id).label }}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div class="photographer-card-action">
-                      <el-button
-                        size="small"
-                        :type="
-                          String(formData.fotografoId) === String(photographer.id)
-                            ? 'primary'
-                            : 'default'
-                        "
-                        :disabled="getPhotographerStatus(photographer.id).disabled"
-                        round
-                      >
-                        {{
-                          String(formData.fotografoId) === String(photographer.id)
-                            ? 'Seleccionado'
-                            : 'Seleccionar'
-                        }}
-                      </el-button>
+                  <div class="calendar-panel-box">
+                    <div class="inline-calendar-picker">
+                      <el-date-picker-panel
+                        :border="false"
+                        v-model="formData.fechaSalida"
+                        type="date"
+                        value-format="YYYY-MM-DD"
+                        date-format="YYYY-MM-DD"
+                        :disabled-date="disabledPastDates"
+                      />
                     </div>
                   </div>
                 </div>
               </div>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+
+        <!-- Paso 3: Resumen y Detalles de la Sesión -->
+        <div v-else-if="currentStep === 2" class="step-pane step-pane-details">
+          <!-- 1. Tarjeta Azul de Resumen de Cita -->
+          <div class="appointment-summary-card" :style="appointmentSummaryCardStyle">
+            <div class="summary-photographer-row">
+              <el-avatar
+                :src="selectedPhotographer?.imagen || undefined"
+                :size="42"
+                :style="{
+                  backgroundColor: selectedPhotographer?.color
+                    ? getUserBgColor(selectedPhotographer.color)
+                    : 'rgba(255, 255, 255, 0.25)',
+                  color: '#ffffff',
+                  fontWeight: '700',
+                  fontSize: '14px',
+                  border: '2px solid rgba(255, 255, 255, 0.4)',
+                }"
+                class="summary-avatar"
+              >
+                {{
+                  selectedPhotographer
+                    ? getUserInitials(selectedPhotographer.nombre, selectedPhotographer.apellidos)
+                    : '?'
+                }}
+              </el-avatar>
+              <div class="summary-photographer-meta">
+                <span class="summary-photographer-label">FOTÓGRAFO ASIGNADO</span>
+                <span class="summary-photographer-name">
+                  {{ selectedPhotographerName || 'Sin asignar' }}
+                </span>
+              </div>
             </div>
-          </el-collapse-item>
 
-          <!-- 2. Venta -->
-          <el-collapse-item name="cita-venta">
-            <template #title>
-              <div class="mobile-accordion-header">
-                <div class="accordion-title-group">
-                  <el-icon class="accordion-icon">
-                    <Calendar :size="24" :stroke-width="2" />
-                  </el-icon>
-                  <span class="accordion-title-text">Venta</span>
-                </div>
-                <el-tag
-                  :type="activeScheduleAccordion === 'cita-venta' ? 'primary' : 'info'"
-                  effect="light"
-                  round
-                  size="small"
-                  class="header-datetime-tag"
-                  :class="{ 'is-active': activeScheduleAccordion === 'cita-venta' }"
-                >
-                  {{ mobileCitaVentaPreview }}
-                </el-tag>
-              </div>
-            </template>
-
-            <div class="mobile-schedule-container">
-              <!-- 1. Bloque de Calendario Cita de Ventas -->
-              <div class="mobile-calendar-section">
-                <div class="schedule-subheading">
-                  <span class="step-badge-num">1</span>
-                  <span>SELECCIONA FECHA</span>
-                </div>
-
-                <div class="calendar-panel-box">
-                  <div class="inline-calendar-picker">
-                    <el-date-picker-panel
-                      :border="false"
-                      v-model="selectedCitaVentaDateOnly"
-                      type="date"
-                      value-format="YYYY-MM-DD"
-                      date-format="YYYY-MM-DD"
-                      :disabled-date="disabledPastDates"
-                      :cell-class-name="getCitaVentaCellClassName"
-                    />
-                  </div>
-                </div>
+            <div class="summary-details-list">
+              <!-- Cliente -->
+              <div v-if="formData.clienteNombre?.trim()" class="summary-detail-row">
+                <span class="summary-detail-key">Cliente:</span>
+                <span class="summary-detail-val">{{ formData.clienteNombre }}</span>
               </div>
 
-              <!-- 2. Bloque de Horas de Venta -->
-              <div class="schedule-section-block">
-                <div class="schedule-section-header-row">
-                  <div class="schedule-subheading">
-                    <span class="step-badge-num">2</span>
-                    <span>SELECCIONA HORARIO VENTA</span>
-                  </div>
-                  <el-switch v-model="showAllCitaVentaTimeSlots" size="default" />
-                </div>
-                <div class="time-slots-grid">
-                  <el-badge
-                    v-for="time in visibleCitaVentaTimeSlots"
-                    :key="`cita-${time}`"
-                    :value="salesCountByHour[time]"
-                    :hidden="!salesCountByHour[time]"
-                    class="time-slot-badge-wrapper"
+              <!-- Habitación -->
+              <div v-if="formData.numeroHabitacion?.trim()" class="summary-detail-row">
+                <span class="summary-detail-key">Habitación:</span>
+                <span class="summary-detail-val">{{ formData.numeroHabitacion }}</span>
+              </div>
+
+              <!-- Email -->
+              <div v-if="formData.clienteEmail?.trim()" class="summary-detail-row">
+                <span class="summary-detail-key">Email:</span>
+                <span class="summary-detail-val">{{ formData.clienteEmail }}</span>
+              </div>
+
+              <!-- Teléfono -->
+              <div v-if="formData.clienteTelefono?.trim()" class="summary-detail-row">
+                <span class="summary-detail-key">Teléfono:</span>
+                <span class="summary-detail-val">{{ formData.clienteTelefono }}</span>
+              </div>
+
+              <!-- Hotel -->
+              <div v-if="selectedHotelDisplayName" class="summary-detail-row">
+                <span class="summary-detail-key">Hotel:</span>
+                <span class="summary-detail-val">{{ selectedHotelDisplayName }}</span>
+              </div>
+
+              <!-- Fecha Sesión -->
+              <div
+                v-if="
+                  formData.fechaHoraInicio &&
+                  summaryFormattedDate &&
+                  summaryFormattedDate !== 'Sin fecha'
+                "
+                class="summary-detail-row"
+              >
+                <span class="summary-detail-key">Fecha:</span>
+                <span class="summary-detail-val">{{ summaryFormattedDate }}</span>
+              </div>
+
+              <!-- Hora Sesión -->
+              <div v-if="selectedTimeOnly" class="summary-detail-row">
+                <span class="summary-detail-key">Hora:</span>
+                <span class="summary-detail-val">{{ selectedTimeOnly }}</span>
+              </div>
+
+              <!-- Personas -->
+              <div
+                v-if="summaryPersonas && summaryPersonas !== 'Sin participantes'"
+                class="summary-detail-row"
+              >
+                <span class="summary-detail-key">Personas:</span>
+                <span class="summary-detail-val">{{ summaryPersonas }}</span>
+              </div>
+
+              <!-- Cita de Venta -->
+              <div
+                v-if="mobileCitaVentaPreview && mobileCitaVentaPreview !== 'Sin cita'"
+                class="summary-detail-row"
+              >
+                <span class="summary-detail-key">Cita Venta:</span>
+                <span class="summary-detail-val">{{ mobileCitaVentaPreview }}</span>
+              </div>
+
+              <!-- Checkout -->
+              <div
+                v-if="mobileCheckoutPreview && mobileCheckoutPreview !== 'Sin checkout'"
+                class="summary-detail-row"
+              >
+                <span class="summary-detail-key">Checkout:</span>
+                <span class="summary-detail-val">{{ mobileCheckoutPreview }}</span>
+              </div>
+
+              <!-- Motivo / Concepto (Solo si se ha seleccionado/escrito) -->
+              <div v-if="formData.concepto?.trim()" class="summary-detail-row">
+                <span class="summary-detail-key">Motivo:</span>
+                <span class="summary-detail-val">{{ formData.concepto }}</span>
+              </div>
+
+              <!-- Notas Adicionales (Solo si se han escrito) -->
+              <div v-if="formData.notas?.trim()" class="summary-detail-row">
+                <span class="summary-detail-key">Notas:</span>
+                <span class="summary-detail-val">{{ formData.notas }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Detalles de la Sesión -->
+          <div class="mobile-details-section">
+            <div class="mobile-details-form">
+              <!-- Concepto / Motivo de la Sesión (Botones estilo Estado de Sesión) -->
+              <div class="motivo-section">
+                <label class="form-field-label">CONCEPTO / MOTIVO DE LA SESIÓN</label>
+                <div class="motivo-grid">
+                  <button
+                    v-for="opt in motivoOptions"
+                    :key="opt.value"
+                    type="button"
+                    class="motivo-grid-btn"
+                    :class="{ 'is-active': isMotivoActive(opt.value) }"
+                    :disabled="isReadOnly"
+                    @click="handleSelectMotivo(opt.value)"
                   >
-                    <button
-                      type="button"
-                      class="time-slot-btn"
-                      :class="[
-                        getCitaVentaTimeSlotStatusClass(time),
-                        { active: selectedCitaVentaTimeOnly === time },
-                      ]"
-                      @click="selectCitaVentaTimeSlot(time)"
-                    >
-                      {{ time }}
-                    </button>
-                  </el-badge>
-                </div>
-
-                <!-- Alerta de conflictos de Cita de Venta -->
-                <div
-                  v-if="conflictsCitaVenta.length > 0"
-                  class="conflict-alert-box uniform-box"
-                  style="margin-top: 0.75rem"
-                >
-                  <el-alert type="warning" show-icon :closable="false">
-                    <template #title>
-                      <span>
-                        <strong>{{ conflictsCitaVenta.length }}</strong>
-                        cita(s) de venta en el mismo hotel en esta franja (±1h)
-                      </span>
-                    </template>
-                  </el-alert>
+                    <el-icon class="motivo-grid-icon">
+                      <component :is="opt.icon" :size="20" :stroke-width="2" />
+                    </el-icon>
+                    <span>{{ opt.label }}</span>
+                  </button>
                 </div>
               </div>
-            </div>
-          </el-collapse-item>
 
-          <!-- 3. Checkout -->
-          <el-collapse-item name="checkout">
-            <template #title>
-              <div class="mobile-accordion-header">
-                <div class="accordion-title-group">
-                  <el-icon class="accordion-icon">
-                    <PlaneTakeoff :size="24" :stroke-width="2" />
-                  </el-icon>
-                  <span class="accordion-title-text">Checkout</span>
-                </div>
-                <el-tag
-                  :type="activeScheduleAccordion === 'checkout' ? 'primary' : 'info'"
-                  effect="light"
-                  round
-                  size="small"
-                  class="header-datetime-tag"
-                  :class="{ 'is-active': activeScheduleAccordion === 'checkout' }"
-                >
-                  {{ mobileCheckoutPreview }}
-                </el-tag>
+              <!-- Notas Adicionales -->
+              <div class="notas-section">
+                <label class="form-field-label">NOTAS ADICIONALES</label>
+                <el-input
+                  v-model="formData.notas"
+                  size="large"
+                  type="textarea"
+                  :rows="3"
+                  placeholder="Ej. Fotos en la playa al atardecer, vestidos de blanco."
+                />
               </div>
-            </template>
-
-            <div class="mobile-schedule-container">
-              <!-- Bloque de Calendario de Checkout -->
-              <div class="mobile-calendar-section">
-                <div class="schedule-subheading">
-                  <span class="step-badge-num">1</span>
-                  <span>SELECCIONA CHECKOUT</span>
-                </div>
-
-                <div class="calendar-panel-box">
-                  <div class="inline-calendar-picker">
-                    <el-date-picker-panel
-                      :border="false"
-                      v-model="formData.fechaSalida"
-                      type="date"
-                      value-format="YYYY-MM-DD"
-                      date-format="YYYY-MM-DD"
-                      :disabled-date="disabledPastDates"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </el-collapse-item>
-        </el-collapse>
-      </div>
-
-      <!-- Paso 3: Resumen y Detalles de la Sesión -->
-      <div v-else-if="currentStep === 2" class="step-pane step-pane-details">
-        <!-- 1. Tarjeta Azul de Resumen de Cita -->
-        <div class="appointment-summary-card" :style="appointmentSummaryCardStyle">
-          <div class="summary-photographer-row">
-            <el-avatar
-              :src="selectedPhotographer?.imagen || undefined"
-              :size="42"
-              :style="{
-                backgroundColor: selectedPhotographer?.color
-                  ? getUserBgColor(selectedPhotographer.color)
-                  : 'rgba(255, 255, 255, 0.25)',
-                color: '#ffffff',
-                fontWeight: '700',
-                fontSize: '14px',
-                border: '2px solid rgba(255, 255, 255, 0.4)',
-              }"
-              class="summary-avatar"
-            >
-              {{
-                selectedPhotographer
-                  ? getUserInitials(selectedPhotographer.nombre, selectedPhotographer.apellidos)
-                  : '?'
-              }}
-            </el-avatar>
-            <div class="summary-photographer-meta">
-              <span class="summary-photographer-label">FOTÓGRAFO ASIGNADO</span>
-              <span class="summary-photographer-name">
-                {{ selectedPhotographerName || 'Sin asignar' }}
-              </span>
-            </div>
-          </div>
-
-          <div class="summary-details-list">
-            <!-- Cliente -->
-            <div v-if="formData.clienteNombre?.trim()" class="summary-detail-row">
-              <span class="summary-detail-key">Cliente:</span>
-              <span class="summary-detail-val">{{ formData.clienteNombre }}</span>
-            </div>
-
-            <!-- Habitación -->
-            <div v-if="formData.numeroHabitacion?.trim()" class="summary-detail-row">
-              <span class="summary-detail-key">Habitación:</span>
-              <span class="summary-detail-val">{{ formData.numeroHabitacion }}</span>
-            </div>
-
-            <!-- Email -->
-            <div v-if="formData.clienteEmail?.trim()" class="summary-detail-row">
-              <span class="summary-detail-key">Email:</span>
-              <span class="summary-detail-val">{{ formData.clienteEmail }}</span>
-            </div>
-
-            <!-- Teléfono -->
-            <div v-if="formData.clienteTelefono?.trim()" class="summary-detail-row">
-              <span class="summary-detail-key">Teléfono:</span>
-              <span class="summary-detail-val">{{ formData.clienteTelefono }}</span>
-            </div>
-
-            <!-- Hotel -->
-            <div v-if="selectedHotelDisplayName" class="summary-detail-row">
-              <span class="summary-detail-key">Hotel:</span>
-              <span class="summary-detail-val">{{ selectedHotelDisplayName }}</span>
-            </div>
-
-            <!-- Fecha Sesión -->
-            <div
-              v-if="
-                formData.fechaHoraInicio &&
-                summaryFormattedDate &&
-                summaryFormattedDate !== 'Sin fecha'
-              "
-              class="summary-detail-row"
-            >
-              <span class="summary-detail-key">Fecha:</span>
-              <span class="summary-detail-val">{{ summaryFormattedDate }}</span>
-            </div>
-
-            <!-- Hora Sesión -->
-            <div v-if="selectedTimeOnly" class="summary-detail-row">
-              <span class="summary-detail-key">Hora:</span>
-              <span class="summary-detail-val">{{ selectedTimeOnly }}</span>
-            </div>
-
-            <!-- Personas -->
-            <div
-              v-if="summaryPersonas && summaryPersonas !== 'Sin participantes'"
-              class="summary-detail-row"
-            >
-              <span class="summary-detail-key">Personas:</span>
-              <span class="summary-detail-val">{{ summaryPersonas }}</span>
-            </div>
-
-            <!-- Cita de Venta -->
-            <div
-              v-if="mobileCitaVentaPreview && mobileCitaVentaPreview !== 'Sin cita'"
-              class="summary-detail-row"
-            >
-              <span class="summary-detail-key">Cita Venta:</span>
-              <span class="summary-detail-val">{{ mobileCitaVentaPreview }}</span>
-            </div>
-
-            <!-- Checkout -->
-            <div
-              v-if="mobileCheckoutPreview && mobileCheckoutPreview !== 'Sin checkout'"
-              class="summary-detail-row"
-            >
-              <span class="summary-detail-key">Checkout:</span>
-              <span class="summary-detail-val">{{ mobileCheckoutPreview }}</span>
-            </div>
-
-            <!-- Motivo / Concepto (Solo si se ha seleccionado/escrito) -->
-            <div v-if="formData.concepto?.trim()" class="summary-detail-row">
-              <span class="summary-detail-key">Motivo:</span>
-              <span class="summary-detail-val">{{ formData.concepto }}</span>
-            </div>
-
-            <!-- Notas Adicionales (Solo si se han escrito) -->
-            <div v-if="formData.notas?.trim()" class="summary-detail-row">
-              <span class="summary-detail-key">Notas:</span>
-              <span class="summary-detail-val">{{ formData.notas }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. Detalles de la Sesión -->
-        <div class="mobile-details-section">
-          <div class="mobile-details-form">
-            <!-- Concepto / Motivo de la Sesión (Botones estilo Estado de Sesión) -->
-            <div class="motivo-section">
-              <label class="form-field-label">CONCEPTO / MOTIVO DE LA SESIÓN</label>
-              <div class="motivo-grid">
-                <button
-                  v-for="opt in motivoOptions"
-                  :key="opt.value"
-                  type="button"
-                  class="motivo-grid-btn"
-                  :class="{ 'is-active': isMotivoActive(opt.value) }"
-                  :disabled="isReadOnly"
-                  @click="handleSelectMotivo(opt.value)"
-                >
-                  <el-icon class="motivo-grid-icon">
-                    <component :is="opt.icon" :size="20" :stroke-width="2" />
-                  </el-icon>
-                  <span>{{ opt.label }}</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Notas Adicionales -->
-            <div class="notas-section">
-              <label class="form-field-label">NOTAS ADICIONALES</label>
-              <el-input
-                v-model="formData.notas"
-                size="large"
-                type="textarea"
-                :rows="3"
-                placeholder="Ej. Fotos en la playa al atardecer, vestidos de blanco."
-              />
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Barra de acciones inferior móvil (Sticky Bottom Bar) -->
-    <!-- Paso 1 (2 botones): 1/4 Cancelar + 3/4 Siguiente -->
-    <div v-if="currentStep === 0" class="mobile-bottom-actions mobile-bottom-actions--2cols">
-      <el-button class="mobile-cancel-btn" size="large" text bg :icon="Close" @click="handleGoBack">
-        Cancelar
-      </el-button>
+      <!-- Barra de acciones inferior móvil (Sticky Bottom Bar) -->
+      <!-- Paso 1 (2 botones): 1/4 Cancelar + 3/4 Siguiente -->
+      <div v-if="currentStep === 0" class="mobile-bottom-actions mobile-bottom-actions--2cols">
+        <el-button
+          class="mobile-cancel-btn"
+          size="large"
+          text
+          bg
+          :icon="Close"
+          @click="handleGoBack"
+        >
+          Cancelar
+        </el-button>
 
-      <el-button
-        type="primary"
-        class="mobile-next-btn"
-        size="large"
-        :loading="isSaving"
-        :disabled="isReadOnly"
-        @click="handleNextStep"
-      >
-        <span>Siguiente</span>
-        <el-icon class="btn-icon-right"><ArrowRight :size="18" /></el-icon>
-      </el-button>
-    </div>
+        <el-button
+          type="primary"
+          class="mobile-next-btn"
+          size="large"
+          :loading="isSaving"
+          :disabled="isReadOnly"
+          @click="handleNextStep"
+        >
+          <span>Siguiente</span>
+          <el-icon class="btn-icon-right"><ArrowRight :size="18" /></el-icon>
+        </el-button>
+      </div>
 
-    <!-- Pasos 2 y 3 (3 botones): Cancelar (solo icono) + Anterior (50%) + Siguiente / Guardar (50%) -->
-    <div v-else class="mobile-bottom-actions mobile-bottom-actions--3cols">
-      <el-button
-        class="mobile-cancel-icon-btn"
-        size="large"
-        text
-        bg
-        :icon="Close"
-        @click="handleGoBack"
-      />
+      <!-- Pasos 2 y 3 (3 botones): Cancelar (solo icono) + Anterior (50%) + Siguiente / Guardar (50%) -->
+      <div v-else class="mobile-bottom-actions mobile-bottom-actions--3cols">
+        <el-button
+          class="mobile-cancel-icon-btn"
+          size="large"
+          text
+          bg
+          :icon="Close"
+          @click="handleGoBack"
+        />
 
-      <el-button class="mobile-prev-btn" size="large" @click="handleStepBack">
-        <el-icon class="btn-icon-left"><LucideArrowLeft :size="18" /></el-icon>
-        <span>Anterior</span>
-      </el-button>
+        <el-button class="mobile-prev-btn" size="large" @click="handleStepBack">
+          <el-icon class="btn-icon-left"><LucideArrowLeft :size="18" /></el-icon>
+          <span>Anterior</span>
+        </el-button>
 
-      <el-button
-        type="primary"
-        class="mobile-next-btn"
-        size="large"
-        :loading="isSaving"
-        :disabled="isReadOnly"
-        @click="handleNextStep"
-      >
-        <span>{{ currentStep < 2 ? 'Siguiente' : isEditing ? 'Guardar' : 'Agendar' }}</span>
-        <el-icon class="btn-icon-right">
-          <component :is="currentStep < 2 ? ArrowRight : Check" :size="18" />
-        </el-icon>
-      </el-button>
-    </div>
+        <el-button
+          type="primary"
+          class="mobile-next-btn"
+          size="large"
+          :loading="isSaving"
+          :disabled="isReadOnly"
+          @click="handleNextStep"
+        >
+          <span>{{ currentStep < 2 ? 'Siguiente' : isEditing ? 'Guardar' : 'Agendar' }}</span>
+          <el-icon class="btn-icon-right">
+            <component :is="currentStep < 2 ? ArrowRight : Check" :size="18" />
+          </el-icon>
+        </el-button>
+      </div>
     </template>
   </div>
 </template>
@@ -1571,7 +1582,7 @@ function handleNextStep() {
 
 .mobile-schedule-accordion :deep(.el-collapse-item__wrap) {
   border-bottom: 1px solid var(--toolbar-border, #e2e8f0);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgb(234 244 254 / 90%) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, rgb(234 244 254 / 90%) 100%);
 }
 
 .mobile-schedule-accordion :deep(.el-collapse-item:last-child .el-collapse-item__wrap) {
