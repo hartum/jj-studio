@@ -23,7 +23,6 @@ import { useCalendarAlerts } from '../composables/useCalendarAlerts'
 import {
   useCalendarEvents,
   type ExtendedEventProps,
-  type EventTooltipInfo,
 } from '../composables/useCalendarEvents'
 import { useCalendarDelete } from '../composables/useCalendarDelete'
 
@@ -32,8 +31,6 @@ import CalendarAlertsPanel from './components/CalendarAlertsPanel.vue'
 import CalendarDesktopToolbar from './components/CalendarDesktopToolbar.vue'
 import CalendarMobileHeader from './components/CalendarMobileHeader.vue'
 import CalendarEventCard from './components/CalendarEventCard.vue'
-import CalendarEventDetailsPopover from './components/CalendarEventDetailsPopover.vue'
-import CalendarEventDetailsDialog from './components/CalendarEventDetailsDialog.vue'
 import CalendarDeleteConfirmPopover from './components/CalendarDeleteConfirmPopover.vue'
 
 const router = useRouter()
@@ -45,7 +42,6 @@ const saleStore = useSaleStore()
 
 // 1. Detección y estado de pantalla (Mobile / Desktop)
 const isMobile = ref(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
-const mobileDialogVisible = ref(false)
 const mobileSelectedDate = ref<string>(dayjs().format('YYYY-MM-DD'))
 
 function checkMobile() {
@@ -74,7 +70,6 @@ const {
   eventsCountByDate,
   highlightEventAndAssociated,
   clearEventHighlights,
-  buildTooltipInfo,
 } = useCalendarEvents(userHotels, selectedHotelIds, getCalendarEl)
 
 // 6. Composable: Borrado de Eventos
@@ -88,10 +83,7 @@ const {
   associatedCheckboxLabel,
   openDeleteConfirm,
   confirmDelete,
-} = useCalendarDelete(selectedHotelIds, () => {
-  tooltipVisible.value = false
-  mobileDialogVisible.value = false
-})
+} = useCalendarDelete(selectedHotelIds)
 
 // 7. Vistas del Calendario y Título
 const CALENDAR_VIEW_STORAGE_KEY = 'jj_calendar_view'
@@ -259,50 +251,18 @@ function handleDateSelect(selectInfo: { startStr: string }) {
   navigateToNewSessionForm(startIso)
 }
 
-// 10. Popover & Dialog de Detalles de Eventos
-const tooltipVisible = ref(false)
-const tooltipTarget = ref<HTMLElement | null>(null)
-const activeTooltipInfo = ref<EventTooltipInfo | null>(null)
-let clickTimer: ReturnType<typeof setTimeout> | null = null
-
-function triggerEditEvent(info?: EventTooltipInfo | ExtendedEventProps | null) {
-  if (!info) return
-  tooltipVisible.value = false
-  mobileDialogVisible.value = false
-
-  const type = info.type
-  const rawSale = info.rawSale
-  const rawSession = info.rawSession
-
-  if (type === 'sale' && rawSale) {
-    router.push(`/ventas/${rawSale.id}/editar`)
-    return
-  }
-
-  if (rawSession) {
-    router.push(`/agenda/${rawSession.id}/editar`)
-  }
-}
-
+// 10. Click en Eventos: Redirección directa a edición
 function handleEventClick(clickInfo: EventClickArg) {
-  if (isMobile.value) {
-    activeTooltipInfo.value = buildTooltipInfo(clickInfo.event.extendedProps)
-    mobileDialogVisible.value = true
+  const props = clickInfo.event.extendedProps as ExtendedEventProps
+  if (!props) return
+
+  if (props.type === 'sale' && props.rawSale?.id) {
+    router.push(`/ventas/${props.rawSale.id}/editar`)
     return
   }
 
-  if (clickTimer) {
-    clearTimeout(clickTimer)
-    clickTimer = null
-    tooltipVisible.value = false
-    triggerEditEvent(clickInfo.event.extendedProps)
-  } else {
-    clickTimer = setTimeout(() => {
-      clickTimer = null
-      activeTooltipInfo.value = buildTooltipInfo(clickInfo.event.extendedProps)
-      tooltipTarget.value = clickInfo.el
-      tooltipVisible.value = true
-    }, 250)
+  if (props.rawSession?.id) {
+    router.push(`/agenda/${props.rawSession.id}/editar`)
   }
 }
 
@@ -446,28 +406,7 @@ onUnmounted(() => {
         </template>
       </FullCalendar>
 
-      <!-- 4. Popover de Detalle en Desktop -->
-      <CalendarEventDetailsPopover
-        v-if="!isMobile"
-        v-model:visible="tooltipVisible"
-        :target="tooltipTarget"
-        :info="activeTooltipInfo"
-        :can-delete="canDeleteEvents"
-        @edit="triggerEditEvent"
-        @delete="openDeleteConfirm"
-      />
-
-      <!-- 5. Diálogo Modal de Detalle en Móvil -->
-      <CalendarEventDetailsDialog
-        v-if="isMobile"
-        v-model:visible="mobileDialogVisible"
-        :info="activeTooltipInfo"
-        :can-delete="canDeleteEvents"
-        @edit="triggerEditEvent"
-        @delete="openDeleteConfirm"
-      />
-
-      <!-- 6. Popover de Confirmación de Borrado con Checkbox Dinámico -->
+      <!-- 4. Popover de Confirmación de Borrado con Checkbox Dinámico -->
       <CalendarDeleteConfirmPopover
         v-model:visible="deletePopoverVisible"
         v-model:delete-associated="deleteAssociated"
