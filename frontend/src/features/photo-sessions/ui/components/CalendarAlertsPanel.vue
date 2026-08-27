@@ -16,11 +16,7 @@ const router = useRouter()
 const activeAlertPanels = ref<string[]>([])
 
 const totalAlertsCount = computed(() => {
-  return (
-    props.overdueSessions.length +
-    props.missingSaleSessions.length +
-    props.overdueSales.length
-  )
+  return props.overdueSessions.length + props.missingSaleSessions.length + props.overdueSales.length
 })
 
 function formatDateTime(dateStr?: string | null): string {
@@ -36,7 +32,7 @@ function formatDateTime(dateStr?: string | null): string {
         <template #title>
           <div class="alerts-panel-header">
             <el-icon class="alerts-header-icon"><Bell /></el-icon>
-            <span class="alerts-header-title">Panel de Alertas Pendientes</span>
+            <span class="alerts-header-title">Alertas Pendientes</span>
             <el-tag type="danger" effect="dark" round size="small" class="alerts-count-badge">
               {{ totalAlertsCount }}
             </el-tag>
@@ -96,10 +92,7 @@ function formatDateTime(dateStr?: string | null): string {
                     }}{{ s.numeroHabitacion ? ` | Hab ${s.numeroHabitacion}` : '' }}
                   </span>
                 </div>
-                <el-button
-                  type="warning"
-                  @click="router.push(`/ventas/${s.citaVenta?.id}/editar`)"
-                >
+                <el-button type="warning" @click="router.push(`/ventas/${s.citaVenta?.id}/editar`)">
                   Cambiar Estado
                 </el-button>
               </div>

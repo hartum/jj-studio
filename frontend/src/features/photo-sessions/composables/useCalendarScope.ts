@@ -151,6 +151,7 @@ export function useCalendarScope() {
         selectedHotelIds.value = selectedHotelIds.value.filter((id) => validHotelIds.has(id))
       }
     },
+    { immediate: true },
   )
 
   watch(

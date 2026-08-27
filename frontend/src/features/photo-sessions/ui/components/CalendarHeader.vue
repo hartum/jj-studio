@@ -11,12 +11,14 @@ interface Props {
   hotels: Hotel[]
   selectedHotelName: string
   isMobile?: boolean
+  showMiniCalendar?: boolean
 }
 
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'update:hotelIds', value: number[]): void
+  (e: 'update:showMiniCalendar', value: boolean): void
   (e: 'newSession'): void
   (e: 'newSale'): void
 }>()
@@ -75,15 +77,29 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
 
 <template>
   <div class="calendar-header">
-    <div class="header-info">
-      <h1 class="page-title">Agenda</h1>
-      <p class="page-subtitle">
-        Hotel:
-        <strong>{{ selectedHotelName }}</strong>
-      </p>
+    <div class="header-top-row">
+      <div class="header-info">
+        <h1 class="page-title">
+          <span>Agenda</span>
+          <span v-if="selectedHotelName" class="page-title-separator">|</span>
+          <span v-if="selectedHotelName" class="page-title-hotel">{{ selectedHotelName }}</span>
+        </h1>
+      </div>
+
+      <!-- Switch para mostrar/ocultar mini calendario mensual en móvil -->
+      <div v-if="isMobile" class="header-mobile-toggle">
+        <el-switch
+          :model-value="showMiniCalendar"
+          size="default"
+          active-text=""
+          inactive-text=""
+          inline-prompt
+          @update:model-value="emit('update:showMiniCalendar', $event)"
+        />
+      </div>
     </div>
 
-    <div class="header-actions">
+    <div v-if="hotels.length > 1 || !isMobile" class="header-actions">
       <!-- Selector de Hotel (Oculto si solo hay 1 hotel asignado o ninguno) -->
       <el-select
         v-if="hotels.length > 1"
@@ -136,11 +152,11 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
         </el-option-group>
       </el-select>
 
-      <div class="header-buttons-row">
+      <div v-if="!isMobile" class="header-buttons-row">
         <!-- Botón Nueva Sesión Fotográfica -->
         <el-button
           type="primary"
-          :size="isMobile ? 'large' : 'default'"
+          size="default"
           class="header-action-btn"
           @click="emit('newSession')"
         >
@@ -151,7 +167,7 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
         <!-- Botón Nueva Cita de Venta -->
         <el-button
           type="primary"
-          :size="isMobile ? 'large' : 'default'"
+          size="default"
           class="header-action-btn"
           @click="emit('newSale')"
         >
@@ -172,17 +188,41 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
   gap: 1rem;
 }
 
+.header-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+.header-mobile-toggle {
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
+}
+
 .page-title {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--heading-color, #0f172a);
-  margin: 0 0 0.25rem 0;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.page-subtitle {
-  font-size: 0.9rem;
+.page-title-separator {
+  color: var(--nav-link-color, #94a3b8);
+  font-weight: 300;
+  font-size: 1.35rem;
+  opacity: 0.7;
+}
+
+.page-title-hotel {
+  font-size: 1.35rem;
+  font-weight: 500;
   color: var(--nav-link-color, #64748b);
-  margin: 0;
 }
 
 .header-actions {
@@ -230,34 +270,32 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
   .calendar-header {
     flex-direction: column;
     align-items: stretch;
-    gap: 1rem;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .page-title {
+    font-size: 1.45rem;
+    gap: 0.4rem;
+  }
+
+  .page-title-separator {
+    font-size: 1.15rem;
+  }
+
+  .page-title-hotel {
+    font-size: 1.15rem;
   }
 
   .header-actions {
     flex-direction: column;
     width: 100%;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   .hotel-selector {
     width: 100%;
-  }
-
-  .header-buttons-row {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-
-  .header-action-btn {
-    width: 100%;
-    justify-content: center;
-    padding: 10px 8px !important;
-  }
-
-  .header-action-btn :deep(> span) {
-    font-size: 0.85rem;
+    max-width: 100%;
   }
 }
 </style>
