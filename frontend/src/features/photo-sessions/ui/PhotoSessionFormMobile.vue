@@ -366,9 +366,24 @@ watch(currentStep, () => {
 function handleStepBack() {
   if (currentStep.value > 0) {
     currentStep.value--
+  } else if (isEditing.value) {
+    showStatusScreen.value = true
   } else {
     handleGoBack()
   }
+}
+
+function goToStep(step: number) {
+  if (step === currentStep.value) return
+  if (isReadOnly.value) {
+    currentStep.value = step
+    return
+  }
+  if (step > currentStep.value) {
+    if (currentStep.value === 0 && !validateStep1()) return
+    if (currentStep.value === 1 && !validateStep2()) return
+  }
+  currentStep.value = step
 }
 
 function validateStep1(): boolean {
@@ -440,16 +455,19 @@ function validateStep2(): boolean {
 
 function handleNextStep() {
   if (currentStep.value === 0) {
-    if (!validateStep1()) {
+    if (!isReadOnly.value && !validateStep1()) {
       return
     }
     currentStep.value = 1
   } else if (currentStep.value === 1) {
-    if (!validateStep2()) {
+    if (!isReadOnly.value && !validateStep2()) {
       return
     }
     currentStep.value = 2
   } else {
+    if (isReadOnly.value) {
+      return
+    }
     handleSaveSession()
   }
 }
@@ -501,7 +519,7 @@ function handleNextStep() {
         />
 
         <el-button type="primary" class="mobile-next-btn" size="large" @click="goToEditSteps">
-          <span>Editar sesión</span>
+          <span>{{ isReadOnly ? 'Ver detalles' : 'Editar sesión' }}</span>
           <el-icon class="btn-icon-right"><ArrowRight :size="18" /></el-icon>
         </el-button>
       </div>
@@ -527,6 +545,9 @@ function handleNextStep() {
               active: currentStep === 0,
               completed: currentStep > 0,
             }"
+            role="button"
+            tabindex="0"
+            @click="goToStep(0)"
           >
             <div class="stepper-icon-wrap">
               <User :size="24" :stroke-width="2" />
@@ -544,6 +565,9 @@ function handleNextStep() {
               active: currentStep === 1,
               completed: currentStep > 1,
             }"
+            role="button"
+            tabindex="0"
+            @click="goToStep(1)"
           >
             <div class="stepper-icon-wrap">
               <Camera :size="24" :stroke-width="2" />
@@ -561,6 +585,9 @@ function handleNextStep() {
               active: currentStep === 2,
               completed: currentStep > 2,
             }"
+            role="button"
+            tabindex="0"
+            @click="goToStep(2)"
           >
             <div class="stepper-icon-wrap">
               <SquarePen :size="24" :stroke-width="2" />
@@ -1287,7 +1314,7 @@ function handleNextStep() {
           :icon="Close"
           @click="handleGoBack"
         >
-          Cancelar
+          {{ isReadOnly ? 'Volver' : 'Cancelar' }}
         </el-button>
 
         <el-button
@@ -1295,7 +1322,6 @@ function handleNextStep() {
           class="mobile-next-btn"
           size="large"
           :loading="isSaving"
-          :disabled="isReadOnly"
           @click="handleNextStep"
         >
           <span>Siguiente</span>
@@ -1324,7 +1350,7 @@ function handleNextStep() {
           class="mobile-next-btn"
           size="large"
           :loading="isSaving"
-          :disabled="isReadOnly"
+          :disabled="isReadOnly && currentStep === 2"
           @click="handleNextStep"
         >
           <span>{{ currentStep < 2 ? 'Siguiente' : isEditing ? 'Guardar' : 'Agendar' }}</span>
