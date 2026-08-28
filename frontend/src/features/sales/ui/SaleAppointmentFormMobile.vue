@@ -53,6 +53,40 @@ function getPhotographer(fotografoId?: string | null) {
   return userStore.users.find((u) => String(u.id) === String(fotografoId)) || null
 }
 
+function formatSessionDate(dateStr?: string | null): string {
+  if (!dateStr) return '-'
+  try {
+    const d = new Date(dateStr)
+    const weekdays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+    const months = [
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ]
+    const weekday = weekdays[d.getDay()]
+    const day = d.getDate()
+    const month = months[d.getMonth()]
+    const year = d.getFullYear()
+    return `${weekday}, ${day} ${month}, ${year}`
+  } catch {
+    return dateStr
+  }
+}
+
+function formatSessionTime(dateStr?: string | null): string {
+  if (!dateStr) return '-'
+  try {
+    const parts = dateStr.split('T')
+    return (parts[1] ?? dateStr.slice(11)).slice(0, 5)
+  } catch {
+    return dateStr
+  }
+}
+
+function formatPersonas(adultos: number = 1, ninos: number = 0): string {
+  const total = (adultos || 0) + (ninos || 0)
+  return `${total} (${adultos || 0} ad., ${ninos || 0} niños)`
+}
+
 function toggleSessionsList() {
   if (isReadOnly.value) return
   showSessionsList.value = !showSessionsList.value
@@ -95,49 +129,99 @@ function selectSeller(sellerId: string | null) {
     </div>
 
     <!-- Selector de Citas Estilo Card (Móvil) -->
-    <div class="mobile-session-selector-card">
-      <div class="session-card-main">
-        <div class="session-avatar-circle">
-          <el-avatar
-            v-if="formData.sesionId && photographerUser"
-            :src="photographerUser.imagen || undefined"
-            :size="44"
-            :style="{
-              backgroundColor: getUserBgColor(photographerUser.color),
-              color: '#ffffff',
-              fontWeight: '600',
-              fontSize: '13px',
-            }"
-            class="session-header-avatar"
-          >
-            {{ getUserInitials(photographerUser.nombre, photographerUser.apellidos) }}
-          </el-avatar>
-          <div v-else class="session-default-circle">
-            <el-icon :size="22"><Camera /></el-icon>
-          </div>
+    <div
+      class="mobile-session-selector-card"
+      :class="{ 'is-session-selected': !!formData.sesionId }"
+      :style="formData.sesionId ? { backgroundColor: getUserBgColor(photographerUser?.color) || '#8b5cf6' } : {}"
+    >
+      <!-- Estado A: Sin Sesión Seleccionada -->
+      <div v-if="!formData.sesionId" class="session-card-main">
+        <div class="session-default-circle">
+          <el-icon :size="22"><Camera /></el-icon>
         </div>
         <div class="session-info-box">
-          <span class="session-category-label">
-            {{ formData.sesionId ? (sessionInfo.hotelNombre || 'SESIÓN ASOCIADA') : 'SIN SESIÓN ASOCIADA' }}
-          </span>
-          <span class="session-title-label">
-            {{ formData.sesionId ? sessionInfo.clienteNombre : 'Elige una sesión de fotos' }}
-          </span>
-          <span v-if="formData.sesionId && sessionInfo.fechaHoraInicio" class="session-subtitle-label">
-            Hab. {{ sessionInfo.numeroHabitacion || '-' }} · {{ paxDisplay }} · {{ formatDateTime(sessionInfo.fechaHoraInicio) }}
-          </span>
+          <span class="session-category-label">SIN SESIÓN ASOCIADA</span>
+          <span class="session-title-label">Elige una sesión de fotos</span>
+        </div>
+      </div>
+
+      <!-- Estado B: Sesión Seleccionada (Color del fotógrafo + Datos de la sesión) -->
+      <div v-else class="session-card-selected-content">
+        <div class="session-selected-header">
+          <div class="session-selected-avatar-wrapper">
+            <el-avatar
+              v-if="photographerUser"
+              :src="photographerUser.imagen || undefined"
+              :size="46"
+              :style="{
+                backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                color: '#ffffff',
+                fontWeight: '700',
+                fontSize: '14px',
+              }"
+              class="session-photographer-avatar"
+            >
+              {{ getUserInitials(photographerUser.nombre, photographerUser.apellidos) }}
+            </el-avatar>
+            <div v-else class="session-selected-placeholder-avatar">
+              <el-icon :size="22"><Camera /></el-icon>
+            </div>
+          </div>
+
+          <div class="session-selected-titles">
+            <span class="session-selected-badge-label">FOTÓGRAFO ASIGNADO</span>
+            <span class="session-selected-name">{{ photographerName }}</span>
+          </div>
+
+          <el-button
+            type="primary"
+            size="small"
+            class="session-view-action-btn-selected"
+            @click.stop="router.push(`/agenda/${formData.sesionId}/editar`)"
+          >
+            Ver sesión
+          </el-button>
+        </div>
+
+        <div class="session-selected-divider" />
+
+        <div class="session-selected-details">
+          <div class="detail-row">
+            <span class="detail-label">Cliente:</span>
+            <span class="detail-value">{{ sessionInfo.clienteNombre }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Fecha:</span>
+            <span class="detail-value">{{ formatSessionDate(sessionInfo.fechaHoraInicio) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Hora:</span>
+            <span class="detail-value">{{ formatSessionTime(sessionInfo.fechaHoraInicio) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Hotel:</span>
+            <span class="detail-value">{{ sessionInfo.hotelNombre }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Personas:</span>
+            <span class="detail-value">{{ formatPersonas(sessionInfo.numAdultos, sessionInfo.numNinos) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Motivo:</span>
+            <span class="detail-value">{{ sessionInfo.concepto || 'Otro' }}</span>
+          </div>
         </div>
       </div>
 
       <!-- Barra toggle VER SESIONES -->
       <div
         class="session-toggle-bar"
-        :class="{ 'is-open': showSessionsList }"
+        :class="{ 'is-open': showSessionsList, 'is-selected-toggle': !!formData.sesionId }"
         role="button"
         tabindex="0"
         @click="toggleSessionsList"
       >
-        <span class="toggle-text">VER SESIONES</span>
+        <span class="toggle-text">{{ showSessionsList ? 'OCULTAR SESIONES' : 'VER SESIONES' }}</span>
         <el-icon class="toggle-icon" :class="{ 'is-rotated': showSessionsList }">
           <ChevronDown :size="18" />
         </el-icon>
@@ -170,7 +254,12 @@ function selectSeller(sellerId: string | null) {
                   }"
                   class="pick-photographer-avatar"
                 >
-                  {{ getUserInitials(getPhotographer(session.fotografoId)?.nombre, getPhotographer(session.fotografoId)?.apellidos) }}
+                  {{
+                    getUserInitials(
+                      getPhotographer(session.fotografoId)?.nombre,
+                      getPhotographer(session.fotografoId)?.apellidos,
+                    )
+                  }}
                 </el-avatar>
                 <div v-else class="pick-photographer-placeholder">
                   <el-icon :size="16"><Camera /></el-icon>
@@ -180,7 +269,9 @@ function selectSeller(sellerId: string | null) {
                   <div class="pick-item-client">{{ session.clienteNombre }}</div>
                   <div class="pick-item-meta">
                     <span>{{ formatDateTime(session.fechaHoraInicio) }}</span>
-                    <span v-if="session.numeroHabitacion">· Hab. {{ session.numeroHabitacion }}</span>
+                    <span v-if="session.numeroHabitacion">
+                      · Hab. {{ session.numeroHabitacion }}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -231,7 +322,11 @@ function selectSeller(sellerId: string | null) {
         <div class="seller-info-box">
           <span class="seller-category-label">VENDEDOR</span>
           <span class="seller-title-label">
-            {{ selectedSeller ? `${selectedSeller.nombre} ${selectedSeller.apellidos}` : 'Selecciona vendedor' }}
+            {{
+              selectedSeller
+                ? `${selectedSeller.nombre} ${selectedSeller.apellidos}`
+                : 'Selecciona vendedor'
+            }}
           </span>
           <span v-if="selectedSeller" class="seller-subtitle-label">
             {{ selectedSeller.perfilNombre }}
@@ -296,7 +391,9 @@ function selectSeller(sellerId: string | null) {
               <div class="pick-item-tags">
                 <el-tag
                   size="small"
-                  :type="seller.perfilNombre.toUpperCase().includes('AGENDADOR') ? 'primary' : 'success'"
+                  :type="
+                    seller.perfilNombre.toUpperCase().includes('AGENDADOR') ? 'primary' : 'success'
+                  "
                   effect="light"
                 >
                   {{ seller.perfilNombre }}
@@ -335,16 +432,9 @@ function selectSeller(sellerId: string | null) {
       <template #header>
         <div class="ref-card-header">
           <span class="ref-card-title">
-            <el-icon :size="20"><Camera /></el-icon> Sesión Fotográfica Asociada
+            <el-icon :size="20"><Camera /></el-icon>
+            Sesión Fotográfica Asociada
           </span>
-          <el-button
-            v-if="formData.sesionId"
-            type="primary"
-            size="small"
-            @click="router.push(`/agenda/${formData.sesionId}/editar`)"
-          >
-            Ver sesión
-          </el-button>
         </div>
       </template>
       <div class="ref-grid">
@@ -452,10 +542,17 @@ function selectSeller(sellerId: string | null) {
     <el-card class="form-card" shadow="never">
       <template #header>
         <span class="ref-card-title">
-          <el-icon :size="20"><Money /></el-icon> Cita venta fotos
+          <el-icon :size="20"><Money /></el-icon>
+          Cita venta fotos
         </span>
       </template>
-      <el-form :model="formData" label-position="top" size="large" class="sale-form" :disabled="isReadOnly">
+      <el-form
+        :model="formData"
+        label-position="top"
+        size="large"
+        class="sale-form"
+        :disabled="isReadOnly"
+      >
         <!-- Estado de la Cita (3 arriba + 1 abajo según diseño) -->
         <el-form-item label="ESTADO DE LA CITA" class="status-form-item">
           <div class="status-radio-container">
@@ -573,12 +670,7 @@ function selectSeller(sellerId: string | null) {
 
     <!-- Sticky Bottom Bar -->
     <div class="mobile-bottom-actions">
-      <el-button
-        size="large"
-        :icon="Close"
-        class="mobile-cancel-icon-btn"
-        @click="handleGoBack"
-      />
+      <el-button size="large" :icon="Close" class="mobile-cancel-icon-btn" @click="handleGoBack" />
       <el-button
         type="primary"
         size="large"
@@ -625,17 +717,130 @@ function selectSeller(sellerId: string | null) {
 .mobile-session-selector-card {
   background: var(--toolbar-bg, #ffffff);
   border: 1px solid var(--toolbar-border, #e2e8f0);
-  border-radius: 14px;
+  border-radius: 16px;
   margin-bottom: 1rem;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.mobile-session-selector-card.is-session-selected {
+  border: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  color: #ffffff;
 }
 
 .session-card-main {
+  position: relative;
   padding: 0.95rem 1rem;
   display: flex;
   align-items: center;
   gap: 0.85rem;
+}
+
+/* Card Seleccionada (Color de fotógrafo) */
+.session-card-selected-content {
+  padding: 1.1rem 1.1rem 0.6rem 1.1rem;
+  color: #ffffff;
+}
+
+.session-selected-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  position: relative;
+}
+
+.session-photographer-avatar {
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.session-selected-placeholder-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.session-selected-titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.session-selected-badge-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.session-selected-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 2px;
+  line-height: 1.25;
+}
+
+.session-view-action-btn-selected {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  padding: 4px 10px;
+  backdrop-filter: blur(4px);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.session-view-action-btn-selected:hover {
+  background: rgba(255, 255, 255, 0.35) !important;
+}
+
+.session-selected-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.25);
+  margin: 0.95rem 0 0.85rem 0;
+}
+
+.session-selected-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding-bottom: 0.35rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.detail-label {
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 500;
+}
+
+.detail-value {
+  color: #ffffff;
+  font-weight: 700;
+  text-align: right;
 }
 
 .session-avatar-circle {
@@ -711,6 +916,17 @@ function selectSeller(sellerId: string | null) {
   user-select: none;
   background: var(--toolbar-bg, #ffffff);
   transition: background 0.15s ease;
+}
+
+.session-toggle-bar.is-selected-toggle {
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.session-toggle-bar.is-selected-toggle .toggle-text,
+.session-toggle-bar.is-selected-toggle .toggle-icon {
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .session-toggle-bar:active {
