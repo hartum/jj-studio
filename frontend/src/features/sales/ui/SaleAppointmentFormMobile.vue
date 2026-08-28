@@ -129,6 +129,7 @@ function selectSeller(sellerId: string | null) {
     </div>
 
     <!-- Selector de Citas Estilo Card (Móvil) -->
+    <div class="mobile-card-section-label">Sesión asociada</div>
     <div
       class="mobile-session-selector-card"
       :class="{ 'is-session-selected': !!formData.sesionId }"
@@ -298,6 +299,7 @@ function selectSeller(sellerId: string | null) {
     </div>
 
     <!-- Selector de Vendedor Estilo Card (Móvil) -->
+    <div class="mobile-card-section-label">Vendedor</div>
     <div class="mobile-seller-selector-card">
       <div class="seller-card-main">
         <div class="seller-avatar-circle">
@@ -320,7 +322,6 @@ function selectSeller(sellerId: string | null) {
           </div>
         </div>
         <div class="seller-info-box">
-          <span class="seller-category-label">VENDEDOR</span>
           <span class="seller-title-label">
             {{
               selectedSeller
@@ -427,116 +428,7 @@ function selectSeller(sellerId: string | null) {
       </div>
     </el-alert>
 
-    <!-- Session Reference Card (read-only) -->
-    <el-card v-if="sessionInfo.clienteNombre" class="session-ref-card" shadow="never">
-      <template #header>
-        <div class="ref-card-header">
-          <span class="ref-card-title">
-            <el-icon :size="20"><Camera /></el-icon>
-            Sesión Fotográfica Asociada
-          </span>
-        </div>
-      </template>
-      <div class="ref-grid">
-        <div class="ref-item">
-          <span class="ref-label">Cliente</span>
-          <span class="ref-value">{{ sessionInfo.clienteNombre }}</span>
-        </div>
-        <div class="ref-item">
-          <span class="ref-label">Hotel</span>
-          <span class="ref-value">{{ sessionInfo.hotelNombre }}</span>
-        </div>
-        <div class="ref-item">
-          <span class="ref-label">Habitación</span>
-          <span class="ref-value">{{ sessionInfo.numeroHabitacion || '-' }}</span>
-        </div>
-        <div class="ref-item">
-          <span class="ref-label">Fotógrafo</span>
-          <div class="ref-user-value">
-            <el-avatar
-              v-if="photographerUser"
-              :src="photographerUser.imagen || undefined"
-              :size="20"
-              :style="{
-                backgroundColor: getUserBgColor(photographerUser.color),
-                color: '#ffffff',
-                fontWeight: '600',
-                fontSize: '10px',
-              }"
-              class="ref-user-avatar"
-            >
-              {{ getUserInitials(photographerUser.nombre, photographerUser.apellidos) }}
-            </el-avatar>
-            <span class="ref-value">{{ photographerName }}</span>
-          </div>
-        </div>
-        <div class="ref-item">
-          <span class="ref-label">PAX</span>
-          <span class="ref-value">{{ paxDisplay }}</span>
-        </div>
-        <div class="ref-item">
-          <span class="ref-label">Concepto</span>
-          <span class="ref-value">{{ sessionInfo.concepto || '-' }}</span>
-        </div>
-        <div class="ref-item">
-          <span class="ref-label">Sesión de fotos</span>
-          <span class="ref-value">{{ formatDateTime(sessionInfo.fechaHoraInicio) }}</span>
-        </div>
-        <div class="ref-item ref-item--vendedor">
-          <span class="ref-label">Vendedor</span>
-          <el-select
-            v-model="formData.vendedorId"
-            placeholder="Selecciona vendedor"
-            clearable
-            filterable
-            size="large"
-            style="width: 100%"
-            :disabled="isReadOnly"
-          >
-            <template #prefix v-if="selectedSeller">
-              <el-avatar
-                :src="selectedSeller.imagen || undefined"
-                :size="20"
-                :style="{
-                  backgroundColor: getUserBgColor(selectedSeller.color),
-                  color: '#ffffff',
-                  fontWeight: '600',
-                  fontSize: '10px',
-                }"
-                class="select-prefix-avatar"
-              >
-                {{ getUserInitials(selectedSeller.nombre, selectedSeller.apellidos) }}
-              </el-avatar>
-            </template>
-            <el-option label="Sin vendedor asignado" value="" />
-            <el-option
-              v-for="seller in sellers"
-              :key="seller.id"
-              :label="`${seller.nombre} ${seller.apellidos}`"
-              :value="seller.id"
-            >
-              <div class="seller-option-item">
-                <el-avatar
-                  :src="seller.imagen || undefined"
-                  :size="24"
-                  :style="{
-                    backgroundColor: getUserBgColor(seller.color),
-                    color: '#ffffff',
-                    fontWeight: '600',
-                    fontSize: '11px',
-                  }"
-                  class="seller-avatar"
-                >
-                  {{ getUserInitials(seller.nombre, seller.apellidos) }}
-                </el-avatar>
-                <span class="seller-option-name">{{ seller.nombre }} {{ seller.apellidos }}</span>
-                <span class="seller-option-role">({{ seller.perfilNombre }})</span>
-              </div>
-            </el-option>
-          </el-select>
-        </div>
-      </div>
-    </el-card>
+
 
     <!-- Main Form Móvil -->
     <el-card class="form-card" shadow="never">
@@ -711,6 +603,15 @@ function selectSeller(sellerId: string | null) {
   font-weight: 700;
   color: var(--heading-color, #0f172a);
   margin: 0;
+}
+
+.mobile-card-section-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--heading-color, #0f172a);
+  margin-top: 0.25rem;
+  margin-bottom: 0.45rem;
+  margin-left: 0.2rem;
 }
 
 /* Card Selector de Sesiones */
