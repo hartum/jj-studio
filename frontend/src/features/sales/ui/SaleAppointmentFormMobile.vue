@@ -12,6 +12,7 @@ import {
   Calendar,
   Edit,
   WarnTriangleFilled,
+  User,
 } from '@element-plus/icons-vue'
 import { ChevronDown } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
@@ -45,6 +46,7 @@ const {
 } = props.form
 
 const showSessionsList = ref(!isEditing.value && !formData.value.sesionId)
+const showSellersList = ref(false)
 
 function getPhotographer(fotografoId?: string | null) {
   if (!fotografoId) return null
@@ -63,6 +65,21 @@ function selectSession(sessionId: number) {
   } else {
     formData.value.sesionId = sessionId
     showSessionsList.value = false
+  }
+}
+
+function toggleSellersList() {
+  if (isReadOnly.value) return
+  showSellersList.value = !showSellersList.value
+}
+
+function selectSeller(sellerId: string | null) {
+  if (isReadOnly.value) return
+  if (formData.value.vendedorId === sellerId) {
+    formData.value.vendedorId = null
+  } else {
+    formData.value.vendedorId = sellerId
+    showSellersList.value = false
   }
 }
 </script>
@@ -184,6 +201,108 @@ function selectSession(sessionId: number) {
               <WarnTriangleFilled />
             </el-icon>
             {{ excludedSessionsCount }} sesión(es) canceladas o no-show no se muestran.
+          </div>
+        </div>
+      </el-collapse-transition>
+    </div>
+
+    <!-- Selector de Vendedor Estilo Card (Móvil) -->
+    <div class="mobile-seller-selector-card">
+      <div class="seller-card-main">
+        <div class="seller-avatar-circle">
+          <el-avatar
+            v-if="selectedSeller"
+            :src="selectedSeller.imagen || undefined"
+            :size="44"
+            :style="{
+              backgroundColor: getUserBgColor(selectedSeller.color),
+              color: '#ffffff',
+              fontWeight: '600',
+              fontSize: '13px',
+            }"
+            class="seller-header-avatar"
+          >
+            {{ getUserInitials(selectedSeller.nombre, selectedSeller.apellidos) }}
+          </el-avatar>
+          <div v-else class="seller-default-circle">
+            <el-icon :size="22"><User /></el-icon>
+          </div>
+        </div>
+        <div class="seller-info-box">
+          <span class="seller-category-label">VENDEDOR</span>
+          <span class="seller-title-label">
+            {{ selectedSeller ? `${selectedSeller.nombre} ${selectedSeller.apellidos}` : 'Selecciona vendedor' }}
+          </span>
+          <span v-if="selectedSeller" class="seller-subtitle-label">
+            {{ selectedSeller.perfilNombre }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Barra toggle VER VENDEDORES -->
+      <div
+        class="seller-toggle-bar"
+        :class="{ 'is-open': showSellersList }"
+        role="button"
+        tabindex="0"
+        @click="toggleSellersList"
+      >
+        <span class="toggle-text">VER VENDEDORES</span>
+        <el-icon class="toggle-icon" :class="{ 'is-rotated': showSellersList }">
+          <ChevronDown :size="18" />
+        </el-icon>
+      </div>
+
+      <!-- Lista colapsable de vendedores -->
+      <el-collapse-transition>
+        <div v-if="showSellersList" class="seller-dropdown-container">
+          <div v-if="!formData.hotelId" class="seller-empty-state">
+            Selecciona primero una sesión de fotos para ver los vendedores de su hotel.
+          </div>
+          <div v-else-if="sellers.length === 0" class="seller-empty-state">
+            No hay agendadores o fotógrafos asignados a este hotel.
+          </div>
+          <div v-else class="seller-dropdown-list">
+            <div
+              v-for="seller in sellers"
+              :key="seller.id"
+              class="seller-pick-item"
+              :class="{ 'is-selected': String(formData.vendedorId) === String(seller.id) }"
+              @click="selectSeller(seller.id)"
+            >
+              <div class="pick-item-left">
+                <el-avatar
+                  :src="seller.imagen || undefined"
+                  :size="36"
+                  :style="{
+                    backgroundColor: getUserBgColor(seller.color),
+                    color: '#ffffff',
+                    fontWeight: '600',
+                    fontSize: '11px',
+                  }"
+                  class="pick-seller-avatar"
+                >
+                  {{ getUserInitials(seller.nombre, seller.apellidos) }}
+                </el-avatar>
+
+                <div class="pick-item-info">
+                  <div class="pick-item-client">{{ seller.nombre }} {{ seller.apellidos }}</div>
+                  <div class="pick-item-meta">
+                    <span>{{ seller.perfilNombre }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pick-item-tags">
+                <el-tag
+                  size="small"
+                  :type="seller.perfilNombre.toUpperCase().includes('AGENDADOR') ? 'primary' : 'success'"
+                  effect="light"
+                >
+                  {{ seller.perfilNombre }}
+                </el-tag>
+              </div>
+            </div>
           </div>
         </div>
       </el-collapse-transition>
@@ -724,6 +843,150 @@ function selectSession(sessionId: number) {
   color: #e6a23c;
   margin-top: 0.5rem;
   line-height: 1.35;
+}
+
+/* Card Selector de Vendedores */
+.mobile-seller-selector-card {
+  background: var(--toolbar-bg, #ffffff);
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  border-radius: 14px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.seller-card-main {
+  padding: 0.95rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.seller-avatar-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.seller-default-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seller-header-avatar {
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.seller-info-box {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.seller-category-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.seller-title-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--heading-color, #0f172a);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.seller-subtitle-label {
+  font-size: 0.8rem;
+  color: var(--nav-link-color, #64748b);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.seller-toggle-bar {
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--toolbar-border, #f1f5f9);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  background: var(--toolbar-bg, #ffffff);
+  transition: background 0.15s ease;
+}
+
+.seller-toggle-bar:active {
+  background: var(--el-fill-color-light, #f8fafc);
+}
+
+.seller-dropdown-container {
+  padding: 0.5rem 1rem 1rem 1rem;
+  border-top: 1px dashed var(--toolbar-border, #e2e8f0);
+  background: var(--toolbar-bg, #ffffff);
+}
+
+.seller-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.seller-pick-item {
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  background: var(--toolbar-bg, #ffffff);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.seller-pick-item:active {
+  transform: scale(0.99);
+}
+
+.seller-pick-item.is-selected {
+  border-color: var(--el-color-primary, #3b82f6);
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.pick-seller-avatar {
+  flex-shrink: 0;
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+}
+
+.seller-empty-state {
+  font-size: 0.85rem;
+  color: var(--nav-link-color, #64748b);
+  text-align: center;
+  padding: 1rem 0;
 }
 
 .lock-banner,
