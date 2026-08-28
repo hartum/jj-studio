@@ -290,17 +290,35 @@ export async function saleRoutes(fastify: FastifyInstance) {
       // Check conflicts using session's hotelId
       const conflicts = await findConflicts(sesion.hotelId, fechaCita)
 
-      const nueva = await prisma.citaVenta.create({
-        data: {
-          sesionId: body.sesionId,
-          hotelId: sesion.hotelId,
-          vendedorId: body.vendedorId || null,
-          fechaHoraCita: fechaCita,
-          estado: 'PROGRAMADA',
-          notas: body.notas ? body.notas.trim() : null,
-        },
-        include: { sesion: true, vendedor: true },
-      })
+      let nueva
+      if (sesion.citaVenta) {
+        nueva = await prisma.citaVenta.update({
+          where: { id: sesion.citaVenta.id },
+          data: {
+            hotelId: sesion.hotelId,
+            vendedorId: body.vendedorId || null,
+            fechaHoraCita: fechaCita,
+            estado: 'PROGRAMADA',
+            numFotosVendidas: null,
+            totalVentaUsd: null,
+            notas: body.notas ? body.notas.trim() : null,
+            deletedAt: null,
+          },
+          include: { sesion: true, vendedor: true },
+        })
+      } else {
+        nueva = await prisma.citaVenta.create({
+          data: {
+            sesionId: body.sesionId,
+            hotelId: sesion.hotelId,
+            vendedorId: body.vendedorId || null,
+            fechaHoraCita: fechaCita,
+            estado: 'PROGRAMADA',
+            notas: body.notas ? body.notas.trim() : null,
+          },
+          include: { sesion: true, vendedor: true },
+        })
+      }
 
       // Sincronizar con Google Calendar
       let googleEventId: string | null = null
