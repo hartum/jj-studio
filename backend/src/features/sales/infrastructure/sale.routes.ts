@@ -38,6 +38,14 @@ function parseLocalDateTime(dateStr: string): Date {
   return new Date(isoStr)
 }
 
+function parseDateOnly(dateStr: string): Date {
+  const parts = dateStr.slice(0, 10).split('-')
+  if (parts.length === 3) {
+    return new Date(Date.UTC(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])))
+  }
+  return new Date(dateStr)
+}
+
 async function findConflicts(hotelId: number, fechaHoraCita: Date, excludeId?: number) {
   const rangeStart = new Date(fechaHoraCita.getTime() - SALES_APPOINTMENT_DURATION_MS)
   const rangeEnd = new Date(fechaHoraCita.getTime() + SALES_APPOINTMENT_DURATION_MS)
@@ -88,6 +96,127 @@ async function getAllowedHotelIds(userId: string): Promise<number[] | null> {
 }
 
 export async function saleRoutes(fastify: FastifyInstance) {
+  // GET /api/hoteles/:id/vendedores-disponibilidad (Disponibilidad de vendedores para una fecha y hora)
+  fastify.get('/api/hoteles/:id/vendedores-disponibilidad', async (request, reply) => {
+    try {
+      const hotelId = Number((request.params as any).id)
+      const { fecha, excludeCitaId } = request.query as {
+        fecha?: string
+        excludeCitaId?: string
+      }
+
+      if (isNaN(hotelId) || !fecha) {
+        return reply.status(400).send({ error: 'Debes proporcionar hotelId y fecha válidos' })
+      }
+
+      const dateStr = fecha.replace(' ', 'T').slice(0, 10)
+      const targetDateOnly = parseDateOnly(dateStr)
+      const targetDateTime = parseLocalDateTime(fecha)
+      const excludeId = excludeCitaId ? Number(excludeCitaId) : undefined
+
+      // Vendedores activos asignados al hotel (Agendadores y Fotógrafos)
+      const sellers = await prisma.usuario.findMany({
+        where: {
+          activo: true,
+          deletedAt: null,
+          role: { codigo: { in: ['AGENDADOR', 'FOTOGRAFO'] } },
+          hotelesAsignados: { some: { hotelId } },
+        },
+        include: {
+          role: true,
+          calendarioLaboral: {
+            where: {
+              fechaInicio: { lte: targetDateOnly },
+              fechaFin: { gte: targetDateOnly },
+            },
+          },
+        },
+      })
+
+      // Ventana de 1 hora para citas de venta simultáneas
+      const windowStart = new Date(targetDateTime.getTime() - 59 * 60 * 1000)
+      const windowEnd = new Date(targetDateTime.getTime() + 59 * 60 * 1000)
+
+      const whereCitas: any = {
+        hotelId,
+        estado: 'PROGRAMADA',
+        deletedAt: null,
+        fechaHoraCita: {
+          gte: windowStart,
+          lte: windowEnd,
+        },
+        vendedorId: { not: null },
+      }
+      if (excludeId) {
+        whereCitas.id = { not: excludeId }
+      }
+
+      const citasSimultaneas = await prisma.citaVenta.findMany({
+        where: whereCitas,
+        select: { id: true, vendedorId: true, fechaHoraCita: true },
+      })
+
+      // Sesiones fotográficas simultáneas (para fotógrafos que actúan de vendedores)
+      const sesionesSimultaneas = await prisma.sesionFotografica.findMany({
+        where: {
+          hotelId,
+          estado: 'PROGRAMADA',
+          deletedAt: null,
+          fechaHoraInicio: {
+            gte: windowStart,
+            lte: windowEnd,
+          },
+          fotografoId: { not: null },
+        },
+        select: { id: true, fotografoId: true, fechaHoraInicio: true },
+      })
+
+      const vendedoresDetalle = sellers.map((rawUser) => {
+        const u = decryptUser(rawUser)!
+        const isAusente = u.calendarioLaboral.length > 0
+        const motivoAusencia = u.calendarioLaboral[0]?.motivo || null
+        const tieneCitaAsignada = citasSimultaneas.some((c) => c.vendedorId === u.id)
+        const tieneSesionAsignada = sesionesSimultaneas.some((s) => s.fotografoId === u.id)
+        const isOcupado = tieneCitaAsignada || tieneSesionAsignada
+        const motivoOcupado = tieneCitaAsignada
+          ? 'Cita de venta en este horario'
+          : tieneSesionAsignada
+            ? 'Sesión de fotos en este horario'
+            : null
+
+        return {
+          id: u.id,
+          nombre: `${u.nombre} ${u.apellidos}`.trim(),
+          roleCode: u.role.codigo,
+          disponible: !isAusente && !isOcupado,
+          isAusente,
+          motivoAusencia,
+          ocupado: isOcupado,
+          motivoOcupado,
+        }
+      })
+
+      const disponiblesCount = vendedoresDetalle.filter((v) => v.disponible).length
+      const ausentesCount = vendedoresDetalle.filter((v) => v.isAusente).length
+      const ocupadosCount = vendedoresDetalle.filter((v) => v.ocupado && !v.isAusente).length
+
+      return reply.send({
+        hotelId,
+        fechaHora: targetDateTime.toISOString(),
+        totalVendedores: sellers.length,
+        disponibles: disponiblesCount,
+        ausentes: ausentesCount,
+        ocupados: ocupadosCount,
+        vendedores: vendedoresDetalle,
+      })
+    } catch (err: unknown) {
+      fastify.log.error(err)
+      const message =
+        err instanceof Error ? err.message : 'Error al consultar disponibilidad de vendedores'
+      return reply.status(500).send({ error: message })
+    }
+  })
+
   // GET /api/citas-venta - List sales appointments
   fastify.get('/api/citas-venta', async (request, reply) => {
     try {

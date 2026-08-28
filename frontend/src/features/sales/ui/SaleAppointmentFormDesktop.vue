@@ -33,8 +33,10 @@ const {
   photographerName,
   sellers,
   selectedSeller,
+  getSellerStatus,
   paxDisplay,
   estadoOptions,
+  isSubmitDisabled,
   disabledPastDates,
   formatDateTime,
   handleGoBack,
@@ -169,8 +171,9 @@ const {
             <el-option
               v-for="seller in sellers"
               :key="seller.id"
-              :label="`${seller.nombre} ${seller.apellidos}`"
+              :label="`${seller.nombre} ${seller.apellidos} (${getSellerStatus(seller.id).label})`"
               :value="seller.id"
+              :disabled="getSellerStatus(seller.id).disabled"
             >
               <div class="seller-option-item">
                 <el-avatar
@@ -187,7 +190,14 @@ const {
                   {{ getUserInitials(seller.nombre, seller.apellidos) }}
                 </el-avatar>
                 <span class="seller-option-name">{{ seller.nombre }} {{ seller.apellidos }}</span>
-                <span class="seller-option-role">({{ seller.perfilNombre }})</span>
+                <span
+                  class="seller-option-status"
+                  :class="getSellerStatus(seller.id).tagClass"
+                  style="margin-left: 0.5rem; font-size: 0.75rem; font-weight: 600"
+                >
+                  {{ getSellerStatus(seller.id).label }}
+                </span>
+                <span class="seller-option-role">{{ seller.perfilNombre }}</span>
               </div>
             </el-option>
           </el-select>
@@ -324,7 +334,7 @@ const {
             type="primary"
             :icon="Check"
             :loading="isSaving"
-            :disabled="isReadOnly"
+            :disabled="isSubmitDisabled"
             @click="handleSave"
           >
             {{ isEditing ? 'Guardar Cambios' : 'Agendar Cita' }}

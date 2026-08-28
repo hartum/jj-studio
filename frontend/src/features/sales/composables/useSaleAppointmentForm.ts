@@ -40,6 +40,27 @@ export interface SessionContextInfo {
   hotelNombre: string
 }
 
+export interface VendedorDisponibilidadItem {
+  id: string
+  nombre: string
+  roleCode: string
+  disponible: boolean
+  isAusente: boolean
+  motivoAusencia: string | null
+  ocupado: boolean
+  motivoOcupado: string | null
+}
+
+export interface VendedoresDisponibilidadResponse {
+  hotelId: number
+  fechaHora: string
+  totalVendedores: number
+  disponibles: number
+  ausentes: number
+  ocupados: number
+  vendedores: VendedorDisponibilidadItem[]
+}
+
 export function useSaleAppointmentForm() {
   const route = useRoute()
   const router = useRouter()
@@ -185,6 +206,198 @@ export function useSaleAppointmentForm() {
     return sellers.value.find((s) => String(s.id) === String(formData.value.vendedorId)) || null
   })
 
+  const timeSlots = [
+    '00:00',
+    '01:00',
+    '02:00',
+    '03:00',
+    '04:00',
+    '05:00',
+    '06:00',
+    '07:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00',
+    '23:00',
+  ]
+
+  const rawDate = ref('')
+  const rawTime = ref('')
+
+  const selectTimeSlot = (time: string) => {
+    if (isReadOnly.value) return
+    selectedTimeOnly.value = time
+  }
+
+  const selectedDateOnly = computed({
+    get: () => {
+      if (rawDate.value) return rawDate.value
+      if (!formData.value.fechaHoraCita) return ''
+      return formData.value.fechaHoraCita.split('T')[0] || ''
+    },
+    set: (val: string) => {
+      rawDate.value = val || ''
+      if (val && selectedTimeOnly.value) {
+        formData.value.fechaHoraCita = `${val}T${selectedTimeOnly.value}`
+      } else {
+        formData.value.fechaHoraCita = ''
+      }
+    },
+  })
+
+  const selectedTimeOnly = computed({
+    get: () => {
+      if (rawTime.value) return rawTime.value
+      if (!formData.value.fechaHoraCita) return ''
+      const parts = formData.value.fechaHoraCita.split('T')
+      return parts[1] ? parts[1].substring(0, 5) : ''
+    },
+    set: (val: string) => {
+      rawTime.value = val || ''
+      if (selectedDateOnly.value && val) {
+        formData.value.fechaHoraCita = `${selectedDateOnly.value}T${val}`
+      } else {
+        formData.value.fechaHoraCita = ''
+      }
+    },
+  })
+
+  const isSubmitDisabled = computed(() => {
+    if (isReadOnly.value) return true
+    if (!formData.value.sesionId) return true
+    if (!selectedDateOnly.value || !selectedTimeOnly.value) return true
+    return false
+  })
+
+  // Disponibilidad de vendedores
+  const vendedoresDisponibilidad = ref<VendedoresDisponibilidadResponse | null>(null)
+  const isCheckingVendedoresDisponibilidad = ref(false)
+
+  async function checkDisponibilidadVendedores() {
+    const hotelId = Number(formData.value.hotelId)
+    const datePart = selectedDateOnly.value
+    const timePart = selectedTimeOnly.value
+    if (!hotelId || !datePart || !timePart) {
+      vendedoresDisponibilidad.value = null
+      return
+    }
+
+    const fechaStr = `${datePart}T${timePart}`
+    isCheckingVendedoresDisponibilidad.value = true
+    try {
+      const excludeId = isEditing.value && citaId.value ? citaId.value : ''
+      const url = `/api/hoteles/${hotelId}/vendedores-disponibilidad?fecha=${encodeURIComponent(fechaStr)}${excludeId ? `&excludeCitaId=${excludeId}` : ''}`
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        },
+      })
+      if (res.ok) {
+        vendedoresDisponibilidad.value = await res.json()
+
+        // Si el vendedor seleccionado no está disponible (ausente u ocupado), deseleccionarlo
+        if (formData.value.vendedorId) {
+          const currentV = vendedoresDisponibilidad.value?.vendedores?.find(
+            (v) => String(v.id) === String(formData.value.vendedorId),
+          )
+          if (currentV && (currentV.isAusente || currentV.ocupado)) {
+            formData.value.vendedorId = null
+          }
+        }
+      } else {
+        vendedoresDisponibilidad.value = null
+      }
+    } catch (err) {
+      console.warn('Error al verificar disponibilidad de vendedores:', err)
+      vendedoresDisponibilidad.value = null
+    } finally {
+      isCheckingVendedoresDisponibilidad.value = false
+    }
+  }
+
+  watch(
+    [() => formData.value.hotelId, () => selectedDateOnly.value, () => selectedTimeOnly.value],
+    () => {
+      checkDisponibilidadVendedores()
+    },
+    { immediate: true },
+  )
+
+  function getSellerStatus(sellerId: string | number) {
+    const sIdStr = String(sellerId)
+    const isCurrentlySelected = String(formData.value.vendedorId) === sIdStr
+
+    if (!selectedDateOnly.value || !selectedTimeOnly.value) {
+      return {
+        status: 'pending',
+        label: 'Elige fecha y hora',
+        tagClass: 'tag-pending',
+        disabled: false,
+      }
+    }
+
+    const sAvail = vendedoresDisponibilidad.value?.vendedores?.find(
+      (v) => String(v.id) === sIdStr,
+    )
+
+    if (!sAvail) {
+      return {
+        status: 'available',
+        label: 'Disponible',
+        tagClass: 'tag-available',
+        disabled: false,
+      }
+    }
+
+    if (sAvail.isAusente || sAvail.motivoAusencia) {
+      const motivo = sAvail.motivoAusencia ? ` (${sAvail.motivoAusencia})` : ''
+      return {
+        status: 'absent',
+        label: `Ausente${motivo}`,
+        tagClass: 'tag-busy',
+        disabled: true,
+      }
+    }
+
+    if (sAvail.ocupado) {
+      const motivo = sAvail.motivoOcupado ? ` (${sAvail.motivoOcupado})` : ' (Ocupado)'
+      return {
+        status: 'occupied',
+        label: `Ocupado${motivo}`,
+        tagClass: 'tag-busy',
+        disabled: true,
+      }
+    }
+
+    if (isCurrentlySelected) {
+      return {
+        status: 'assigned',
+        label: 'Seleccionado',
+        tagClass: 'tag-available',
+        disabled: false,
+      }
+    }
+
+    return {
+      status: 'available',
+      label: 'Disponible',
+      tagClass: 'tag-available',
+      disabled: false,
+    }
+  }
+
   // Reset vendedor selection when hotel changes if selected vendedor is not in the new hotel
   watch(
     () => formData.value.hotelId,
@@ -216,61 +429,6 @@ export function useSaleAppointmentForm() {
       { value: 'CANCELADA', label: 'Cancelada', color: '#f56c6c', icon: Close },
       { value: 'COMPLETADA', label: 'Completada', color: '#67c23a', icon: Check },
     ]
-
-  const timeSlots = [
-    '00:00',
-    '01:00',
-    '02:00',
-    '03:00',
-    '04:00',
-    '05:00',
-    '06:00',
-    '07:00',
-    '08:00',
-    '09:00',
-    '10:00',
-    '11:00',
-    '12:00',
-    '13:00',
-    '14:00',
-    '15:00',
-    '16:00',
-    '17:00',
-    '18:00',
-    '19:00',
-    '20:00',
-    '21:00',
-    '22:00',
-    '23:00',
-  ]
-
-  const selectTimeSlot = (time: string) => {
-    if (isReadOnly.value) return
-    selectedTimeOnly.value = time
-  }
-
-  const selectedDateOnly = computed({
-    get: () => {
-      if (!formData.value.fechaHoraCita) return ''
-      return formData.value.fechaHoraCita.split('T')[0] || ''
-    },
-    set: (val: string) => {
-      const currentTime = selectedTimeOnly.value || '11:00'
-      formData.value.fechaHoraCita = val ? `${val}T${currentTime}` : ''
-    },
-  })
-
-  const selectedTimeOnly = computed({
-    get: () => {
-      if (!formData.value.fechaHoraCita) return ''
-      const parts = formData.value.fechaHoraCita.split('T')
-      return parts[1] ? parts[1].substring(0, 5) : ''
-    },
-    set: (val: string) => {
-      const currentDate = selectedDateOnly.value || new Date().toISOString().split('T')[0]
-      formData.value.fechaHoraCita = `${currentDate}T${val}`
-    },
-  })
 
   function formatDateIso(d: Date | string | unknown): string {
     if (!d) return ''
@@ -432,6 +590,11 @@ export function useSaleAppointmentForm() {
           totalVentaUsd: existing.totalVentaUsd ?? null,
           notas: existing.notas || '',
         }
+        if (existing.fechaHoraCita) {
+          const parts = existing.fechaHoraCita.split('T')
+          rawDate.value = parts[0] || ''
+          rawTime.value = parts[1] ? parts[1].substring(0, 5) : ''
+        }
         sessionInfo.value = {
           clienteNombre: existing.clienteNombre || '',
           clienteEmail: existing.clienteEmail || '',
@@ -549,8 +712,13 @@ export function useSaleAppointmentForm() {
     photographerName,
     sellers,
     selectedSeller,
+    vendedoresDisponibilidad,
+    isCheckingVendedoresDisponibilidad,
+    checkDisponibilidadVendedores,
+    getSellerStatus,
     paxDisplay,
     estadoOptions,
+    isSubmitDisabled,
     selectedDateOnly,
     selectedTimeOnly,
     timeSlots,

@@ -25,7 +25,9 @@ const {
   photographerName,
   sellers,
   selectedSeller,
+  getSellerStatus,
   estadoOptions,
+  isSubmitDisabled,
   selectedDateOnly,
   selectedTimeOnly,
   timeSlots,
@@ -184,6 +186,7 @@ function toggleSellersList() {
 
 function selectSeller(sellerId: string | null) {
   if (isReadOnly.value) return
+  if (sellerId && getSellerStatus(sellerId).disabled) return
   if (formData.value.vendedorId === sellerId) {
     formData.value.vendedorId = null
   } else {
@@ -282,6 +285,10 @@ const isSellerPhotographer = computed(() => {
 
         <div class="session-selected-details">
           <div class="detail-row">
+            <span class="detail-label">Hotel:</span>
+            <span class="detail-value">{{ sessionInfo.hotelNombre }}</span>
+          </div>
+          <div class="detail-row">
             <span class="detail-label">Cliente:</span>
             <span class="detail-value">{{ sessionInfo.clienteNombre }}</span>
           </div>
@@ -292,10 +299,6 @@ const isSellerPhotographer = computed(() => {
           <div class="detail-row">
             <span class="detail-label">Hora:</span>
             <span class="detail-value">{{ formatSessionTime(sessionInfo.fechaHoraInicio) }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Hotel:</span>
-            <span class="detail-value">{{ sessionInfo.hotelNombre }}</span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Personas:</span>
@@ -396,12 +399,14 @@ const isSellerPhotographer = computed(() => {
       </el-collapse-transition>
     </div>
 
-    <!-- 1. Bloque de Calendario Cita de Ventas (Selecciona Fecha) -->
-    <div class="mobile-calendar-section">
-      <div class="mobile-card-section-label">
-        <span class="step-badge-num">2</span>
-        Fecha de la venta
-      </div>
+    <!-- Pasos restantes (Solo visibles si hay una sesión asociada seleccionada) -->
+    <template v-if="formData.sesionId">
+      <!-- 1. Bloque de Calendario Cita de Ventas (Selecciona Fecha) -->
+      <div class="mobile-calendar-section">
+        <div class="mobile-card-section-label">
+          <span class="step-badge-num">2</span>
+          Fecha de la venta
+        </div>
 
       <div class="calendar-panel-box">
         <div class="inline-calendar-picker">
@@ -518,7 +523,7 @@ const isSellerPhotographer = computed(() => {
             class="seller-subtitle-label"
             :class="{ 'text-white-subtle': isSellerPhotographer }"
           >
-            {{ selectedSeller.perfilNombre }}
+            {{ selectedSeller.perfilNombre }} · {{ getSellerStatus(selectedSeller.id).label }}
           </span>
         </div>
       </div>
@@ -553,8 +558,11 @@ const isSellerPhotographer = computed(() => {
               v-for="seller in sellers"
               :key="seller.id"
               class="seller-pick-item"
-              :class="{ 'is-selected': String(formData.vendedorId) === String(seller.id) }"
-              @click="selectSeller(seller.id)"
+              :class="{
+                'is-selected': String(formData.vendedorId) === String(seller.id),
+                'is-disabled': getSellerStatus(seller.id).disabled,
+              }"
+              @click="!getSellerStatus(seller.id).disabled && selectSeller(seller.id)"
             >
               <div class="pick-item-left">
                 <el-avatar
@@ -574,7 +582,12 @@ const isSellerPhotographer = computed(() => {
                 <div class="pick-item-info">
                   <div class="pick-item-client">{{ seller.nombre }} {{ seller.apellidos }}</div>
                   <div class="pick-item-meta">
-                    <span>{{ seller.perfilNombre }}</span>
+                    <span
+                      class="seller-status-tag"
+                      :class="getSellerStatus(seller.id).tagClass"
+                    >
+                      {{ getSellerStatus(seller.id).label }}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -686,6 +699,7 @@ const isSellerPhotographer = computed(() => {
         </el-radio-group>
       </div>
     </div>
+  </template>
 
     <!-- Sticky Bottom Bar -->
     <div class="mobile-bottom-actions">
@@ -695,7 +709,7 @@ const isSellerPhotographer = computed(() => {
         size="large"
         :icon="Check"
         :loading="isSaving"
-        :disabled="isReadOnly"
+        :disabled="isSubmitDisabled"
         class="mobile-submit-btn"
         @click="handleSave"
       >
@@ -1245,6 +1259,34 @@ const isSellerPhotographer = computed(() => {
 .seller-pick-item.is-selected {
   border-color: var(--el-color-primary, #3b82f6);
   background: rgba(59, 130, 246, 0.06);
+}
+
+.seller-pick-item.is-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--el-fill-color-lighter, #f8fafc);
+}
+
+.seller-pick-item.is-disabled:active {
+  transform: none;
+}
+
+.seller-status-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.seller-status-tag.tag-available {
+  color: #10b981;
+}
+
+.seller-status-tag.tag-busy {
+  color: #f56c6c;
+}
+
+.seller-status-tag.tag-pending {
+  color: var(--nav-link-color, #64748b);
 }
 
 .pick-seller-avatar {
