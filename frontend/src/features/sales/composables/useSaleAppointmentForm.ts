@@ -6,8 +6,13 @@ import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { useProfileStore } from '@/features/users/stores/profile.store'
-import type { CitaVenta, UpdateCitaVentaPayload, ConflictoCitaVenta, EstadoCitaVenta } from '../domain/sale.model'
-import { Calendar, Check, Close, WarnTriangleFilled } from '@element-plus/icons-vue'
+import type {
+  CitaVenta,
+  UpdateCitaVentaPayload,
+  ConflictoCitaVenta,
+  EstadoCitaVenta,
+} from '../domain/sale.model'
+import { Calendar, Check, Close } from '@element-plus/icons-vue'
 import { UserX } from '@lucide/vue'
 import { ElMessage } from 'element-plus'
 
@@ -132,7 +137,9 @@ export function useSaleAppointmentForm() {
   // Photographer name and avatar for display
   const photographerUser = computed(() => {
     if (!sessionInfo.value.fotografoId) return null
-    return userStore.users.find((u) => String(u.id) === String(sessionInfo.value.fotografoId)) || null
+    return (
+      userStore.users.find((u) => String(u.id) === String(sessionInfo.value.fotografoId)) || null
+    )
   })
 
   const photographerName = computed(() => {
@@ -202,12 +209,128 @@ export function useSaleAppointmentForm() {
     return dateStr.replace('T', ' ').slice(0, 16)
   }
 
-  const estadoOptions: { value: EstadoCitaVenta; label: string; color: string; icon: Component }[] = [
-    { value: 'PROGRAMADA', label: 'Programada', color: '#409eff', icon: Calendar },
-    { value: 'NO_SHOW', label: 'No se presentó', color: '#e6a23c', icon: UserX },
-    { value: 'CANCELADA', label: 'Cancelada', color: '#f56c6c', icon: Close },
-    { value: 'COMPLETADA', label: 'Completada', color: '#67c23a', icon: Check },
+  const estadoOptions: { value: EstadoCitaVenta; label: string; color: string; icon: Component }[] =
+    [
+      { value: 'PROGRAMADA', label: 'Programada', color: '#409eff', icon: Calendar },
+      { value: 'NO_SHOW', label: 'No vino', color: '#e6a23c', icon: UserX },
+      { value: 'CANCELADA', label: 'Cancelada', color: '#f56c6c', icon: Close },
+      { value: 'COMPLETADA', label: 'Completada', color: '#67c23a', icon: Check },
+    ]
+
+  const timeSlots = [
+    '00:00',
+    '01:00',
+    '02:00',
+    '03:00',
+    '04:00',
+    '05:00',
+    '06:00',
+    '07:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+    '20:00',
+    '21:00',
+    '22:00',
+    '23:00',
   ]
+
+  const selectTimeSlot = (time: string) => {
+    if (isReadOnly.value) return
+    selectedTimeOnly.value = time
+  }
+
+  const selectedDateOnly = computed({
+    get: () => {
+      if (!formData.value.fechaHoraCita) return ''
+      return formData.value.fechaHoraCita.split('T')[0] || ''
+    },
+    set: (val: string) => {
+      const currentTime = selectedTimeOnly.value || '11:00'
+      formData.value.fechaHoraCita = val ? `${val}T${currentTime}` : ''
+    },
+  })
+
+  const selectedTimeOnly = computed({
+    get: () => {
+      if (!formData.value.fechaHoraCita) return ''
+      const parts = formData.value.fechaHoraCita.split('T')
+      return parts[1] ? parts[1].substring(0, 5) : ''
+    },
+    set: (val: string) => {
+      const currentDate = selectedDateOnly.value || new Date().toISOString().split('T')[0]
+      formData.value.fechaHoraCita = `${currentDate}T${val}`
+    },
+  })
+
+  function formatDateIso(d: Date | string | unknown): string {
+    if (!d) return ''
+    if (typeof d === 'string') return d.slice(0, 10)
+    if (d instanceof Date) {
+      const year = d.getFullYear()
+      const month = String(d.getMonth() + 1).padStart(2, '0')
+      const day = String(d.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    }
+    const anyDate =
+      (d as { date?: Date; dayjs?: { format?: (fmt: string) => string } })?.date ||
+      (d as { dayjs?: { format?: (fmt: string) => string } })?.dayjs
+    if (anyDate && anyDate instanceof Date) {
+      const year = anyDate.getFullYear()
+      const month = String(anyDate.getMonth() + 1).padStart(2, '0')
+      const day = String(anyDate.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    }
+    if (anyDate && typeof (anyDate as { format?: (fmt: string) => string }).format === 'function') {
+      return (anyDate as { format: (fmt: string) => string }).format('YYYY-MM-DD')
+    }
+    return ''
+  }
+
+  // Mapa de conteo de citas de venta por fecha ISO (YYYY-MM-DD) para el hotel actual o todos los hoteles del usuario
+  const salesCountByDate = computed<Record<string, number>>(() => {
+    const counts: Record<string, number> = {}
+    const currentHotelId = formData.value.hotelId ? Number(formData.value.hotelId) : null
+    const allowedHotelIds = new Set(userHotels.value.map((h) => Number(h.id)))
+    const currentCitaId = citaId.value
+
+    for (const c of saleStore.citasVenta) {
+      if (c.estado === 'CANCELADA') continue
+      if (currentCitaId && c.id === currentCitaId) continue
+      if (currentHotelId) {
+        if (Number(c.hotelId) !== currentHotelId) continue
+      } else if (allowedHotelIds.size > 0 && !allowedHotelIds.has(Number(c.hotelId))) {
+        continue
+      }
+      if (!c.fechaHoraCita) continue
+      const dateKey = String(c.fechaHoraCita).slice(0, 10)
+      if (dateKey) {
+        counts[dateKey] = (counts[dateKey] || 0) + 1
+      }
+    }
+    return counts
+  })
+
+  function getCitaVentaCellClassName(cellDate: Date): string {
+    const cellIso = formatDateIso(cellDate)
+    const count = salesCountByDate.value[cellIso] || 0
+    if (count > 0) {
+      if (count <= 30) {
+        return `has-sessions-${count}`
+      }
+      return 'has-sessions-plus'
+    }
+    return ''
+  }
 
   function disabledPastDates(time: Date): boolean {
     const today = new Date()
@@ -228,13 +351,6 @@ export function useSaleAppointmentForm() {
         newVal,
         citaId.value ?? undefined,
       )
-      if (conflicts.value.length > 0) {
-        ElMessage({
-          type: 'warning',
-          icon: WarnTriangleFilled,
-          message: `Hay ${conflicts.value.length} cita(s) de venta en el mismo hotel dentro de la franja de 1 hora`,
-        })
-      }
     },
   )
 
@@ -292,6 +408,7 @@ export function useSaleAppointmentForm() {
       userStore.fetchUsers(),
       profileStore.fetchProfiles(),
       sessionStore.fetchSessions(),
+      saleStore.fetchCitasVenta(),
     ])
 
     if (isEditing.value && citaId.value) {
@@ -363,7 +480,9 @@ export function useSaleAppointmentForm() {
 
     if (formData.value.estado === 'COMPLETADA') {
       if (formData.value.numFotosVendidas == null || formData.value.totalVentaUsd == null) {
-        ElMessage.warning('Para completar la cita, indica el nº de fotos vendidas y el total en USD')
+        ElMessage.warning(
+          'Para completar la cita, indica el nº de fotos vendidas y el total en USD',
+        )
         return
       }
     }
@@ -432,6 +551,12 @@ export function useSaleAppointmentForm() {
     selectedSeller,
     paxDisplay,
     estadoOptions,
+    selectedDateOnly,
+    selectedTimeOnly,
+    timeSlots,
+    selectTimeSlot,
+    salesCountByDate,
+    getCitaVentaCellClassName,
     disabledPastDates,
     formatDateTime,
     handleGoBack,

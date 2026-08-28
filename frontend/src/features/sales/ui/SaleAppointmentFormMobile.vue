@@ -2,18 +2,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import type { SaleAppointmentFormContext } from '../composables/useSaleAppointmentForm'
-import {
-  ArrowLeft,
-  Check,
-  Close,
-  Warning,
-  Camera,
-  Money,
-  Calendar,
-  Edit,
-  WarnTriangleFilled,
-  User,
-} from '@element-plus/icons-vue'
+import { ArrowLeft, Check, Close, Camera, WarnTriangleFilled, User } from '@element-plus/icons-vue'
 import { ChevronDown } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 
@@ -37,12 +26,89 @@ const {
   sellers,
   selectedSeller,
   estadoOptions,
+  selectedDateOnly,
+  selectedTimeOnly,
+  timeSlots,
+  selectTimeSlot,
+  getCitaVentaCellClassName,
   disabledPastDates,
   formatDateTime,
   handleGoBack,
   handleSave,
   userStore,
+  saleStore,
+  userHotels,
+  citaId,
 } = props.form
+
+const showAllTimeSlots = ref(false)
+
+const visibleTimeSlots = computed(() => {
+  if (showAllTimeSlots.value) {
+    return timeSlots
+  }
+  return timeSlots.filter((time) => {
+    const hour = parseInt(time.split(':')[0] ?? '0', 10)
+    return hour >= 8 && hour <= 20
+  })
+})
+
+// Mapa de cantidad de citas de venta por hora para la fecha de venta seleccionada
+const salesCountByHour = computed<Record<string, number>>(() => {
+  const counts: Record<string, number> = {}
+  const targetDate = selectedDateOnly.value
+  if (!targetDate) return counts
+
+  const currentHotelId = formData.value.hotelId ? Number(formData.value.hotelId) : null
+  const allowedHotelIds = new Set(userHotels.value.map((h) => Number(h.id)))
+  const currentCitaId = citaId.value
+
+  for (const c of saleStore.citasVenta) {
+    if (c.estado === 'CANCELADA') continue
+    if (currentCitaId && c.id === currentCitaId) continue
+    if (currentHotelId) {
+      if (Number(c.hotelId) !== currentHotelId) continue
+    } else if (allowedHotelIds.size > 0 && !allowedHotelIds.has(Number(c.hotelId))) {
+      continue
+    }
+    if (!c.fechaHoraCita) continue
+
+    const cDate = String(c.fechaHoraCita).slice(0, 10)
+    if (cDate !== targetDate) continue
+
+    const timePart = c.fechaHoraCita.includes('T')
+      ? c.fechaHoraCita.split('T')[1]
+      : c.fechaHoraCita.split(' ')[1]
+    if (timePart) {
+      const hourKey = `${timePart.substring(0, 2)}:00`
+      counts[hourKey] = (counts[hourKey] || 0) + 1
+    }
+  }
+
+  return counts
+})
+
+function getCitaVentaTimeSlotStatusClass(time: string): string {
+  // 1. Si la hora tiene una venta directa -> ROJO
+  if (salesCountByHour.value[time] && salesCountByHour.value[time] > 0) {
+    return 'time-slot-btn--full'
+  }
+
+  // 2. Si la hora anterior o posterior tiene una venta -> AMARILLO (margen de conflicto ±1h)
+  const hourNum = parseInt(time.split(':')[0] ?? '0', 10)
+  const prevHourKey = `${String(hourNum - 1).padStart(2, '0')}:00`
+  const nextHourKey = `${String(hourNum + 1).padStart(2, '0')}:00`
+
+  if (
+    (salesCountByHour.value[prevHourKey] && salesCountByHour.value[prevHourKey] > 0) ||
+    (salesCountByHour.value[nextHourKey] && salesCountByHour.value[nextHourKey] > 0)
+  ) {
+    return 'time-slot-btn--partial'
+  }
+
+  // 3. El resto -> color neutro por defecto
+  return 'time-slot-btn--empty'
+}
 
 const showSessionsList = ref(!isEditing.value && !formData.value.sesionId)
 const showSellersList = ref(false)
@@ -150,7 +216,10 @@ const isSellerPhotographer = computed(() => {
     </div>
 
     <!-- Selector de Citas Estilo Card (Móvil) -->
-    <div class="mobile-card-section-label">Sesión asociada</div>
+    <div class="mobile-card-section-label">
+      <span class="step-badge-num">1</span>
+      Sesión asociada
+    </div>
     <div
       class="mobile-session-selector-card"
       :class="{ 'is-session-selected': !!formData.sesionId }"
@@ -327,8 +396,84 @@ const isSellerPhotographer = computed(() => {
       </el-collapse-transition>
     </div>
 
+    <!-- 1. Bloque de Calendario Cita de Ventas (Selecciona Fecha) -->
+    <div class="mobile-calendar-section">
+      <div class="mobile-card-section-label">
+        <span class="step-badge-num">2</span>
+        Fecha de la venta
+      </div>
+
+      <div class="calendar-panel-box">
+        <div class="inline-calendar-picker">
+          <el-date-picker-panel
+            :key="`sale-cal-${formData.hotelId || 'all'}-${saleStore.citasVenta.length}`"
+            :border="false"
+            v-model="selectedDateOnly"
+            type="date"
+            value-format="YYYY-MM-DD"
+            date-format="YYYY-MM-DD"
+            :disabled="isReadOnly"
+            :disabled-date="disabledPastDates"
+            :cell-class-name="getCitaVentaCellClassName"
+          />
+        </div>
+      </div>
+
+      <!-- 2. Bloque de Horas de Venta -->
+      <div class="schedule-section-block">
+        <div class="schedule-section-header-row">
+          <div class="schedule-subheading">
+            <span class="step-badge-num">3</span>
+            <span>Hora de la venta</span>
+          </div>
+          <el-switch v-model="showAllTimeSlots" size="default" />
+        </div>
+        <div class="time-slots-grid">
+          <el-badge
+            v-for="time in visibleTimeSlots"
+            :key="`cita-${time}`"
+            :value="salesCountByHour[time]"
+            :hidden="!salesCountByHour[time]"
+            class="time-slot-badge-wrapper"
+          >
+            <button
+              type="button"
+              class="time-slot-btn"
+              :class="[
+                getCitaVentaTimeSlotStatusClass(time),
+                { active: selectedTimeOnly === time },
+              ]"
+              :disabled="isReadOnly"
+              @click="selectTimeSlot(time)"
+            >
+              {{ time }}
+            </button>
+          </el-badge>
+        </div>
+
+        <!-- Alerta de conflictos de Cita de Venta (debajo de selección de horas) -->
+        <div v-if="conflicts.length > 0" class="conflict-alert-box" style="margin-top: 0.75rem">
+          <el-alert type="warning" :closable="false" show-icon class="conflict-banner">
+            <template #icon>
+              <el-icon :size="18"><WarnTriangleFilled /></el-icon>
+            </template>
+            <template #title>
+              <span>
+                Hay
+                <strong>{{ conflicts.length }}</strong>
+                cita(s) de venta en el mismo hotel dentro de la franja de 1 hora (±1h)
+              </span>
+            </template>
+          </el-alert>
+        </div>
+      </div>
+    </div>
+
     <!-- Selector de Vendedor Estilo Card (Móvil) -->
-    <div class="mobile-card-section-label">Vendedor</div>
+    <div class="mobile-card-section-label">
+      <span class="step-badge-num">4</span>
+      Vendedor
+    </div>
     <div
       class="mobile-seller-selector-card"
       :class="{ 'is-seller-colored': isSellerPhotographer }"
@@ -456,111 +601,21 @@ const isSellerPhotographer = computed(() => {
       Para editar esta cita contacta con tu supervisor o gerente de area.
     </el-alert>
 
-    <!-- Conflict banner -->
-    <el-alert
-      v-if="conflicts.length > 0"
-      type="warning"
-      :closable="false"
-      show-icon
-      :icon="Warning"
-      class="conflict-banner"
+    <!-- Datos de Venta y Notas (Directo en el flujo del formulario, sin tarjeta) -->
+    <el-form
+      :model="formData"
+      label-position="top"
+      size="large"
+      class="sale-form"
+      :disabled="isReadOnly"
     >
-      <template #title>
-        Hay {{ conflicts.length }} cita(s) de venta en la misma franja horaria (±1h)
-      </template>
-      <div v-for="c in conflicts" :key="c.id" class="conflict-item">
-        {{ c.clienteNombre }} — {{ c.fechaHoraCita }}
+      <!-- Fotos Vendidas y Total USD en 2 columnas (50% cada una) -->
+      <div class="mobile-card-section-label">
+        <span class="step-badge-num">5</span>
+        Venta
       </div>
-    </el-alert>
-
-    <!-- Main Form Móvil -->
-    <el-card class="form-card" shadow="never">
-      <template #header>
-        <span class="ref-card-title">
-          <el-icon :size="20"><Money /></el-icon>
-          Cita venta fotos
-        </span>
-      </template>
-      <el-form
-        :model="formData"
-        label-position="top"
-        size="large"
-        class="sale-form"
-        :disabled="isReadOnly"
-      >
-        <!-- Estado de la Cita (3 arriba + 1 abajo según diseño) -->
-        <el-form-item label="ESTADO DE LA CITA" class="status-form-item">
-          <div class="status-radio-container">
-            <el-radio-group v-model="formData.estado" class="status-radio-group" size="large">
-              <el-radio-button
-                v-for="opt in estadoOptions"
-                :key="opt.value"
-                :value="opt.value"
-                :class="['status-radio-btn', `status-radio-btn--${opt.value.toLowerCase()}`]"
-              >
-                <span class="status-btn-content">
-                  <el-icon class="status-btn-icon"><component :is="opt.icon" /></el-icon>
-                  <span>{{ opt.label }}</span>
-                </span>
-              </el-radio-button>
-            </el-radio-group>
-          </div>
-        </el-form-item>
-
-        <el-divider border-style="dashed">
-          <el-icon><Calendar /></el-icon>
-        </el-divider>
-
-        <!-- Session selector (solo al crear nueva) -->
-        <el-form-item v-if="!isEditing" label="Sesión Fotográfica *" required>
-          <el-select
-            v-model="formData.sesionId"
-            style="width: 100%"
-            placeholder="Elige la sesión para la que agendar esta venta"
-            filterable
-            clearable
-            size="large"
-          >
-            <el-option
-              v-for="session in availableSessions"
-              :key="session.id"
-              :label="`${session.clienteNombre} — ${formatDateTime(session.fechaHoraInicio)} (${session.estado === 'COMPLETADA' ? 'Completada' : 'Programada'})`"
-              :value="session.id"
-            />
-          </el-select>
-          <div v-if="excludedSessionsCount > 0" class="select-helper-notice">
-            <el-icon style="vertical-align: middle; margin-right: 4px; color: #e6a23c">
-              <WarnTriangleFilled />
-            </el-icon>
-            Hay {{ excludedSessionsCount }} sesión(es) en tus hoteles no mostrada(s) porque están
-            canceladas o el cliente no se presentó.
-          </div>
-        </el-form-item>
-
-        <!-- Selector Fecha/Hora -->
-        <el-form-item required>
-          <template #label>
-            <span class="calendar-item-label">
-              <el-icon class="calendar-label-icon icon-money"><Money /></el-icon>
-              <span>Fecha/Hora Cita de Ventas</span>
-            </span>
-          </template>
-          <div class="mobile-picker-panel-wrapper">
-            <el-date-picker-panel
-              :border="false"
-              v-model="formData.fechaHoraCita"
-              type="datetime"
-              value-format="YYYY-MM-DDTHH:mm"
-              date-format="YYYY-MM-DD"
-              time-format="HH:mm"
-              :default-time="new Date(2000, 0, 1, 10, 0, 0)"
-              :disabled-date="disabledPastDates"
-            />
-          </div>
-        </el-form-item>
-
-        <!-- Fotos Vendidas y Total USD -->
-        <el-form-item label="Nº de Fotos Vendidas *">
+      <div class="mobile-form-row-2 spinner-containers">
+        <el-form-item label="Fotos Vendidas">
           <el-input-number
             v-model="formData.numFotosVendidas"
             :min="0"
@@ -571,37 +626,66 @@ const isSellerPhotographer = computed(() => {
           />
         </el-form-item>
 
-        <el-form-item label="Total en USD *">
+        <el-form-item label="Total en USD">
           <el-input-number
             v-model="formData.totalVentaUsd"
             :min="0"
-            :step="0.01"
-            :precision="2"
+            :step="5"
             style="width: 100%"
-            placeholder="0.00"
+            placeholder="0"
             size="large"
           >
             <template #suffix>
-              <span>$ (USD)</span>
+              <span>$</span>
             </template>
           </el-input-number>
         </el-form-item>
+      </div>
 
-        <el-divider border-style="dashed">
-          <el-icon><Edit /></el-icon>
-        </el-divider>
-
-        <!-- Notas -->
-        <el-form-item label="Notas">
+      <!-- Notas -->
+      <div>
+        <div class="mobile-card-section-label">
+          <span class="step-badge-num">6</span>
+          Notas
+        </div>
+        <el-form-item>
           <el-input
             v-model="formData.notas"
             type="textarea"
-            :rows="3"
+            :rows="5"
             placeholder="Notas sobre la cita de venta..."
           />
         </el-form-item>
-      </el-form>
-    </el-card>
+      </div>
+    </el-form>
+
+    <!-- Estado de la Cita (Directo en el flujo del formulario, sin tarjeta) -->
+    <div class="mobile-status-section">
+      <div class="mobile-card-section-label">
+        <span class="step-badge-num">7</span>
+        Estado de la cita
+      </div>
+      <div class="status-radio-container">
+        <el-radio-group
+          v-model="formData.estado"
+          class="status-radio-group"
+          size="large"
+          :disabled="isReadOnly"
+        >
+          <el-radio-button
+            v-for="opt in estadoOptions"
+            :key="opt.value"
+            :value="opt.value"
+            :class="['status-radio-btn', `status-radio-btn--${opt.value.toLowerCase()}`]"
+          >
+            <span class="status-btn-content">
+              <el-icon class="status-btn-icon"><component :is="opt.icon" /></el-icon>
+              <span>{{ opt.label }}</span>
+            </span>
+          </el-radio-button>
+        </el-radio-group>
+      </div>
+    </div>
 
     <!-- Sticky Bottom Bar -->
     <div class="mobile-bottom-actions">
@@ -1277,6 +1361,30 @@ const isSellerPhotographer = computed(() => {
   font-weight: 500;
 }
 
+.mobile-sales-details-section {
+  width: 100%;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.mobile-form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.mobile-form-row-2 :deep(.el-form-item) {
+  margin-bottom: 0 !important;
+}
+
+.mobile-form-row-2 :deep(.el-input-number) {
+  width: 100% !important;
+}
+.spinner-containers {
+  margin-bottom: 1.25rem;
+}
+
 .form-card {
   border-radius: var(--el-card-border-radius, 8px);
   border: 1px solid var(--toolbar-border, #e2e8f0);
@@ -1286,6 +1394,12 @@ const isSellerPhotographer = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.mobile-status-section {
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 5rem;
 }
 
 .status-form-item :deep(.el-form-item__label) {
@@ -1452,5 +1566,403 @@ const isSellerPhotographer = computed(() => {
   font-size: 0.95rem;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* =========================================================
+   ESTILOS CALENDARIO CITA DE VENTAS (MÓVIL)
+   ========================================================= */
+
+.mobile-calendar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+/* Schedule Section Block (Horas) */
+.schedule-section-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.schedule-section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Time slots grid (6 columnas x 4 filas) */
+.time-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.65rem 0.45rem;
+  padding-top: 0.35rem;
+}
+
+.time-slot-badge-wrapper {
+  width: 100%;
+  display: block;
+}
+
+.time-slot-badge-wrapper :deep(.el-badge__content) {
+  background-color: #475569;
+  color: #ffffff;
+  border: 1.5px solid var(--toolbar-bg, #ffffff);
+  font-weight: 700;
+  font-size: 0.65rem;
+}
+
+.time-slot-btn {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.55rem 0.2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--heading-color, #0f172a);
+  background: var(--el-fill-color-light, #f8fafc);
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.time-slot-btn--partial {
+  background-color: #fef9c3 !important;
+  border-color: #fde047 !important;
+  color: #854d0e !important;
+}
+
+.time-slot-btn--partial:hover {
+  background-color: #fef08a !important;
+  border-color: #eab308 !important;
+  color: #713f12 !important;
+}
+
+.time-slot-btn--full {
+  background-color: #fee2e2 !important;
+  border-color: #fca5a5 !important;
+  color: #991b1b !important;
+}
+
+.time-slot-btn--full:hover {
+  background-color: #fecaca !important;
+  border-color: #ef4444 !important;
+  color: #7f1d1d !important;
+}
+
+.time-slot-btn:hover {
+  border-color: var(--el-color-primary, #3b82f6);
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--el-color-primary, #3b82f6);
+}
+
+.time-slot-btn.active {
+  background-color: var(--el-color-primary, #3b82f6) !important;
+  border-color: var(--el-color-primary, #3b82f6) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.35);
+}
+
+html.dark .time-slot-btn {
+  background: var(--toolbar-bg, #1d1e1f);
+  border-color: var(--toolbar-border, #363637);
+  color: var(--heading-color, #ffffff);
+}
+
+html.dark .time-slot-btn--partial {
+  background-color: rgba(234, 179, 8, 0.18) !important;
+  border-color: rgba(234, 179, 8, 0.45) !important;
+  color: #fef08a !important;
+}
+
+html.dark .time-slot-btn--partial:hover {
+  background-color: rgba(234, 179, 8, 0.28) !important;
+  border-color: #eab308 !important;
+}
+
+html.dark .time-slot-btn--full {
+  background-color: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.45) !important;
+  color: #fca5a5 !important;
+}
+
+html.dark .time-slot-btn--full:hover {
+  background-color: rgba(239, 68, 68, 0.28) !important;
+  border-color: #ef4444 !important;
+}
+
+html.dark .time-slot-btn.active {
+  background-color: var(--el-color-primary, #3b82f6) !important;
+  border-color: var(--el-color-primary, #3b82f6) !important;
+  color: #ffffff !important;
+}
+
+.schedule-subheading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--heading-color, #0f172a);
+  margin-left: 0.2rem;
+}
+
+.step-badge-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--el-color-primary, #3b82f6);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.calendar-panel-box {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: -2rem;
+}
+
+.inline-calendar-picker {
+  width: 100%;
+}
+
+.inline-calendar-picker :deep(.el-picker-panel) {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Ocultar botones de navegación anual (« y ») para dejar únicamente flechas simples (mes anterior/siguiente) */
+.inline-calendar-picker :deep(.el-date-picker__prev-year-btn),
+.inline-calendar-picker :deep(.el-date-picker__next-year-btn),
+.inline-calendar-picker :deep(.d-arrow-left),
+.inline-calendar-picker :deep(.d-arrow-right),
+.inline-calendar-picker :deep(.el-date-picker__prev-btn.d-arrow-left),
+.inline-calendar-picker :deep(.el-date-picker__next-btn.d-arrow-right) {
+  display: none !important;
+}
+
+.inline-calendar-picker :deep(.el-date-picker__header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 10px 16px 10px !important;
+}
+
+.inline-calendar-picker :deep(.el-date-picker__header-label) {
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: var(--heading-color, #0f172a) !important;
+  letter-spacing: 0.02em;
+}
+
+.inline-calendar-picker :deep(.el-date-picker__prev-btn),
+.inline-calendar-picker :deep(.el-date-picker__next-btn) {
+  font-size: 1.1rem !important;
+  color: var(--nav-link-color, #64748b) !important;
+}
+
+.inline-calendar-picker :deep(.el-date-table) {
+  font-size: 0.95rem !important;
+  width: 100% !important;
+}
+
+.inline-calendar-picker :deep(.el-date-table th) {
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: var(--nav-link-color, #64748b) !important;
+  padding: 6px 0 10px 0 !important;
+  text-transform: lowercase;
+}
+
+.inline-calendar-picker :deep(.el-date-table td) {
+  padding: 4px 0 !important;
+  height: 42px !important;
+}
+
+.inline-calendar-picker :deep(.el-date-table-cell) {
+  position: relative;
+  height: 38px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.inline-calendar-picker :deep(.el-date-table-cell__text) {
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.inline-calendar-picker :deep(.el-date-table td.today .el-date-table-cell__text) {
+  font-weight: 800 !important;
+  color: var(--el-color-primary, #3b82f6) !important;
+}
+
+.inline-calendar-picker :deep(.el-date-table td.current:not(.disabled) .el-date-table-cell__text) {
+  background-color: var(--el-color-primary, #3b82f6) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.inline-calendar-picker
+  :deep(.el-date-table td.available:not(.disabled):not(.current) .el-date-table-cell__text) {
+  color: var(--heading-color, #0f172a);
+}
+
+.inline-calendar-picker :deep(.el-date-table td.prev-month .el-date-table-cell__text),
+.inline-calendar-picker :deep(.el-date-table td.next-month .el-date-table-cell__text) {
+  color: var(--el-text-color-placeholder, #cbd5e1) !important;
+  opacity: 0.45;
+}
+
+html.dark .inline-calendar-picker :deep(.el-date-picker__header-label) {
+  color: var(--heading-color, #ffffff) !important;
+}
+
+html.dark
+  .inline-calendar-picker
+  :deep(.el-date-table td.available:not(.disabled):not(.current) .el-date-table-cell__text) {
+  color: var(--heading-color, #ffffff) !important;
+}
+
+/* Badge indicador de número de citas en DatePicker (pseudo-elemento ::after) */
+:deep(.el-date-table td[class*='has-sessions-'] .el-date-table-cell::after) {
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background-color: #475569;
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+:deep(.el-date-table td.has-sessions-1 .el-date-table-cell::after) {
+  content: '1';
+}
+:deep(.el-date-table td.has-sessions-2 .el-date-table-cell::after) {
+  content: '2';
+}
+:deep(.el-date-table td.has-sessions-3 .el-date-table-cell::after) {
+  content: '3';
+}
+:deep(.el-date-table td.has-sessions-4 .el-date-table-cell::after) {
+  content: '4';
+}
+:deep(.el-date-table td.has-sessions-5 .el-date-table-cell::after) {
+  content: '5';
+}
+:deep(.el-date-table td.has-sessions-6 .el-date-table-cell::after) {
+  content: '6';
+}
+:deep(.el-date-table td.has-sessions-7 .el-date-table-cell::after) {
+  content: '7';
+}
+:deep(.el-date-table td.has-sessions-8 .el-date-table-cell::after) {
+  content: '8';
+}
+:deep(.el-date-table td.has-sessions-9 .el-date-table-cell::after) {
+  content: '9';
+}
+:deep(.el-date-table td.has-sessions-10 .el-date-table-cell::after) {
+  content: '10';
+}
+:deep(.el-date-table td.has-sessions-11 .el-date-table-cell::after) {
+  content: '11';
+}
+:deep(.el-date-table td.has-sessions-12 .el-date-table-cell::after) {
+  content: '12';
+}
+:deep(.el-date-table td.has-sessions-13 .el-date-table-cell::after) {
+  content: '13';
+}
+:deep(.el-date-table td.has-sessions-14 .el-date-table-cell::after) {
+  content: '14';
+}
+:deep(.el-date-table td.has-sessions-15 .el-date-table-cell::after) {
+  content: '15';
+}
+:deep(.el-date-table td.has-sessions-16 .el-date-table-cell::after) {
+  content: '16';
+}
+:deep(.el-date-table td.has-sessions-17 .el-date-table-cell::after) {
+  content: '17';
+}
+:deep(.el-date-table td.has-sessions-18 .el-date-table-cell::after) {
+  content: '18';
+}
+:deep(.el-date-table td.has-sessions-19 .el-date-table-cell::after) {
+  content: '19';
+}
+:deep(.el-date-table td.has-sessions-20 .el-date-table-cell::after) {
+  content: '20';
+}
+:deep(.el-date-table td.has-sessions-21 .el-date-table-cell::after) {
+  content: '21';
+}
+:deep(.el-date-table td.has-sessions-22 .el-date-table-cell::after) {
+  content: '22';
+}
+:deep(.el-date-table td.has-sessions-23 .el-date-table-cell::after) {
+  content: '23';
+}
+:deep(.el-date-table td.has-sessions-24 .el-date-table-cell::after) {
+  content: '24';
+}
+:deep(.el-date-table td.has-sessions-25 .el-date-table-cell::after) {
+  content: '25';
+}
+:deep(.el-date-table td.has-sessions-26 .el-date-table-cell::after) {
+  content: '26';
+}
+:deep(.el-date-table td.has-sessions-27 .el-date-table-cell::after) {
+  content: '27';
+}
+:deep(.el-date-table td.has-sessions-28 .el-date-table-cell::after) {
+  content: '28';
+}
+:deep(.el-date-table td.has-sessions-29 .el-date-table-cell::after) {
+  content: '29';
+}
+:deep(.el-date-table td.has-sessions-30 .el-date-table-cell::after) {
+  content: '30';
+}
+:deep(.el-date-table td.has-sessions-plus .el-date-table-cell::after) {
+  content: '30+';
 }
 </style>
