@@ -612,6 +612,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  pointer-events: none;
 }
 
 .speed-dial-backdrop {
@@ -620,6 +621,7 @@ onUnmounted(() => {
   background: rgba(15, 23, 42, 0.32);
   backdrop-filter: blur(2px);
   z-index: 998;
+  pointer-events: auto;
 }
 
 .speed-dial-actions {
@@ -631,10 +633,12 @@ onUnmounted(() => {
   position: relative;
   z-index: 1000;
   pointer-events: none;
+  visibility: hidden;
 }
 
 .speed-dial-container.is-open .speed-dial-actions {
   pointer-events: auto;
+  visibility: visible;
 }
 
 .speed-dial-item {
@@ -646,11 +650,13 @@ onUnmounted(() => {
   transform: translateY(16px) scale(0.85);
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
+  pointer-events: none;
 }
 
 .speed-dial-container.is-open .speed-dial-item {
   opacity: 1;
   transform: translateY(0) scale(1);
+  pointer-events: auto;
 }
 
 .speed-dial-container.is-open .item-sale {
@@ -671,6 +677,10 @@ onUnmounted(() => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   white-space: nowrap;
   letter-spacing: 0.2px;
+  pointer-events: none;
+}
+
+.speed-dial-container.is-open .speed-dial-label {
   pointer-events: auto;
 }
 
@@ -688,6 +698,7 @@ onUnmounted(() => {
   transition: transform 0.18s ease, box-shadow 0.18s ease;
   padding: 0;
   outline: none;
+  pointer-events: auto;
 }
 
 .speed-dial-btn:active {
@@ -729,6 +740,7 @@ onUnmounted(() => {
   cursor: pointer;
   position: relative;
   z-index: 1000;
+  pointer-events: auto;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
   outline: none;
 }
