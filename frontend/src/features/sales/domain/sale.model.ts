@@ -32,6 +32,9 @@ export interface CreateCitaVentaPayload {
   hotelId: number
   vendedorId?: string | null
   fechaHoraCita: string
+  estado?: EstadoCitaVenta
+  numFotosVendidas?: number | null
+  totalVentaUsd?: number | null
   notas?: string | null
 }
 

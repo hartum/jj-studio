@@ -675,6 +675,9 @@ export function useSaleAppointmentForm() {
           hotelId: formData.value.hotelId,
           vendedorId: formData.value.vendedorId || null,
           fechaHoraCita: formData.value.fechaHoraCita,
+          estado: formData.value.estado,
+          numFotosVendidas: formData.value.numFotosVendidas,
+          totalVentaUsd: formData.value.totalVentaUsd,
           notas: formData.value.notas ? formData.value.notas.trim() : null,
         })
         if (result.conflictos && result.conflictos.length > 0) {

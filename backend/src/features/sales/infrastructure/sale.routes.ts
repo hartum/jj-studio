@@ -374,6 +374,9 @@ export async function saleRoutes(fastify: FastifyInstance) {
         hotelId: number
         vendedorId?: string | null
         fechaHoraCita: string
+        estado?: string
+        numFotosVendidas?: number | null
+        totalVentaUsd?: number | null
         notas?: string
       }
 
@@ -416,6 +419,16 @@ export async function saleRoutes(fastify: FastifyInstance) {
         })
       }
 
+      // Validate sales fields when creating as COMPLETADA
+      const targetEstado = (body.estado as any) || 'PROGRAMADA'
+      if (targetEstado === 'COMPLETADA') {
+        if (body.numFotosVendidas == null || body.totalVentaUsd == null) {
+          return reply
+            .status(400)
+            .send({ error: 'Para completar la cita, debes indicar el nº de fotos vendidas y el total en USD' })
+        }
+      }
+
       // Check conflicts using session's hotelId
       const conflicts = await findConflicts(sesion.hotelId, fechaCita)
 
@@ -427,9 +440,9 @@ export async function saleRoutes(fastify: FastifyInstance) {
             hotelId: sesion.hotelId,
             vendedorId: body.vendedorId || null,
             fechaHoraCita: fechaCita,
-            estado: 'PROGRAMADA',
-            numFotosVendidas: null,
-            totalVentaUsd: null,
+            estado: targetEstado,
+            numFotosVendidas: body.numFotosVendidas ?? null,
+            totalVentaUsd: body.totalVentaUsd ?? null,
             notas: body.notas ? body.notas.trim() : null,
             deletedAt: null,
           },
@@ -442,11 +455,22 @@ export async function saleRoutes(fastify: FastifyInstance) {
             hotelId: sesion.hotelId,
             vendedorId: body.vendedorId || null,
             fechaHoraCita: fechaCita,
-            estado: 'PROGRAMADA',
+            estado: targetEstado,
+            numFotosVendidas: body.numFotosVendidas ?? null,
+            totalVentaUsd: body.totalVentaUsd ?? null,
             notas: body.notas ? body.notas.trim() : null,
           },
           include: { sesion: true, vendedor: true },
         })
+      }
+
+      // Recalcular comisiones si se crea directamente como COMPLETADA
+      if (nueva.estado === 'COMPLETADA') {
+        try {
+          await calculateAndSaveCommissionsForSale(nueva.id)
+        } catch (commErr) {
+          fastify.log.error(commErr, 'Error al calcular comisiones para la venta creada')
+        }
       }
 
       // Sincronizar con Google Calendar
