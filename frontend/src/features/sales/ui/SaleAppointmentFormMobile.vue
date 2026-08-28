@@ -312,32 +312,36 @@ const {
             placeholder="Notas sobre la cita de venta..."
           />
         </el-form-item>
-
-        <!-- Acciones Inferiores -->
-        <div class="mobile-form-actions">
-          <el-button
-            type="primary"
-            size="large"
-            :icon="Check"
-            :loading="isSaving"
-            :disabled="isReadOnly"
-            class="mobile-submit-btn"
-            @click="handleSave"
-          >
-            {{ isEditing ? 'Guardar Cambios' : 'Agendar Cita' }}
-          </el-button>
-          <el-button size="large" :icon="Close" class="mobile-cancel-btn" @click="handleGoBack">
-            Cancelar
-          </el-button>
-        </div>
       </el-form>
     </el-card>
+
+    <!-- Sticky Bottom Bar -->
+    <div class="mobile-bottom-actions">
+      <el-button
+        size="large"
+        :icon="Close"
+        class="mobile-cancel-icon-btn"
+        @click="handleGoBack"
+      />
+      <el-button
+        type="primary"
+        size="large"
+        :icon="Check"
+        :loading="isSaving"
+        :disabled="isReadOnly"
+        class="mobile-submit-btn"
+        @click="handleSave"
+      >
+        {{ isEditing ? 'Guardar Cambios' : 'Agendar Cita' }}
+      </el-button>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .sale-form-mobile {
   padding: 1rem;
+  padding-bottom: 5.5rem;
   max-width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
@@ -594,19 +598,49 @@ const {
   overflow-x: auto;
 }
 
-.mobile-picker-panel-wrapper :deep(.el-picker-panel) {
-  border-radius: 8px;
+/* Sticky Bottom Bar */
+.mobile-bottom-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.75rem 1rem;
+  background: var(--toolbar-bg, #ffffff);
+  border-top: 1px solid var(--toolbar-border, #e2e8f0);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.65rem;
+  z-index: 100;
+  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.06);
 }
 
-.mobile-form-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+.mobile-cancel-icon-btn {
+  width: 50px !important;
+  min-width: 50px !important;
+  height: 48px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  background: var(--el-fill-color-light, #f1f5f9);
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  color: var(--el-text-color-regular, #64748b);
 }
 
-.mobile-form-actions .el-button {
+.mobile-cancel-icon-btn:hover {
+  background: var(--el-fill-color, #e2e8f0);
+}
+
+.mobile-submit-btn {
   width: 100%;
-  margin-left: 0 !important;
+  height: 48px !important;
+  margin: 0 !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 </style>
