@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import type { SaleAppointmentFormContext } from '../composables/useSaleAppointmentForm'
 import {
@@ -36,7 +36,6 @@ const {
   photographerName,
   sellers,
   selectedSeller,
-  paxDisplay,
   estadoOptions,
   disabledPastDates,
   formatDateTime,
@@ -59,8 +58,18 @@ function formatSessionDate(dateStr?: string | null): string {
     const d = new Date(dateStr)
     const weekdays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
     const months = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
     ]
     const weekday = weekdays[d.getDay()]
     const day = d.getDate()
@@ -116,6 +125,18 @@ function selectSeller(sellerId: string | null) {
     showSellersList.value = false
   }
 }
+
+const isSellerPhotographer = computed(() => {
+  if (!selectedSeller.value) return false
+  const pName = (selectedSeller.value.perfilNombre || '').toUpperCase()
+  const rCode = (selectedSeller.value.roleCode || '').toUpperCase()
+  return (
+    selectedSeller.value.isFotografo ||
+    rCode === 'FOTOGRAFO' ||
+    pName.includes('FOTÓGRAFO') ||
+    pName.includes('FOTOGRAFO')
+  )
+})
 </script>
 
 <template>
@@ -133,7 +154,11 @@ function selectSeller(sellerId: string | null) {
     <div
       class="mobile-session-selector-card"
       :class="{ 'is-session-selected': !!formData.sesionId }"
-      :style="formData.sesionId ? { backgroundColor: getUserBgColor(photographerUser?.color) || '#8b5cf6' } : {}"
+      :style="
+        formData.sesionId
+          ? { backgroundColor: getUserBgColor(photographerUser?.color) || '#8b5cf6' }
+          : {}
+      "
     >
       <!-- Estado A: Sin Sesión Seleccionada -->
       <div v-if="!formData.sesionId" class="session-card-main">
@@ -205,7 +230,9 @@ function selectSeller(sellerId: string | null) {
           </div>
           <div class="detail-row">
             <span class="detail-label">Personas:</span>
-            <span class="detail-value">{{ formatPersonas(sessionInfo.numAdultos, sessionInfo.numNinos) }}</span>
+            <span class="detail-value">
+              {{ formatPersonas(sessionInfo.numAdultos, sessionInfo.numNinos) }}
+            </span>
           </div>
           <div class="detail-row">
             <span class="detail-label">Motivo:</span>
@@ -222,7 +249,9 @@ function selectSeller(sellerId: string | null) {
         tabindex="0"
         @click="toggleSessionsList"
       >
-        <span class="toggle-text">{{ showSessionsList ? 'OCULTAR SESIONES' : 'VER SESIONES' }}</span>
+        <span class="toggle-text">
+          {{ showSessionsList ? 'OCULTAR SESIONES' : 'VER SESIONES' }}
+        </span>
         <el-icon class="toggle-icon" :class="{ 'is-rotated': showSessionsList }">
           <ChevronDown :size="18" />
         </el-icon>
@@ -300,7 +329,15 @@ function selectSeller(sellerId: string | null) {
 
     <!-- Selector de Vendedor Estilo Card (Móvil) -->
     <div class="mobile-card-section-label">Vendedor</div>
-    <div class="mobile-seller-selector-card">
+    <div
+      class="mobile-seller-selector-card"
+      :class="{ 'is-seller-colored': isSellerPhotographer }"
+      :style="
+        isSellerPhotographer
+          ? { backgroundColor: getUserBgColor(selectedSeller?.color) || '#8b5cf6' }
+          : {}
+      "
+    >
       <div class="seller-card-main">
         <div class="seller-avatar-circle">
           <el-avatar
@@ -308,12 +345,14 @@ function selectSeller(sellerId: string | null) {
             :src="selectedSeller.imagen || undefined"
             :size="44"
             :style="{
-              backgroundColor: getUserBgColor(selectedSeller.color),
+              backgroundColor: isSellerPhotographer
+                ? 'rgba(255, 255, 255, 0.25)'
+                : getUserBgColor(selectedSeller.color),
               color: '#ffffff',
               fontWeight: '600',
               fontSize: '13px',
             }"
-            class="seller-header-avatar"
+            :class="isSellerPhotographer ? 'seller-header-avatar-colored' : 'seller-header-avatar'"
           >
             {{ getUserInitials(selectedSeller.nombre, selectedSeller.apellidos) }}
           </el-avatar>
@@ -322,14 +361,18 @@ function selectSeller(sellerId: string | null) {
           </div>
         </div>
         <div class="seller-info-box">
-          <span class="seller-title-label">
+          <span class="seller-title-label" :class="{ 'text-white': isSellerPhotographer }">
             {{
               selectedSeller
                 ? `${selectedSeller.nombre} ${selectedSeller.apellidos}`
                 : 'Selecciona vendedor'
             }}
           </span>
-          <span v-if="selectedSeller" class="seller-subtitle-label">
+          <span
+            v-if="selectedSeller"
+            class="seller-subtitle-label"
+            :class="{ 'text-white-subtle': isSellerPhotographer }"
+          >
             {{ selectedSeller.perfilNombre }}
           </span>
         </div>
@@ -338,12 +381,14 @@ function selectSeller(sellerId: string | null) {
       <!-- Barra toggle VER VENDEDORES -->
       <div
         class="seller-toggle-bar"
-        :class="{ 'is-open': showSellersList }"
+        :class="{ 'is-open': showSellersList, 'is-selected-toggle': isSellerPhotographer }"
         role="button"
         tabindex="0"
         @click="toggleSellersList"
       >
-        <span class="toggle-text">VER VENDEDORES</span>
+        <span class="toggle-text">
+          {{ showSellersList ? 'OCULTAR VENDEDORES' : 'VER VENDEDORES' }}
+        </span>
         <el-icon class="toggle-icon" :class="{ 'is-rotated': showSellersList }">
           <ChevronDown :size="18" />
         </el-icon>
@@ -427,8 +472,6 @@ function selectSeller(sellerId: string | null) {
         {{ c.clienteNombre }} — {{ c.fechaHoraCita }}
       </div>
     </el-alert>
-
-
 
     <!-- Main Form Móvil -->
     <el-card class="form-card" shadow="never">
@@ -622,7 +665,9 @@ function selectSeller(sellerId: string | null) {
   margin-bottom: 1rem;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .mobile-session-selector-card.is-session-selected {
@@ -966,10 +1011,19 @@ function selectSeller(sellerId: string | null) {
 .mobile-seller-selector-card {
   background: var(--toolbar-bg, #ffffff);
   border: 1px solid var(--toolbar-border, #e2e8f0);
-  border-radius: 14px;
+  border-radius: 16px;
   margin-bottom: 1rem;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.mobile-seller-selector-card.is-seller-colored {
+  border: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  color: #ffffff;
 }
 
 .seller-card-main {
@@ -1006,20 +1060,16 @@ function selectSeller(sellerId: string | null) {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
+.seller-header-avatar-colored {
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
 .seller-info-box {
   display: flex;
   flex-direction: column;
   min-width: 0;
   flex: 1;
-}
-
-.seller-category-label {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  line-height: 1.2;
 }
 
 .seller-title-label {
@@ -1033,6 +1083,10 @@ function selectSeller(sellerId: string | null) {
   line-height: 1.3;
 }
 
+.seller-title-label.text-white {
+  color: #ffffff !important;
+}
+
 .seller-subtitle-label {
   font-size: 0.8rem;
   color: var(--nav-link-color, #64748b);
@@ -1040,6 +1094,10 @@ function selectSeller(sellerId: string | null) {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.seller-subtitle-label.text-white-subtle {
+  color: rgba(255, 255, 255, 0.85) !important;
 }
 
 .seller-toggle-bar {
@@ -1056,6 +1114,17 @@ function selectSeller(sellerId: string | null) {
 
 .seller-toggle-bar:active {
   background: var(--el-fill-color-light, #f8fafc);
+}
+
+.seller-toggle-bar.is-selected-toggle {
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.seller-toggle-bar.is-selected-toggle .toggle-text,
+.seller-toggle-bar.is-selected-toggle .toggle-icon {
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .seller-dropdown-container {

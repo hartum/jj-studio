@@ -159,6 +159,7 @@ export function useSaleAppointmentForm() {
       })
       .map((u) => {
         const perfil = u.perfil || profileStore.getProfileById(u.profileId)
+        const perfilCode = perfil?.code?.toUpperCase() || ''
         return {
           id: u.id,
           nombre: u.nombre,
@@ -166,6 +167,8 @@ export function useSaleAppointmentForm() {
           color: u.color,
           imagen: u.imagen,
           perfilNombre: perfil?.name || perfil?.code || 'Vendedor',
+          roleCode: perfilCode,
+          isFotografo: perfilCode === 'FOTOGRAFO',
         }
       })
   })
