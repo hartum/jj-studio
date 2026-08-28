@@ -882,6 +882,57 @@ async function handleSave() {
   font-size: 1.05rem;
 }
 
+/* En móvil: distribución 3 arriba + 1 abajo según diseño */
+@media (max-width: 768px) {
+  .status-radio-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  :deep(.status-radio-btn) {
+    display: flex;
+  }
+
+  :deep(.status-radio-btn .el-radio-button__inner) {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px !important;
+    border: 1px solid var(--toolbar-border, #e2e8f0) !important;
+    box-shadow: none !important;
+    padding: 1rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :deep(.status-radio-btn--completada) {
+    grid-column: 1 / -1;
+  }
+
+  :deep(.status-radio-btn--completada .el-radio-button__inner) {
+    flex-direction: row;
+    padding: 0.85rem 1.25rem;
+  }
+
+  .status-btn-content {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  :deep(.status-radio-btn--completada .status-btn-content) {
+    flex-direction: row;
+  }
+
+  .status-btn-icon {
+    font-size: 1.35rem;
+  }
+}
+
 /* Colores personalizados por estado */
 :deep(.status-radio-btn--programada.is-active .el-radio-button__inner) {
   background-color: #409eff !important;

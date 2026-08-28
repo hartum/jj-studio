@@ -250,6 +250,14 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 // Pantalla inicial de estado de sesión (solo al editar)
 const showStatusScreen = ref(isEditing.value)
 
+// Orden específico para la pantalla de estado en móvil (3 arriba + 1 abajo)
+const mobileEstadoSesionOptions = computed(() => {
+  const order: EstadoSesion[] = ['PROGRAMADA', 'NO_SHOW', 'CANCELADA', 'COMPLETADA']
+  return order
+    .map((val) => estadoSesionOptions.find((o) => o.value === val))
+    .filter((o): o is typeof estadoSesionOptions[0] => Boolean(o))
+})
+
 function goToEditSteps() {
   showStatusScreen.value = false
   currentStep.value = 0
@@ -461,7 +469,7 @@ function handleNextStep() {
           <label class="status-screen-label">ESTADO DE SESIÓN</label>
           <div class="status-screen-grid">
             <button
-              v-for="opt in estadoSesionOptions"
+              v-for="opt in mobileEstadoSesionOptions"
               :key="opt.value"
               type="button"
               class="status-screen-btn"
@@ -2240,17 +2248,19 @@ function handleNextStep() {
 
 .status-screen-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.85rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  width: 100%;
 }
 
 .status-screen-btn {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
-  padding: 1.1rem 0.65rem;
-  font-size: 0.88rem;
+  gap: 0.45rem;
+  padding: 1.15rem 0.4rem;
+  font-size: 0.8rem;
   font-weight: 700;
   border-radius: 12px;
   border: 1px solid var(--toolbar-border, #e2e8f0);
@@ -2260,14 +2270,24 @@ function handleNextStep() {
   transition: all 0.2s ease;
   user-select: none;
   box-sizing: border-box;
+  text-align: center;
 }
 
 .status-screen-btn-icon {
-  font-size: 1.25rem;
+  font-size: 1.45rem;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/* El botón COMPLETADA ocupa toda la fila inferior en horizontal */
+.status-screen-btn--completada {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  padding: 1.1rem 1.25rem;
+  gap: 0.65rem;
+  font-size: 0.95rem;
 }
 
 .status-screen-btn:hover:not(:disabled):not(.is-active) {
