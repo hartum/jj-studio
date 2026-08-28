@@ -239,7 +239,22 @@ export function useSaleAppointmentForm() {
   watch(
     () => formData.value.sesionId,
     (newVal) => {
-      if (!newVal) return
+      if (!newVal) {
+        formData.value.hotelId = 0
+        sessionInfo.value = {
+          clienteNombre: '',
+          clienteEmail: '',
+          clienteTelefono: '',
+          numeroHabitacion: '',
+          fotografoId: '',
+          numAdultos: 1,
+          numNinos: 0,
+          concepto: '',
+          fechaHoraInicio: '',
+          hotelNombre: '',
+        }
+        return
+      }
       const session = sessionStore.sessions.find((s) => s.id === newVal)
       if (session) {
         formData.value.hotelId = session.hotelId

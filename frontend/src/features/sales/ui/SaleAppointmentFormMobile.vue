@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { SaleAppointmentFormContext } from '../composables/useSaleAppointmentForm'
 import {
@@ -12,6 +13,7 @@ import {
   Edit,
   WarnTriangleFilled,
 } from '@element-plus/icons-vue'
+import { ChevronDown } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 
 const props = defineProps<{
@@ -39,7 +41,30 @@ const {
   formatDateTime,
   handleGoBack,
   handleSave,
+  userStore,
 } = props.form
+
+const showSessionsList = ref(!isEditing.value && !formData.value.sesionId)
+
+function getPhotographer(fotografoId?: string | null) {
+  if (!fotografoId) return null
+  return userStore.users.find((u) => String(u.id) === String(fotografoId)) || null
+}
+
+function toggleSessionsList() {
+  if (isReadOnly.value) return
+  showSessionsList.value = !showSessionsList.value
+}
+
+function selectSession(sessionId: number) {
+  if (isReadOnly.value) return
+  if (Number(formData.value.sesionId) === Number(sessionId)) {
+    formData.value.sesionId = null
+  } else {
+    formData.value.sesionId = sessionId
+    showSessionsList.value = false
+  }
+}
 </script>
 
 <template>
@@ -50,6 +75,118 @@ const {
       <h1 class="mobile-title">
         {{ isEditing ? 'Editar Cita de Venta' : 'Nueva Cita de Venta' }}
       </h1>
+    </div>
+
+    <!-- Selector de Citas Estilo Card (Móvil) -->
+    <div class="mobile-session-selector-card">
+      <div class="session-card-main">
+        <div class="session-avatar-circle">
+          <el-avatar
+            v-if="formData.sesionId && photographerUser"
+            :src="photographerUser.imagen || undefined"
+            :size="44"
+            :style="{
+              backgroundColor: getUserBgColor(photographerUser.color),
+              color: '#ffffff',
+              fontWeight: '600',
+              fontSize: '13px',
+            }"
+            class="session-header-avatar"
+          >
+            {{ getUserInitials(photographerUser.nombre, photographerUser.apellidos) }}
+          </el-avatar>
+          <div v-else class="session-default-circle">
+            <el-icon :size="22"><Camera /></el-icon>
+          </div>
+        </div>
+        <div class="session-info-box">
+          <span class="session-category-label">
+            {{ formData.sesionId ? (sessionInfo.hotelNombre || 'SESIÓN ASOCIADA') : 'SIN SESIÓN ASOCIADA' }}
+          </span>
+          <span class="session-title-label">
+            {{ formData.sesionId ? sessionInfo.clienteNombre : 'Elige una sesión de fotos' }}
+          </span>
+          <span v-if="formData.sesionId && sessionInfo.fechaHoraInicio" class="session-subtitle-label">
+            Hab. {{ sessionInfo.numeroHabitacion || '-' }} · {{ paxDisplay }} · {{ formatDateTime(sessionInfo.fechaHoraInicio) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Barra toggle VER SESIONES -->
+      <div
+        class="session-toggle-bar"
+        :class="{ 'is-open': showSessionsList }"
+        role="button"
+        tabindex="0"
+        @click="toggleSessionsList"
+      >
+        <span class="toggle-text">VER SESIONES</span>
+        <el-icon class="toggle-icon" :class="{ 'is-rotated': showSessionsList }">
+          <ChevronDown :size="18" />
+        </el-icon>
+      </div>
+
+      <!-- Lista colapsable de sesiones -->
+      <el-collapse-transition>
+        <div v-if="showSessionsList" class="session-dropdown-container">
+          <div v-if="availableSessions.length === 0" class="session-empty-state">
+            No hay sesiones fotográficas pendientes de agendar cita de venta.
+          </div>
+          <div v-else class="session-dropdown-list">
+            <div
+              v-for="session in availableSessions"
+              :key="session.id"
+              class="session-pick-item"
+              :class="{ 'is-selected': Number(formData.sesionId) === Number(session.id) }"
+              @click="selectSession(session.id)"
+            >
+              <div class="pick-item-left">
+                <el-avatar
+                  v-if="getPhotographer(session.fotografoId)"
+                  :src="getPhotographer(session.fotografoId)?.imagen || undefined"
+                  :size="36"
+                  :style="{
+                    backgroundColor: getUserBgColor(getPhotographer(session.fotografoId)?.color),
+                    color: '#ffffff',
+                    fontWeight: '600',
+                    fontSize: '11px',
+                  }"
+                  class="pick-photographer-avatar"
+                >
+                  {{ getUserInitials(getPhotographer(session.fotografoId)?.nombre, getPhotographer(session.fotografoId)?.apellidos) }}
+                </el-avatar>
+                <div v-else class="pick-photographer-placeholder">
+                  <el-icon :size="16"><Camera /></el-icon>
+                </div>
+
+                <div class="pick-item-info">
+                  <div class="pick-item-client">{{ session.clienteNombre }}</div>
+                  <div class="pick-item-meta">
+                    <span>{{ formatDateTime(session.fechaHoraInicio) }}</span>
+                    <span v-if="session.numeroHabitacion">· Hab. {{ session.numeroHabitacion }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pick-item-tags">
+                <el-tag
+                  size="small"
+                  :type="session.estado === 'COMPLETADA' ? 'success' : 'primary'"
+                  effect="light"
+                >
+                  {{ session.estado === 'COMPLETADA' ? 'Completada' : 'Programada' }}
+                </el-tag>
+              </div>
+            </div>
+          </div>
+          <div v-if="excludedSessionsCount > 0" class="session-excluded-notice">
+            <el-icon style="vertical-align: middle; margin-right: 4px; color: #e6a23c">
+              <WarnTriangleFilled />
+            </el-icon>
+            {{ excludedSessionsCount }} sesión(es) canceladas o no-show no se muestran.
+          </div>
+        </div>
+      </el-collapse-transition>
     </div>
 
     <!-- Read-only lock banner -->
@@ -363,6 +500,230 @@ const {
   font-weight: 700;
   color: var(--heading-color, #0f172a);
   margin: 0;
+}
+
+/* Card Selector de Sesiones */
+.mobile-session-selector-card {
+  background: var(--toolbar-bg, #ffffff);
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  border-radius: 14px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.session-card-main {
+  padding: 0.95rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.session-avatar-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.session-default-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(64, 158, 255, 0.12);
+  border: 1px solid rgba(64, 158, 255, 0.25);
+  color: #409eff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.session-header-avatar {
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.session-info-box {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.session-category-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.session-title-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--heading-color, #0f172a);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.session-subtitle-label {
+  font-size: 0.8rem;
+  color: var(--nav-link-color, #64748b);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-toggle-bar {
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--toolbar-border, #f1f5f9);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  background: var(--toolbar-bg, #ffffff);
+  transition: background 0.15s ease;
+}
+
+.session-toggle-bar:active {
+  background: var(--el-fill-color-light, #f8fafc);
+}
+
+.toggle-text {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.toggle-icon {
+  color: #64748b;
+  font-size: 1.1rem;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-icon.is-rotated {
+  transform: rotate(180deg);
+}
+
+.session-dropdown-container {
+  padding: 0.5rem 1rem 1rem 1rem;
+  border-top: 1px dashed var(--toolbar-border, #e2e8f0);
+  background: var(--toolbar-bg, #ffffff);
+}
+
+.session-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.session-pick-item {
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  background: var(--toolbar-bg, #ffffff);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.session-pick-item:active {
+  transform: scale(0.99);
+}
+
+.session-pick-item.is-selected {
+  border-color: var(--el-color-primary, #3b82f6);
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.pick-item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.pick-photographer-avatar {
+  flex-shrink: 0;
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+}
+
+.pick-photographer-placeholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(64, 158, 255, 0.12);
+  border: 1px solid rgba(64, 158, 255, 0.25);
+  color: #409eff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pick-item-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pick-item-client {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--heading-color, #0f172a);
+}
+
+.pick-item-meta {
+  font-size: 0.78rem;
+  color: var(--nav-link-color, #64748b);
+  margin-top: 2px;
+}
+
+.pick-item-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.pick-check-icon {
+  color: var(--el-color-primary, #3b82f6);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.session-empty-state {
+  font-size: 0.85rem;
+  color: var(--nav-link-color, #64748b);
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.session-excluded-notice {
+  font-size: 0.75rem;
+  color: #e6a23c;
+  margin-top: 0.5rem;
+  line-height: 1.35;
 }
 
 .lock-banner,
