@@ -391,19 +391,13 @@ function validateForm(): boolean {
     return false
   }
 
-  // 7. Fotógrafo obligatorio
-  if (!data.fotografoId) {
-    ElMessage.warning('Por favor, selecciona un fotógrafo para la sesión')
-    return false
-  }
-
-  // 8. Ausencia del fotógrafo
-  if (isFotografoAusente.value) {
+  // 7. Ausencia del fotógrafo (solo si hay fotógrafo seleccionado)
+  if (data.fotografoId && isFotografoAusente.value) {
     ElMessage.warning('El fotógrafo seleccionado tiene una ausencia en esta fecha')
     return false
   }
 
-  // 9. Tope de sesiones simultáneas
+  // 8. Tope de sesiones simultáneas
   if (isTopeAlcanzado.value) {
     activeScheduleAccordion.value = 'sesion'
     ElMessage.warning('Se ha alcanzado el tope de sesiones simultáneas para esta hora')
@@ -835,10 +829,7 @@ function handleSave() {
       <!-- 3 Elige fotógrafo -->
       <div class="mobile-card-section-label mobile-card-section-label--photographer">
         <span class="step-badge-num">3</span>
-        <span>
-          Elige fotógrafo
-          <span class="required-asterisk">*</span>
-        </span>
+        <span>Elige fotógrafo</span>
       </div>
 
       <!-- Selector de Fotógrafo Estilo Card Desplegable -->
