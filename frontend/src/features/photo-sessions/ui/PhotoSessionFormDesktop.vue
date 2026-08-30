@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { PhotoSessionFormContext } from '../composables/usePhotoSessionForm'
+import { User, Message, Phone, Check, ArrowLeft, Close, Edit } from '@element-plus/icons-vue'
 import {
-  User,
-  Message,
-  Phone,
-  Check,
-  ArrowLeft,
-  Close,
-  Edit,
-} from '@element-plus/icons-vue'
-import { Building2, PlaneTakeoff, Users, Baby, Camera, Calendar } from '@lucide/vue'
+  Building2,
+  PlaneTakeoff,
+  Users,
+  Baby,
+  Camera,
+  Calendar,
+  Balloon,
+  Sparkles,
+  Gem,
+} from '@lucide/vue'
 
 const props = defineProps<{
   form: PhotoSessionFormContext
@@ -40,7 +42,6 @@ const {
   alertNoSaleAppointment,
   alertSaleNoShow,
   isSaving,
-  defaultConceptos,
   disponibilidadHotel,
   isTopeAlcanzado,
   userHotels,
@@ -102,6 +103,30 @@ const sessionsCountByHour = computed<Record<string, number>>(() => {
 
   return counts
 })
+
+const motivoOptions = [
+  { label: 'Cumpleaños', value: 'Cumpleaños', icon: Balloon },
+  { label: 'Foto familiar', value: 'Foto familiar', icon: Users },
+  { label: 'Pedida matrimonio', value: 'Pedida de matrimonio', icon: Gem },
+  { label: 'Revelación género', value: 'Revelación de género', icon: Baby },
+  { label: 'Otro', value: 'Otro', icon: Sparkles },
+]
+
+if (!formData.value.concepto) {
+  formData.value.concepto = 'Otro'
+}
+
+function isMotivoActive(val: string): boolean {
+  return formData.value.concepto === val
+}
+
+function handleSelectMotivo(val: string) {
+  if (formData.value.concepto === val) {
+    formData.value.concepto = ''
+  } else {
+    formData.value.concepto = val
+  }
+}
 
 function getTimeSlotStatusClass(time: string): string {
   const count = sessionsCountByHour.value[time] || 0
@@ -803,25 +828,25 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 
             <div class="details-fields">
               <!-- Concepto / Motivo de la Sesión -->
-              <el-form-item label="Concepto / Motivo de la Sesión">
-                <el-select
-                  v-model="formData.concepto"
-                  size="large"
-                  filterable
-                  allow-create
-                  default-first-option
-                  placeholder="Selecciona o escribe un concepto personalizado"
-                  style="width: 100%"
-                  clearable
-                >
-                  <el-option
-                    v-for="item in defaultConceptos"
-                    :key="item"
-                    :label="item"
-                    :value="item"
-                  />
-                </el-select>
-              </el-form-item>
+              <div class="motivo-section">
+                <label class="form-field-label">Concepto / Motivo de la Sesión</label>
+                <div class="motivo-grid">
+                  <button
+                    v-for="opt in motivoOptions"
+                    :key="opt.value"
+                    type="button"
+                    class="motivo-grid-btn"
+                    :class="{ 'is-active': isMotivoActive(opt.value) }"
+                    :disabled="isReadOnly"
+                    @click="handleSelectMotivo(opt.value)"
+                  >
+                    <el-icon class="motivo-grid-icon">
+                      <component :is="opt.icon" :size="18" :stroke-width="2" />
+                    </el-icon>
+                    <span>{{ opt.label }}</span>
+                  </button>
+                </div>
+              </div>
 
               <!-- Notas Adicionales -->
               <el-form-item label="Notas Adicionales">
@@ -848,9 +873,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
             >
               {{ isEditing ? 'Guardar Cambios' : 'Agendar Sesión' }}
             </el-button>
-            <el-button size="large" :icon="Close" @click="handleGoBack">
-              Cancelar
-            </el-button>
+            <el-button size="large" :icon="Close" @click="handleGoBack">Cancelar</el-button>
           </div>
         </el-form>
       </div>
@@ -1878,5 +1901,82 @@ html.dark .status-grid-btn:hover:not(:disabled):not(.is-active) {
 
 .conflict-alert-box {
   margin-top: 0.5rem;
+}
+
+.motivo-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.form-field-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--heading-color, #0f172a);
+}
+
+.motivo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.65rem;
+}
+
+.motivo-grid-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.55rem;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  background: var(--toolbar-bg, #ffffff);
+  color: var(--nav-link-color, #475569);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.motivo-grid-btn:hover:not(:disabled):not(.is-active) {
+  border-color: var(--el-color-primary-light-5, #93c5fd);
+  color: var(--el-color-primary, #3b82f6);
+  background: var(--el-color-primary-light-9, #eff6ff);
+}
+
+.motivo-grid-btn.is-active {
+  background-color: var(--el-color-primary, #3b82f6) !important;
+  border-color: var(--el-color-primary, #3b82f6) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.28);
+}
+
+.motivo-grid-icon {
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+html.dark .motivo-grid-btn {
+  background-color: var(--content-bg, #121212);
+  border-color: var(--toolbar-border, #363637);
+  color: var(--nav-link-color, #94a3b8);
+}
+
+html.dark .motivo-grid-btn:hover:not(:disabled):not(.is-active) {
+  background-color: rgba(59, 130, 246, 0.15);
+  border-color: var(--el-color-primary, #3b82f6);
+  color: #ffffff;
+}
+
+html.dark .motivo-grid-btn.is-active {
+  background-color: var(--el-color-primary, #3b82f6) !important;
+  border-color: var(--el-color-primary, #3b82f6) !important;
+  color: #ffffff !important;
 }
 </style>

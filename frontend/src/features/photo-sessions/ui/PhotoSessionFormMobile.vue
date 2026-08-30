@@ -13,7 +13,7 @@ import {
   Baby,
   Balloon,
   Sparkles,
-  MoreHorizontal,
+  Gem,
   ChevronDown,
   UserX,
 } from '@lucide/vue'
@@ -297,9 +297,9 @@ const estadoOptions = [
 const motivoOptions = [
   { label: 'Cumpleaños', value: 'Cumpleaños', icon: Balloon },
   { label: 'Foto familiar', value: 'Foto familiar', icon: Users },
-  { label: 'Pedida matrimonio', value: 'Pedida de matrimonio', icon: Sparkles },
+  { label: 'Pedida matrimonio', value: 'Pedida de matrimonio', icon: Gem },
   { label: 'Revelación género', value: 'Revelación de género', icon: Baby },
-  { label: 'Otro', value: 'Otro', icon: MoreHorizontal },
+  { label: 'Otro', value: 'Otro', icon: Sparkles },
 ]
 
 // Establecer 'Otro' como motivo seleccionado por defecto si no hay ninguno
