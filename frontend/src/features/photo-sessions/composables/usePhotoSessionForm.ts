@@ -263,7 +263,7 @@ export function usePhotoSessionForm() {
     },
   )
 
-  const activeScheduleAccordion = ref<string>('sesion')
+  const activeScheduleAccordion = ref<string>('')
 
   const alertOverdue = computed(() => {
     if (!isEditing.value || !loadedSession.value) return false
@@ -396,6 +396,17 @@ export function usePhotoSessionForm() {
     const userHotelIds = new Set(user.hotelIds || [])
     return hotelStore.hotels.filter((h) => userHotelIds.has(h.id))
   })
+
+  // Auto-seleccionar hotel si el usuario solo tiene 1 hotel asignado o si no hay hotel seleccionado
+  watch(
+    () => userHotels.value,
+    (hotels) => {
+      if (!isEditing.value && hotels.length === 1 && hotels[0] && !formData.value.hotelId) {
+        formData.value.hotelId = hotels[0].id
+      }
+    },
+    { immediate: true },
+  )
 
   // Photographers list for assignment (filtered by selected hotel)
   const photographers = computed(() => {
@@ -671,39 +682,7 @@ export function usePhotoSessionForm() {
     const classes: string[] = []
     const cellIso = formatDateIso(cellDate)
 
-    // 1. Ausencias del fotógrafo seleccionado
-    if (formData.value.fotografoId && fotografoAusencias.value.length) {
-      for (const reg of fotografoAusencias.value) {
-        if (cellIso >= reg.fechaInicio && cellIso <= reg.fechaFin) {
-          let baseClass = ''
-          if (reg.motivo === 'BAJA') baseClass = 'cell-highlight-baja'
-          else if (reg.motivo === 'VACACIONES') baseClass = 'cell-highlight-vacaciones'
-          else if (reg.motivo === 'PERMISO') baseClass = 'cell-highlight-permiso'
-          else baseClass = 'cell-highlight-otro'
-
-          const isStart = cellIso === reg.fechaInicio
-          const isEnd = cellIso === reg.fechaFin
-          const isMonday = cellDate.getDay() === 1
-          const isSunday = cellDate.getDay() === 0
-
-          let posClass = ''
-          if ((isStart || isMonday) && (isEnd || isSunday)) {
-            posClass = 'cell-range-single'
-          } else if (isStart || isMonday) {
-            posClass = 'cell-range-start'
-          } else if (isEnd || isSunday) {
-            posClass = 'cell-range-end'
-          } else {
-            posClass = 'cell-range-middle'
-          }
-
-          classes.push(`${baseClass} ${posClass}`)
-          break
-        }
-      }
-    }
-
-    // 2. Conteo de sesiones activas del hotel en este día (Badge rojo)
+    // Conteo de sesiones activas del hotel en este día (Badge indicador)
     const count = sessionsCountByDate.value[cellIso] || 0
     if (count > 0) {
       if (count <= 30) {
@@ -872,17 +851,6 @@ export function usePhotoSessionForm() {
         formData.value.hotelId = queryHotelId
       } else if (userHotels.value.length > 0) {
         formData.value.hotelId = userHotels.value[0]?.id ?? 0
-      }
-
-      // Prefill photographer (current user if photographer and assigned to selected hotel)
-      const isPhotographer = currentUser.value?.roleCode?.toUpperCase() === 'FOTOGRAFO'
-      if (isPhotographer && currentUser.value) {
-        const isAssigned = currentUser.value.hotelIds?.some(
-          (hId) => Number(hId) === Number(formData.value.hotelId),
-        )
-        if (isAssigned) {
-          formData.value.fotografoId = currentUser.value.id
-        }
       }
 
       // Prefill start date/time only if explicitly provided with time in route query (e.g. from calendar slot click)

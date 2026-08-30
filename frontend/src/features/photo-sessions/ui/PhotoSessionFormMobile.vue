@@ -18,6 +18,8 @@ import {
   Balloon,
   Sparkles,
   MoreHorizontal,
+  ChevronDown,
+  UserX,
 } from '@lucide/vue'
 
 const props = defineProps<{
@@ -122,9 +124,56 @@ const mobileCheckoutPreview = computed(() => {
   }
 })
 
-const showAllClientFields = ref(false)
+const showAllClientFields = ref(
+  Boolean(
+    formData.value.clienteEmail ||
+    formData.value.clienteTelefono ||
+    formData.value.numeroHabitacion,
+  ),
+)
+
+watch(
+  () => [
+    formData.value.clienteEmail,
+    formData.value.clienteTelefono,
+    formData.value.numeroHabitacion,
+  ],
+  ([email, tel, hab]) => {
+    if (email || tel || hab) {
+      showAllClientFields.value = true
+    }
+  },
+)
+
+// Auto-seleccionar hotel si el usuario solo tiene acceso a un hotel
+watch(
+  () => userHotels.value,
+  (hotels) => {
+    if (!isEditing.value && hotels.length === 1 && hotels[0] && !formData.value.hotelId) {
+      formData.value.hotelId = hotels[0].id
+    }
+  },
+  { immediate: true },
+)
 const showAllTimeSlots = ref(false)
 const showAllCitaVentaTimeSlots = ref(false)
+const showPhotographersList = ref(false)
+
+function togglePhotographersList() {
+  if (isReadOnly.value) return
+  showPhotographersList.value = !showPhotographersList.value
+}
+
+function handleSelectPhotographer(id: string | number) {
+  if (isReadOnly.value) return
+  if (getPhotographerStatus(id).disabled) return
+  if (String(formData.value.fotografoId) === String(id)) {
+    formData.value.fotografoId = ''
+  } else {
+    formData.value.fotografoId = String(id)
+    showPhotographersList.value = false
+  }
+}
 
 const visibleTimeSlots = computed(() => {
   if (showAllTimeSlots.value) {
@@ -247,54 +296,13 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
   return 'time-slot-btn--empty'
 }
 
-// Pantalla inicial de estado de sesión (solo al editar)
-const showStatusScreen = ref(isEditing.value)
-
-// Orden específico para la pantalla de estado en móvil (3 arriba + 1 abajo)
-const mobileEstadoSesionOptions = computed(() => {
-  const order: EstadoSesion[] = ['PROGRAMADA', 'NO_SHOW', 'CANCELADA', 'COMPLETADA']
-  return order
-    .map((val) => estadoSesionOptions.find((o) => o.value === val))
-    .filter((o): o is typeof estadoSesionOptions[0] => Boolean(o))
-})
-
-function goToEditSteps() {
-  showStatusScreen.value = false
-  currentStep.value = 0
-}
-
-async function handleStatusClick(optValue: EstadoSesion) {
-  if (optValue === 'PROGRAMADA') {
-    formData.value.estado = 'PROGRAMADA'
-    goToEditSteps()
-    return
-  }
-
-  if (isReadOnly.value) {
-    ElMessage.warning('No tienes permisos para modificar el estado de esta sesión')
-    return
-  }
-
-  try {
-    isSaving.value = true
-    formData.value.estado = optValue
-    if (sessionId.value) {
-      await sessionStore.updateSession(Number(sessionId.value), {
-        estado: optValue,
-      })
-      ElMessage.success(`Estado actualizado a ${optValue === 'NO_SHOW' ? 'NO VINO' : optValue}`)
-      await sessionStore.fetchSessions()
-      handleGoBack()
-    }
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : 'Error al actualizar el estado'
-    ElMessage.error(msg)
-  } finally {
-    isSaving.value = false
-  }
-}
-
-const currentStep = ref(0)
+// Opciones para el selector de estado de la cita
+const estadoOptions = [
+  { value: 'PROGRAMADA', label: 'Programada', icon: Calendar },
+  { value: 'NO_SHOW', label: 'No vino', icon: UserX },
+  { value: 'CANCELADA', label: 'Cancelada', icon: Close },
+  { value: 'COMPLETADA', label: 'Completada', icon: Check },
+]
 
 // Opciones para botones de motivo de sesión (estilo Estado de Sesión)
 const motivoOptions = [
@@ -354,36 +362,8 @@ watch(activeScheduleAccordion, (newVal) => {
   }
 })
 
-watch(currentStep, () => {
-  nextTick(() => {
-    const scrollContainer = document.querySelector('.main-content')
-    if (scrollContainer) {
-      scrollContainer.scrollTo({ top: 0, behavior: 'instant' })
-    }
-  })
-})
-
 function handleStepBack() {
-  if (currentStep.value > 0) {
-    currentStep.value--
-  } else if (isEditing.value) {
-    showStatusScreen.value = true
-  } else {
-    handleGoBack()
-  }
-}
-
-function goToStep(step: number) {
-  if (step === currentStep.value) return
-  if (isReadOnly.value) {
-    currentStep.value = step
-    return
-  }
-  if (step > currentStep.value) {
-    if (currentStep.value === 0 && !validateStep1()) return
-    if (currentStep.value === 1 && !validateStep2()) return
-  }
-  currentStep.value = step
+  handleGoBack()
 }
 
 function validateStep1(): boolean {
@@ -436,14 +416,19 @@ function validateStep2(): boolean {
     return false
   }
 
-  // 3. Validar que el fotógrafo (si está seleccionado) no tenga ausencia registrada
+  // 3. Validar fotógrafo obligatorio
+  if (!formData.value.fotografoId) {
+    ElMessage.warning('Por favor, selecciona un fotógrafo para la sesión')
+    return false
+  }
+
+  // 4. Validar que el fotógrafo (si está seleccionado) no tenga ausencia registrada
   if (formData.value.fotografoId && isFotografoAusente.value) {
-    activeScheduleAccordion.value = 'sesion'
     ElMessage.warning('El fotógrafo seleccionado tiene una ausencia en esta fecha')
     return false
   }
 
-  // 4. Validar que no se supere el tope de sesiones simultáneas
+  // 5. Validar que no se supere el tope de sesiones simultáneas
   if (isTopeAlcanzado.value) {
     activeScheduleAccordion.value = 'sesion'
     ElMessage.warning('Se ha alcanzado el tope de sesiones simultáneas para esta hora')
@@ -453,913 +438,724 @@ function validateStep2(): boolean {
   return true
 }
 
-function handleNextStep() {
-  if (currentStep.value === 0) {
-    if (!isReadOnly.value && !validateStep1()) {
-      return
-    }
-    currentStep.value = 1
-  } else if (currentStep.value === 1) {
-    if (!isReadOnly.value && !validateStep2()) {
-      return
-    }
-    currentStep.value = 2
-  } else {
-    if (isReadOnly.value) {
-      return
-    }
-    handleSaveSession()
+function handleSave() {
+  if (isReadOnly.value) {
+    return
   }
+  if (!validateStep1() || !validateStep2()) {
+    return
+  }
+  handleSaveSession()
 }
 </script>
 
 <template>
   <div class="session-form-mobile">
-    <!-- Pantalla Inicial de Estado de Sesión (solo al entrar a editar sesión) -->
-    <template v-if="showStatusScreen">
-      <div class="mobile-header">
-        <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleGoBack" />
-        <h1 class="mobile-title">Editar Sesión</h1>
+    <!-- Header móvil con botón Volver y Título -->
+    <div class="mobile-header">
+      <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleGoBack" />
+      <h1 class="mobile-title">
+        {{ isEditing ? 'Editar Sesión' : 'Nueva Sesión' }}
+      </h1>
+    </div>
+
+    <!-- Contenido del Formulario en Pantalla Única -->
+    <div class="mobile-step-body">
+      <!-- 1 Datos del cliente -->
+      <div class="mobile-card-section-label">
+        <span class="step-badge-num">1</span>
+        <span>Datos del cliente</span>
       </div>
 
-      <div class="status-screen-center">
-        <div class="status-screen-box">
-          <label class="status-screen-label">ESTADO DE SESIÓN</label>
-          <div class="status-screen-grid">
-            <button
-              v-for="opt in mobileEstadoSesionOptions"
-              :key="opt.value"
-              type="button"
-              class="status-screen-btn"
-              :class="[
-                `status-screen-btn--${opt.value.toLowerCase()}`,
-                { 'is-active': formData.estado === opt.value },
-              ]"
-              :disabled="isReadOnly"
-              @click="handleStatusClick(opt.value)"
-            >
-              <el-icon class="status-screen-btn-icon">
-                <component :is="opt.icon" :size="20" />
-              </el-icon>
-              <span>{{ opt.label }}</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Barra de acciones inferior de la pantalla de estado -->
-      <div class="mobile-bottom-actions mobile-bottom-actions--status">
-        <el-button
-          class="mobile-cancel-icon-btn"
-          size="large"
-          text
-          bg
-          :icon="Close"
-          @click="handleGoBack"
-        />
-
-        <el-button type="primary" class="mobile-next-btn" size="large" @click="goToEditSteps">
-          <span>{{ isReadOnly ? 'Ver detalles' : 'Editar sesión' }}</span>
-          <el-icon class="btn-icon-right"><ArrowRight :size="18" /></el-icon>
-        </el-button>
-      </div>
-    </template>
-
-    <!-- Flujo de 3 Pasos del Formulario -->
-    <template v-else>
-      <!-- Header móvil con botón Volver y Título -->
-      <div class="mobile-header">
-        <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleStepBack" />
-        <h1 class="mobile-title">
-          {{ isEditing ? 'Editar Sesión' : 'Nueva Sesión' }}
-        </h1>
-      </div>
-
-      <!-- Barra de Pasos (Steps) Móvil -->
-      <div class="mobile-steps-wrapper">
-        <div class="mobile-stepper">
-          <!-- Paso 1: Cliente -->
-          <div
-            class="stepper-item"
-            :class="{
-              active: currentStep === 0,
-              completed: currentStep > 0,
-            }"
-            role="button"
-            tabindex="0"
-            @click="goToStep(0)"
-          >
-            <div class="stepper-icon-wrap">
-              <User :size="24" :stroke-width="2" />
-            </div>
-            <span class="stepper-label">Cliente</span>
-          </div>
-
-          <!-- Conector 1-2 -->
-          <div class="stepper-connector" :class="{ completed: currentStep > 0 }"></div>
-
-          <!-- Paso 2: Sesión -->
-          <div
-            class="stepper-item"
-            :class="{
-              active: currentStep === 1,
-              completed: currentStep > 1,
-            }"
-            role="button"
-            tabindex="0"
-            @click="goToStep(1)"
-          >
-            <div class="stepper-icon-wrap">
-              <Camera :size="24" :stroke-width="2" />
-            </div>
-            <span class="stepper-label">Sesión</span>
-          </div>
-
-          <!-- Conector 2-3 -->
-          <div class="stepper-connector" :class="{ completed: currentStep > 1 }"></div>
-
-          <!-- Paso 3: Detalles -->
-          <div
-            class="stepper-item"
-            :class="{
-              active: currentStep === 2,
-              completed: currentStep > 2,
-            }"
-            role="button"
-            tabindex="0"
-            @click="goToStep(2)"
-          >
-            <div class="stepper-icon-wrap">
-              <SquarePen :size="24" :stroke-width="2" />
-            </div>
-            <span class="stepper-label">Detalles</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Contenido Dinámico del Paso Activo -->
-      <div class="mobile-step-body">
-        <!-- Paso 1: Información del Cliente -->
-        <div v-if="currentStep === 0" class="step-pane step-pane-client">
-          <el-form
-            :model="formData"
-            label-position="top"
+      <el-form
+        :model="formData"
+        label-position="top"
+        size="large"
+        :disabled="isReadOnly"
+        class="mobile-client-form"
+      >
+        <!-- Fila 1: Nombre del Cliente -->
+        <el-form-item label="Nombre del Cliente" required>
+          <el-input
+            v-model="formData.clienteNombre"
             size="large"
-            :disabled="isReadOnly"
-            class="mobile-client-form"
+            placeholder="Ej. Familia López / Pareja Smith"
+            :prefix-icon="User"
+          />
+        </el-form-item>
+
+        <!-- Fila 2: Hotel (solo si el usuario tiene acceso a más de 1 hotel) -->
+        <el-form-item v-if="userHotels.length > 1" label="Hotel" required>
+          <el-select
+            v-model="formData.hotelId"
+            size="large"
+            style="width: 100%"
+            placeholder="Selecciona hotel"
           >
-            <!-- Fila 1: Nombre del Cliente -->
-            <el-form-item label="Nombre del Cliente" required>
+            <el-option
+              v-for="hotel in userHotels"
+              :key="hotel.id"
+              :label="hotel.nombre"
+              :value="hotel.id"
+            />
+          </el-select>
+        </el-form-item>
+
+        <!-- Fila 3: Participantes (Adultos y Niños) en 2 columnas al 50% -->
+        <div class="mobile-form-row-pax">
+          <el-form-item>
+            <template #label>
+              <span class="pax-item-label">
+                <el-icon class="pax-label-icon"><Users :size="16" /></el-icon>
+                <span>Adultos</span>
+              </span>
+            </template>
+            <el-input-number
+              v-model="formData.numAdultos"
+              size="large"
+              :min="0"
+              :max="99"
+              :step="1"
+              class="mobile-pax-input"
+            />
+          </el-form-item>
+
+          <el-form-item>
+            <template #label>
+              <span class="pax-item-label">
+                <el-icon class="pax-label-icon"><Baby :size="16" /></el-icon>
+                <span>Niños</span>
+              </span>
+            </template>
+            <el-input-number
+              v-model="formData.numNinos"
+              size="large"
+              :min="0"
+              :max="99"
+              :step="1"
+              class="mobile-pax-input"
+            />
+          </el-form-item>
+        </div>
+
+        <!-- Switch para mostrar/ocultar campos adicionales -->
+        <div class="mobile-switch-row">
+          <el-switch v-model="showAllClientFields" size="default" />
+          <span class="switch-label">Más datos del cliente</span>
+        </div>
+
+        <!-- Fila 4 Condicional: Nº de Habitación, Email y Teléfono al 100% de ancho -->
+        <transition name="el-fade-in">
+          <div v-if="showAllClientFields" class="mobile-form-extra-fields">
+            <el-form-item label="Nº de Habitación">
               <el-input
-                v-model="formData.clienteNombre"
+                v-model="formData.numeroHabitacion"
                 size="large"
-                placeholder="Ej. Familia López / Pareja Smith"
-                :prefix-icon="User"
+                placeholder="Ej. 304B / Villa 12"
+                :prefix-icon="Building2"
               />
             </el-form-item>
 
-            <!-- Fila 2: Hotel y Nº de Habitación -->
-            <div class="mobile-form-row-2">
-              <el-form-item label="Hotel" required>
-                <el-select
-                  v-model="formData.hotelId"
-                  size="large"
-                  style="width: 100%"
-                  placeholder="Selecciona hotel"
-                >
-                  <el-option
-                    v-for="hotel in userHotels"
-                    :key="hotel.id"
-                    :label="hotel.nombre"
-                    :value="hotel.id"
-                  />
-                </el-select>
-              </el-form-item>
+            <el-form-item label="Email del Cliente">
+              <el-input
+                v-model="formData.clienteEmail"
+                size="large"
+                placeholder="cliente@ejemplo.com"
+                :prefix-icon="Message"
+              />
+            </el-form-item>
 
-              <el-form-item label="Nº de Habitación">
-                <el-input
-                  v-model="formData.numeroHabitacion"
-                  size="large"
-                  placeholder="Ej. 304B / Villa 12"
-                  :prefix-icon="Building2"
-                />
-              </el-form-item>
-            </div>
+            <el-form-item label="Teléfono del Cliente">
+              <el-input
+                v-model="formData.clienteTelefono"
+                size="large"
+                placeholder="+34 600 000 000"
+                :prefix-icon="Phone"
+              />
+            </el-form-item>
+          </div>
+        </transition>
+      </el-form>
 
-            <!-- Fila 3: Participantes (Adultos y Niños) en 2 columnas al 50% -->
-            <div class="mobile-form-row-pax">
-              <el-form-item>
-                <template #label>
-                  <span class="pax-item-label">
-                    <el-icon class="pax-label-icon"><Users :size="16" /></el-icon>
-                    <span>Adultos</span>
-                  </span>
-                </template>
-                <el-input-number
-                  v-model="formData.numAdultos"
-                  size="large"
-                  :min="0"
-                  :max="99"
-                  :step="1"
-                  class="mobile-pax-input"
-                />
-              </el-form-item>
+      <!-- 2 Establece fechas -->
+      <div class="mobile-card-section-label mobile-card-section-label--schedule">
+        <span class="step-badge-num">2</span>
+        <span>Establece fechas</span>
+      </div>
 
-              <el-form-item>
-                <template #label>
-                  <span class="pax-item-label">
-                    <el-icon class="pax-label-icon"><Baby :size="16" /></el-icon>
-                    <span>Niños</span>
-                  </span>
-                </template>
-                <el-input-number
-                  v-model="formData.numNinos"
-                  size="large"
-                  :min="0"
-                  :max="99"
-                  :step="1"
-                  class="mobile-pax-input"
-                />
-              </el-form-item>
-            </div>
-
-            <!-- Switch para mostrar/ocultar campos adicionales -->
-            <div class="mobile-switch-row">
-              <el-switch v-model="showAllClientFields" size="default" />
-              <span class="switch-label">Más datos</span>
-            </div>
-
-            <!-- Fila 4 Condicional: Email y Teléfono al 100% de ancho -->
-            <transition name="el-fade-in">
-              <div v-if="showAllClientFields" class="mobile-form-extra-fields">
-                <el-form-item label="Email del Cliente">
-                  <el-input
-                    v-model="formData.clienteEmail"
-                    size="large"
-                    placeholder="cliente@ejemplo.com"
-                    :prefix-icon="Message"
-                  />
-                </el-form-item>
-
-                <el-form-item label="Teléfono del Cliente">
-                  <el-input
-                    v-model="formData.clienteTelefono"
-                    size="large"
-                    placeholder="+34 600 000 000"
-                    :prefix-icon="Phone"
-                  />
-                </el-form-item>
-              </div>
-            </transition>
-          </el-form>
-        </div>
-
-        <!-- Paso 2: Planificación con Acordeón (3 Secciones) -->
-        <div v-else-if="currentStep === 1" class="step-pane step-pane-schedule">
-          <el-collapse
-            v-model="activeScheduleAccordion"
-            accordion
-            class="mobile-schedule-accordion"
-            @change="handleAccordionChange"
-          >
-            <!-- 1. Sesión -->
-            <el-collapse-item name="sesion">
-              <template #title>
-                <div class="mobile-accordion-header">
-                  <div class="accordion-title-group">
-                    <el-icon class="accordion-icon">
-                      <Camera :size="24" :stroke-width="2" />
-                    </el-icon>
-                    <span class="accordion-title-text">Sesión</span>
-                  </div>
-                  <el-tag
-                    :type="activeScheduleAccordion === 'sesion' ? sessionStateTagType : 'info'"
-                    effect="light"
-                    round
-                    size="small"
-                    class="header-datetime-tag"
-                    :class="{ 'is-active': activeScheduleAccordion === 'sesion' }"
-                  >
-                    {{ mobileSessionPreview }}
-                  </el-tag>
-                </div>
-              </template>
-
-              <div class="mobile-schedule-container">
-                <!-- 1. Bloque de Calendario -->
-                <div class="mobile-calendar-section">
-                  <div class="schedule-subheading">
-                    <span class="step-badge-num">1</span>
-                    <span>SELECCIONA FECHA</span>
-                  </div>
-
-                  <div class="calendar-panel-box">
-                    <div class="inline-calendar-picker">
-                      <el-date-picker-panel
-                        :border="false"
-                        v-model="selectedDateOnly"
-                        type="date"
-                        value-format="YYYY-MM-DD"
-                        date-format="YYYY-MM-DD"
-                        :disabled-date="disabledPastDates"
-                        :cell-class-name="getFotografoCellClassName"
-                        @panel-change="handlePanelChange"
-                      />
-                    </div>
-                  </div>
-
-                  <!-- Contenedor de Avisos e Información bajo el Calendario -->
-                  <div class="calendar-info-boxes">
-                    <!-- Leyenda de colores de ausencias del fotógrafo seleccionado -->
-                    <div
-                      v-if="formData.fotografoId && hasAusenciasInVisibleMonth"
-                      class="fotografo-absence-legend uniform-box"
-                    >
-                      <span class="legend-label">Ausencias de {{ selectedPhotographerName }}:</span>
-                      <div class="calendar-legend">
-                        <div class="legend-item">
-                          <span class="legend-dot dot-baja"></span>
-                          <span>Baja Médica</span>
-                        </div>
-                        <div class="legend-item">
-                          <span class="legend-dot dot-vacaciones"></span>
-                          <span>Vacaciones</span>
-                        </div>
-                        <div class="legend-item">
-                          <span class="legend-dot dot-permiso"></span>
-                          <span>Permiso</span>
-                        </div>
-                        <div class="legend-item">
-                          <span class="legend-dot dot-otro"></span>
-                          <span>Otro</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Alerta de Bloqueo por Ausencia Individual del Fotógrafo -->
-                    <el-alert
-                      v-if="
-                        formData.fechaHoraInicio && isFotografoAusente && ausenciaFotografoActual
-                      "
-                      type="error"
-                      show-icon
-                      :closable="false"
-                      class="fotografo-absence-alert uniform-box"
-                    >
-                      <template #title>
-                        <span>
-                          <strong>{{ selectedPhotographerName }}</strong>
-                          tiene una ausencia registrada (
-                          <strong>{{ ausenciaFotografoActual.motivo }}</strong>
-                          ) en la fecha seleccionada. No es posible asignarlo a esta sesión.
-                        </span>
-                      </template>
-                    </el-alert>
-
-                    <!-- Indicador de Disponibilidad y Cupo del Hotel -->
-                    <div
-                      v-if="formData.fechaHoraInicio && disponibilidadHotel"
-                      class="disponibilidad-indicator-card uniform-box"
-                      :class="{ 'quota-full': isTopeAlcanzado }"
-                    >
-                      <div class="disponibilidad-header">
-                        <div class="disponibilidad-title">
-                          <span
-                            class="status-indicator-dot"
-                            :class="isTopeAlcanzado ? 'dot-danger' : 'dot-success'"
-                          ></span>
-                          <span>Sesiones disponibles:</span>
-                        </div>
-                        <div class="disponibilidad-badge">
-                          <el-tag
-                            :type="isTopeAlcanzado ? 'danger' : 'success'"
-                            effect="light"
-                            size="small"
-                            round
-                          >
-                            {{
-                              isTopeAlcanzado
-                                ? 'Tope alcanzado'
-                                : `${disponibilidadHotel.cupoLibre} ${
-                                    disponibilidadHotel.cupoLibre === 1
-                                      ? 'sesión libre'
-                                      : 'sesiones libres'
-                                  }`
-                            }}
-                          </el-tag>
-                        </div>
-                      </div>
-                      <div class="disponibilidad-details">
-                        <span class="detail-item">
-                          <strong>{{ disponibilidadHotel.disponibles }}</strong>
-                          / {{ disponibilidadHotel.totalFotografos }} fotógrafos activos
-                        </span>
-                        <span class="detail-separator">•</span>
-                        <span class="detail-item">
-                          <strong>{{ disponibilidadHotel.sesionesSimultaneas }}</strong>
-                          sesiones a esta hora
-                        </span>
-                      </div>
-
-                      <!-- Alerta de Bloqueo si no hay cupo -->
-                      <el-alert
-                        v-if="isTopeAlcanzado"
-                        type="error"
-                        show-icon
-                        :closable="false"
-                        class="quota-alert"
-                      >
-                        <template #title>
-                          <span v-if="disponibilidadHotel.disponibles === 0">
-                            No hay fotógrafos disponibles en este hotel para la fecha seleccionada.
-                          </span>
-                          <span v-else>
-                            Tope de {{ disponibilidadHotel.disponibles }} sesiones simultáneas
-                            alcanzado para esta hora.
-                          </span>
-                        </template>
-                      </el-alert>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 2. Bloque de Horas: 2 SELECCIONA HORARIO (Recuadro Verde) -->
-                <div class="schedule-section-block">
-                  <div class="schedule-section-header-row">
-                    <div class="schedule-subheading">
-                      <span class="step-badge-num">2</span>
-                      <span>SELECCIONA HORARIO</span>
-                    </div>
-                    <el-switch v-model="showAllTimeSlots" size="default" />
-                  </div>
-                  <div class="time-slots-grid">
-                    <el-badge
-                      v-for="time in visibleTimeSlots"
-                      :key="time"
-                      :value="sessionsCountByHour[time]"
-                      :hidden="!sessionsCountByHour[time]"
-                      class="time-slot-badge-wrapper"
-                    >
-                      <button
-                        type="button"
-                        class="time-slot-btn"
-                        :class="[
-                          getTimeSlotStatusClass(time),
-                          { active: selectedTimeOnly === time },
-                        ]"
-                        @click="selectTimeSlot(time)"
-                      >
-                        {{ time }}
-                      </button>
-                    </el-badge>
-                  </div>
-                </div>
-
-                <!-- 3. Bloque de Fotógrafos:  FOTÓGRAFOS DISPONIBLES (Recuadro Morado) -->
-                <div class="schedule-section-block">
-                  <div class="schedule-subheading">
-                    <span class="step-badge-num">3</span>
-                    <span>FOTÓGRAFOS DISPONIBLES</span>
-                  </div>
-
-                  <div v-if="photographers.length === 0" class="empty-photographers-msg">
-                    <span v-if="!formData.hotelId">
-                      Selecciona un hotel primero para consultar disponibilidad.
-                    </span>
-                    <span v-else>No hay fotógrafos activos en este hotel.</span>
-                  </div>
-
-                  <div v-else class="photographers-card-list">
-                    <div
-                      v-for="photographer in photographers"
-                      :key="photographer.id"
-                      class="photographer-selection-card"
-                      :class="{
-                        selected: String(formData.fotografoId) === String(photographer.id),
-                        disabled: getPhotographerStatus(photographer.id).disabled,
-                      }"
-                      @click="
-                        !getPhotographerStatus(photographer.id).disabled &&
-                        selectPhotographerCard(photographer.id)
-                      "
-                    >
-                      <div class="photographer-card-info">
-                        <el-avatar
-                          :src="photographer.imagen || undefined"
-                          :size="36"
-                          :style="{
-                            backgroundColor: getUserBgColor(photographer.color),
-                            color: '#ffffff',
-                            fontWeight: '700',
-                            fontSize: '13px',
-                          }"
-                          class="photographer-avatar-preview"
-                        >
-                          {{ getUserInitials(photographer.nombre, photographer.apellidos) }}
-                        </el-avatar>
-                        <div class="photographer-text-meta">
-                          <span class="photographer-card-name">
-                            {{ photographer.nombre }} {{ photographer.apellidos }}
-                          </span>
-                          <span
-                            class="photographer-card-tag"
-                            :class="getPhotographerStatus(photographer.id).tagClass"
-                          >
-                            {{ getPhotographerStatus(photographer.id).label }}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div class="photographer-card-action">
-                        <el-button
-                          size="small"
-                          :type="
-                            String(formData.fotografoId) === String(photographer.id)
-                              ? 'primary'
-                              : 'default'
-                          "
-                          :disabled="getPhotographerStatus(photographer.id).disabled"
-                          round
-                        >
-                          {{
-                            String(formData.fotografoId) === String(photographer.id)
-                              ? 'Seleccionado'
-                              : 'Seleccionar'
-                          }}
-                        </el-button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </el-collapse-item>
-
-            <!-- 2. Venta -->
-            <el-collapse-item name="cita-venta">
-              <template #title>
-                <div class="mobile-accordion-header">
-                  <div class="accordion-title-group">
-                    <el-icon class="accordion-icon">
-                      <Calendar :size="24" :stroke-width="2" />
-                    </el-icon>
-                    <span class="accordion-title-text">Venta</span>
-                  </div>
-                  <el-tag
-                    :type="activeScheduleAccordion === 'cita-venta' ? 'primary' : 'info'"
-                    effect="light"
-                    round
-                    size="small"
-                    class="header-datetime-tag"
-                    :class="{ 'is-active': activeScheduleAccordion === 'cita-venta' }"
-                  >
-                    {{ mobileCitaVentaPreview }}
-                  </el-tag>
-                </div>
-              </template>
-
-              <div class="mobile-schedule-container">
-                <!-- 1. Bloque de Calendario Cita de Ventas -->
-                <div class="mobile-calendar-section">
-                  <div class="schedule-subheading">
-                    <span class="step-badge-num">1</span>
-                    <span>SELECCIONA FECHA</span>
-                  </div>
-
-                  <div class="calendar-panel-box">
-                    <div class="inline-calendar-picker">
-                      <el-date-picker-panel
-                        :border="false"
-                        v-model="selectedCitaVentaDateOnly"
-                        type="date"
-                        value-format="YYYY-MM-DD"
-                        date-format="YYYY-MM-DD"
-                        :disabled-date="disabledPastDates"
-                        :cell-class-name="getCitaVentaCellClassName"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 2. Bloque de Horas de Venta -->
-                <div class="schedule-section-block">
-                  <div class="schedule-section-header-row">
-                    <div class="schedule-subheading">
-                      <span class="step-badge-num">2</span>
-                      <span>SELECCIONA HORARIO VENTA</span>
-                    </div>
-                    <el-switch v-model="showAllCitaVentaTimeSlots" size="default" />
-                  </div>
-                  <div class="time-slots-grid">
-                    <el-badge
-                      v-for="time in visibleCitaVentaTimeSlots"
-                      :key="`cita-${time}`"
-                      :value="salesCountByHour[time]"
-                      :hidden="!salesCountByHour[time]"
-                      class="time-slot-badge-wrapper"
-                    >
-                      <button
-                        type="button"
-                        class="time-slot-btn"
-                        :class="[
-                          getCitaVentaTimeSlotStatusClass(time),
-                          { active: selectedCitaVentaTimeOnly === time },
-                        ]"
-                        @click="selectCitaVentaTimeSlot(time)"
-                      >
-                        {{ time }}
-                      </button>
-                    </el-badge>
-                  </div>
-
-                  <!-- Alerta de conflictos de Cita de Venta -->
-                  <div
-                    v-if="conflictsCitaVenta.length > 0"
-                    class="conflict-alert-box uniform-box"
-                    style="margin-top: 0.75rem"
-                  >
-                    <el-alert type="warning" show-icon :closable="false">
-                      <template #title>
-                        <span>
-                          <strong>{{ conflictsCitaVenta.length }}</strong>
-                          cita(s) de venta en el mismo hotel en esta franja (±1h)
-                        </span>
-                      </template>
-                    </el-alert>
-                  </div>
-                </div>
-              </div>
-            </el-collapse-item>
-
-            <!-- 3. Checkout -->
-            <el-collapse-item name="checkout">
-              <template #title>
-                <div class="mobile-accordion-header">
-                  <div class="accordion-title-group">
-                    <el-icon class="accordion-icon">
-                      <PlaneTakeoff :size="24" :stroke-width="2" />
-                    </el-icon>
-                    <span class="accordion-title-text">Checkout</span>
-                  </div>
-                  <el-tag
-                    :type="activeScheduleAccordion === 'checkout' ? 'primary' : 'info'"
-                    effect="light"
-                    round
-                    size="small"
-                    class="header-datetime-tag"
-                    :class="{ 'is-active': activeScheduleAccordion === 'checkout' }"
-                  >
-                    {{ mobileCheckoutPreview }}
-                  </el-tag>
-                </div>
-              </template>
-
-              <div class="mobile-schedule-container">
-                <!-- Bloque de Calendario de Checkout -->
-                <div class="mobile-calendar-section">
-                  <div class="schedule-subheading">
-                    <span class="step-badge-num">1</span>
-                    <span>SELECCIONA CHECKOUT</span>
-                  </div>
-
-                  <div class="calendar-panel-box">
-                    <div class="inline-calendar-picker">
-                      <el-date-picker-panel
-                        :border="false"
-                        v-model="formData.fechaSalida"
-                        type="date"
-                        value-format="YYYY-MM-DD"
-                        date-format="YYYY-MM-DD"
-                        :disabled-date="disabledPastDates"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </el-collapse-item>
-          </el-collapse>
-        </div>
-
-        <!-- Paso 3: Resumen y Detalles de la Sesión -->
-        <div v-else-if="currentStep === 2" class="step-pane step-pane-details">
-          <!-- 1. Tarjeta Azul de Resumen de Cita -->
-          <div class="appointment-summary-card" :style="appointmentSummaryCardStyle">
-            <div class="summary-photographer-row">
-              <el-avatar
-                :src="selectedPhotographer?.imagen || undefined"
-                :size="42"
-                :style="{
-                  backgroundColor: selectedPhotographer?.color
-                    ? getUserBgColor(selectedPhotographer.color)
-                    : 'rgba(255, 255, 255, 0.25)',
-                  color: '#ffffff',
-                  fontWeight: '700',
-                  fontSize: '14px',
-                  border: '2px solid rgba(255, 255, 255, 0.4)',
-                }"
-                class="summary-avatar"
-              >
-                {{
-                  selectedPhotographer
-                    ? getUserInitials(selectedPhotographer.nombre, selectedPhotographer.apellidos)
-                    : '?'
-                }}
-              </el-avatar>
-              <div class="summary-photographer-meta">
-                <span class="summary-photographer-label">FOTÓGRAFO ASIGNADO</span>
-                <span class="summary-photographer-name">
-                  {{ selectedPhotographerName || 'Sin asignar' }}
+      <!-- Acordeón de Planificación (Sesión, Cita de Venta, Checkout) al final del Paso 1 -->
+      <el-collapse
+        v-model="activeScheduleAccordion"
+        accordion
+        class="mobile-schedule-accordion"
+        @change="handleAccordionChange"
+      >
+        <!-- 1. Sesión -->
+        <el-collapse-item name="sesion">
+          <template #title>
+            <div class="mobile-accordion-header">
+              <div class="accordion-title-group">
+                <el-icon class="accordion-icon">
+                  <Camera :size="24" :stroke-width="2" />
+                </el-icon>
+                <span class="accordion-title-text">
+                  Sesión
+                  <span class="required-asterisk">*</span>
                 </span>
               </div>
+              <el-tag
+                :type="activeScheduleAccordion === 'sesion' ? sessionStateTagType : 'info'"
+                effect="light"
+                round
+                size="small"
+                class="header-datetime-tag"
+                :class="{ 'is-active': activeScheduleAccordion === 'sesion' }"
+              >
+                {{ mobileSessionPreview }}
+              </el-tag>
+            </div>
+          </template>
+
+          <div class="mobile-schedule-container">
+            <!-- 1. Bloque de Calendario -->
+            <div class="mobile-calendar-section">
+              <div class="calendar-panel-box">
+                <div class="inline-calendar-picker">
+                  <el-date-picker-panel
+                    :border="false"
+                    v-model="selectedDateOnly"
+                    type="date"
+                    value-format="YYYY-MM-DD"
+                    date-format="YYYY-MM-DD"
+                    :disabled-date="disabledPastDates"
+                    :cell-class-name="getFotografoCellClassName"
+                    @panel-change="handlePanelChange"
+                  />
+                </div>
+              </div>
             </div>
 
-            <div class="summary-details-list">
-              <!-- Cliente -->
-              <div v-if="formData.clienteNombre?.trim()" class="summary-detail-row">
-                <span class="summary-detail-key">Cliente:</span>
-                <span class="summary-detail-val">{{ formData.clienteNombre }}</span>
+            <!-- 2. Bloque de Horas -->
+            <div class="schedule-section-block">
+              <div class="schedule-section-header-row">
+                <span class="schedule-section-title">Horario disponible</span>
+                <el-switch v-model="showAllTimeSlots" size="default" />
+              </div>
+              <div class="time-slots-grid">
+                <el-badge
+                  v-for="time in visibleTimeSlots"
+                  :key="time"
+                  :value="sessionsCountByHour[time]"
+                  :hidden="!sessionsCountByHour[time]"
+                  class="time-slot-badge-wrapper"
+                >
+                  <button
+                    type="button"
+                    class="time-slot-btn"
+                    :class="[getTimeSlotStatusClass(time), { active: selectedTimeOnly === time }]"
+                    @click="selectTimeSlot(time)"
+                  >
+                    {{ time }}
+                  </button>
+                </el-badge>
+              </div>
+            </div>
+
+            <!-- Indicador de Disponibilidad y Cupo del Hotel (después de hora y antes de fotógrafo) -->
+            <div
+              v-if="formData.fechaHoraInicio && disponibilidadHotel"
+              class="disponibilidad-indicator-card uniform-box"
+              :class="{ 'quota-full': isTopeAlcanzado }"
+            >
+              <div class="disponibilidad-header">
+                <div class="disponibilidad-title">
+                  <span
+                    class="status-indicator-dot"
+                    :class="isTopeAlcanzado ? 'dot-danger' : 'dot-success'"
+                  ></span>
+                  <span>Sesiones disponibles:</span>
+                </div>
+                <div class="disponibilidad-badge">
+                  <el-tag
+                    :type="isTopeAlcanzado ? 'danger' : 'success'"
+                    effect="light"
+                    size="small"
+                    round
+                  >
+                    {{
+                      isTopeAlcanzado
+                        ? 'Tope alcanzado'
+                        : `${disponibilidadHotel.cupoLibre} ${
+                            disponibilidadHotel.cupoLibre === 1 ? 'sesión libre' : 'sesiones libres'
+                          }`
+                    }}
+                  </el-tag>
+                </div>
+              </div>
+              <div class="disponibilidad-details">
+                <span class="detail-item">
+                  <strong>{{ disponibilidadHotel.disponibles }}</strong>
+                  / {{ disponibilidadHotel.totalFotografos }} fotógrafos activos
+                </span>
+                <span class="detail-separator">•</span>
+                <span class="detail-item">
+                  <strong>{{ disponibilidadHotel.sesionesSimultaneas }}</strong>
+                  sesiones a esta hora
+                </span>
               </div>
 
-              <!-- Habitación -->
-              <div v-if="formData.numeroHabitacion?.trim()" class="summary-detail-row">
-                <span class="summary-detail-key">Habitación:</span>
-                <span class="summary-detail-val">{{ formData.numeroHabitacion }}</span>
-              </div>
-
-              <!-- Email -->
-              <div v-if="formData.clienteEmail?.trim()" class="summary-detail-row">
-                <span class="summary-detail-key">Email:</span>
-                <span class="summary-detail-val">{{ formData.clienteEmail }}</span>
-              </div>
-
-              <!-- Teléfono -->
-              <div v-if="formData.clienteTelefono?.trim()" class="summary-detail-row">
-                <span class="summary-detail-key">Teléfono:</span>
-                <span class="summary-detail-val">{{ formData.clienteTelefono }}</span>
-              </div>
-
-              <!-- Hotel -->
-              <div v-if="selectedHotelDisplayName" class="summary-detail-row">
-                <span class="summary-detail-key">Hotel:</span>
-                <span class="summary-detail-val">{{ selectedHotelDisplayName }}</span>
-              </div>
-
-              <!-- Fecha Sesión -->
-              <div
-                v-if="
-                  formData.fechaHoraInicio &&
-                  summaryFormattedDate &&
-                  summaryFormattedDate !== 'Sin fecha'
-                "
-                class="summary-detail-row"
+              <!-- Alerta de Bloqueo si no hay cupo -->
+              <el-alert
+                v-if="isTopeAlcanzado"
+                type="error"
+                show-icon
+                :closable="false"
+                class="quota-alert"
               >
-                <span class="summary-detail-key">Fecha:</span>
-                <span class="summary-detail-val">{{ summaryFormattedDate }}</span>
-              </div>
+                <template #title>
+                  <span v-if="disponibilidadHotel.disponibles === 0">
+                    No hay fotógrafos disponibles en este hotel para la fecha seleccionada.
+                  </span>
+                  <span v-else>
+                    Tope de {{ disponibilidadHotel.disponibles }} sesiones simultáneas alcanzado
+                    para esta hora.
+                  </span>
+                </template>
+              </el-alert>
+            </div>
+          </div>
+        </el-collapse-item>
 
-              <!-- Hora Sesión -->
-              <div v-if="selectedTimeOnly" class="summary-detail-row">
-                <span class="summary-detail-key">Hora:</span>
-                <span class="summary-detail-val">{{ selectedTimeOnly }}</span>
+        <!-- 2. Venta -->
+        <el-collapse-item name="cita-venta">
+          <template #title>
+            <div class="mobile-accordion-header">
+              <div class="accordion-title-group">
+                <el-icon class="accordion-icon">
+                  <Calendar :size="24" :stroke-width="2" />
+                </el-icon>
+                <span class="accordion-title-text">Venta</span>
               </div>
-
-              <!-- Personas -->
-              <div
-                v-if="summaryPersonas && summaryPersonas !== 'Sin participantes'"
-                class="summary-detail-row"
+              <el-tag
+                :type="activeScheduleAccordion === 'cita-venta' ? 'primary' : 'info'"
+                effect="light"
+                round
+                size="small"
+                class="header-datetime-tag"
+                :class="{ 'is-active': activeScheduleAccordion === 'cita-venta' }"
               >
-                <span class="summary-detail-key">Personas:</span>
-                <span class="summary-detail-val">{{ summaryPersonas }}</span>
+                {{ mobileCitaVentaPreview }}
+              </el-tag>
+            </div>
+          </template>
+
+          <div class="mobile-schedule-container">
+            <!-- 1. Bloque de Calendario Cita de Ventas -->
+            <div class="mobile-calendar-section">
+              <div class="calendar-panel-box">
+                <div class="inline-calendar-picker">
+                  <el-date-picker-panel
+                    :border="false"
+                    v-model="selectedCitaVentaDateOnly"
+                    type="date"
+                    value-format="YYYY-MM-DD"
+                    date-format="YYYY-MM-DD"
+                    :disabled-date="disabledPastDates"
+                    :cell-class-name="getCitaVentaCellClassName"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Bloque de Horas de Venta -->
+            <div class="schedule-section-block">
+              <div class="schedule-section-header-row">
+                <span class="schedule-section-title">Horario de venta</span>
+                <el-switch v-model="showAllCitaVentaTimeSlots" size="default" />
+              </div>
+              <div class="time-slots-grid">
+                <el-badge
+                  v-for="time in visibleCitaVentaTimeSlots"
+                  :key="`cita-${time}`"
+                  :value="salesCountByHour[time]"
+                  :hidden="!salesCountByHour[time]"
+                  class="time-slot-badge-wrapper"
+                >
+                  <button
+                    type="button"
+                    class="time-slot-btn"
+                    :class="[
+                      getCitaVentaTimeSlotStatusClass(time),
+                      { active: selectedCitaVentaTimeOnly === time },
+                    ]"
+                    @click="selectCitaVentaTimeSlot(time)"
+                  >
+                    {{ time }}
+                  </button>
+                </el-badge>
               </div>
 
-              <!-- Cita de Venta -->
+              <!-- Alerta de conflictos de Cita de Venta -->
               <div
-                v-if="mobileCitaVentaPreview && mobileCitaVentaPreview !== 'Sin cita'"
-                class="summary-detail-row"
+                v-if="conflictsCitaVenta.length > 0"
+                class="conflict-alert-box uniform-box"
+                style="margin-top: 0.75rem"
               >
-                <span class="summary-detail-key">Cita Venta:</span>
-                <span class="summary-detail-val">{{ mobileCitaVentaPreview }}</span>
-              </div>
-
-              <!-- Checkout -->
-              <div
-                v-if="mobileCheckoutPreview && mobileCheckoutPreview !== 'Sin checkout'"
-                class="summary-detail-row"
-              >
-                <span class="summary-detail-key">Checkout:</span>
-                <span class="summary-detail-val">{{ mobileCheckoutPreview }}</span>
-              </div>
-
-              <!-- Motivo / Concepto (Solo si se ha seleccionado/escrito) -->
-              <div v-if="formData.concepto?.trim()" class="summary-detail-row">
-                <span class="summary-detail-key">Motivo:</span>
-                <span class="summary-detail-val">{{ formData.concepto }}</span>
-              </div>
-
-              <!-- Notas Adicionales (Solo si se han escrito) -->
-              <div v-if="formData.notas?.trim()" class="summary-detail-row">
-                <span class="summary-detail-key">Notas:</span>
-                <span class="summary-detail-val">{{ formData.notas }}</span>
+                <el-alert type="warning" show-icon :closable="false">
+                  <template #title>
+                    <span>
+                      <strong>{{ conflictsCitaVenta.length }}</strong>
+                      cita(s) de venta en el mismo hotel en esta franja (±1h)
+                    </span>
+                  </template>
+                </el-alert>
               </div>
             </div>
           </div>
+        </el-collapse-item>
 
-          <!-- 2. Detalles de la Sesión -->
-          <div class="mobile-details-section">
-            <div class="mobile-details-form">
-              <!-- Concepto / Motivo de la Sesión (Botones estilo Estado de Sesión) -->
-              <div class="motivo-section">
-                <label class="form-field-label">CONCEPTO / MOTIVO DE LA SESIÓN</label>
-                <div class="motivo-grid">
-                  <button
-                    v-for="opt in motivoOptions"
-                    :key="opt.value"
-                    type="button"
-                    class="motivo-grid-btn"
-                    :class="{ 'is-active': isMotivoActive(opt.value) }"
-                    :disabled="isReadOnly"
-                    @click="handleSelectMotivo(opt.value)"
-                  >
-                    <el-icon class="motivo-grid-icon">
-                      <component :is="opt.icon" :size="20" :stroke-width="2" />
-                    </el-icon>
-                    <span>{{ opt.label }}</span>
-                  </button>
+        <!-- 3. Checkout -->
+        <el-collapse-item name="checkout">
+          <template #title>
+            <div class="mobile-accordion-header">
+              <div class="accordion-title-group">
+                <el-icon class="accordion-icon">
+                  <PlaneTakeoff :size="24" :stroke-width="2" />
+                </el-icon>
+                <span class="accordion-title-text">Checkout</span>
+              </div>
+              <el-tag
+                :type="activeScheduleAccordion === 'checkout' ? 'primary' : 'info'"
+                effect="light"
+                round
+                size="small"
+                class="header-datetime-tag"
+                :class="{ 'is-active': activeScheduleAccordion === 'checkout' }"
+              >
+                {{ mobileCheckoutPreview }}
+              </el-tag>
+            </div>
+          </template>
+
+          <div class="mobile-schedule-container">
+            <!-- Bloque de Calendario de Checkout -->
+            <div class="mobile-calendar-section">
+              <div class="calendar-panel-box">
+                <div class="inline-calendar-picker">
+                  <el-date-picker-panel
+                    :border="false"
+                    v-model="formData.fechaSalida"
+                    type="date"
+                    value-format="YYYY-MM-DD"
+                    date-format="YYYY-MM-DD"
+                    :disabled-date="disabledPastDates"
+                  />
                 </div>
               </div>
+            </div>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
 
-              <!-- Notas Adicionales -->
-              <div class="notas-section">
-                <label class="form-field-label">NOTAS ADICIONALES</label>
-                <el-input
-                  v-model="formData.notas"
-                  size="large"
-                  type="textarea"
-                  :rows="3"
-                  placeholder="Ej. Fotos en la playa al atardecer, vestidos de blanco."
-                />
+      <!-- 3 Elige fotógrafo -->
+      <div class="mobile-card-section-label mobile-card-section-label--photographer">
+        <span class="step-badge-num">3</span>
+        <span>
+          Elige fotógrafo
+          <span class="required-asterisk">*</span>
+        </span>
+      </div>
+
+      <!-- Selector de Fotógrafo Estilo Card Desplegable -->
+      <div
+        class="mobile-photographer-selector-card"
+        :class="{ 'is-photographer-colored': !!selectedPhotographer }"
+        :style="
+          selectedPhotographer
+            ? { backgroundColor: getUserBgColor(selectedPhotographer?.color) || '#8b5cf6' }
+            : {}
+        "
+      >
+        <div class="photographer-card-main">
+          <div class="photographer-avatar-circle">
+            <el-avatar
+              v-if="selectedPhotographer"
+              :src="selectedPhotographer.imagen || undefined"
+              :size="46"
+              :style="{
+                backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                color: '#ffffff',
+                fontWeight: '700',
+                fontSize: '14px',
+              }"
+              class="photographer-header-avatar-colored"
+            >
+              {{ getUserInitials(selectedPhotographer.nombre, selectedPhotographer.apellidos) }}
+            </el-avatar>
+            <div v-else class="photographer-default-circle">
+              <el-icon :size="22"><User /></el-icon>
+            </div>
+          </div>
+          <div class="photographer-info-box">
+            <span v-if="selectedPhotographer" class="photographer-badge-label">
+              FOTÓGRAFO ASIGNADO
+            </span>
+            <span
+              class="photographer-title-label"
+              :class="{ 'text-white': !!selectedPhotographer }"
+            >
+              {{
+                selectedPhotographer
+                  ? `${selectedPhotographer.nombre} ${selectedPhotographer.apellidos}`
+                  : 'Selecciona fotógrafo'
+              }}
+            </span>
+            <span v-if="!selectedPhotographer" class="photographer-subtitle-label">
+              Elige un fotógrafo para la sesión
+            </span>
+          </div>
+        </div>
+
+        <!-- Resumen de la sesión dentro de la tarjeta al haber fotógrafo asignado -->
+        <template v-if="selectedPhotographer">
+          <div class="photographer-selected-divider" />
+          <div class="photographer-selected-details">
+            <div v-if="selectedHotelDisplayName" class="detail-row">
+              <span class="detail-label">Hotel:</span>
+              <span class="detail-value">{{ selectedHotelDisplayName }}</span>
+            </div>
+            <div v-if="formData.clienteNombre?.trim()" class="detail-row">
+              <span class="detail-label">Cliente:</span>
+              <span class="detail-value">{{ formData.clienteNombre }}</span>
+            </div>
+            <div v-if="formData.numeroHabitacion?.trim()" class="detail-row">
+              <span class="detail-label">Habitación:</span>
+              <span class="detail-value">{{ formData.numeroHabitacion }}</span>
+            </div>
+            <div
+              v-if="
+                formData.fechaHoraInicio &&
+                summaryFormattedDate &&
+                summaryFormattedDate !== 'Sin fecha'
+              "
+              class="detail-row"
+            >
+              <span class="detail-label">Fecha:</span>
+              <span class="detail-value">{{ summaryFormattedDate }}</span>
+            </div>
+            <div v-if="selectedTimeOnly" class="detail-row">
+              <span class="detail-label">Hora:</span>
+              <span class="detail-value">{{ selectedTimeOnly }}</span>
+            </div>
+            <div
+              v-if="summaryPersonas && summaryPersonas !== 'Sin participantes'"
+              class="detail-row"
+            >
+              <span class="detail-label">Personas:</span>
+              <span class="detail-value">{{ summaryPersonas }}</span>
+            </div>
+            <div
+              v-if="mobileCitaVentaPreview && mobileCitaVentaPreview !== 'Sin cita'"
+              class="detail-row"
+            >
+              <span class="detail-label">Cita Venta:</span>
+              <span class="detail-value">{{ mobileCitaVentaPreview }}</span>
+            </div>
+            <div
+              v-if="mobileCheckoutPreview && mobileCheckoutPreview !== 'Sin checkout'"
+              class="detail-row"
+            >
+              <span class="detail-label">Checkout:</span>
+              <span class="detail-value">{{ mobileCheckoutPreview }}</span>
+            </div>
+            <div v-if="formData.concepto?.trim()" class="detail-row">
+              <span class="detail-label">Motivo:</span>
+              <span class="detail-value">{{ formData.concepto }}</span>
+            </div>
+          </div>
+        </template>
+
+        <!-- Barra toggle VER / OCULTAR FOTÓGRAFOS -->
+        <div
+          class="photographer-toggle-bar"
+          :class="{
+            'is-open': showPhotographersList,
+            'is-selected-toggle': !!selectedPhotographer,
+          }"
+          role="button"
+          tabindex="0"
+          @click="togglePhotographersList"
+        >
+          <span class="toggle-text">
+            {{ showPhotographersList ? 'OCULTAR FOTÓGRAFOS' : 'VER FOTÓGRAFOS' }}
+          </span>
+          <el-icon class="toggle-icon" :class="{ 'is-rotated': showPhotographersList }">
+            <ChevronDown :size="18" />
+          </el-icon>
+        </div>
+
+        <!-- Lista colapsable de fotógrafos -->
+        <el-collapse-transition>
+          <div v-if="showPhotographersList" class="photographer-dropdown-container">
+            <div v-if="!formData.hotelId" class="photographer-empty-state">
+              Selecciona primero un hotel para ver sus fotógrafos.
+            </div>
+            <div v-else-if="photographers.length === 0" class="photographer-empty-state">
+              No hay fotógrafos activos en este hotel.
+            </div>
+            <div v-else class="photographer-dropdown-list">
+              <div
+                v-for="photographer in photographers"
+                :key="photographer.id"
+                class="photographer-pick-item"
+                :class="{
+                  'is-selected': String(formData.fotografoId) === String(photographer.id),
+                  'is-disabled': getPhotographerStatus(photographer.id).disabled,
+                }"
+                @click="
+                  !getPhotographerStatus(photographer.id).disabled &&
+                  handleSelectPhotographer(photographer.id)
+                "
+              >
+                <div class="pick-item-left">
+                  <el-avatar
+                    :src="photographer.imagen || undefined"
+                    :size="36"
+                    :style="{
+                      backgroundColor: getUserBgColor(photographer.color),
+                      color: '#ffffff',
+                      fontWeight: '600',
+                      fontSize: '11px',
+                    }"
+                    class="pick-photographer-avatar"
+                  >
+                    {{ getUserInitials(photographer.nombre, photographer.apellidos) }}
+                  </el-avatar>
+
+                  <div class="pick-item-info">
+                    <div class="pick-item-client">
+                      {{ photographer.nombre }} {{ photographer.apellidos }}
+                    </div>
+                    <div class="pick-item-meta">
+                      <span
+                        class="photographer-status-tag"
+                        :class="getPhotographerStatus(photographer.id).tagClass"
+                      >
+                        {{ getPhotographerStatus(photographer.id).label }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pick-item-tags">
+                  <el-tag size="small" type="success" effect="light">Fotógrafo</el-tag>
+                </div>
               </div>
             </div>
+          </div>
+        </el-collapse-transition>
+      </div>
+
+      <!-- 4 Otros datos -->
+      <div class="mobile-card-section-label mobile-card-section-label--details">
+        <span class="step-badge-num">4</span>
+        <span>Otros datos</span>
+      </div>
+
+      <!-- Concepto / Motivo de la Sesión y Notas Adicionales -->
+      <div class="mobile-details-section">
+        <div class="mobile-details-form">
+          <!-- Concepto / Motivo de la Sesión (Botones estilo Estado de Sesión) -->
+          <div class="motivo-section">
+            <label class="form-field-label">CONCEPTO / MOTIVO DE LA SESIÓN</label>
+            <div class="motivo-grid">
+              <button
+                v-for="opt in motivoOptions"
+                :key="opt.value"
+                type="button"
+                class="motivo-grid-btn"
+                :class="{ 'is-active': isMotivoActive(opt.value) }"
+                :disabled="isReadOnly"
+                @click="handleSelectMotivo(opt.value)"
+              >
+                <el-icon class="motivo-grid-icon">
+                  <component :is="opt.icon" :size="20" :stroke-width="2" />
+                </el-icon>
+                <span>{{ opt.label }}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Notas Adicionales -->
+          <div class="notas-section">
+            <label class="form-field-label">NOTAS ADICIONALES</label>
+            <el-input
+              v-model="formData.notas"
+              size="large"
+              type="textarea"
+              :rows="3"
+              placeholder="Ej. Fotos en la playa al atardecer, vestidos de blanco."
+            />
           </div>
         </div>
       </div>
 
-      <!-- Barra de acciones inferior móvil (Sticky Bottom Bar) -->
-      <!-- Paso 1 (2 botones): 1/4 Cancelar + 3/4 Siguiente -->
-      <div v-if="currentStep === 0" class="mobile-bottom-actions mobile-bottom-actions--2cols">
-        <el-button
-          class="mobile-cancel-btn"
-          size="large"
-          text
-          bg
-          :icon="Close"
-          @click="handleGoBack"
-        >
-          {{ isReadOnly ? 'Volver' : 'Cancelar' }}
-        </el-button>
-
-        <el-button
-          type="primary"
-          class="mobile-next-btn"
-          size="large"
-          :loading="isSaving"
-          @click="handleNextStep"
-        >
-          <span>Siguiente</span>
-          <el-icon class="btn-icon-right"><ArrowRight :size="18" /></el-icon>
-        </el-button>
+      <!-- 5 Estado de la cita -->
+      <div class="mobile-card-section-label mobile-card-section-label--status">
+        <span class="step-badge-num">5</span>
+        <span>Estado de la cita</span>
       </div>
 
-      <!-- Pasos 2 y 3 (3 botones): Cancelar (solo icono) + Anterior (50%) + Siguiente / Guardar (50%) -->
-      <div v-else class="mobile-bottom-actions mobile-bottom-actions--3cols">
-        <el-button
-          class="mobile-cancel-icon-btn"
-          size="large"
-          text
-          bg
-          :icon="Close"
-          @click="handleGoBack"
-        />
-
-        <el-button class="mobile-prev-btn" size="large" @click="handleStepBack">
-          <el-icon class="btn-icon-left"><LucideArrowLeft :size="18" /></el-icon>
-          <span>Anterior</span>
-        </el-button>
-
-        <el-button
-          type="primary"
-          class="mobile-next-btn"
-          size="large"
-          :loading="isSaving"
-          :disabled="isReadOnly && currentStep === 2"
-          @click="handleNextStep"
-        >
-          <span>{{ currentStep < 2 ? 'Siguiente' : isEditing ? 'Guardar' : 'Agendar' }}</span>
-          <el-icon class="btn-icon-right">
-            <component :is="currentStep < 2 ? ArrowRight : Check" :size="18" />
-          </el-icon>
-        </el-button>
+      <!-- Selector de Estado de la Cita (3 arriba + 1 abajo) -->
+      <div class="mobile-status-section">
+        <div class="status-radio-container">
+          <el-radio-group
+            v-model="formData.estado"
+            class="status-radio-group"
+            size="large"
+            :disabled="isReadOnly"
+          >
+            <el-radio-button
+              v-for="opt in estadoOptions"
+              :key="opt.value"
+              :value="opt.value"
+              :class="['status-radio-btn', `status-radio-btn--${opt.value.toLowerCase()}`]"
+            >
+              <span class="status-btn-content">
+                <el-icon class="status-btn-icon"><component :is="opt.icon" /></el-icon>
+                <span>{{ opt.label }}</span>
+              </span>
+            </el-radio-button>
+          </el-radio-group>
+        </div>
       </div>
-    </template>
+    </div>
+
+    <!-- Barra de acciones inferior móvil (Sticky Bottom Bar) -->
+    <div class="mobile-bottom-actions mobile-bottom-actions--status">
+      <el-button
+        class="mobile-cancel-icon-btn"
+        size="large"
+        text
+        bg
+        :icon="Close"
+        @click="handleGoBack"
+      />
+
+      <el-button
+        type="primary"
+        class="mobile-next-btn"
+        size="large"
+        :loading="isSaving"
+        :disabled="isReadOnly"
+        @click="handleSave"
+      >
+        <span>{{ isEditing ? 'Guardar' : 'Agendar' }}</span>
+        <el-icon class="btn-icon-right">
+          <Check :size="18" />
+        </el-icon>
+      </el-button>
+    </div>
   </div>
 </template>
 
@@ -1490,6 +1286,32 @@ function handleNextStep() {
   line-height: 1.25;
 }
 
+.mobile-client-form
+  :deep(.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before),
+.mobile-client-form
+  :deep(
+    .el-form-item.is-required:not(.is-no-asterisk)
+      .el-form-item__label-wrap
+      > .el-form-item__label:before
+  ) {
+  display: none !important;
+  content: '' !important;
+}
+
+.mobile-client-form
+  :deep(.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:after),
+.mobile-client-form
+  :deep(
+    .el-form-item.is-required:not(.is-no-asterisk)
+      .el-form-item__label-wrap
+      > .el-form-item__label:after
+  ) {
+  content: ' *' !important;
+  color: var(--el-color-danger, #f56c6c) !important;
+  margin-left: 2px !important;
+  font-weight: bold;
+}
+
 /* Switch beside Nombre del Cliente label */
 .client-name-item :deep(.el-form-item__label) {
   width: 100% !important;
@@ -1568,11 +1390,16 @@ function handleNextStep() {
   align-items: center;
 }
 
-/* Step 2: Schedule & Availability Accordion Styles */
+/* Schedule & Availability Accordion Styles in Step 1 */
 .mobile-schedule-accordion {
   border: none;
   background: transparent;
   display: block;
+  margin-top: 1rem;
+}
+
+.mobile-schedule-accordion :deep(.el-collapse-item:first-child .el-collapse-item__header) {
+  border-top: 1px solid var(--toolbar-border, #e2e8f0);
 }
 
 .mobile-schedule-accordion :deep(.el-collapse-item) {
@@ -1811,7 +1638,8 @@ function handleNextStep() {
   font-weight: 700 !important;
 }
 
-.inline-calendar-picker :deep(.el-date-table td.available:not(.disabled):not(.current) .el-date-table-cell__text) {
+.inline-calendar-picker
+  :deep(.el-date-table td.available:not(.disabled):not(.current) .el-date-table-cell__text) {
   color: var(--heading-color, #0f172a);
 }
 
@@ -1825,7 +1653,9 @@ html.dark .inline-calendar-picker :deep(.el-date-picker__header-label) {
   color: var(--heading-color, #ffffff) !important;
 }
 
-html.dark .inline-calendar-picker :deep(.el-date-table td.available:not(.disabled):not(.current) .el-date-table-cell__text) {
+html.dark
+  .inline-calendar-picker
+  :deep(.el-date-table td.available:not(.disabled):not(.current) .el-date-table-cell__text) {
   color: var(--heading-color, #ffffff) !important;
 }
 
@@ -1902,7 +1732,7 @@ html.dark .inline-calendar-picker :deep(.el-date-table td.available:not(.disable
 }
 
 .disponibilidad-indicator-card {
-  background: var(--el-fill-color-light, #f8fafc);
+  background: #fff;
   border: 1px solid var(--el-border-color-lighter, #e2e8f0);
   border-radius: 8px;
   padding: 0.75rem 0.85rem;
@@ -1976,6 +1806,49 @@ html.dark .inline-calendar-picker :deep(.el-date-table td.available:not(.disable
   justify-content: space-between;
   align-items: center;
   width: 100%;
+}
+
+.schedule-section-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--heading-color, #0f172a);
+}
+
+.mobile-card-section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--heading-color, #0f172a);
+  margin-top: 0.25rem;
+  margin-bottom: 0.65rem;
+}
+
+.mobile-card-section-label--schedule {
+  margin-top: 2.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.mobile-card-section-label--photographer {
+  margin-top: 2.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.mobile-card-section-label--details {
+  margin-top: 2.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.mobile-card-section-label--status {
+  margin-top: 2.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.required-asterisk {
+  color: var(--el-color-danger, #f56c6c);
+  margin-left: 3px;
+  font-weight: 700;
 }
 
 .schedule-subheading {
@@ -2080,95 +1953,279 @@ html.dark .inline-calendar-picker :deep(.el-date-table td.available:not(.disable
   box-shadow: 0 2px 6px rgba(59, 130, 246, 0.35);
 }
 
-/* Photographers List */
-.photographers-card-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-
-.photographer-selection-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
+/* Card Selector de Fotógrafos Desplegable */
+.mobile-photographer-selector-card {
   background: var(--toolbar-bg, #ffffff);
   border: 1px solid var(--toolbar-border, #e2e8f0);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.photographer-selection-card:hover {
-  border-color: var(--el-color-primary, #3b82f6);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+.mobile-photographer-selector-card.is-photographer-colored {
+  border: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  color: #ffffff;
 }
 
-.photographer-selection-card.selected {
-  border-color: var(--el-color-primary, #3b82f6);
-  background: rgba(59, 130, 246, 0.04);
-  box-shadow: 0 0 0 1px var(--el-color-primary, #3b82f6);
-}
-
-.photographer-selection-card.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: var(--el-fill-color-light, #f8fafc);
-  border-color: var(--toolbar-border, #e2e8f0);
-}
-
-.photographer-selection-card.disabled:hover {
-  transform: none;
-  box-shadow: none;
-  border-color: var(--toolbar-border, #e2e8f0);
-}
-
-.photographer-card-info {
+.photographer-card-main {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.85rem;
+  padding: 1rem 1rem;
 }
 
-.photographer-avatar-preview {
+.photographer-avatar-circle {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.photographer-text-meta {
+.photographer-default-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(64, 158, 255, 0.12);
+  border: 1px solid rgba(64, 158, 255, 0.25);
+  color: #409eff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photographer-header-avatar-colored {
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.photographer-info-box {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
 }
 
-.photographer-card-name {
-  font-size: 0.92rem;
+.photographer-badge-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.photographer-title-label {
+  font-size: 1rem;
   font-weight: 700;
   color: var(--heading-color, #0f172a);
+  line-height: 1.25;
 }
 
-.photographer-card-tag {
+.photographer-title-label.text-white {
+  color: #ffffff;
+}
+
+.photographer-subtitle-label {
+  font-size: 0.8rem;
+  color: var(--nav-link-color, #64748b);
+  margin-top: 0.2rem;
+}
+
+.photographer-subtitle-label.text-white-subtle {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.photographer-selected-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.25);
+  margin: 0 1rem 0.85rem 1rem;
+}
+
+.photographer-selected-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0 1rem 0.95rem 1rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.detail-label {
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 500;
+}
+
+.detail-value {
+  color: #ffffff;
+  font-weight: 700;
+  text-align: right;
+}
+
+.photographer-toggle-bar {
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--toolbar-border, #f1f5f9);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  background: var(--toolbar-bg, #ffffff);
+  transition: background 0.15s ease;
+}
+
+.photographer-toggle-bar:active {
+  background: var(--el-fill-color-light, #f8fafc);
+}
+
+.photographer-toggle-bar.is-selected-toggle {
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.photographer-toggle-bar.is-selected-toggle .toggle-text,
+.photographer-toggle-bar.is-selected-toggle .toggle-icon {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.toggle-text {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.toggle-icon {
+  color: #64748b;
+  font-size: 1.1rem;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-icon.is-rotated {
+  transform: rotate(180deg);
+}
+
+.photographer-dropdown-container {
+  padding: 0.5rem 1rem 1rem 1rem;
+  border-top: 1px dashed var(--toolbar-border, #e2e8f0);
+  background: var(--toolbar-bg, #ffffff);
+}
+
+.photographer-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.photographer-pick-item {
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  background: var(--toolbar-bg, #ffffff);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.photographer-pick-item:active {
+  transform: scale(0.99);
+}
+
+.photographer-pick-item.is-selected {
+  border-color: var(--el-color-primary, #3b82f6);
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.photographer-pick-item.is-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--el-fill-color-lighter, #f8fafc);
+}
+
+.photographer-pick-item.is-disabled:active {
+  transform: none;
+}
+
+.photographer-status-tag {
   font-size: 0.72rem;
   font-weight: 600;
+  display: inline-block;
 }
 
-.photographer-card-tag.tag-assigned {
-  color: var(--el-color-primary, #3b82f6);
-}
-
-.photographer-card-tag.tag-busy {
-  color: #f56c6c;
-}
-
-.photographer-card-tag.tag-available {
+.photographer-status-tag.tag-available {
   color: #10b981;
 }
 
-.empty-photographers-msg {
+.photographer-status-tag.tag-busy {
+  color: #f56c6c;
+}
+
+.photographer-status-tag.tag-assigned {
+  color: var(--el-color-primary, #3b82f6);
+}
+
+.pick-photographer-avatar {
+  flex-shrink: 0;
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+}
+
+.pick-item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.pick-item-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pick-item-client {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--heading-color, #0f172a);
+}
+
+.pick-item-meta {
+  font-size: 0.78rem;
+  color: var(--nav-link-color, #64748b);
+  margin-top: 2px;
+}
+
+.pick-item-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.photographer-empty-state {
   font-size: 0.85rem;
   color: var(--nav-link-color, #64748b);
-  padding: 0.75rem;
-  background: var(--el-fill-color-light, #f8fafc);
-  border-radius: 8px;
+  text-align: center;
+  padding: 1rem 0;
 }
 
 /* Step 3: Resumen & Detalles Styles */
@@ -2341,110 +2398,101 @@ html.dark .inline-calendar-picker :deep(.el-date-table td.available:not(.disable
   gap: 0.5rem;
 }
 
-/* Pantalla Inicial de Estado de Sesión (solo al editar) */
-.status-screen-center {
-  flex: 1;
+/* Estado de la Cita (Radio Group) */
+.mobile-status-section {
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.status-radio-container {
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 200px);
   width: 100%;
-  padding: 1rem 0;
-  box-sizing: border-box;
 }
 
-.status-screen-box {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-}
-
-.status-screen-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: var(--nav-link-color, #64748b);
-  text-transform: uppercase;
-}
-
-.status-screen-grid {
+.status-radio-group {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
   width: 100%;
 }
 
-.status-screen-btn {
+:deep(.status-radio-btn) {
+  display: flex;
+}
+
+:deep(.status-radio-btn .el-radio-button__inner) {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px !important;
+  border: 1px solid var(--toolbar-border, #e2e8f0) !important;
+  box-shadow: none !important;
+  padding: 1rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--toolbar-bg, #ffffff);
+  color: var(--nav-link-color, #475569);
+}
+
+:deep(.status-radio-btn--completada) {
+  grid-column: 1 / -1;
+}
+
+:deep(.status-radio-btn--completada .el-radio-button__inner) {
+  flex-direction: row;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.95rem;
+}
+
+.status-btn-content {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  padding: 1.15rem 0.4rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  border-radius: 12px;
-  border: 1px solid var(--toolbar-border, #e2e8f0);
-  background: var(--toolbar-bg, #ffffff);
-  color: var(--nav-link-color, #475569);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  user-select: none;
-  box-sizing: border-box;
-  text-align: center;
 }
 
-.status-screen-btn-icon {
-  font-size: 1.45rem;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* El botón COMPLETADA ocupa toda la fila inferior en horizontal */
-.status-screen-btn--completada {
-  grid-column: 1 / -1;
+:deep(.status-radio-btn--completada .status-btn-content) {
   flex-direction: row;
-  padding: 1.1rem 1.25rem;
-  gap: 0.65rem;
-  font-size: 0.95rem;
+  gap: 0.6rem;
 }
 
-.status-screen-btn:hover:not(:disabled):not(.is-active) {
-  border-color: var(--el-color-primary-light-5, #93c5fd);
-  color: var(--el-color-primary, #3b82f6);
-  background: var(--el-color-primary-light-9, #eff6ff);
+.status-btn-icon {
+  font-size: 1.4rem;
 }
 
-.status-screen-btn--programada.is-active {
+/* Colores personalizados por estado */
+:deep(.status-radio-btn--programada.is-active .el-radio-button__inner) {
   background-color: #409eff !important;
   border-color: #409eff !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3) !important;
 }
 
-.status-screen-btn--completada.is-active {
+:deep(.status-radio-btn--completada.is-active .el-radio-button__inner) {
   background-color: #67c23a !important;
   border-color: #67c23a !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(103, 194, 58, 0.3);
+  box-shadow: 0 4px 12px rgba(103, 194, 58, 0.3) !important;
 }
 
-.status-screen-btn--cancelada.is-active {
-  background-color: #f56c6c !important;
-  border-color: #f56c6c !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(245, 108, 108, 0.3);
-}
-
-.status-screen-btn--no_show.is-active {
+:deep(.status-radio-btn--no_show.is-active .el-radio-button__inner) {
   background-color: #e6a23c !important;
   border-color: #e6a23c !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(230, 162, 60, 0.3);
+  box-shadow: 0 4px 12px rgba(230, 162, 60, 0.3) !important;
+}
+
+:deep(.status-radio-btn--cancelada.is-active .el-radio-button__inner) {
+  background-color: #f56c6c !important;
+  border-color: #f56c6c !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(245, 108, 108, 0.3) !important;
 }
 
 /* Sticky Bottom Bar */
@@ -2560,7 +2608,31 @@ html.dark .accordion-icon {
   color: #71717a;
 }
 
-html.dark .photographer-selection-card,
+html.dark .mobile-photographer-selector-card {
+  background: var(--toolbar-bg, #1d1e1f);
+  border-color: var(--toolbar-border, #363637);
+}
+
+html.dark .photographer-toggle-bar {
+  background: var(--toolbar-bg, #1d1e1f);
+  border-color: var(--toolbar-border, #363637);
+}
+
+html.dark .photographer-dropdown-container {
+  background: var(--toolbar-bg, #1d1e1f);
+  border-color: var(--toolbar-border, #363637);
+}
+
+html.dark .photographer-pick-item {
+  background: var(--toolbar-bg, #1d1e1f);
+  border-color: var(--toolbar-border, #363637);
+}
+
+html.dark .photographer-pick-item.is-disabled {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: var(--toolbar-border, #363637);
+}
+
 html.dark .mobile-bottom-actions {
   background: var(--toolbar-bg, #1d1e1f);
   border-color: var(--toolbar-border, #363637);
