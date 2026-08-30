@@ -2,19 +2,15 @@
 import { ref, computed, watch, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { PhotoSessionFormContext } from '../composables/usePhotoSessionForm'
-import type { EstadoSesion } from '../domain/session.model'
 import { ArrowLeft, Close, Message, Phone, Check } from '@element-plus/icons-vue'
 import {
   User,
   Camera,
   Calendar,
   PlaneTakeoff,
-  ArrowRight,
-  ArrowLeft as LucideArrowLeft,
   Building2,
   Users,
   Baby,
-  SquarePen,
   Balloon,
   Sparkles,
   MoreHorizontal,
@@ -29,7 +25,6 @@ const props = defineProps<{
 const {
   formData,
   userHotels,
-  sessionId,
   isEditing,
   isSaving,
   isReadOnly,
@@ -38,18 +33,14 @@ const {
   disabledPastDates,
   getFotografoCellClassName,
   handlePanelChange,
-  hasAusenciasInVisibleMonth,
   selectedPhotographer,
-  selectedPhotographerName,
   isFotografoAusente,
-  ausenciaFotografoActual,
   disponibilidadHotel,
   isTopeAlcanzado,
   timeSlots,
   selectTimeSlot,
   photographers,
   getPhotographerStatus,
-  selectPhotographerCard,
   getUserInitials,
   getUserBgColor,
   handleGoBack,
@@ -68,8 +59,6 @@ const {
   summaryFormattedDate,
   selectedHotelDisplayName,
   summaryPersonas,
-  appointmentSummaryCardStyle,
-  estadoSesionOptions,
 } = props.form
 
 // Formato compacto para las etiquetas de la cabecera en móvil (evita que el texto se corte)
@@ -356,17 +345,7 @@ function handleAccordionChange(activeName: string) {
   }
 }
 
-watch(activeScheduleAccordion, (newVal) => {
-  if (newVal) {
-    scrollToActiveAccordion()
-  }
-})
-
-function handleStepBack() {
-  handleGoBack()
-}
-
-function validateStep1(): boolean {
+function validateForm(): boolean {
   const data = formData.value
 
   // 1. Nombre del cliente obligatorio
@@ -398,37 +377,33 @@ function validateStep1(): boolean {
     return false
   }
 
-  return true
-}
-
-function validateStep2(): boolean {
-  // 1. Validar que haya fecha elegida para la sesión de fotos
+  // 5. Fecha de sesión obligatoria
   if (!selectedDateOnly.value) {
     activeScheduleAccordion.value = 'sesion'
     ElMessage.warning('Por favor, selecciona una fecha para la sesión de fotos')
     return false
   }
 
-  // 2. Validar que haya un horario seleccionado para la sesión
+  // 6. Horario de sesión obligatorio
   if (!selectedTimeOnly.value) {
     activeScheduleAccordion.value = 'sesion'
     ElMessage.warning('Por favor, selecciona un horario para la sesión de fotos')
     return false
   }
 
-  // 3. Validar fotógrafo obligatorio
-  if (!formData.value.fotografoId) {
+  // 7. Fotógrafo obligatorio
+  if (!data.fotografoId) {
     ElMessage.warning('Por favor, selecciona un fotógrafo para la sesión')
     return false
   }
 
-  // 4. Validar que el fotógrafo (si está seleccionado) no tenga ausencia registrada
-  if (formData.value.fotografoId && isFotografoAusente.value) {
+  // 8. Ausencia del fotógrafo
+  if (isFotografoAusente.value) {
     ElMessage.warning('El fotógrafo seleccionado tiene una ausencia en esta fecha')
     return false
   }
 
-  // 5. Validar que no se supere el tope de sesiones simultáneas
+  // 9. Tope de sesiones simultáneas
   if (isTopeAlcanzado.value) {
     activeScheduleAccordion.value = 'sesion'
     ElMessage.warning('Se ha alcanzado el tope de sesiones simultáneas para esta hora')
@@ -442,7 +417,7 @@ function handleSave() {
   if (isReadOnly.value) {
     return
   }
-  if (!validateStep1() || !validateStep2()) {
+  if (!validateForm()) {
     return
   }
   handleSaveSession()
@@ -1188,85 +1163,7 @@ function handleSave() {
   border: 1px solid var(--toolbar-border, #e2e8f0);
 }
 
-.mobile-steps-wrapper {
-  padding: 0.5rem 0.25rem 0.25rem 0.25rem;
-}
-
-.mobile-stepper {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.stepper-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  min-width: 64px;
-}
-
-.stepper-icon-wrap {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--nav-link-color, #94a3b8);
-  transition: color 0.2s ease;
-}
-
-.stepper-label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--nav-link-color, #94a3b8);
-  transition:
-    color 0.2s ease,
-    font-weight 0.2s ease;
-  white-space: nowrap;
-}
-
-/* Conector entre pasos */
-.stepper-connector {
-  flex: 1;
-  height: 2px;
-  background-color: var(--toolbar-border, #e2e8f0);
-  margin-top: 15px;
-  margin-left: 0.35rem;
-  margin-right: 0.35rem;
-  border-radius: 1px;
-  transition: background-color 0.2s ease;
-}
-
-/* Estados */
-.stepper-item.active .stepper-icon-wrap {
-  color: var(--el-color-success, #67c23a);
-}
-
-.stepper-item.active .stepper-label {
-  color: var(--heading-color, #0f172a);
-  font-weight: 700;
-}
-
-.stepper-item.completed .stepper-icon-wrap {
-  color: var(--el-color-success, #67c23a);
-}
-
-.stepper-item.completed .stepper-label {
-  color: var(--heading-color, #0f172a);
-  font-weight: 600;
-}
-
-.stepper-connector.completed {
-  background-color: var(--el-color-success, #67c23a);
-}
-
 .mobile-step-body {
-  width: 100%;
-}
-
-.step-pane {
   width: 100%;
 }
 
@@ -1310,31 +1207,6 @@ function handleSave() {
   color: var(--el-color-danger, #f56c6c) !important;
   margin-left: 2px !important;
   font-weight: bold;
-}
-
-/* Switch beside Nombre del Cliente label */
-.client-name-item :deep(.el-form-item__label) {
-  width: 100% !important;
-  display: block !important;
-  padding-right: 0 !important;
-  margin-bottom: 4px;
-}
-
-.client-name-label-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.client-name-label-text {
-  font-weight: 600;
-}
-
-.mobile-form-row-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.65rem;
 }
 
 .mobile-form-row-pax {
@@ -2228,93 +2100,6 @@ html.dark
   padding: 1rem 0;
 }
 
-/* Step 3: Resumen & Detalles Styles */
-.step-pane-details {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding-bottom: 1rem;
-}
-
-.appointment-summary-card {
-  background-color: var(--el-color-primary, #2563eb);
-  border-radius: 14px;
-  padding: 1.25rem;
-  color: #ffffff;
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.22);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  transition:
-    background 0.3s ease,
-    background-color 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.summary-photographer-row {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.summary-avatar {
-  flex-shrink: 0;
-}
-
-.summary-photographer-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  min-width: 0;
-}
-
-.summary-photographer-label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.75);
-  text-transform: uppercase;
-}
-
-.summary-photographer-name {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #ffffff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.summary-details-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.summary-detail-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.88rem;
-}
-
-.summary-detail-key {
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 500;
-}
-
-.summary-detail-val {
-  color: #ffffff;
-  font-weight: 700;
-  text-align: right;
-  max-width: 60%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .mobile-details-section {
   display: flex;
   flex-direction: column;
@@ -2514,14 +2299,6 @@ html.dark
   grid-template-columns: auto 1fr;
 }
 
-.mobile-bottom-actions--2cols {
-  grid-template-columns: 1fr 3fr;
-}
-
-.mobile-bottom-actions--3cols {
-  grid-template-columns: auto 1fr 1fr;
-}
-
 .mobile-cancel-icon-btn {
   width: 44px !important;
   min-width: 44px !important;
@@ -2532,27 +2309,6 @@ html.dark
   align-items: center;
   justify-content: center;
   font-size: 1.15rem;
-}
-
-.mobile-cancel-btn {
-  width: 100%;
-  margin: 0 !important;
-  font-weight: 600;
-  padding: 0 0.5rem !important;
-}
-
-.mobile-prev-btn {
-  width: 100%;
-  margin: 0 !important;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  background-color: var(--toolbar-bg, #ffffff);
-  border: 1px solid var(--toolbar-border, #e2e8f0);
-  color: var(--heading-color, #0f172a);
-  padding: 0 0.5rem !important;
 }
 
 .mobile-next-btn {
@@ -2566,12 +2322,6 @@ html.dark
   padding: 0 0.5rem !important;
 }
 
-.btn-icon-left {
-  display: inline-flex;
-  align-items: center;
-  margin-right: 0.2rem;
-}
-
 .btn-icon-right {
   display: inline-flex;
   align-items: center;
@@ -2583,8 +2333,7 @@ html.dark .session-form-mobile {
   background-color: var(--app-bg, #121212);
 }
 
-html.dark .back-btn,
-html.dark .mobile-prev-btn {
+html.dark .back-btn {
   background-color: var(--toolbar-bg, #1d1e1f);
   border-color: var(--toolbar-border, #363637);
   color: var(--heading-color, #ffffff);
