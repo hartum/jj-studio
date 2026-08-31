@@ -31,7 +31,6 @@ const {
   selectedDateOnly,
   selectedTimeOnly,
   timeSlots,
-  selectTimeSlot,
   getCitaVentaCellClassName,
   disabledPastDates,
   formatDateTime,
@@ -45,13 +44,38 @@ const {
 
 const showAllTimeSlots = ref(false)
 
+const minuteSlots = ['00', '10', '20', '30', '40', '50']
+
+const selectedHourOnly = computed(() => {
+  if (!selectedTimeOnly.value) return ''
+  return selectedTimeOnly.value.split(':')[0] || ''
+})
+
+const selectedMinuteOnly = computed(() => {
+  if (!selectedTimeOnly.value) return '00'
+  return selectedTimeOnly.value.split(':')[1] || '00'
+})
+
+function selectHour(timeOrHour: string) {
+  if (isReadOnly.value) return
+  const hour = timeOrHour.includes(':') ? timeOrHour.split(':')[0] : timeOrHour
+  const min = selectedMinuteOnly.value || '00'
+  selectedTimeOnly.value = `${hour}:${min}`
+}
+
+function selectMinute(min: string) {
+  if (isReadOnly.value) return
+  const hour = selectedHourOnly.value || '10'
+  selectedTimeOnly.value = `${hour}:${min}`
+}
+
 const visibleTimeSlots = computed(() => {
   if (showAllTimeSlots.value) {
     return timeSlots
   }
   return timeSlots.filter((time) => {
     const hour = parseInt(time.split(':')[0] ?? '0', 10)
-    return hour >= 8 && hour <= 20
+    return hour >= 8 && hour <= 19
   })
 })
 
@@ -408,298 +432,328 @@ const isSellerPhotographer = computed(() => {
           Fecha de la venta
         </div>
 
-      <div class="calendar-panel-box">
-        <div class="inline-calendar-picker">
-          <el-date-picker-panel
-            :key="`sale-cal-${formData.hotelId || 'all'}-${saleStore.citasVenta.length}`"
-            :border="false"
-            v-model="selectedDateOnly"
-            type="date"
-            value-format="YYYY-MM-DD"
-            date-format="YYYY-MM-DD"
-            :disabled="isReadOnly"
-            :disabled-date="disabledPastDates"
-            :cell-class-name="getCitaVentaCellClassName"
-          />
-        </div>
-      </div>
-
-      <!-- 2. Bloque de Horas de Venta -->
-      <div class="schedule-section-block">
-        <div class="schedule-section-header-row">
-          <div class="schedule-subheading">
-            <span class="step-badge-num">3</span>
-            <span>Hora de la venta</span>
-          </div>
-          <el-switch v-model="showAllTimeSlots" size="default" />
-        </div>
-        <div class="time-slots-grid">
-          <el-badge
-            v-for="time in visibleTimeSlots"
-            :key="`cita-${time}`"
-            :value="salesCountByHour[time]"
-            :hidden="!salesCountByHour[time]"
-            class="time-slot-badge-wrapper"
-          >
-            <button
-              type="button"
-              class="time-slot-btn"
-              :class="[
-                getCitaVentaTimeSlotStatusClass(time),
-                { active: selectedTimeOnly === time },
-              ]"
+        <div class="calendar-panel-box">
+          <div class="inline-calendar-picker">
+            <el-date-picker-panel
+              :key="`sale-cal-${formData.hotelId || 'all'}-${saleStore.citasVenta.length}`"
+              :border="false"
+              v-model="selectedDateOnly"
+              type="date"
+              value-format="YYYY-MM-DD"
+              date-format="YYYY-MM-DD"
               :disabled="isReadOnly"
-              @click="selectTimeSlot(time)"
+              :disabled-date="disabledPastDates"
+              :cell-class-name="getCitaVentaCellClassName"
+            />
+          </div>
+        </div>
+
+        <!-- 2. Bloque de Horas de Venta -->
+        <div class="schedule-section-block">
+          <div class="schedule-section-header-row">
+            <div class="schedule-subheading">
+              <span class="step-badge-num">3</span>
+              <span>Hora de la venta</span>
+              <el-tag
+                v-if="selectedTimeOnly"
+                effect="plain"
+                round
+                size="small"
+                class="header-datetime-tag"
+              >
+                {{ selectedTimeOnly }}
+              </el-tag>
+            </div>
+            <el-switch v-model="showAllTimeSlots" size="default" />
+          </div>
+          <div class="time-slots-grid">
+            <el-badge
+              v-for="time in visibleTimeSlots"
+              :key="`cita-${time}`"
+              :value="salesCountByHour[time]"
+              :hidden="!salesCountByHour[time]"
+              class="time-slot-badge-wrapper"
             >
-              {{ time }}
+              <button
+                type="button"
+                class="time-slot-btn"
+                :class="[
+                  getCitaVentaTimeSlotStatusClass(time),
+                  { active: selectedHourOnly === time.split(':')[0] },
+                ]"
+                :disabled="isReadOnly"
+                @click="selectHour(time)"
+              >
+                {{ time }}
+              </button>
+            </el-badge>
+          </div>
+
+          <!-- Divisor punteado para selección de minutos -->
+          <div class="minute-slots-divider">
+            <el-divider border-style="dotted" />
+          </div>
+
+          <!-- Grid de slots de minutos (00 - 50) -->
+          <div class="minute-slots-grid">
+            <button
+              v-for="min in minuteSlots"
+              :key="`cita-min-${min}`"
+              type="button"
+              class="time-slot-btn minute-slot-btn"
+              :class="{ active: selectedMinuteOnly === min && !!selectedHourOnly }"
+              :disabled="isReadOnly"
+              @click="selectMinute(min)"
+            >
+              {{ min }}
             </button>
-          </el-badge>
-        </div>
+          </div>
 
-        <!-- Alerta de conflictos de Cita de Venta (debajo de selección de horas) -->
-        <div v-if="conflicts.length > 0" class="conflict-alert-box" style="margin-top: 0.75rem">
-          <el-alert type="warning" :closable="false" show-icon class="conflict-banner">
-            <template #icon>
-              <el-icon :size="18"><WarnTriangleFilled /></el-icon>
-            </template>
-            <template #title>
-              <span>
-                Hay
-                <strong>{{ conflicts.length }}</strong>
-                cita(s) de venta en el mismo hotel dentro de la franja de 1 hora (±1h)
-              </span>
-            </template>
-          </el-alert>
-        </div>
-      </div>
-    </div>
-
-    <!-- Selector de Vendedor Estilo Card (Móvil) -->
-    <div class="mobile-card-section-label">
-      <span class="step-badge-num">4</span>
-      Vendedor
-    </div>
-    <div
-      class="mobile-seller-selector-card"
-      :class="{ 'is-seller-colored': isSellerPhotographer }"
-      :style="
-        isSellerPhotographer
-          ? { backgroundColor: getUserBgColor(selectedSeller?.color) || '#8b5cf6' }
-          : {}
-      "
-    >
-      <div class="seller-card-main">
-        <div class="seller-avatar-circle">
-          <el-avatar
-            v-if="selectedSeller"
-            :src="selectedSeller.imagen || undefined"
-            :size="44"
-            :style="{
-              backgroundColor: isSellerPhotographer
-                ? 'rgba(255, 255, 255, 0.25)'
-                : getUserBgColor(selectedSeller.color),
-              color: '#ffffff',
-              fontWeight: '600',
-              fontSize: '13px',
-            }"
-            :class="isSellerPhotographer ? 'seller-header-avatar-colored' : 'seller-header-avatar'"
-          >
-            {{ getUserInitials(selectedSeller.nombre, selectedSeller.apellidos) }}
-          </el-avatar>
-          <div v-else class="seller-default-circle">
-            <el-icon :size="22"><User /></el-icon>
+          <!-- Alerta de conflictos de Cita de Venta (debajo de selección de horas) -->
+          <div v-if="conflicts.length > 0" class="conflict-alert-box" style="margin-top: 0.75rem">
+            <el-alert type="warning" :closable="false" show-icon class="conflict-banner">
+              <template #icon>
+                <el-icon :size="18"><WarnTriangleFilled /></el-icon>
+              </template>
+              <template #title>
+                <span>
+                  Hay
+                  <strong>{{ conflicts.length }}</strong>
+                  cita(s) de venta en el mismo hotel dentro de la franja de 1 hora (±1h)
+                </span>
+              </template>
+            </el-alert>
           </div>
         </div>
-        <div class="seller-info-box">
-          <span class="seller-title-label" :class="{ 'text-white': isSellerPhotographer }">
-            {{
-              selectedSeller
-                ? `${selectedSeller.nombre} ${selectedSeller.apellidos}`
-                : 'Selecciona vendedor'
-            }}
-          </span>
-          <span
-            v-if="selectedSeller"
-            class="seller-subtitle-label"
-            :class="{ 'text-white-subtle': isSellerPhotographer }"
-          >
-            {{ selectedSeller.perfilNombre }} · {{ getSellerStatus(selectedSeller.id).label }}
-          </span>
-        </div>
       </div>
 
-      <!-- Barra toggle VER VENDEDORES -->
+      <!-- Selector de Vendedor Estilo Card (Móvil) -->
+      <div class="mobile-card-section-label">
+        <span class="step-badge-num">4</span>
+        Vendedor
+      </div>
       <div
-        class="seller-toggle-bar"
-        :class="{ 'is-open': showSellersList, 'is-selected-toggle': isSellerPhotographer }"
-        role="button"
-        tabindex="0"
-        @click="toggleSellersList"
+        class="mobile-seller-selector-card"
+        :class="{ 'is-seller-colored': isSellerPhotographer }"
+        :style="
+          isSellerPhotographer
+            ? { backgroundColor: getUserBgColor(selectedSeller?.color) || '#8b5cf6' }
+            : {}
+        "
       >
-        <span class="toggle-text">
-          {{ showSellersList ? 'OCULTAR VENDEDORES' : 'VER VENDEDORES' }}
-        </span>
-        <el-icon class="toggle-icon" :class="{ 'is-rotated': showSellersList }">
-          <ChevronDown :size="18" />
-        </el-icon>
-      </div>
-
-      <!-- Lista colapsable de vendedores -->
-      <el-collapse-transition>
-        <div v-if="showSellersList" class="seller-dropdown-container">
-          <div v-if="!formData.hotelId" class="seller-empty-state">
-            Selecciona primero una sesión de fotos para ver los vendedores de su hotel.
-          </div>
-          <div v-else-if="sellers.length === 0" class="seller-empty-state">
-            No hay agendadores o fotógrafos asignados a este hotel.
-          </div>
-          <div v-else class="seller-dropdown-list">
-            <div
-              v-for="seller in sellers"
-              :key="seller.id"
-              class="seller-pick-item"
-              :class="{
-                'is-selected': String(formData.vendedorId) === String(seller.id),
-                'is-disabled': getSellerStatus(seller.id).disabled,
+        <div class="seller-card-main">
+          <div class="seller-avatar-circle">
+            <el-avatar
+              v-if="selectedSeller"
+              :src="selectedSeller.imagen || undefined"
+              :size="44"
+              :style="{
+                backgroundColor: isSellerPhotographer
+                  ? 'rgba(255, 255, 255, 0.25)'
+                  : getUserBgColor(selectedSeller.color),
+                color: '#ffffff',
+                fontWeight: '600',
+                fontSize: '13px',
               }"
-              @click="!getSellerStatus(seller.id).disabled && selectSeller(seller.id)"
+              :class="
+                isSellerPhotographer ? 'seller-header-avatar-colored' : 'seller-header-avatar'
+              "
             >
-              <div class="pick-item-left">
-                <el-avatar
-                  :src="seller.imagen || undefined"
-                  :size="36"
-                  :style="{
-                    backgroundColor: getUserBgColor(seller.color),
-                    color: '#ffffff',
-                    fontWeight: '600',
-                    fontSize: '11px',
-                  }"
-                  class="pick-seller-avatar"
-                >
-                  {{ getUserInitials(seller.nombre, seller.apellidos) }}
-                </el-avatar>
+              {{ getUserInitials(selectedSeller.nombre, selectedSeller.apellidos) }}
+            </el-avatar>
+            <div v-else class="seller-default-circle">
+              <el-icon :size="22"><User /></el-icon>
+            </div>
+          </div>
+          <div class="seller-info-box">
+            <span class="seller-title-label" :class="{ 'text-white': isSellerPhotographer }">
+              {{
+                selectedSeller
+                  ? `${selectedSeller.nombre} ${selectedSeller.apellidos}`
+                  : 'Selecciona vendedor'
+              }}
+            </span>
+            <span
+              v-if="selectedSeller"
+              class="seller-subtitle-label"
+              :class="{ 'text-white-subtle': isSellerPhotographer }"
+            >
+              {{ selectedSeller.perfilNombre }} · {{ getSellerStatus(selectedSeller.id).label }}
+            </span>
+          </div>
+        </div>
 
-                <div class="pick-item-info">
-                  <div class="pick-item-client">{{ seller.nombre }} {{ seller.apellidos }}</div>
-                  <div class="pick-item-meta">
-                    <span
-                      class="seller-status-tag"
-                      :class="getSellerStatus(seller.id).tagClass"
-                    >
-                      {{ getSellerStatus(seller.id).label }}
-                    </span>
+        <!-- Barra toggle VER VENDEDORES -->
+        <div
+          class="seller-toggle-bar"
+          :class="{ 'is-open': showSellersList, 'is-selected-toggle': isSellerPhotographer }"
+          role="button"
+          tabindex="0"
+          @click="toggleSellersList"
+        >
+          <span class="toggle-text">
+            {{ showSellersList ? 'OCULTAR VENDEDORES' : 'VER VENDEDORES' }}
+          </span>
+          <el-icon class="toggle-icon" :class="{ 'is-rotated': showSellersList }">
+            <ChevronDown :size="18" />
+          </el-icon>
+        </div>
+
+        <!-- Lista colapsable de vendedores -->
+        <el-collapse-transition>
+          <div v-if="showSellersList" class="seller-dropdown-container">
+            <div v-if="!formData.hotelId" class="seller-empty-state">
+              Selecciona primero una sesión de fotos para ver los vendedores de su hotel.
+            </div>
+            <div v-else-if="sellers.length === 0" class="seller-empty-state">
+              No hay agendadores o fotógrafos asignados a este hotel.
+            </div>
+            <div v-else class="seller-dropdown-list">
+              <div
+                v-for="seller in sellers"
+                :key="seller.id"
+                class="seller-pick-item"
+                :class="{
+                  'is-selected': String(formData.vendedorId) === String(seller.id),
+                  'is-disabled': getSellerStatus(seller.id).disabled,
+                }"
+                @click="!getSellerStatus(seller.id).disabled && selectSeller(seller.id)"
+              >
+                <div class="pick-item-left">
+                  <el-avatar
+                    :src="seller.imagen || undefined"
+                    :size="36"
+                    :style="{
+                      backgroundColor: getUserBgColor(seller.color),
+                      color: '#ffffff',
+                      fontWeight: '600',
+                      fontSize: '11px',
+                    }"
+                    class="pick-seller-avatar"
+                  >
+                    {{ getUserInitials(seller.nombre, seller.apellidos) }}
+                  </el-avatar>
+
+                  <div class="pick-item-info">
+                    <div class="pick-item-client">{{ seller.nombre }} {{ seller.apellidos }}</div>
+                    <div class="pick-item-meta">
+                      <span class="seller-status-tag" :class="getSellerStatus(seller.id).tagClass">
+                        {{ getSellerStatus(seller.id).label }}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="pick-item-tags">
-                <el-tag
-                  size="small"
-                  :type="
-                    seller.perfilNombre.toUpperCase().includes('AGENDADOR') ? 'primary' : 'success'
-                  "
-                  effect="light"
-                >
-                  {{ seller.perfilNombre }}
-                </el-tag>
+                <div class="pick-item-tags">
+                  <el-tag
+                    size="small"
+                    :type="
+                      seller.perfilNombre.toUpperCase().includes('AGENDADOR')
+                        ? 'primary'
+                        : 'success'
+                    "
+                    effect="light"
+                  >
+                    {{ seller.perfilNombre }}
+                  </el-tag>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </el-collapse-transition>
-    </div>
-
-    <!-- Read-only lock banner -->
-    <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-      Para editar esta cita contacta con tu supervisor o gerente de area.
-    </el-alert>
-
-    <!-- Datos de Venta y Notas (Directo en el flujo del formulario, sin tarjeta) -->
-    <el-form
-      :model="formData"
-      label-position="top"
-      size="large"
-      class="sale-form"
-      :disabled="isReadOnly"
-    >
-      <!-- Fotos Vendidas y Total USD en 2 columnas (50% cada una) -->
-      <div class="mobile-card-section-label">
-        <span class="step-badge-num">5</span>
-        Venta
-      </div>
-      <div class="mobile-form-row-2 spinner-containers">
-        <el-form-item label="Fotos Vendidas">
-          <el-input-number
-            v-model="formData.numFotosVendidas"
-            :min="0"
-            :step="1"
-            style="width: 100%"
-            placeholder="0"
-            size="large"
-          />
-        </el-form-item>
-
-        <el-form-item label="Total en USD">
-          <el-input-number
-            v-model="formData.totalVentaUsd"
-            :min="0"
-            :step="5"
-            style="width: 100%"
-            placeholder="0"
-            size="large"
-          >
-            <template #suffix>
-              <span>$</span>
-            </template>
-          </el-input-number>
-        </el-form-item>
+        </el-collapse-transition>
       </div>
 
-      <!-- Notas -->
-      <div>
+      <!-- Read-only lock banner -->
+      <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
+        Para editar esta cita contacta con tu supervisor o gerente de area.
+      </el-alert>
+
+      <!-- Datos de Venta y Notas (Directo en el flujo del formulario, sin tarjeta) -->
+      <el-form
+        :model="formData"
+        label-position="top"
+        size="large"
+        class="sale-form"
+        :disabled="isReadOnly"
+      >
+        <!-- Fotos Vendidas y Total USD en 2 columnas (50% cada una) -->
         <div class="mobile-card-section-label">
-          <span class="step-badge-num">6</span>
-          Notas
+          <span class="step-badge-num">5</span>
+          Venta
         </div>
-        <el-form-item>
-          <el-input
-            v-model="formData.notas"
-            type="textarea"
-            :rows="5"
-            placeholder="Notas sobre la cita de venta..."
-          />
-        </el-form-item>
-      </div>
-    </el-form>
+        <div class="mobile-form-row-2 spinner-containers">
+          <el-form-item label="Fotos Vendidas">
+            <el-input-number
+              v-model="formData.numFotosVendidas"
+              :min="0"
+              :step="1"
+              style="width: 100%"
+              placeholder="0"
+              size="large"
+            />
+          </el-form-item>
 
-    <!-- Estado de la Cita (Directo en el flujo del formulario, sin tarjeta) -->
-    <div class="mobile-status-section">
-      <div class="mobile-card-section-label">
-        <span class="step-badge-num">7</span>
-        Estado de la cita
-      </div>
-      <div class="status-radio-container">
-        <el-radio-group
-          v-model="formData.estado"
-          class="status-radio-group"
-          size="large"
-          :disabled="isReadOnly"
-        >
-          <el-radio-button
-            v-for="opt in estadoOptions"
-            :key="opt.value"
-            :value="opt.value"
-            :class="['status-radio-btn', `status-radio-btn--${opt.value.toLowerCase()}`]"
+          <el-form-item label="Total en USD">
+            <el-input-number
+              v-model="formData.totalVentaUsd"
+              :min="0"
+              :step="5"
+              style="width: 100%"
+              placeholder="0"
+              size="large"
+            >
+              <template #suffix>
+                <span>$</span>
+              </template>
+            </el-input-number>
+          </el-form-item>
+        </div>
+
+        <!-- Notas -->
+        <div>
+          <div class="mobile-card-section-label">
+            <span class="step-badge-num">6</span>
+            Notas
+          </div>
+          <el-form-item>
+            <el-input
+              v-model="formData.notas"
+              type="textarea"
+              :rows="5"
+              placeholder="Notas sobre la cita de venta..."
+            />
+          </el-form-item>
+        </div>
+      </el-form>
+
+      <!-- Estado de la Cita (Directo en el flujo del formulario, sin tarjeta) -->
+      <div class="mobile-status-section">
+        <div class="mobile-card-section-label">
+          <span class="step-badge-num">7</span>
+          Estado de la cita
+        </div>
+        <div class="status-radio-container">
+          <el-radio-group
+            v-model="formData.estado"
+            class="status-radio-group"
+            size="large"
+            :disabled="isReadOnly"
           >
-            <span class="status-btn-content">
-              <el-icon class="status-btn-icon"><component :is="opt.icon" /></el-icon>
-              <span>{{ opt.label }}</span>
-            </span>
-          </el-radio-button>
-        </el-radio-group>
+            <el-radio-button
+              v-for="opt in estadoOptions"
+              :key="opt.value"
+              :value="opt.value"
+              :class="['status-radio-btn', `status-radio-btn--${opt.value.toLowerCase()}`]"
+            >
+              <span class="status-btn-content">
+                <el-icon class="status-btn-icon"><component :is="opt.icon" /></el-icon>
+                <span>{{ opt.label }}</span>
+              </span>
+            </el-radio-button>
+          </el-radio-group>
+        </div>
       </div>
-    </div>
-  </template>
+    </template>
 
     <!-- Sticky Bottom Bar -->
     <div class="mobile-bottom-actions">
@@ -1645,6 +1699,25 @@ const isSellerPhotographer = computed(() => {
   padding-top: 0.35rem;
 }
 
+.minute-slots-divider {
+  margin: 0.25rem 0 0.15rem 0;
+}
+
+.minute-slots-divider :deep(.el-divider) {
+  margin: 0.35rem 0;
+  border-top-color: var(--toolbar-border, #e2e8f0);
+}
+
+.minute-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.65rem 0.45rem;
+}
+
+.minute-slot-btn {
+  font-weight: 600;
+}
+
 .time-slot-badge-wrapper {
   width: 100%;
   display: block;
@@ -1746,6 +1819,29 @@ html.dark .time-slot-btn.active {
   background-color: var(--el-color-primary, #3b82f6) !important;
   border-color: var(--el-color-primary, #3b82f6) !important;
   color: #ffffff !important;
+}
+
+.schedule-section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.schedule-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.header-datetime-tag {
+  font-weight: 600;
+  font-size: 0.76rem;
+  color: var(--el-color-primary, #3b82f6);
+  background-color: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.25);
 }
 
 .schedule-subheading {

@@ -170,7 +170,7 @@ const visibleTimeSlots = computed(() => {
   }
   return timeSlots.filter((time) => {
     const hour = parseInt(time.split(':')[0] ?? '0', 10)
-    return hour >= 8 && hour <= 20
+    return hour >= 8 && hour <= 19
   })
 })
 
@@ -180,9 +180,53 @@ const visibleCitaVentaTimeSlots = computed(() => {
   }
   return timeSlots.filter((time) => {
     const hour = parseInt(time.split(':')[0] ?? '0', 10)
-    return hour >= 8 && hour <= 20
+    return hour >= 8 && hour <= 19
   })
 })
+
+const minuteSlots = ['00', '10', '20', '30', '40', '50']
+
+const selectedHourOnly = computed(() => {
+  if (!selectedTimeOnly.value) return ''
+  return selectedTimeOnly.value.split(':')[0] || ''
+})
+
+const selectedMinuteOnly = computed(() => {
+  if (!selectedTimeOnly.value) return '00'
+  return selectedTimeOnly.value.split(':')[1] || '00'
+})
+
+function selectHour(timeOrHour: string) {
+  const hour = timeOrHour.includes(':') ? timeOrHour.split(':')[0] : timeOrHour
+  const min = selectedMinuteOnly.value || '00'
+  selectTimeSlot(`${hour}:${min}`)
+}
+
+function selectMinute(min: string) {
+  const hour = selectedHourOnly.value || '10'
+  selectTimeSlot(`${hour}:${min}`)
+}
+
+const selectedCitaVentaHourOnly = computed(() => {
+  if (!selectedCitaVentaTimeOnly.value) return ''
+  return selectedCitaVentaTimeOnly.value.split(':')[0] || ''
+})
+
+const selectedCitaVentaMinuteOnly = computed(() => {
+  if (!selectedCitaVentaTimeOnly.value) return '00'
+  return selectedCitaVentaTimeOnly.value.split(':')[1] || '00'
+})
+
+function selectCitaVentaHour(timeOrHour: string) {
+  const hour = timeOrHour.includes(':') ? timeOrHour.split(':')[0] : timeOrHour
+  const min = selectedCitaVentaMinuteOnly.value || '00'
+  selectCitaVentaTimeSlot(`${hour}:${min}`)
+}
+
+function selectCitaVentaMinute(min: string) {
+  const hour = selectedCitaVentaHourOnly.value || '10'
+  selectCitaVentaTimeSlot(`${hour}:${min}`)
+}
 
 // Mapa de cantidad de sesiones por hora para el día seleccionado
 const sessionsCountByHour = computed<Record<string, number>>(() => {
@@ -607,7 +651,18 @@ function handleSave() {
             <!-- 2. Bloque de Horas -->
             <div class="schedule-section-block">
               <div class="schedule-section-header-row">
-                <span class="schedule-section-title">Horario disponible</span>
+                <div class="schedule-section-title-group">
+                  <span class="schedule-section-title">Horario disponible</span>
+                  <el-tag
+                    v-if="selectedTimeOnly"
+                    effect="plain"
+                    round
+                    size="small"
+                    class="header-datetime-tag"
+                  >
+                    {{ selectedTimeOnly }}
+                  </el-tag>
+                </div>
                 <el-switch v-model="showAllTimeSlots" size="default" />
               </div>
               <div class="time-slots-grid">
@@ -621,12 +676,34 @@ function handleSave() {
                   <button
                     type="button"
                     class="time-slot-btn"
-                    :class="[getTimeSlotStatusClass(time), { active: selectedTimeOnly === time }]"
-                    @click="selectTimeSlot(time)"
+                    :class="[
+                      getTimeSlotStatusClass(time),
+                      { active: selectedHourOnly === time.split(':')[0] },
+                    ]"
+                    @click="selectHour(time)"
                   >
                     {{ time }}
                   </button>
                 </el-badge>
+              </div>
+
+              <!-- Divisor punteado para selección de minutos -->
+              <div class="minute-slots-divider">
+                <el-divider border-style="dotted" />
+              </div>
+
+              <!-- Grid de slots de minutos (00 - 50) -->
+              <div class="minute-slots-grid">
+                <button
+                  v-for="min in minuteSlots"
+                  :key="`sesion-min-${min}`"
+                  type="button"
+                  class="time-slot-btn minute-slot-btn"
+                  :class="{ active: selectedMinuteOnly === min && !!selectedHourOnly }"
+                  @click="selectMinute(min)"
+                >
+                  {{ min }}
+                </button>
               </div>
             </div>
 
@@ -739,7 +816,18 @@ function handleSave() {
             <!-- 2. Bloque de Horas de Venta -->
             <div class="schedule-section-block">
               <div class="schedule-section-header-row">
-                <span class="schedule-section-title">Horario de venta</span>
+                <div class="schedule-section-title-group">
+                  <span class="schedule-section-title">Horario de venta</span>
+                  <el-tag
+                    v-if="selectedCitaVentaTimeOnly"
+                    effect="plain"
+                    round
+                    size="small"
+                    class="header-datetime-tag"
+                  >
+                    {{ selectedCitaVentaTimeOnly }}
+                  </el-tag>
+                </div>
                 <el-switch v-model="showAllCitaVentaTimeSlots" size="default" />
               </div>
               <div class="time-slots-grid">
@@ -755,13 +843,32 @@ function handleSave() {
                     class="time-slot-btn"
                     :class="[
                       getCitaVentaTimeSlotStatusClass(time),
-                      { active: selectedCitaVentaTimeOnly === time },
+                      { active: selectedCitaVentaHourOnly === time.split(':')[0] },
                     ]"
-                    @click="selectCitaVentaTimeSlot(time)"
+                    @click="selectCitaVentaHour(time)"
                   >
                     {{ time }}
                   </button>
                 </el-badge>
+              </div>
+
+              <!-- Divisor punteado para selección de minutos de venta -->
+              <div class="minute-slots-divider">
+                <el-divider border-style="dotted" />
+              </div>
+
+              <!-- Grid de slots de minutos (00 - 50) -->
+              <div class="minute-slots-grid">
+                <button
+                  v-for="min in minuteSlots"
+                  :key="`cita-sesion-min-${min}`"
+                  type="button"
+                  class="time-slot-btn minute-slot-btn"
+                  :class="{ active: selectedCitaVentaMinuteOnly === min && !!selectedCitaVentaHourOnly }"
+                  @click="selectCitaVentaMinute(min)"
+                >
+                  {{ min }}
+                </button>
               </div>
 
               <!-- Alerta de conflictos de Cita de Venta -->
@@ -1671,6 +1778,20 @@ html.dark
   width: 100%;
 }
 
+.schedule-section-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-datetime-tag {
+  font-weight: 600;
+  font-size: 0.76rem;
+  color: var(--el-color-primary, #3b82f6);
+  background-color: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
 .schedule-section-title {
   font-size: 0.82rem;
   font-weight: 700;
@@ -1745,6 +1866,25 @@ html.dark
   grid-template-columns: repeat(6, 1fr);
   gap: 0.65rem 0.45rem;
   padding-top: 0.35rem;
+}
+
+.minute-slots-divider {
+  margin: 0.25rem 0 0.15rem 0;
+}
+
+.minute-slots-divider :deep(.el-divider) {
+  margin: 0.35rem 0;
+  border-top-color: var(--toolbar-border, #e2e8f0);
+}
+
+.minute-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.65rem 0.45rem;
+}
+
+.minute-slot-btn {
+  font-weight: 600;
 }
 
 .time-slot-badge-wrapper {

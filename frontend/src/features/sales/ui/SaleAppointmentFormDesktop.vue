@@ -40,7 +40,6 @@ const {
   selectedDateOnly,
   selectedTimeOnly,
   timeSlots,
-  selectTimeSlot,
   getCitaVentaCellClassName,
   disabledPastDates,
   formatDateTime,
@@ -147,6 +146,31 @@ const isSellerPhotographer = computed(() => {
     pName.includes('FOTOGRAFO')
   )
 })
+
+const minuteSlots = ['00', '10', '20', '30', '40', '50']
+
+const selectedHourOnly = computed(() => {
+  if (!selectedTimeOnly.value) return ''
+  return selectedTimeOnly.value.split(':')[0] || ''
+})
+
+const selectedMinuteOnly = computed(() => {
+  if (!selectedTimeOnly.value) return '00'
+  return selectedTimeOnly.value.split(':')[1] || '00'
+})
+
+function selectHour(timeOrHour: string) {
+  if (isReadOnly.value) return
+  const hour = timeOrHour.includes(':') ? timeOrHour.split(':')[0] : timeOrHour
+  const min = selectedMinuteOnly.value || '00'
+  selectedTimeOnly.value = `${hour}:${min}`
+}
+
+function selectMinute(min: string) {
+  if (isReadOnly.value) return
+  const hour = selectedHourOnly.value || '10'
+  selectedTimeOnly.value = `${hour}:${min}`
+}
 
 // Mapa de cantidad de citas de venta por hora para la fecha de venta seleccionada
 const salesCountByHour = computed<Record<string, number>>(() => {
@@ -322,14 +346,34 @@ const formattedSelectedSaleDateTime = computed(() => {
                         class="time-slot-btn"
                         :class="[
                           getCitaVentaTimeSlotStatusClass(time),
-                          { active: selectedTimeOnly === time },
+                          { active: selectedHourOnly === time.split(':')[0] },
                         ]"
                         :disabled="isReadOnly"
-                        @click="selectTimeSlot(time)"
+                        @click="selectHour(time)"
                       >
                         {{ time }}
                       </button>
                     </el-badge>
+                  </div>
+
+                  <!-- Divisor punteado para selección de minutos -->
+                  <div class="minute-slots-divider">
+                    <el-divider border-style="dotted" />
+                  </div>
+
+                  <!-- Grid de slots de minutos (00 - 50) -->
+                  <div class="minute-slots-grid">
+                    <button
+                      v-for="min in minuteSlots"
+                      :key="`cita-desktop-min-${min}`"
+                      type="button"
+                      class="time-slot-btn minute-slot-btn"
+                      :class="{ active: selectedMinuteOnly === min && !!selectedHourOnly }"
+                      :disabled="isReadOnly"
+                      @click="selectMinute(min)"
+                    >
+                      {{ min }}
+                    </button>
                   </div>
                 </div>
 
@@ -1001,9 +1045,28 @@ const formattedSelectedSaleDateTime = computed(() => {
 
 .time-slots-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 0.65rem 0.45rem;
   padding-top: 0.35rem;
+}
+
+.minute-slots-divider {
+  margin: 0.25rem 0 0.15rem 0;
+}
+
+.minute-slots-divider :deep(.el-divider) {
+  margin: 0.35rem 0;
+  border-top-color: var(--toolbar-border, #e2e8f0);
+}
+
+.minute-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.65rem 0.45rem;
+}
+
+.minute-slot-btn {
+  font-weight: 600;
 }
 
 .time-slot-badge-wrapper {

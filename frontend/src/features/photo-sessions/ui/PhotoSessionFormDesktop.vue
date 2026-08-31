@@ -104,6 +104,50 @@ const sessionsCountByHour = computed<Record<string, number>>(() => {
   return counts
 })
 
+const minuteSlots = ['00', '10', '20', '30', '40', '50']
+
+const selectedHourOnly = computed(() => {
+  if (!selectedTimeOnly.value) return ''
+  return selectedTimeOnly.value.split(':')[0] || ''
+})
+
+const selectedMinuteOnly = computed(() => {
+  if (!selectedTimeOnly.value) return '00'
+  return selectedTimeOnly.value.split(':')[1] || '00'
+})
+
+function selectHour(timeOrHour: string) {
+  const hour = timeOrHour.includes(':') ? timeOrHour.split(':')[0] : timeOrHour
+  const min = selectedMinuteOnly.value || '00'
+  selectTimeSlot(`${hour}:${min}`)
+}
+
+function selectMinute(min: string) {
+  const hour = selectedHourOnly.value || '10'
+  selectTimeSlot(`${hour}:${min}`)
+}
+
+const selectedCitaVentaHourOnly = computed(() => {
+  if (!selectedCitaVentaTimeOnly.value) return ''
+  return selectedCitaVentaTimeOnly.value.split(':')[0] || ''
+})
+
+const selectedCitaVentaMinuteOnly = computed(() => {
+  if (!selectedCitaVentaTimeOnly.value) return '00'
+  return selectedCitaVentaTimeOnly.value.split(':')[1] || '00'
+})
+
+function selectCitaVentaHour(timeOrHour: string) {
+  const hour = timeOrHour.includes(':') ? timeOrHour.split(':')[0] : timeOrHour
+  const min = selectedCitaVentaMinuteOnly.value || '00'
+  selectCitaVentaTimeSlot(`${hour}:${min}`)
+}
+
+function selectCitaVentaMinute(min: string) {
+  const hour = selectedCitaVentaHourOnly.value || '10'
+  selectCitaVentaTimeSlot(`${hour}:${min}`)
+}
+
 const motivoOptions = [
   { label: 'Cumpleaños', value: 'Cumpleaños', icon: Balloon },
   { label: 'Foto familiar', value: 'Foto familiar', icon: Users },
@@ -583,13 +627,32 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                               class="time-slot-btn"
                               :class="[
                                 getTimeSlotStatusClass(time),
-                                { active: selectedTimeOnly === time },
+                                { active: selectedHourOnly === time.split(':')[0] },
                               ]"
-                              @click="selectTimeSlot(time)"
+                              @click="selectHour(time)"
                             >
                               {{ time }}
                             </button>
                           </el-badge>
+                        </div>
+
+                        <!-- Divisor punteado para selección de minutos -->
+                        <div class="minute-slots-divider">
+                          <el-divider border-style="dotted" />
+                        </div>
+
+                        <!-- Grid de slots de minutos (00 - 50) -->
+                        <div class="minute-slots-grid">
+                          <button
+                            v-for="min in minuteSlots"
+                            :key="`sesion-desktop-min-${min}`"
+                            type="button"
+                            class="time-slot-btn minute-slot-btn"
+                            :class="{ active: selectedMinuteOnly === min && !!selectedHourOnly }"
+                            @click="selectMinute(min)"
+                          >
+                            {{ min }}
+                          </button>
                         </div>
                       </div>
 
@@ -759,13 +822,32 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                               class="time-slot-btn"
                               :class="[
                                 getCitaVentaTimeSlotStatusClass(time),
-                                { active: selectedCitaVentaTimeOnly === time },
+                                { active: selectedCitaVentaHourOnly === time.split(':')[0] },
                               ]"
-                              @click="selectCitaVentaTimeSlot(time)"
+                              @click="selectCitaVentaHour(time)"
                             >
                               {{ time }}
                             </button>
                           </el-badge>
+                        </div>
+
+                        <!-- Divisor punteado para selección de minutos de venta -->
+                        <div class="minute-slots-divider">
+                          <el-divider border-style="dotted" />
+                        </div>
+
+                        <!-- Grid de slots de minutos (00 - 50) -->
+                        <div class="minute-slots-grid">
+                          <button
+                            v-for="min in minuteSlots"
+                            :key="`cita-sesion-desktop-min-${min}`"
+                            type="button"
+                            class="time-slot-btn minute-slot-btn"
+                            :class="{ active: selectedCitaVentaMinuteOnly === min && !!selectedCitaVentaHourOnly }"
+                            @click="selectCitaVentaMinute(min)"
+                          >
+                            {{ min }}
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -1167,9 +1249,28 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 /* Time slots pills grid */
 .time-slots-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 0.65rem 0.45rem;
   padding-top: 0.35rem;
+}
+
+.minute-slots-divider {
+  margin: 0.25rem 0 0.15rem 0;
+}
+
+.minute-slots-divider :deep(.el-divider) {
+  margin: 0.35rem 0;
+  border-top-color: var(--toolbar-border, #e2e8f0);
+}
+
+.minute-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.65rem 0.45rem;
+}
+
+.minute-slot-btn {
+  font-weight: 600;
 }
 
 .time-slot-badge-wrapper {
