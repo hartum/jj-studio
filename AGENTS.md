@@ -69,6 +69,10 @@ Todas las pantallas del sistema deben seguir las directrices globales de [.agent
 - Debe incluir siempre `git config --global --add safe.directory $TARGET_DIR`.
 - Debe ejecutar `npx prisma db push` en el backend para aplicar cambios de esquema a MariaDB automáticamente sin alterar datos existentes.
 
+### 4. Cabeceras HTTP en Frontend y Fastify 5 (Prevenir Error 400 `FST_ERR_CTP_EMPTY_JSON_BODY`):
+- **Fastify 5 (`^5.10.0`)** rechaza con `400 Bad Request (FST_ERR_CTP_EMPTY_JSON_BODY)` cualquier petición HTTP que envíe la cabecera `Content-Type: application/json` con un cuerpo (*body*) vacío (típico en peticiones `DELETE` o `GET`).
+- **Regla estricta en Stores/Servicios Frontend**: NUNCA incluir `Content-Type: application/json` de forma incondicional en helpers de headers (`getHeaders`/`getAuthHeaders`). Solo añadir `Content-Type: application/json` si la petición lleva un payload (`POST`, `PUT`, `PATCH` con body). En peticiones sin body (`DELETE`, `GET`), enviar únicamente `Authorization: Bearer <token>`.
+
 ---
 
 ## 🛠️ Comandos Principales

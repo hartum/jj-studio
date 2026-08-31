@@ -102,6 +102,10 @@ Este archivo define el contexto obligatorio, la estructura de negocio, los roles
   4. Reinicio de proceso PM2 `jjstudio-backend`.
   5. Asignación de permisos al usuario web: `chown -R jjstudio_har_usr:jjstudio_har_usr $TARGET_DIR`.
 
+### D. Cabeceras HTTP en Frontend y Fastify 5 (Prevenir Error 400 `FST_ERR_CTP_EMPTY_JSON_BODY`):
+- **Fastify 5 (`^5.10.0`)** rechaza con `400 Bad Request (FST_ERR_CTP_EMPTY_JSON_BODY)` cualquier petición HTTP que envíe la cabecera `Content-Type: application/json` con un cuerpo (*body*) vacío (típico en peticiones `DELETE` o `GET`).
+- **Regla estricta en Stores/Servicios Frontend**: NUNCA incluir `Content-Type: application/json` de forma incondicional en helpers de headers (`getHeaders`/`getAuthHeaders`). Solo añadir `Content-Type: application/json` si la petición lleva un payload (`POST`, `PUT`, `PATCH` con body). En peticiones sin body (`DELETE`, `GET`), enviar únicamente `Authorization: Bearer <token>`.
+
 ---
 
 ## 6. Instrucciones Generales para el Agente AI
@@ -109,3 +113,4 @@ Este archivo define el contexto obligatorio, la estructura de negocio, los roles
 - No borres ni simplifiques la lógica de negocio descrita en este documento.
 - Asegúrate de que las consultas y mutaciones respeten el tipado estricto de TypeScript sin usar `any`.
 - Respeta estrictamente la regla de NO commitear archivos `.env` bajo ninguna circunstancia.
+- Asegúrate de que las peticiones sin cuerpo (`DELETE`/`GET`) no envíen cabecera `Content-Type: application/json` para no provocar el error `400 FST_ERR_CTP_EMPTY_JSON_BODY` de Fastify 5.

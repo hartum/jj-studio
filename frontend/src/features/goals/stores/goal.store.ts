@@ -9,8 +9,11 @@ import type {
 
 const API_URL = import.meta.env.VITE_API_URL || '/api'
 
-function getAuthHeaders(): Record<string, string> {
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+function getAuthHeaders(includeContentType = true): Record<string, string> {
+  const headers: Record<string, string> = {}
+  if (includeContentType) {
+    headers['Content-Type'] = 'application/json'
+  }
   const token = localStorage.getItem('token')
   if (token) {
     headers['Authorization'] = `Bearer ${token}`
@@ -140,7 +143,7 @@ export const useGoalStore = defineStore('goals', () => {
     try {
       const res = await fetch(`${API_URL}/metas/${id}`, {
         method: 'DELETE',
-        headers: getAuthHeaders(),
+        headers: getAuthHeaders(false),
       })
       if (res.ok) {
         metas.value = metas.value.filter((m) => m.id !== id)
