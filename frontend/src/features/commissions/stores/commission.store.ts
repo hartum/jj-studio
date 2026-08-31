@@ -17,12 +17,16 @@ export const useCommissionStore = defineStore('commission', () => {
   const isSaving = ref(false)
   const error = ref<string | null>(null)
 
-  function getHeaders(): HeadersInit {
+  function getHeaders(includeJson: boolean = false): HeadersInit {
     const token = localStorage.getItem('token')
-    return {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    const headers: Record<string, string> = {}
+    if (includeJson) {
+      headers['Content-Type'] = 'application/json'
     }
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+    return headers
   }
 
   async function fetchConfigs(paisId?: number, hotelId?: number) {
@@ -55,7 +59,7 @@ export const useCommissionStore = defineStore('commission', () => {
     try {
       const res = await fetch(`${API_URL}/comisiones/config`, {
         method: 'PUT',
-        headers: getHeaders(),
+        headers: getHeaders(true),
         body: JSON.stringify(configData),
       })
       if (!res.ok) {
@@ -70,6 +74,28 @@ export const useCommissionStore = defineStore('commission', () => {
       throw err
     } finally {
       isSaving.value = false
+    }
+  }
+
+  async function deleteConfig(id: number, paisId?: number, hotelId?: number) {
+    isLoading.value = true
+    error.value = null
+    try {
+      const res = await fetch(`${API_URL}/comisiones/config/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(false),
+      })
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Error al eliminar la configuración de comisiones')
+      }
+      await fetchConfigs(paisId, hotelId)
+      return true
+    } catch (err: unknown) {
+      error.value = err instanceof Error ? err.message : String(err)
+      throw err
+    } finally {
+      isLoading.value = false
     }
   }
 
@@ -149,7 +175,7 @@ export const useCommissionStore = defineStore('commission', () => {
     try {
       const res = await fetch(`${API_URL}/comisiones/${id}/estado`, {
         method: 'PATCH',
-        headers: getHeaders(),
+        headers: getHeaders(true),
         body: JSON.stringify({ estado }),
       })
       if (!res.ok) throw new Error('Error al actualizar el estado de la comisión')
@@ -192,6 +218,7 @@ export const useCommissionStore = defineStore('commission', () => {
     error,
     fetchConfigs,
     saveConfig,
+    deleteConfig,
     fetchResumen,
     fetchComisiones,
     updateEstadoComision,

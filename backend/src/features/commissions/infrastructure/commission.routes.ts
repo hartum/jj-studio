@@ -128,6 +128,45 @@ export async function commissionRoutes(fastify: FastifyInstance) {
     }
   })
 
+  // DELETE /api/comisiones/config/:id - Eliminar configuración de comisiones
+  fastify.delete('/api/comisiones/config/:id', async (request, reply) => {
+    try {
+      const userId = getAuthUserId(request)
+      if (!userId) {
+        return reply.status(401).send({ error: 'No autenticado' })
+      }
+      const ctx = await getUserContext(userId)
+      if (!ctx || !['SUPERUSUARIO', 'ADMIN'].includes(ctx.roleCode)) {
+        return reply
+          .status(403)
+          .send({ error: 'Solo Superusuarios y Administradores pueden eliminar comisiones' })
+      }
+
+      const id = Number((request.params as any).id)
+      if (!id || isNaN(id)) {
+        return reply.status(400).send({ error: 'ID de configuración inválido' })
+      }
+
+      const existing = await prisma.comisionConfig.findUnique({
+        where: { id },
+      })
+      if (!existing) {
+        return reply.status(404).send({ error: 'Configuración no encontrada o ya eliminada' })
+      }
+
+      await prisma.comisionConfig.delete({
+        where: { id },
+      })
+
+      return reply.send({ success: true, id })
+    } catch (err: unknown) {
+      fastify.log.error(err)
+      const message =
+        err instanceof Error ? err.message : 'Error al eliminar la configuración de comisiones'
+      return reply.status(500).send({ error: message })
+    }
+  })
+
   // GET /api/comisiones/resumen - Resumen de comisiones para dashboards
   fastify.get('/api/comisiones/resumen', async (request, reply) => {
     try {

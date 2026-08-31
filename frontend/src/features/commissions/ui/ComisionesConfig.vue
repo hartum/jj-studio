@@ -4,8 +4,10 @@ import { useCommissionStore } from '../stores/commission.store'
 import { useCountryStore } from '@/features/countries/stores/country.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { ElMessage } from 'element-plus'
-import { Check, Refresh, InfoFilled } from '@element-plus/icons-vue'
+import { Check, Refresh, InfoFilled, Location, Delete } from '@element-plus/icons-vue'
+import { Building2 } from '@lucide/vue'
 import { getRoleSvg } from '@/features/users/utils/user-avatar'
+import type { ComisionConfig } from '../domain/commission.model'
 
 const commissionStore = useCommissionStore()
 const countryStore = useCountryStore()
@@ -28,13 +30,38 @@ const formatPercentTooltip = (val: number) => `${val}%`
 
 const isRecalculating = ref(false)
 
-const availableHotels = computed(() => {
+interface AreaGroup {
+  id: number
+  nombre: string
+  hoteles: { id: number; nombre: string }[]
+}
+
+const groupedAreas = computed<AreaGroup[]>(() => {
   if (!selectedPaisId.value) return []
-  return hotelStore.hotels.filter((h) => {
-    // Find area of hotel and check if its country is selectedPaisId
-    const country = countryStore.countries.find((c) => c.areas?.some((a) => a.id === h.areaId))
-    return country?.id === selectedPaisId.value
-  })
+  const country = countryStore.countries.find((c) => c.id === selectedPaisId.value)
+  if (!country || !country.areas) return []
+
+  const result: AreaGroup[] = []
+  for (const area of country.areas) {
+    let hotelsInArea: { id: number; nombre: string }[] = (area.hoteles || [])
+      .filter((h) => !h.deletedAt)
+      .map((h) => ({ id: h.id, nombre: h.nombre }))
+
+    if (hotelsInArea.length === 0) {
+      hotelsInArea = hotelStore.hotels
+        .filter((h) => h.areaId === area.id)
+        .map((h) => ({ id: h.id, nombre: h.nombre }))
+    }
+
+    if (hotelsInArea.length > 0) {
+      result.push({
+        id: area.id,
+        nombre: area.nombre,
+        hoteles: hotelsInArea,
+      })
+    }
+  }
+  return result
 })
 
 async function loadConfig() {
@@ -99,6 +126,22 @@ async function handleRecalculate() {
     isRecalculating.value = false
   }
 }
+
+async function handleDeleteConfig(row: ComisionConfig) {
+  if (!row.id) return
+  try {
+    await commissionStore.deleteConfig(
+      row.id,
+      selectedPaisId.value || undefined,
+      selectedHotelId.value || undefined,
+    )
+    ElMessage.success('Configuración de comisiones eliminada correctamente')
+    await loadConfig()
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Error al eliminar la configuración'
+    ElMessage.error(message)
+  }
+}
 </script>
 
 <template>
@@ -126,16 +169,40 @@ async function handleRecalculate() {
           v-model="selectedHotelId"
           placeholder="Todos los hoteles del país seleccionado"
           clearable
+          filterable
           size="large"
           class="hotel-select"
           :disabled="!selectedPaisId"
+          popper-class="custom-group-select-dropdown"
         >
-          <el-option
-            v-for="hotel in availableHotels"
-            :key="hotel.id"
-            :value="hotel.id"
-            :label="hotel.nombre"
-          />
+          <template v-for="area in groupedAreas" :key="area.id">
+            <!-- Item no seleccionable por cada Área -->
+            <el-option
+              :value="`area-${area.id}`"
+              :label="area.nombre"
+              disabled
+              class="area-header-option"
+            >
+              <div class="area-option-header">
+                <el-icon :size="18" class="area-icon"><Location /></el-icon>
+                <span class="area-title">{{ area.nombre }}</span>
+              </div>
+            </el-option>
+
+            <!-- Hoteles pertenecientes a este área -->
+            <el-option
+              v-for="hotel in area.hoteles"
+              :key="hotel.id"
+              :value="hotel.id"
+              :label="hotel.nombre"
+              class="hotel-sub-option"
+            >
+              <div class="option-item-content hotel-option-item">
+                <el-icon :size="18" class="hotel-option-icon"><Building2 /></el-icon>
+                <span class="hotel-name">{{ hotel.nombre }}</span>
+              </div>
+            </el-option>
+          </template>
         </el-select>
       </div>
 
@@ -371,6 +438,27 @@ async function handleRecalculate() {
         <el-table-column label="Gerente" align="center" width="110">
           <template #default="{ row }">
             <span>{{ row.gerentePct }}%</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="Acciones" width="90" align="center">
+          <template #default="{ row }">
+            <el-popconfirm
+              title="¿Eliminar esta configuración de comisiones?"
+              confirm-button-text="Eliminar"
+              cancel-button-text="Cancelar"
+              confirm-button-type="danger"
+              :width="260"
+              @confirm="handleDeleteConfig(row)"
+            >
+              <template #reference>
+                <el-button
+                  type="danger"
+                  link
+                  :icon="Delete"
+                  title="Eliminar configuración"
+                />
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
