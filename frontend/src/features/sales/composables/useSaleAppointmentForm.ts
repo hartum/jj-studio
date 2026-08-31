@@ -278,6 +278,12 @@ export function useSaleAppointmentForm() {
     if (isReadOnly.value) return true
     if (!formData.value.sesionId) return true
     if (!selectedDateOnly.value || !selectedTimeOnly.value) return true
+    if (formData.value.estado === 'COMPLETADA') {
+      if (!formData.value.vendedorId) return true
+      if (formData.value.numFotosVendidas == null || formData.value.totalVentaUsd == null) {
+        return true
+      }
+    }
     return false
   })
 
@@ -642,6 +648,14 @@ export function useSaleAppointmentForm() {
     }
 
     if (formData.value.estado === 'COMPLETADA') {
+      if (!formData.value.sesionId) {
+        ElMessage.warning('Debes seleccionar una sesión fotográfica para completar la cita')
+        return
+      }
+      if (!formData.value.vendedorId) {
+        ElMessage.warning('Debes seleccionar un vendedor para completar la cita')
+        return
+      }
       if (formData.value.numFotosVendidas == null || formData.value.totalVentaUsd == null) {
         ElMessage.warning(
           'Para completar la cita, indica el nº de fotos vendidas y el total en USD',

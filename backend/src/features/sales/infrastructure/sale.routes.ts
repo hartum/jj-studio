@@ -4,6 +4,7 @@ import { decrypt, decryptUser } from '../../../shared/encryption.js'
 import { calculateAndSaveCommissionsForSale } from '../../commissions/application/commission.service.js'
 import {
   syncCitaVentaToGoogle,
+  syncSesionToGoogle,
   deleteCitaVentaFromGoogle,
   deleteSesionFromGoogle,
 } from '../../integrations/google-calendar/google-calendar.service.js'
@@ -422,6 +423,16 @@ export async function saleRoutes(fastify: FastifyInstance) {
       // Validate sales fields when creating as COMPLETADA
       const targetEstado = (body.estado as any) || 'PROGRAMADA'
       if (targetEstado === 'COMPLETADA') {
+        if (!body.sesionId) {
+          return reply
+            .status(400)
+            .send({ error: 'Para completar la cita, debes seleccionar una sesión fotográfica' })
+        }
+        if (!body.vendedorId) {
+          return reply
+            .status(400)
+            .send({ error: 'Para completar la cita, debes seleccionar un vendedor' })
+        }
         if (body.numFotosVendidas == null || body.totalVentaUsd == null) {
           return reply
             .status(400)
@@ -464,8 +475,21 @@ export async function saleRoutes(fastify: FastifyInstance) {
         })
       }
 
-      // Recalcular comisiones si se crea directamente como COMPLETADA
+      // Recalcular comisiones y sincronizar estado de sesión si se crea directamente como COMPLETADA
       if (nueva.estado === 'COMPLETADA') {
+        if (nueva.sesionId) {
+          try {
+            await prisma.sesionFotografica.update({
+              where: { id: nueva.sesionId },
+              data: { estado: 'COMPLETADA' },
+            })
+            await syncSesionToGoogle(nueva.sesionId).catch((gErr) => {
+              fastify.log.error(gErr, 'Error al sincronizar sesión completada con Google Calendar')
+            })
+          } catch (sessErr) {
+            fastify.log.error(sessErr, 'Error al marcar sesión como COMPLETADA tras completar la cita de venta')
+          }
+        }
         try {
           await calculateAndSaveCommissionsForSale(nueva.id)
         } catch (commErr) {
@@ -550,6 +574,18 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       // Validate sales fields when transitioning to COMPLETADA
       if (body.estado === 'COMPLETADA') {
+        const sesionId = existing.sesionId
+        const vendedorId = body.vendedorId !== undefined ? body.vendedorId : existing.vendedorId
+        if (!sesionId) {
+          return reply
+            .status(400)
+            .send({ error: 'Para completar la cita, debes seleccionar una sesión fotográfica' })
+        }
+        if (!vendedorId) {
+          return reply
+            .status(400)
+            .send({ error: 'Para completar la cita, debes seleccionar un vendedor' })
+        }
         const fotosVendidas = body.numFotosVendidas ?? existing.numFotosVendidas
         const totalVenta = body.totalVentaUsd ?? existing.totalVentaUsd
         if (fotosVendidas == null || totalVenta == null) {
@@ -575,7 +611,21 @@ export async function saleRoutes(fastify: FastifyInstance) {
         include: { sesion: true, vendedor: true },
       })
 
-      // Recalcular comisiones automáticamente
+      // Recalcular comisiones y sincronizar estado de sesión automáticamente
+      if (actualizada.estado === 'COMPLETADA' && actualizada.sesionId) {
+        try {
+          await prisma.sesionFotografica.update({
+            where: { id: actualizada.sesionId },
+            data: { estado: 'COMPLETADA' },
+          })
+          await syncSesionToGoogle(actualizada.sesionId).catch((gErr) => {
+            fastify.log.error(gErr, 'Error al sincronizar sesión completada con Google Calendar')
+          })
+        } catch (sessErr) {
+          fastify.log.error(sessErr, 'Error al marcar sesión como COMPLETADA tras completar la cita de venta')
+        }
+      }
+
       try {
         await calculateAndSaveCommissionsForSale(actualizada.id)
       } catch (commErr) {
