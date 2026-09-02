@@ -191,23 +191,6 @@ export const useCommissionStore = defineStore('commission', () => {
     }
   }
 
-  async function recalcularComisiones() {
-    isLoading.value = true
-    try {
-      const res = await fetch(`${API_URL}/comisiones/recalcular-todas`, {
-        method: 'POST',
-        headers: getHeaders(),
-      })
-      if (!res.ok) throw new Error('Error al recalcular comisiones')
-      return await res.json()
-    } catch (err: unknown) {
-      error.value = err instanceof Error ? err.message : String(err)
-      throw err
-    } finally {
-      isLoading.value = false
-    }
-  }
-
   return {
     configs,
     effectiveConfig,
@@ -222,6 +205,5 @@ export const useCommissionStore = defineStore('commission', () => {
     fetchResumen,
     fetchComisiones,
     updateEstadoComision,
-    recalcularComisiones,
   }
 })

@@ -6,7 +6,6 @@ import {
   getEffectiveCommissionConfig,
   saveCommissionConfig,
   getResumenComisiones,
-  calculateAndSaveCommissionsForSale,
 } from '../application/commission.service.js'
 
 function getAuthUserId(request: any): string | null {
@@ -367,34 +366,6 @@ export async function commissionRoutes(fastify: FastifyInstance) {
       const message =
         err instanceof Error ? err.message : 'Error al actualizar el estado de la comisión'
       return reply.status(400).send({ error: message })
-    }
-  })
-
-  // POST /api/comisiones/recalcular-todas - Recalcular comisiones existentes
-  fastify.post('/api/comisiones/recalcular-todas', async (request, reply) => {
-    try {
-      const userId = getAuthUserId(request)
-      if (!userId) return reply.status(401).send({ error: 'No autenticado' })
-
-      const ctx = await getUserContext(userId)
-      if (!ctx || !['SUPERUSUARIO', 'ADMIN', 'GERENTE'].includes(ctx.roleCode)) {
-        return reply.status(403).send({ error: 'No autorizado para recalcular comisiones' })
-      }
-
-      const ventasCompletadas = await prisma.citaVenta.findMany({
-        where: { estado: 'COMPLETADA', deletedAt: null, totalVentaUsd: { gt: 0 } },
-        select: { id: true },
-      })
-
-      for (const v of ventasCompletadas) {
-        await calculateAndSaveCommissionsForSale(v.id)
-      }
-
-      return reply.send({ success: true, processed: ventasCompletadas.length })
-    } catch (err: unknown) {
-      fastify.log.error(err)
-      const message = err instanceof Error ? err.message : 'Error al recalcular comisiones'
-      return reply.status(500).send({ error: message })
     }
   })
 }

@@ -4,7 +4,7 @@ import { useCommissionStore } from '../stores/commission.store'
 import { useCountryStore } from '@/features/countries/stores/country.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { ElMessage } from 'element-plus'
-import { Check, Refresh, InfoFilled, Location, Delete } from '@element-plus/icons-vue'
+import { Check, InfoFilled, Location, Delete } from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
 import { getRoleSvg } from '@/features/users/utils/user-avatar'
 import type { ComisionConfig } from '../domain/commission.model'
@@ -27,8 +27,6 @@ const formData = ref({
 })
 
 const formatPercentTooltip = (val: number) => `${val}%`
-
-const isRecalculating = ref(false)
 
 interface AreaGroup {
   id: number
@@ -114,19 +112,6 @@ async function handleSave() {
   }
 }
 
-async function handleRecalculate() {
-  isRecalculating.value = true
-  try {
-    const res = await commissionStore.recalcularComisiones()
-    ElMessage.success(`Se han recalculado las comisiones de ${res.processed} ventas completadas`)
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al recalcular comisiones'
-    ElMessage.error(message)
-  } finally {
-    isRecalculating.value = false
-  }
-}
-
 async function handleDeleteConfig(row: ComisionConfig) {
   if (!row.id) return
   try {
@@ -205,17 +190,6 @@ async function handleDeleteConfig(row: ComisionConfig) {
           </template>
         </el-select>
       </div>
-
-      <el-button
-        type="warning"
-        plain
-        size="large"
-        :icon="Refresh"
-        :loading="isRecalculating"
-        @click="handleRecalculate"
-      >
-        Recalcular Ventas Pasadas
-      </el-button>
     </div>
 
     <!-- Card Unificada de Configuración de Porcentajes -->
@@ -280,7 +254,7 @@ async function handleDeleteConfig(row: ComisionConfig) {
               />
               Vendedor / Agendador
             </el-tag>
-            <span class="role-desc-header"> Comisión por captación y apertura de sesión </span>
+            <span class="role-desc-header">Comisión por captación y apertura de sesión</span>
           </div>
           <el-divider border-style="dashed" class="section-divider" />
 
@@ -389,8 +363,8 @@ async function handleDeleteConfig(row: ComisionConfig) {
             <el-icon><InfoFilled /></el-icon>
             <span>
               Las modificaciones afectarán de manera inmediata a las nuevas ventas que se completen.
-              Las ventas ya cerradas mantienen su snapshot original a menos que se use el botón
-              "Recalcular".
+              Las ventas ya cerradas mantienen su valor original registrado en el momento de la
+              venta.
             </span>
           </div>
 
@@ -416,18 +390,18 @@ async function handleDeleteConfig(row: ComisionConfig) {
         <el-table-column prop="hotelNombre" label="Hotel" min-width="160" />
         <el-table-column label="Fotógrafo Contratado | Freelance" align="center" width="220">
           <template #default="{ row }">
-            <span
-              >{{ row.fotografoAsalariadoPct }}% |
-              <strong>{{ row.fotografoSinSalarioPct }}%</strong></span
-            >
+            <span>
+              {{ row.fotografoAsalariadoPct }}% |
+              <strong>{{ row.fotografoSinSalarioPct }}%</strong>
+            </span>
           </template>
         </el-table-column>
         <el-table-column label="Vendedor Contratado | Freelance" align="center" width="220">
           <template #default="{ row }">
-            <span
-              >{{ row.vendedorAsalariadoPct }}% |
-              <strong>{{ row.vendedorSinSalarioPct }}%</strong></span
-            >
+            <span>
+              {{ row.vendedorAsalariadoPct }}% |
+              <strong>{{ row.vendedorSinSalarioPct }}%</strong>
+            </span>
           </template>
         </el-table-column>
         <el-table-column label="Supervisor" align="center" width="110">
@@ -451,12 +425,7 @@ async function handleDeleteConfig(row: ComisionConfig) {
               @confirm="handleDeleteConfig(row)"
             >
               <template #reference>
-                <el-button
-                  type="danger"
-                  link
-                  :icon="Delete"
-                  title="Eliminar configuración"
-                />
+                <el-button type="danger" link :icon="Delete" title="Eliminar configuración" />
               </template>
             </el-popconfirm>
           </template>
