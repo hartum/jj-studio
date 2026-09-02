@@ -31,7 +31,7 @@ export const PERMISSION_MATRIX: Record<RoleCode, RoleConfig> = {
     scopeType: 'GLOBAL',
   },
   GERENTE: {
-    allowedNavRoutes: ['/inicio', '/usuarios'],
+    allowedNavRoutes: ['/inicio', '/agenda', '/ventas', '/usuarios', '/configuracion'],
     visibleTargetRoles: ['GERENTE', 'SUPERVISOR', 'FOTOGRAFO', 'AGENDADOR'],
     assignableTargetRoles: ['SUPERVISOR', 'FOTOGRAFO', 'AGENDADOR'],
     canCreateUsers: true,

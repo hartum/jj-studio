@@ -105,7 +105,8 @@ En el flujo operativo de venta participan distintos roles:
 
 ## 10. Permisos de Edición de Comisiones
 * **Pueden editar comisiones**:
-  * Administrador general / Dueño (`ADMIN`)
+  * Administrador general / Dueño (`ADMIN` / `SUPERUSUARIO`)
+  * Gerente de Área (`GERENTE`)
   * Contable (`CONTABLE`)
 * **NO pueden editar comisiones**:
   * Fotógrafos

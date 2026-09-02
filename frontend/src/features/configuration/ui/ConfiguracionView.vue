@@ -13,9 +13,16 @@ const authStore = useAuthStore()
 
 const userRole = computed(() => authStore.user?.roleCode?.toUpperCase())
 const isSuperOrAdmin = computed(() => userRole.value === 'SUPERUSUARIO' || userRole.value === 'ADMIN')
+const canManageCommissions = computed(
+  () => isSuperOrAdmin.value || userRole.value === 'GERENTE' || userRole.value === 'CONTABLE',
+)
 
 // Pestaña por defecto según el rol del usuario
-const defaultTab = computed(() => (isSuperOrAdmin.value ? 'paises' : 'metas'))
+const defaultTab = computed(() => {
+  if (isSuperOrAdmin.value) return 'paises'
+  if (userRole.value === 'CONTABLE') return 'comisiones'
+  return 'metas'
+})
 
 // Leer la pestaña activa desde el parámetro de consulta ?tab=
 const activeTab = ref((route.query.tab as string) || defaultTab.value)
@@ -46,7 +53,9 @@ function handleTabChange(paneName: string | number) {
         {{
           isSuperOrAdmin
             ? 'Gestiona las opciones generales, estructura geográfica, comisiones y parámetros de la plataforma'
-            : 'Establece y gestiona los objetivos comerciales y metas de tus hoteles y equipo'
+            : canManageCommissions
+              ? 'Establece y gestiona los porcentajes de comisiones, objetivos comerciales y metas de tus hoteles y equipo'
+              : 'Establece y gestiona los objetivos comerciales y metas de tus hoteles y equipo'
         }}
       </p>
     </div>
@@ -68,14 +77,14 @@ function handleTabChange(paneName: string | number) {
         <HotelesConfig />
       </el-tab-pane>
 
-      <el-tab-pane v-if="isSuperOrAdmin" label="Comisiones" name="comisiones">
-        <!-- Componente modular de comisiones -->
-        <ComisionesConfig />
-      </el-tab-pane>
-
       <el-tab-pane label="Metas y Objetivos" name="metas">
         <!-- Componente modular de la feature 'goals' -->
         <GoalFormView />
+      </el-tab-pane>
+
+      <el-tab-pane v-if="canManageCommissions" label="Comisiones" name="comisiones">
+        <!-- Componente modular de comisiones -->
+        <ComisionesConfig />
       </el-tab-pane>
     </el-tabs>
   </div>

@@ -87,10 +87,10 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         return reply.status(401).send({ error: 'No autenticado' })
       }
       const ctx = await getUserContext(userId)
-      if (!ctx || !['SUPERUSUARIO', 'ADMIN'].includes(ctx.roleCode)) {
+      if (!ctx || !['SUPERUSUARIO', 'ADMIN', 'GERENTE'].includes(ctx.roleCode)) {
         return reply
           .status(403)
-          .send({ error: 'Solo Superusuarios y Administradores pueden editar comisiones' })
+          .send({ error: 'Solo Superusuarios, Administradores y Gerentes pueden editar comisiones' })
       }
 
       const body = request.body as {
@@ -136,10 +136,10 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         return reply.status(401).send({ error: 'No autenticado' })
       }
       const ctx = await getUserContext(userId)
-      if (!ctx || !['SUPERUSUARIO', 'ADMIN'].includes(ctx.roleCode)) {
+      if (!ctx || !['SUPERUSUARIO', 'ADMIN', 'GERENTE'].includes(ctx.roleCode)) {
         return reply
           .status(403)
-          .send({ error: 'Solo Superusuarios y Administradores pueden eliminar comisiones' })
+          .send({ error: 'Solo Superusuarios, Administradores y Gerentes pueden eliminar comisiones' })
       }
 
       const id = Number((request.params as any).id)
@@ -377,7 +377,7 @@ export async function commissionRoutes(fastify: FastifyInstance) {
       if (!userId) return reply.status(401).send({ error: 'No autenticado' })
 
       const ctx = await getUserContext(userId)
-      if (!ctx || !['SUPERUSUARIO', 'ADMIN'].includes(ctx.roleCode)) {
+      if (!ctx || !['SUPERUSUARIO', 'ADMIN', 'GERENTE'].includes(ctx.roleCode)) {
         return reply.status(403).send({ error: 'No autorizado para recalcular comisiones' })
       }
 

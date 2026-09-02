@@ -12,7 +12,7 @@ Este archivo contiene el contexto del proyecto, la arquitectura tecnológica, lo
 
 ## 👥 Roles y Niveles de Acceso
 1. **Administrador (`ADMIN`)**: Acceso total global (países, destinos, hoteles, reportes, usuarios, comisiones, metas).
-2. **Gerente de Área (`GERENTE`)**: Gestión y supervisión de su zona/país asignado.
+2. **Gerente de Área (`GERENTE`)**: Gestión y supervisión de su zona/país asignado (usuarios, agenda, comisiones, metas).
 3. **Supervisor de Hotel (`SUPERVISOR`)**: Agenda, fotógrafos, ventas y metas de su hotel.
 4. **Fotógrafo (`FOTOGRAFO`)**: Acceso móvil/web a su agenda, ventas registradas y metas personales.
 5. **Contable (`CONTABLE`)**: Consulta de ventas, comisiones y liquidación de pagos.
