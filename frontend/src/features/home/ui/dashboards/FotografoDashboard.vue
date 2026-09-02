@@ -15,6 +15,8 @@ const {
   goToAgenda,
   formatCurrency,
   myMonthlyCommissions,
+  myCommissionFormula,
+  myCommissionTooltip,
 } = useDashboard()
 </script>
 
@@ -50,6 +52,14 @@ const {
           </div>
         </div>
         <div class="commission-banner-right">
+          <el-tooltip
+            :content="myCommissionTooltip"
+            placement="top"
+          >
+            <el-tag type="success" effect="light" style="font-weight: 600; cursor: help">
+              {{ myCommissionFormula }}
+            </el-tag>
+          </el-tooltip>
           <div class="stat-pill">
             <span class="pill-label">Ventas con Comisión:</span>
             <span class="pill-val">{{ commissionStore.comisiones.length }}</span>
@@ -75,7 +85,7 @@ const {
           <el-table-column prop="fechaVenta" label="Fecha" width="110" />
           <el-table-column prop="clienteNombre" label="Cliente" min-width="140" />
           <el-table-column prop="hotelNombre" label="Hotel" min-width="140" />
-          <el-table-column label="Venta Total" width="110" align="right">
+          <el-table-column label="Base Neta (tras imp.)" width="165" align="right">
             <template #default="{ row }">
               <span>{{ formatCurrency(row.baseCalculoUsd) }}</span>
             </template>

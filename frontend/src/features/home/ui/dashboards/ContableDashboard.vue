@@ -121,7 +121,7 @@ const {
           </template>
         </el-table-column>
         <el-table-column prop="hotelNombre" label="Hotel" min-width="150" />
-        <el-table-column label="Base Venta" width="120" align="right">
+        <el-table-column label="Base Neta (tras imp.)" width="165" align="right">
           <template #default="{ row }">
             <span>{{ formatCurrency(row.baseCalculoUsd) }}</span>
           </template>

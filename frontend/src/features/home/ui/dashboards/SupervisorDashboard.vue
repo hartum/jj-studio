@@ -13,6 +13,8 @@ const {
   formatCurrency,
   supervisorHotels,
   supervisorMonthlyCommissions,
+  myCommissionFormula,
+  myCommissionTooltip,
 } = useDashboard()
 </script>
 
@@ -52,7 +54,14 @@ const {
             Tus Comisiones —
             {{ monthsOptions.find((m) => m.value === selectedMes)?.label }} {{ selectedAnio }}
           </span>
-          <el-tag type="info" effect="light">2% sobre ventas del hotel</el-tag>
+          <el-tooltip
+            :content="myCommissionTooltip"
+            placement="top"
+          >
+            <el-tag type="info" effect="light" style="font-weight: 600; cursor: help">
+              {{ myCommissionFormula }}
+            </el-tag>
+          </el-tooltip>
         </div>
       </template>
       <div

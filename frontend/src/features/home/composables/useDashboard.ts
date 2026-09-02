@@ -79,6 +79,46 @@ export function useDashboard() {
   })
 
   // --- Carga de datos ---
+  async function loadCommissionConfigForUser() {
+    let paisId: number | undefined = undefined
+    let hotelId: number | undefined = undefined
+
+    if (selectedHotelFilters.value.length === 1 && selectedHotelFilters.value[0]) {
+      hotelId = selectedHotelFilters.value[0]
+      const h = hotelStore.hotels.find((item) => item.id === hotelId)
+      if (h) {
+        const area = countryStore.countries
+          .flatMap((c) => c.areas || [])
+          .find((a) => a.id === h.areaId)
+        if (area) paisId = area.paisId
+      }
+    } else if (
+      currentUser.value?.hotelIds &&
+      currentUser.value.hotelIds.length > 0 &&
+      currentUser.value.hotelIds[0]
+    ) {
+      hotelId = currentUser.value.hotelIds[0]
+      const h = hotelStore.hotels.find((item) => item.id === hotelId)
+      if (h) {
+        const area = countryStore.countries
+          .flatMap((c) => c.areas || [])
+          .find((a) => a.id === h.areaId)
+        if (area) paisId = area.paisId
+      }
+    } else if (
+      currentUser.value?.areaIds &&
+      currentUser.value.areaIds.length > 0 &&
+      currentUser.value.areaIds[0]
+    ) {
+      const area = countryStore.countries
+        .flatMap((c) => c.areas || [])
+        .find((a) => a.id === currentUser.value?.areaIds?.[0])
+      if (area) paisId = area.paisId
+    }
+
+    await commissionStore.fetchConfigs(paisId, hotelId).catch(() => {})
+  }
+
   async function loadGoalsData() {
     const hotelIdsParam =
       selectedHotelFilters.value.length > 0 ? selectedHotelFilters.value : undefined
@@ -103,6 +143,7 @@ export function useDashboard() {
         anio: selectedAnio.value,
         mes: selectedMes.value,
       }),
+      loadCommissionConfigForUser(),
     ])
   }
 
@@ -424,6 +465,46 @@ export function useDashboard() {
     return c === 'SIN_SALARIO' ? '🔵 Sin Salario / Freelance' : '🟢 Asalariado'
   })
 
+  const currentImpuestoPct = computed(() => {
+    return commissionStore.effectiveConfig?.impuestoPct ?? 16
+  })
+
+  const myCommissionFormula = computed(() => {
+    const code = currentUser.value?.roleCode
+    const contrato = currentUser.value?.tipoContrato
+    const config = commissionStore.effectiveConfig
+    const tax = config?.impuestoPct !== undefined ? config.impuestoPct : 16
+
+    if (code === 'GERENTE') {
+      const pct = config?.gerentePct ?? 2
+      return `${pct}% × (Ventas − ${tax}% impuestos)`
+    }
+    if (code === 'SUPERVISOR') {
+      const pct = config?.supervisorPct ?? 2
+      return `${pct}% × (Ventas del hotel − ${tax}% impuestos)`
+    }
+    if (code === 'FOTOGRAFO') {
+      const pct =
+        contrato === 'SIN_SALARIO'
+          ? (config?.fotografoSinSalarioPct ?? 20)
+          : (config?.fotografoAsalariadoPct ?? 14)
+      return `${pct}% × (Venta − ${tax}% impuestos)`
+    }
+    if (code === 'AGENDADOR') {
+      const pct =
+        contrato === 'SIN_SALARIO'
+          ? (config?.vendedorSinSalarioPct ?? 8)
+          : (config?.vendedorAsalariadoPct ?? 6)
+      return `${pct}% × (Venta − ${tax}% impuestos)`
+    }
+    return ''
+  })
+
+  const myCommissionTooltip = computed(() => {
+    const tax = currentImpuestoPct.value
+    return `La comisión se calcula sobre la base neta tras deducir el ${tax}% de retención de impuestos: ${myCommissionFormula.value}`
+  })
+
   const myMonthlyCommissions = computed(() => commissionStore.resumen?.totalComisionesUsd || 0)
 
   const supervisorMonthlyCommissions = computed(() => {
@@ -517,7 +598,10 @@ export function useDashboard() {
     formatCurrency,
     handleNavigateToGoalForm,
     // Comisiones
+    currentImpuestoPct,
     myContractBadge,
+    myCommissionFormula,
+    myCommissionTooltip,
     myMonthlyCommissions,
     supervisorMonthlyCommissions,
     gerenteMonthlyCommissions,

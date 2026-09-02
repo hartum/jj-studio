@@ -33,6 +33,8 @@ const {
   managerHotels,
   managerTeam,
   gerenteMonthlyCommissions,
+  myCommissionFormula,
+  myCommissionTooltip,
 } = useDashboard()
 
 interface AreaGroup {
@@ -93,7 +95,7 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
           <el-option-group
             v-for="pais in groupedManagerHotelsByCountry"
             :key="pais.id"
-            :label="pais.codigo ? `${pais.nombre} (${pais.codigo})` : pais.nombre"
+            :label="pais.nombre"
           >
             <template v-for="area in pais.areas" :key="area.id">
               <!-- Item no seleccionable por cada Área -->
@@ -150,7 +152,14 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
             Tus Comisiones —
             {{ monthsOptions.find((m) => m.value === selectedMes)?.label }} {{ selectedAnio }}
           </span>
-          <el-tag type="primary" effect="light">2% sobre ventas de tus áreas</el-tag>
+          <el-tooltip
+            :content="myCommissionTooltip"
+            placement="top"
+          >
+            <el-tag type="primary" effect="light" style="font-weight: 600; cursor: help">
+              {{ myCommissionFormula }}
+            </el-tag>
+          </el-tooltip>
         </div>
       </template>
       <div
