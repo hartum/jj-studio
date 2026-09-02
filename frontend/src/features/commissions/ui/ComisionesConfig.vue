@@ -5,7 +5,7 @@ import { useCountryStore } from '@/features/countries/stores/country.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { ElMessage } from 'element-plus'
 import { Check, InfoFilled, Location, Delete } from '@element-plus/icons-vue'
-import { Building2 } from '@lucide/vue'
+import { Building2, HandCoins } from '@lucide/vue'
 import { getRoleSvg } from '@/features/users/utils/user-avatar'
 import type { ComisionConfig } from '../domain/commission.model'
 
@@ -17,6 +17,7 @@ const selectedPaisId = ref<number | null>(null)
 const selectedHotelId = ref<number | null>(null)
 
 const formData = ref({
+  impuestoPct: 16,
   gerentePct: 2,
   supervisorPct: 2,
   fotografoAsalariadoPct: 14,
@@ -27,6 +28,7 @@ const formData = ref({
 })
 
 const formatPercentTooltip = (val: number) => `${val}%`
+const formatNegativePercentTooltip = (val: number) => `-${val}%`
 
 interface AreaGroup {
   id: number
@@ -70,6 +72,7 @@ async function loadConfig() {
   const eff = commissionStore.effectiveConfig
   if (eff) {
     formData.value = {
+      impuestoPct: Math.round(eff.impuestoPct ?? 16),
       gerentePct: Math.round(eff.gerentePct),
       supervisorPct: Math.round(eff.supervisorPct),
       fotografoAsalariadoPct: Math.round(eff.fotografoAsalariadoPct),
@@ -354,6 +357,33 @@ async function handleDeleteConfig(row: ComisionConfig) {
           </div>
         </div>
 
+        <!-- 5. Sección Retención Estatal / Impuestos -->
+        <div class="role-section">
+          <div class="section-header-role">
+            <el-tag type="info" size="large" effect="light" class="role-tag tax-tag">
+              <HandCoins :size="18" class="role-lucide-icon" />
+              Estado / Retención Impuestos
+            </el-tag>
+            <span class="role-desc-header">
+              Porcentaje deducido de los ingresos de cada venta antes de calcular las comisiones
+            </span>
+          </div>
+          <el-divider border-style="dashed" class="section-divider" />
+
+          <div class="inputs-row">
+            <div class="slider-container">
+              <el-slider
+                v-model="formData.impuestoPct"
+                :min="0"
+                :max="100"
+                :step="1"
+                :format-tooltip="formatNegativePercentTooltip"
+              />
+              <span class="pct-value text-danger">-{{ formData.impuestoPct }} %</span>
+            </div>
+          </div>
+        </div>
+
         <!-- Divisor final antes del footer -->
         <el-divider class="section-divider final-divider" />
 
@@ -388,6 +418,11 @@ async function handleDeleteConfig(row: ComisionConfig) {
       <el-table :data="commissionStore.configs" border stripe style="width: 100%">
         <el-table-column prop="paisNombre" label="País" min-width="150" />
         <el-table-column prop="hotelNombre" label="Hotel" min-width="160" />
+        <el-table-column label="Retención Estado" align="center" width="150">
+          <template #default="{ row }">
+            <span class="text-danger font-semibold">-{{ row.impuestoPct ?? 16 }}%</span>
+          </template>
+        </el-table-column>
         <el-table-column label="Fotógrafo Contratado | Freelance" align="center" width="220">
           <template #default="{ row }">
             <span>
@@ -491,6 +526,26 @@ async function handleDeleteConfig(row: ComisionConfig) {
     margin-top: -12px;
     vertical-align: middle;
   }
+}
+
+.role-lucide-icon {
+  margin-right: 6px;
+  vertical-align: middle;
+  margin-top: -2px;
+}
+
+.tax-tag {
+  color: #475569 !important;
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+.text-danger {
+  color: var(--el-color-danger, #f56c6c) !important;
+}
+
+.font-semibold {
+  font-weight: 600;
 }
 
 .role-desc-header {

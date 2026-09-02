@@ -73,14 +73,15 @@ En el flujo operativo de venta participan distintos roles:
 ## 8. Reparto de Comisiones y Matriz de Porcentajes
 
 ### Reglas Generales de Reparto (según estado de contratación):
-* **Proceso completo**: Si el fotógrafo agenda y realiza la sesión fotográfica, recibe la comisión completa o combinada.
-* **Fotógrafo Contratado (Asalariado)**: Percibe un **14%** de comisión sobre las ventas asignadas.
-* **Fotógrafo No Contratado (Sin salario / Comisión pura)**: Percibe un **20%** de comisión sobre las ventas asignadas.
-* **Vendedor / Agendador Contratado (Asalariado)**: Percibe un **6%** de comisión por captar/agendar la venta.
-* **Vendedor / Agendador No Contratado (Sin salario)**: Percibe un **8%** de comisión por captar/agendar la venta.
-* **Reparto combinado si no hace todo el proceso**: Si el fotógrafo no hace la captación/agenda, el agendador se lleva su comisión correspondiente (6% u 8%, o el 5% estándar mencionado en la conversación).
-* **Supervisor**: Percibe una comisión fija del **2%** sobre la venta total del hotel/grupo.
-* **Gerente**: Percibe una comisión fija del **2%** de las ventas en todos los hoteles de su área.
+* **Deducción Fiscal Previa**: Antes de calcular las comisiones, se descuenta el porcentaje de impuestos/retención del estado (ej. **-16%** en México) sobre el ingreso total de la venta, obteniendo la **base neta de cálculo**:
+  $$\text{Base de Cálculo} = \text{Venta Total} \times (1 - \text{\% Impuesto})$$
+* **Proceso completo**: Si el fotógrafo agenda y realiza la sesión fotográfica, recibe la comisión completa o combinada sobre la base neta.
+* **Fotógrafo Contratado (Asalariado)**: Percibe un **14%** de comisión sobre la base de cálculo de las ventas asignadas.
+* **Fotógrafo No Contratado (Sin salario / Comisión pura)**: Percibe un **20%** de comisión sobre la base de cálculo de las ventas asignadas.
+* **Vendedor / Agendador Contratado (Asalariado)**: Percibe un **6%** de comisión sobre la base de cálculo por captar/agendar la venta.
+* **Vendedor / Agendador No Contratado (Sin salario)**: Percibe un **8%** de comisión sobre la base de cálculo por captar/agendar la venta.
+* **Supervisor**: Percibe una comisión fija del **2%** sobre la base de cálculo total de su hotel asignado.
+* **Gerente**: Percibe una comisión fija del **2%** sobre la base de cálculo de las ventas de todos los hoteles de su área.
 
 ### Matriz de Porcentajes de Comisión (Tabla México):
 

@@ -421,7 +421,7 @@ export function useDashboard() {
   // --- Comisiones ---
   const myContractBadge = computed(() => {
     const c = currentUser.value?.tipoContrato
-    return c === 'SIN_SALARIO' ? '🔵 Sin Salario (20% Comisión)' : '🟢 Asalariado (14% Comisión)'
+    return c === 'SIN_SALARIO' ? '🔵 Sin Salario / Freelance' : '🟢 Asalariado'
   })
 
   const myMonthlyCommissions = computed(() => commissionStore.resumen?.totalComisionesUsd || 0)

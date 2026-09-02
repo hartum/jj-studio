@@ -95,6 +95,7 @@ export async function commissionRoutes(fastify: FastifyInstance) {
       const body = request.body as {
         paisId?: number | null
         hotelId?: number | null
+        impuestoPct?: number
         gerentePct: number
         supervisorPct: number
         fotografoAsalariadoPct: number

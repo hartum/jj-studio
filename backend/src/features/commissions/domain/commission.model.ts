@@ -4,6 +4,7 @@ export interface ComisionConfigDTO {
   paisNombre?: string
   hotelId?: number | null
   hotelNombre?: string
+  impuestoPct?: number
   gerentePct: number
   supervisorPct: number
   fotografoAsalariadoPct: number

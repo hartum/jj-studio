@@ -223,6 +223,7 @@ model ComisionConfig {
   id                     Int       @id @default(autoincrement())
   paisId                 Int?      @map("pais_id")
   hotelId                Int?      @map("hotel_id")
+  impuestoPct            Float     @default(16.0) @map("impuesto_pct")
   gerentePct             Float     @default(2.0) @map("gerente_pct")
   supervisorPct          Float     @default(2.0) @map("supervisor_pct")
   fotografoAsalariadoPct Float     @default(14.0) @map("fotografo_asalariado_pct")

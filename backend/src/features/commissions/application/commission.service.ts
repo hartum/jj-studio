@@ -5,6 +5,7 @@ import type { ComisionConfigDTO, ResumenComisionesDTO } from '../domain/commissi
 const DEFAULT_GLOBAL_CONFIG: ComisionConfigDTO = {
   paisId: null,
   hotelId: null,
+  impuestoPct: 16.0,
   gerentePct: 2.0,
   supervisorPct: 2.0,
   fotografoAsalariadoPct: 14.0,
@@ -28,6 +29,7 @@ export async function getEffectiveCommissionConfig(
         id: hotelConfig.id,
         paisId: hotelConfig.paisId,
         hotelId: hotelConfig.hotelId,
+        impuestoPct: hotelConfig.impuestoPct,
         gerentePct: hotelConfig.gerentePct,
         supervisorPct: hotelConfig.supervisorPct,
         fotografoAsalariadoPct: hotelConfig.fotografoAsalariadoPct,
@@ -49,6 +51,7 @@ export async function getEffectiveCommissionConfig(
         id: paisConfig.id,
         paisId: paisConfig.paisId,
         hotelId: paisConfig.hotelId,
+        impuestoPct: paisConfig.impuestoPct,
         gerentePct: paisConfig.gerentePct,
         supervisorPct: paisConfig.supervisorPct,
         fotografoAsalariadoPct: paisConfig.fotografoAsalariadoPct,
@@ -69,6 +72,7 @@ export async function getEffectiveCommissionConfig(
       id: globalConfig.id,
       paisId: null,
       hotelId: null,
+      impuestoPct: globalConfig.impuestoPct,
       gerentePct: globalConfig.gerentePct,
       supervisorPct: globalConfig.supervisorPct,
       fotografoAsalariadoPct: globalConfig.fotografoAsalariadoPct,
@@ -99,6 +103,7 @@ export async function getAllCommissionConfigs(): Promise<ComisionConfigDTO[]> {
     paisNombre: c.pais?.nombre || 'Global / Por defecto',
     hotelId: c.hotelId,
     hotelNombre: c.hotel?.nombre || 'Todos los hoteles del país',
+    impuestoPct: c.impuestoPct,
     gerentePct: c.gerentePct,
     supervisorPct: c.supervisorPct,
     fotografoAsalariadoPct: c.fotografoAsalariadoPct,
@@ -112,6 +117,7 @@ export async function getAllCommissionConfigs(): Promise<ComisionConfigDTO[]> {
 export async function saveCommissionConfig(data: ComisionConfigDTO): Promise<ComisionConfigDTO> {
   const paisId = data.paisId ?? null
   const hotelId = data.hotelId ?? null
+  const impuestoPct = data.impuestoPct !== undefined ? data.impuestoPct : 16.0
 
   const existing = await prisma.comisionConfig.findFirst({
     where: { paisId, hotelId, deletedAt: null },
@@ -121,6 +127,7 @@ export async function saveCommissionConfig(data: ComisionConfigDTO): Promise<Com
     const updated = await prisma.comisionConfig.update({
       where: { id: existing.id },
       data: {
+        impuestoPct,
         gerentePct: data.gerentePct,
         supervisorPct: data.supervisorPct,
         fotografoAsalariadoPct: data.fotografoAsalariadoPct,
@@ -138,6 +145,7 @@ export async function saveCommissionConfig(data: ComisionConfigDTO): Promise<Com
       paisNombre: updated.pais?.nombre || 'Global / Por defecto',
       hotelId: updated.hotelId,
       hotelNombre: updated.hotel?.nombre || 'Todos los hoteles',
+      impuestoPct: updated.impuestoPct,
       gerentePct: updated.gerentePct,
       supervisorPct: updated.supervisorPct,
       fotografoAsalariadoPct: updated.fotografoAsalariadoPct,
@@ -152,6 +160,7 @@ export async function saveCommissionConfig(data: ComisionConfigDTO): Promise<Com
     data: {
       paisId,
       hotelId,
+      impuestoPct,
       gerentePct: data.gerentePct,
       supervisorPct: data.supervisorPct,
       fotografoAsalariadoPct: data.fotografoAsalariadoPct,
@@ -169,6 +178,7 @@ export async function saveCommissionConfig(data: ComisionConfigDTO): Promise<Com
     paisNombre: created.pais?.nombre || 'Global / Por defecto',
     hotelId: created.hotelId,
     hotelNombre: created.hotel?.nombre || 'Todos los hoteles',
+    impuestoPct: created.impuestoPct,
     gerentePct: created.gerentePct,
     supervisorPct: created.supervisorPct,
     fotografoAsalariadoPct: created.fotografoAsalariadoPct,
@@ -212,6 +222,9 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
   const fechaVenta = cita.fechaHoraCita
 
   const config = await getEffectiveCommissionConfig(paisId, hotelId)
+  const impuestoPct = config.impuestoPct ?? 16.0
+  // Deducción de impuestos sobre el ingreso bruto para obtener la base de cálculo neta
+  const baseCalculoUsd = Number(Math.max(0, totalVentaUsd * (1 - impuestoPct / 100)).toFixed(2))
 
   // 1. Fotógrafo Commission
   if (cita.sesion.fotografoId) {
@@ -224,7 +237,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
         tipoContrato === 'SIN_SALARIO'
           ? config.fotografoSinSalarioPct
           : config.fotografoAsalariadoPct
-      const importe = (totalVentaUsd * pct) / 100
+      const importe = Number(((baseCalculoUsd * pct) / 100).toFixed(2))
 
       await prisma.comision.upsert({
         where: {
@@ -241,8 +254,8 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
           rolEnVenta: 'FOTOGRAFO',
           tipoContrato,
           porcentajeAplicado: pct,
-          baseCalculoUsd: totalVentaUsd,
-          importeComisionUsd: Number(importe.toFixed(2)),
+          baseCalculoUsd,
+          importeComisionUsd: importe,
           estado: 'PENDIENTE',
           fechaVenta,
         },
@@ -250,8 +263,8 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
           hotelId,
           tipoContrato,
           porcentajeAplicado: pct,
-          baseCalculoUsd: totalVentaUsd,
-          importeComisionUsd: Number(importe.toFixed(2)),
+          baseCalculoUsd,
+          importeComisionUsd: importe,
           fechaVenta,
         },
       })
@@ -272,7 +285,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
         tipoContrato === 'SIN_SALARIO'
           ? config.vendedorSinSalarioPct
           : config.vendedorAsalariadoPct
-      const importe = (totalVentaUsd * pct) / 100
+      const importe = Number(((baseCalculoUsd * pct) / 100).toFixed(2))
 
       // Clean any other user previously marked as VENDEDOR for this sale
       await prisma.comision.deleteMany({
@@ -298,8 +311,8 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
           rolEnVenta: 'VENDEDOR',
           tipoContrato,
           porcentajeAplicado: pct,
-          baseCalculoUsd: totalVentaUsd,
-          importeComisionUsd: Number(importe.toFixed(2)),
+          baseCalculoUsd,
+          importeComisionUsd: importe,
           estado: 'PENDIENTE',
           fechaVenta,
         },
@@ -307,8 +320,8 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
           hotelId,
           tipoContrato,
           porcentajeAplicado: pct,
-          baseCalculoUsd: totalVentaUsd,
-          importeComisionUsd: Number(importe.toFixed(2)),
+          baseCalculoUsd,
+          importeComisionUsd: importe,
           fechaVenta,
         },
       })
@@ -337,7 +350,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
   for (const item of hotelSupervisores) {
     const supervisor = item.usuario
     const pct = config.supervisorPct
-    const importe = (totalVentaUsd * pct) / 100
+    const importe = Number(((baseCalculoUsd * pct) / 100).toFixed(2))
 
     await prisma.comision.upsert({
       where: {
@@ -354,8 +367,8 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
         rolEnVenta: 'SUPERVISOR',
         tipoContrato: supervisor.tipoContrato,
         porcentajeAplicado: pct,
-        baseCalculoUsd: totalVentaUsd,
-        importeComisionUsd: Number(importe.toFixed(2)),
+        baseCalculoUsd,
+        importeComisionUsd: importe,
         estado: 'PENDIENTE',
         fechaVenta,
       },
@@ -363,8 +376,8 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
         hotelId,
         tipoContrato: supervisor.tipoContrato,
         porcentajeAplicado: pct,
-        baseCalculoUsd: totalVentaUsd,
-        importeComisionUsd: Number(importe.toFixed(2)),
+        baseCalculoUsd,
+        importeComisionUsd: importe,
         fechaVenta,
       },
     })
@@ -385,7 +398,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
   for (const item of areaGerentes) {
     const gerente = item.usuario
     const pct = config.gerentePct
-    const importe = (totalVentaUsd * pct) / 100
+    const importe = Number(((baseCalculoUsd * pct) / 100).toFixed(2))
 
     await prisma.comision.upsert({
       where: {
@@ -402,8 +415,8 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
         rolEnVenta: 'GERENTE',
         tipoContrato: gerente.tipoContrato,
         porcentajeAplicado: pct,
-        baseCalculoUsd: totalVentaUsd,
-        importeComisionUsd: Number(importe.toFixed(2)),
+        baseCalculoUsd,
+        importeComisionUsd: importe,
         estado: 'PENDIENTE',
         fechaVenta,
       },
@@ -411,8 +424,8 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
         hotelId,
         tipoContrato: gerente.tipoContrato,
         porcentajeAplicado: pct,
-        baseCalculoUsd: totalVentaUsd,
-        importeComisionUsd: Number(importe.toFixed(2)),
+        baseCalculoUsd,
+        importeComisionUsd: importe,
         fechaVenta,
       },
     })
