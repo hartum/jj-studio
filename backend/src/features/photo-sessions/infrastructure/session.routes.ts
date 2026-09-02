@@ -503,7 +503,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         return reply.status(404).send({ error: 'Sesión fotográfica no encontrada' })
       }
 
-      // Role check: if session in DB was NOT PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW), only SUPERVISOR/GERENTE/ADMIN/SUPERUSUARIO can edit
+      // Role check: if session in DB was NOT PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW), only GERENTE/ADMIN/SUPERUSUARIO can edit
       if (existing.estado !== 'PROGRAMADA') {
         const userId = getAuthUserId(request)
         if (!userId) {
@@ -514,11 +514,11 @@ export async function sessionRoutes(fastify: FastifyInstance) {
           include: { role: true },
         })
         const role = user?.role?.codigo?.toUpperCase()
-        const canEdit = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role || '')
+        const canEdit = ['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role || '')
         if (!canEdit) {
           return reply.status(403).send({
             error:
-              'Solo supervisores, gerentes, administradores y superusuarios pueden editar sesiones cerradas',
+              'Solo gerentes, administradores y superusuarios pueden editar sesiones cerradas',
           })
         }
       }

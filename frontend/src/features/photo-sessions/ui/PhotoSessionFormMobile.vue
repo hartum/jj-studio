@@ -474,6 +474,12 @@ function handleSave() {
 
     <!-- Contenido del Formulario en Pantalla Única -->
     <div class="mobile-step-body">
+      <!-- Read-only lock banner -->
+      <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
+        Esta sesión no está en estado programada. Para editarla contacta con tu gerente de área o
+        administrador.
+      </el-alert>
+
       <!-- 1 Datos del cliente -->
       <div class="mobile-card-section-label">
         <span class="step-badge-num">1</span>
@@ -1241,6 +1247,10 @@ function handleSave() {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+
+.lock-banner {
+  margin-bottom: 1rem;
 }
 
 .mobile-header {

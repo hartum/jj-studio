@@ -320,8 +320,8 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 
     <!-- Read-only lock banner -->
     <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-      Esta sesión no está en estado programada. Para editarla contacta con tu supervisor o gerente
-      de area.
+      Esta sesión no está en estado programada. Para editarla contacta con tu gerente de área o
+      administrador.
     </el-alert>
 
     <!-- Layout de 2 Columnas -->

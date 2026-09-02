@@ -260,7 +260,7 @@ const formattedSelectedSaleDateTime = computed(() => {
       <div class="form-main-col">
         <!-- Read-only lock banner -->
         <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-          Para editar esta cita contacta con tu supervisor o gerente de area.
+          Para editar esta cita contacta con tu gerente de área o administrador.
         </el-alert>
 
         <!-- Conflict banner -->

@@ -278,7 +278,7 @@ export function usePhotoSessionForm() {
     if (!isEditing.value || !loadedSession.value) return false
     if (loadedSession.value.estado === 'PROGRAMADA') return false
     const role = currentUser.value?.roleCode?.toUpperCase() || ''
-    return !['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+    return !['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
   })
 
   const alertNoSaleAppointment = computed(() => {

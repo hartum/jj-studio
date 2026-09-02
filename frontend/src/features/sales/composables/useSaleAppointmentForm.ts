@@ -129,7 +129,7 @@ export function useSaleAppointmentForm() {
     if (!isEditing.value || !loadedCita.value) return false
     if (loadedCita.value.estado === 'PROGRAMADA') return false
     const role = currentUser.value?.roleCode?.toUpperCase() || ''
-    return !['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+    return !['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
   })
 
   // Available completed sessions without a sales appointment (for session selector)
