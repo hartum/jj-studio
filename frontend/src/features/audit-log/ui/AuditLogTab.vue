@@ -391,18 +391,10 @@ onMounted(async () => {
                 </div>
               </div>
 
-              <!-- Badges de acción y entidad -->
+              <!-- Badge único de acción y entidad -->
               <div class="entry-badges">
                 <el-tag :type="getActionTagType(entry.accion)" size="small" class="action-tag">
-                  {{ entry.accion }}
-                </el-tag>
-                <el-tag
-                  v-if="entry.entidad && entry.entidad !== 'SISTEMA'"
-                  type="info"
-                  size="small"
-                  class="entity-tag"
-                >
-                  {{ getEntityLabel(entry.entidad) }}
+                  {{ entry.accion }}<template v-if="entry.entidad && entry.entidad !== 'SISTEMA'"> · {{ getEntityLabel(entry.entidad) }}</template>
                 </el-tag>
               </div>
             </div>
@@ -743,11 +735,6 @@ onMounted(async () => {
 .action-tag {
   font-weight: 600;
   border-radius: 6px;
-}
-
-.entity-tag {
-  border-radius: 6px;
-  font-weight: 500;
 }
 
 .entry-action-line {
