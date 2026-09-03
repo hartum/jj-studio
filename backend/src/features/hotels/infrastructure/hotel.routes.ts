@@ -1,5 +1,18 @@
 import type { FastifyInstance } from 'fastify'
 import { prisma } from '../../../shared/db.js'
+import { registrarAudit, formatAuditDateTime } from '../../audit-log/application/audit-log.service.js'
+
+function getAuthUserId(request: any): string | null {
+  try {
+    const authHeader = request.headers.authorization
+    if (!authHeader || !authHeader.startsWith('Bearer ')) return null
+    const token = authHeader.substring(7)
+    const decoded = request.server.jwt.decode(token) as { id: string } | null
+    return decoded?.id || null
+  } catch {
+    return null
+  }
+}
 
 export async function hotelRoutes(fastify: FastifyInstance) {
   // GET /api/hoteles (obtiene los hoteles activos con datos de área y país)
@@ -89,6 +102,21 @@ export async function hotelRoutes(fastify: FastifyInstance) {
         },
       })
 
+      const authUserId = getAuthUserId(request)
+      if (authUserId) {
+        registrarAudit({
+          accion: 'CREAR',
+          entidad: 'HOTEL',
+          entidadId: nuevo.id,
+          usuarioId: authUserId,
+          hotelId: nuevo.id,
+          hotelNombre: nuevo.nombre,
+          descripcion: `creó el hotel ${nuevo.nombre}`,
+          contexto: `Ubicado en el área ${nuevo.area.nombre} (${nuevo.area.pais.nombre})`,
+          ipAddress: request.ip,
+        })
+      }
+
       return reply.status(201).send({
         id: nuevo.id,
         areaId: nuevo.areaId,
@@ -133,6 +161,11 @@ export async function hotelRoutes(fastify: FastifyInstance) {
         metaMensualDefault?: number | null
       }
 
+      const existing = await prisma.hotel.findUnique({
+        where: { id },
+        include: { area: { include: { pais: true } } },
+      })
+
       const actualizado = await prisma.hotel.update({
         where: { id },
         data: {
@@ -158,6 +191,23 @@ export async function hotelRoutes(fastify: FastifyInstance) {
           },
         },
       })
+
+      const updateAuthUserId = getAuthUserId(request)
+      if (updateAuthUserId && existing) {
+        const creadorOriginal = `Fue creado el ${formatAuditDateTime(existing.createdAt)}`
+        registrarAudit({
+          accion: 'MODIFICAR',
+          entidad: 'HOTEL',
+          entidadId: actualizado.id,
+          usuarioId: updateAuthUserId,
+          hotelId: actualizado.id,
+          hotelNombre: actualizado.nombre,
+          descripcion: `modificó los datos del hotel ${actualizado.nombre}`,
+          contexto: `Área: ${actualizado.area.nombre} (${actualizado.area.pais.nombre})`,
+          creadorOriginal,
+          ipAddress: request.ip,
+        })
+      }
 
       return reply.send({
         id: actualizado.id,
@@ -190,10 +240,26 @@ export async function hotelRoutes(fastify: FastifyInstance) {
     try {
       const id = Number(request.params && (request.params as any).id)
 
+      const hotelToDelete = await prisma.hotel.findUnique({ where: { id } })
+
       await prisma.hotel.update({
         where: { id },
         data: { deletedAt: new Date() },
       })
+
+      const delAuthUserId = getAuthUserId(request)
+      if (delAuthUserId && hotelToDelete) {
+        registrarAudit({
+          accion: 'ELIMINAR',
+          entidad: 'HOTEL',
+          entidadId: id,
+          usuarioId: delAuthUserId,
+          hotelId: id,
+          hotelNombre: hotelToDelete.nombre,
+          descripcion: `eliminó el hotel ${hotelToDelete.nombre}`,
+          ipAddress: request.ip,
+        })
+      }
 
       return reply.send({ success: true, id })
     } catch (err: unknown) {

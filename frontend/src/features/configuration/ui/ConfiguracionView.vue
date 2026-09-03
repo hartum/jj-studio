@@ -7,6 +7,7 @@ import HotelesConfig from '@/features/hotels/ui/HotelesConfig.vue'
 import GoalFormView from '@/features/goals/ui/GoalFormView.vue'
 import ComisionesConfig from '@/features/commissions/ui/ComisionesConfig.vue'
 import EmailTemplatesView from '@/features/notifications/ui/EmailTemplatesView.vue'
+import AuditLogTab from '@/features/audit-log/ui/AuditLogTab.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -56,7 +57,7 @@ function handleTabChange(paneName: string | number) {
       <p class="page-subtitle">
         {{
           isSuperOrAdmin
-            ? 'Gestiona las opciones generales, estructura geográfica, comisiones, plantillas de correo y parámetros de la plataforma'
+            ? 'Gestiona las opciones generales, estructura geográfica, comisiones, registro de actividad, plantillas de correo y parámetros de la plataforma'
             : canManageCommissions
               ? 'Establece y gestiona los porcentajes de comisiones, objetivos comerciales y metas de tus hoteles y equipo'
               : 'Establece y gestiona los objetivos comerciales, metas y configuraciones de tus hoteles y equipo'
@@ -94,6 +95,11 @@ function handleTabChange(paneName: string | number) {
       <el-tab-pane v-if="canManageEmailTemplates" label="Plantillas de Email" name="plantillas">
         <!-- Componente modular de plantillas de correo de recordatorio -->
         <EmailTemplatesView embedded />
+      </el-tab-pane>
+
+      <el-tab-pane v-if="isSuperOrAdmin" label="Actividad" name="actividad">
+        <!-- Componente modular de auditoría y registro de actividad -->
+        <AuditLogTab />
       </el-tab-pane>
     </el-tabs>
   </div>

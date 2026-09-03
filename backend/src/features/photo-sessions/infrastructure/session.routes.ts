@@ -1,11 +1,12 @@
 import type { FastifyInstance } from 'fastify'
 import { prisma } from '../../../shared/db.js'
-import { encrypt, decryptUser, decryptSesion } from '../../../shared/encryption.js'
+import { encrypt, decrypt, decryptUser, decryptSesion } from '../../../shared/encryption.js'
 import {
   syncSesionToGoogle,
   deleteSesionFromGoogle,
   deleteCitaVentaFromGoogle,
 } from '../../integrations/google-calendar/google-calendar.service.js'
+import { registrarAudit, formatCreadorOriginal } from '../../audit-log/application/audit-log.service.js'
 
 function parseLocalDateTime(dateStr: string): Date {
   if (!dateStr) return new Date()
@@ -438,6 +439,24 @@ export async function sessionRoutes(fastify: FastifyInstance) {
           origen: 'MANUAL',
           notas: body.notas ? body.notas.trim() : null,
         },
+        include: { hotel: true },
+      })
+
+      registrarAudit({
+        accion: 'CREAR',
+        entidad: 'SESION',
+        entidadId: nueva.id,
+        usuarioId: creadorId,
+        hotelId: nueva.hotelId,
+        hotelNombre: nueva.hotel?.nombre,
+        clienteNombre: body.clienteNombre.trim(),
+        descripcion: 'creó una nueva sesión de fotos',
+        contexto: `La sesión es para el cliente ${body.clienteNombre.trim()} en el hotel ${nueva.hotel?.nombre || ''}`,
+        ipAddress: request.ip,
+        metadatos: {
+          fechaHoraInicio: body.fechaHoraInicio,
+          estado: nueva.estado,
+        },
       })
 
       // Sincronizar automáticamente con Google Calendar
@@ -498,7 +517,10 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         notas?: string
       }
 
-      const existing = await prisma.sesionFotografica.findUnique({ where: { id } })
+      const existing = await prisma.sesionFotografica.findUnique({
+        where: { id },
+        include: { creador: true, hotel: true },
+      })
       if (!existing || existing.deletedAt) {
         return reply.status(404).send({ error: 'Sesión fotográfica no encontrada' })
       }
@@ -608,6 +630,31 @@ export async function sessionRoutes(fastify: FastifyInstance) {
           ...(body.estado && { estado: body.estado }),
           ...(body.notas !== undefined && { notas: body.notas ? body.notas.trim() : null }),
         },
+        include: { hotel: true },
+      })
+
+      const authUserId = getAuthUserId(request)
+      const creadorDesc = existing.creador ? decryptUser(existing.creador) : null
+      const creadorNombre = creadorDesc ? `${creadorDesc.nombre} ${creadorDesc.apellidos}`.trim() : 'un usuario'
+      const creadorOriginal = formatCreadorOriginal(creadorNombre, existing.createdAt)
+      const clienteNombrePlano = decrypt(actualizada.clienteNombre) || ''
+
+      registrarAudit({
+        accion: 'MODIFICAR',
+        entidad: 'SESION',
+        entidadId: actualizada.id,
+        usuarioId: authUserId || actualizada.creadorId,
+        hotelId: actualizada.hotelId,
+        hotelNombre: actualizada.hotel?.nombre,
+        clienteNombre: clienteNombrePlano,
+        descripcion: 'modificó una sesión de fotos',
+        contexto: `La sesión es para el cliente ${clienteNombrePlano} en el hotel ${actualizada.hotel?.nombre || ''}`,
+        creadorOriginal,
+        ipAddress: request.ip,
+        metadatos: {
+          estado: actualizada.estado,
+          fechaHoraInicio: actualizada.fechaHoraInicio.toISOString(),
+        },
       })
 
       // Sincronizar actualización con Google Calendar
@@ -663,7 +710,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
 
       const sesion = await prisma.sesionFotografica.findUnique({
         where: { id },
-        include: { citaVenta: true },
+        include: { citaVenta: true, hotel: true },
       })
 
       if (!sesion) {
@@ -673,6 +720,21 @@ export async function sessionRoutes(fastify: FastifyInstance) {
       await prisma.sesionFotografica.update({
         where: { id },
         data: { deletedAt: new Date() },
+      })
+
+      const deleteAuthUserId = getAuthUserId(request)
+      const delClienteNombre = decrypt(sesion.clienteNombre) || ''
+      registrarAudit({
+        accion: 'ELIMINAR',
+        entidad: 'SESION',
+        entidadId: id,
+        usuarioId: deleteAuthUserId || sesion.creadorId,
+        hotelId: sesion.hotelId,
+        hotelNombre: sesion.hotel?.nombre,
+        clienteNombre: delClienteNombre,
+        descripcion: 'eliminó una sesión de fotos',
+        contexto: `La sesión era para el cliente ${delClienteNombre} en el hotel ${sesion.hotel?.nombre || ''}`,
+        ipAddress: request.ip,
       })
 
       // Eliminar evento de Google Calendar

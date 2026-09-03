@@ -13,6 +13,7 @@ import { calendarioLaboralRoutes } from './features/users/infrastructure/calenda
 import { googleCalendarRoutes } from './features/integrations/google-calendar/google-calendar.routes.js'
 import { templateRoutes } from './features/notifications/infrastructure/template.routes.js'
 import { startReminderCron } from './features/notifications/infrastructure/reminder.cron.js'
+import { auditLogRoutes } from './features/audit-log/infrastructure/audit-log.routes.js'
 
 const fastify = Fastify({
   logger: true,
@@ -39,6 +40,7 @@ await fastify.register(commissionRoutes)
 await fastify.register(calendarioLaboralRoutes)
 await fastify.register(googleCalendarRoutes)
 await fastify.register(templateRoutes)
+await fastify.register(auditLogRoutes)
 
 fastify.get('/health', async () => {
   return { status: 'ok', timestamp: new Date().toISOString() }

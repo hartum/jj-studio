@@ -47,6 +47,7 @@ model Usuario {
   calendarioLaboral     CalendarioLaboralFotografo[]
   passwordResetTokens   PasswordResetToken[]
   plantillasModificadas PlantillaEmail[]            @relation("EditorPlantillas")
+  auditLogs             AuditLog[]
 
   @@map("usuarios")
 }
@@ -115,6 +116,7 @@ model Hotel {
   metas              Meta[]
   comisiones         Comision[]
   comisionConfigs    ComisionConfig[]
+  auditLogs          AuditLog[]
 
   @@map("hoteles")
 }
@@ -310,5 +312,34 @@ model PlantillaEmail {
   editor      Usuario? @relation("EditorPlantillas", fields: [updatedBy], references: [id], onDelete: SetNull)
 
   @@map("plantillas_email")
+}
+
+model AuditLog {
+  id              Int       @id @default(autoincrement())
+  accion          String    // LOGIN | LOGOUT | CREAR | MODIFICAR | ELIMINAR
+  entidad         String    // USUARIO | HOTEL | AREA | SESION | CITA_VENTA | COMISION | META | PAIS
+  entidadId       String?   @map("entidad_id")
+  usuarioId       String    @map("usuario_id")
+  usuarioNombre   String    @map("usuario_nombre")
+  usuarioRol      String    @map("usuario_rol")
+  hotelId         Int?      @map("hotel_id")
+  hotelNombre     String?   @map("hotel_nombre")
+  clienteNombre   String?   @map("cliente_nombre")
+  descripcion     String    @db.Text
+  contexto        String?   @db.Text
+  creadorOriginal String?   @map("creador_original")
+  metadatos       String?   @db.Text
+  ipAddress       String?   @map("ip_address")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  usuario         Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  hotel           Hotel?    @relation(fields: [hotelId], references: [id], onDelete: SetNull)
+
+  @@index([usuarioId])
+  @@index([hotelId])
+  @@index([entidad])
+  @@index([createdAt])
+  @@index([clienteNombre])
+  @@map("audit_log")
 }
 

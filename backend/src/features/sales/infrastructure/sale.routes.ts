@@ -8,6 +8,7 @@ import {
   deleteCitaVentaFromGoogle,
   deleteSesionFromGoogle,
 } from '../../integrations/google-calendar/google-calendar.service.js'
+import { registrarAudit, formatCreadorOriginal } from '../../audit-log/application/audit-log.service.js'
 
 const SALES_APPOINTMENT_DURATION_MS = 60 * 60 * 1000 // 1 hour
 
@@ -505,6 +506,26 @@ export async function saleRoutes(fastify: FastifyInstance) {
         fastify.log.error(gErr, 'Error al sincronizar cita de venta con Google Calendar')
       }
 
+      const authUserId = getAuthUserId(request) || nueva.vendedorId
+      const clienteNombrePlano = decrypt(nueva.sesion.clienteNombre) || ''
+      registrarAudit({
+        accion: 'CREAR',
+        entidad: 'CITA_VENTA',
+        entidadId: nueva.id,
+        usuarioId: authUserId || 'sistema',
+        hotelId: nueva.hotelId,
+        clienteNombre: clienteNombrePlano,
+        descripcion: 'creó una nueva cita de ventas',
+        contexto: `La cita es para el cliente ${clienteNombrePlano}`,
+        ipAddress: request.ip,
+        metadatos: {
+          fechaHoraCita: body.fechaHoraCita,
+          estado: nueva.estado,
+          numFotosVendidas: nueva.numFotosVendidas,
+          totalVentaUsd: nueva.totalVentaUsd,
+        },
+      })
+
       const v = decryptUser(nueva.vendedor)
       const response: any = {
         id: nueva.id,
@@ -552,7 +573,10 @@ export async function saleRoutes(fastify: FastifyInstance) {
         notas?: string
       }
 
-      const existing = await prisma.citaVenta.findUnique({ where: { id } })
+      const existing = await prisma.citaVenta.findUnique({
+        where: { id },
+        include: { sesion: { include: { creador: true, hotel: true } }, hotel: true, vendedor: true },
+      })
       if (!existing || existing.deletedAt) {
         return reply.status(404).send({ error: 'Cita de venta no encontrada' })
       }
@@ -640,6 +664,30 @@ export async function saleRoutes(fastify: FastifyInstance) {
         fastify.log.error(gErr, 'Error al sincronizar actualización de cita de venta con Google Calendar')
       }
 
+      const updateAuthUserId = getAuthUserId(request) || actualizada.vendedorId
+      const updateClientePlano = decrypt(actualizada.sesion.clienteNombre) || ''
+      const creadorSesion = existing.sesion?.creador ? decryptUser(existing.sesion.creador) : null
+      const creadorNombre = creadorSesion ? `${creadorSesion.nombre} ${creadorSesion.apellidos}`.trim() : 'un usuario'
+      const creadorOriginal = formatCreadorOriginal(creadorNombre, existing.createdAt)
+
+      registrarAudit({
+        accion: 'MODIFICAR',
+        entidad: 'CITA_VENTA',
+        entidadId: actualizada.id,
+        usuarioId: updateAuthUserId || 'sistema',
+        hotelId: actualizada.hotelId,
+        clienteNombre: updateClientePlano,
+        descripcion: 'modificó una cita de ventas',
+        contexto: `La cita era para el cliente ${updateClientePlano}`,
+        creadorOriginal,
+        ipAddress: request.ip,
+        metadatos: {
+          estado: actualizada.estado,
+          totalVentaUsd: actualizada.totalVentaUsd,
+          numFotosVendidas: actualizada.numFotosVendidas,
+        },
+      })
+
       const v = decryptUser(actualizada.vendedor)
       const response: any = {
         id: actualizada.id,
@@ -691,7 +739,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const cita = await prisma.citaVenta.findUnique({
         where: { id },
-        include: { sesion: true },
+        include: { sesion: true, hotel: true },
       })
 
       if (!cita) {
@@ -701,6 +749,20 @@ export async function saleRoutes(fastify: FastifyInstance) {
       await prisma.citaVenta.update({
         where: { id },
         data: { deletedAt: new Date() },
+      })
+
+      const delAuthUserId = getAuthUserId(request) || cita.vendedorId
+      const delClienteNombre = decrypt(cita.sesion.clienteNombre) || ''
+      registrarAudit({
+        accion: 'ELIMINAR',
+        entidad: 'CITA_VENTA',
+        entidadId: id,
+        usuarioId: delAuthUserId || 'sistema',
+        hotelId: cita.hotelId,
+        clienteNombre: delClienteNombre,
+        descripcion: 'eliminó una cita de ventas',
+        contexto: `La cita era para el cliente ${delClienteNombre}`,
+        ipAddress: request.ip,
       })
 
       // Limpiar comisiones asociadas a la venta eliminada

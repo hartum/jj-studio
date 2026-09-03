@@ -50,6 +50,15 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function logout() {
+    if (token.value) {
+      // Registrar evento de logout en el backend de forma asíncrona
+      fetch(`${API_URL}/auth/logout`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token.value}`,
+        },
+      }).catch(() => {})
+    }
     token.value = null
     user.value = null
     localStorage.removeItem('token')

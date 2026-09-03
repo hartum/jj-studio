@@ -2,13 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import crypto from 'node:crypto'
 import bcrypt from 'bcryptjs'
 import { prisma } from '../../../shared/db.js'
-import {
-  encrypt,
-  decrypt,
-  blindIndex,
-  decryptUser,
-  decryptUsers,
-} from '../../../shared/encryption.js'
+import { encrypt, blindIndex, decryptUser, decryptUsers } from '../../../shared/encryption.js'
 import { sendPasswordResetEmail } from '../../../shared/email.service.js'
 import {
   getRolePermissions,
@@ -16,6 +10,10 @@ import {
   canDeleteUser,
   type RoleCode,
 } from '../../../shared/permissions.js'
+import {
+  registrarAudit,
+  formatAuditDateTime,
+} from '../../audit-log/application/audit-log.service.js'
 
 async function getAuthUser(request: any) {
   try {
@@ -56,10 +54,7 @@ export async function userRoutes(fastify: FastifyInstance) {
 
       const rawUser = await prisma.usuario.findFirst({
         where: {
-          OR: [
-            ...(searchHash ? [{ emailHash: searchHash }] : []),
-            { email: normalizedEmail },
-          ],
+          OR: [...(searchHash ? [{ emailHash: searchHash }] : []), { email: normalizedEmail }],
         },
         include: {
           role: true,
@@ -70,9 +65,7 @@ export async function userRoutes(fastify: FastifyInstance) {
       })
 
       if (!rawUser || rawUser.deletedAt !== null) {
-        return reply
-          .status(401)
-          .send({ error: 'Credenciales incorrectas o usuario no encontrado' })
+        return reply.status(401).send({ error: 'Credenciales incorrectas o usuario no encontrado' })
       }
 
       if (!rawUser.activo) {
@@ -98,6 +91,17 @@ export async function userRoutes(fastify: FastifyInstance) {
         id: user.id,
         email: user.email,
         role: user.role.codigo,
+      })
+
+      registrarAudit({
+        accion: 'LOGIN',
+        entidad: 'USUARIO',
+        entidadId: user.id,
+        usuarioId: user.id,
+        usuarioNombre: `${user.nombre} ${user.apellidos}`.trim(),
+        usuarioRol: user.role.nombre,
+        descripcion: 'inició sesión en el sistema',
+        ipAddress: request.ip,
       })
 
       return reply.send({
@@ -126,6 +130,28 @@ export async function userRoutes(fastify: FastifyInstance) {
     }
   })
 
+  // POST /api/auth/logout (Registrar cierre de sesión)
+  fastify.post('/api/auth/logout', async (request, reply) => {
+    try {
+      const authUser = await getAuthUser(request)
+      if (authUser) {
+        registrarAudit({
+          accion: 'LOGOUT',
+          entidad: 'USUARIO',
+          entidadId: authUser.id,
+          usuarioId: authUser.id,
+          usuarioNombre: `${authUser.nombre} ${authUser.apellidos}`.trim(),
+          usuarioRol: authUser.role.nombre,
+          descripcion: 'cerró sesión en el sistema',
+          ipAddress: request.ip,
+        })
+      }
+      return reply.send({ success: true })
+    } catch {
+      return reply.send({ success: true })
+    }
+  })
+
   // POST /api/auth/forgot-password (Solicita restablecimiento de contraseña)
   fastify.post('/api/auth/forgot-password', async (request, reply) => {
     try {
@@ -140,10 +166,7 @@ export async function userRoutes(fastify: FastifyInstance) {
 
       const rawUser = await prisma.usuario.findFirst({
         where: {
-          OR: [
-            ...(searchHash ? [{ emailHash: searchHash }] : []),
-            { email: normalizedEmail },
-          ],
+          OR: [...(searchHash ? [{ emailHash: searchHash }] : []), { email: normalizedEmail }],
           deletedAt: null,
         },
       })
@@ -178,7 +201,8 @@ export async function userRoutes(fastify: FastifyInstance) {
 
       // Respuesta neutral estándar de seguridad para prevenir enumeración de usuarios
       return reply.send({
-        message: 'Si el correo electrónico está registrado, recibirás un enlace para restablecer tu contraseña en unos minutos.',
+        message:
+          'Si el correo electrónico está registrado, recibirás un enlace para restablecer tu contraseña en unos minutos.',
       })
     } catch (err: unknown) {
       fastify.log.error(err)
@@ -204,7 +228,8 @@ export async function userRoutes(fastify: FastifyInstance) {
       if (!resetToken || resetToken.usedAt !== null || resetToken.expiresAt < new Date()) {
         return reply.status(400).send({
           valid: false,
-          error: 'El enlace de recuperación es inválido o ha expirado. Por favor, solicita uno nuevo.',
+          error:
+            'El enlace de recuperación es inválido o ha expirado. Por favor, solicita uno nuevo.',
         })
       }
 
@@ -226,7 +251,9 @@ export async function userRoutes(fastify: FastifyInstance) {
       const { token, password } = request.body as { token?: string; password?: string }
 
       if (!token || !password) {
-        return reply.status(400).send({ error: 'Debes proporcionar el token y la nueva contraseña' })
+        return reply
+          .status(400)
+          .send({ error: 'Debes proporcionar el token y la nueva contraseña' })
       }
 
       if (password.length < 6) {
@@ -240,7 +267,8 @@ export async function userRoutes(fastify: FastifyInstance) {
 
       if (!resetToken || resetToken.usedAt !== null || resetToken.expiresAt < new Date()) {
         return reply.status(400).send({
-          error: 'El enlace de recuperación es inválido o ha expirado. Por favor, solicita uno nuevo.',
+          error:
+            'El enlace de recuperación es inválido o ha expirado. Por favor, solicita uno nuevo.',
         })
       }
 
@@ -259,7 +287,8 @@ export async function userRoutes(fastify: FastifyInstance) {
       ])
 
       return reply.send({
-        message: '¡Tu contraseña ha sido restablecida exitosamente! Ya puedes iniciar sesión con tu nueva contraseña.',
+        message:
+          '¡Tu contraseña ha sido restablecida exitosamente! Ya puedes iniciar sesión con tu nueva contraseña.',
       })
     } catch (err: unknown) {
       fastify.log.error(err)
@@ -416,10 +445,7 @@ export async function userRoutes(fastify: FastifyInstance) {
 
       const existingUser = await prisma.usuario.findFirst({
         where: {
-          OR: [
-            ...(emailHash ? [{ emailHash }] : []),
-            { email: normalizedEmail },
-          ],
+          OR: [...(emailHash ? [{ emailHash }] : []), { email: normalizedEmail }],
         },
       })
 
@@ -520,6 +546,25 @@ export async function userRoutes(fastify: FastifyInstance) {
 
       const decryptedNuevo = decryptUser(nuevo)!
 
+      const creator = await getAuthUser(request)
+      if (creator) {
+        registrarAudit({
+          accion: 'CREAR',
+          entidad: 'USUARIO',
+          entidadId: decryptedNuevo.id,
+          usuarioId: creator.id,
+          usuarioNombre: `${creator.nombre} ${creator.apellidos}`.trim(),
+          usuarioRol: creator.role.nombre,
+          descripcion: `creó al usuario ${decryptedNuevo.nombre} ${decryptedNuevo.apellidos}`,
+          contexto: `Rol asignado: ${targetRole?.nombre || targetRole?.codigo}. Estado: ${decryptedNuevo.activo ? 'Activo' : 'Inactivo'}`,
+          ipAddress: request.ip,
+          metadatos: {
+            email: decryptedNuevo.email,
+            tipoContrato: decryptedNuevo.tipoContrato,
+          },
+        })
+      }
+
       return reply.status(201).send({
         id: decryptedNuevo.id,
         nombre: decryptedNuevo.nombre,
@@ -537,14 +582,16 @@ export async function userRoutes(fastify: FastifyInstance) {
       })
     } catch (err: any) {
       fastify.log.error(err)
-      if (err.code === 'P2002' || err.message?.includes('usuarios_email_key') || err.message?.includes('email_hash')) {
+      if (
+        err.code === 'P2002' ||
+        err.message?.includes('usuarios_email_key') ||
+        err.message?.includes('email_hash')
+      ) {
         return reply.status(400).send({
           error: 'El correo electrónico ya se encuentra registrado por otro usuario',
         })
       }
-      return reply
-        .status(400)
-        .send({ error: err.message || 'Error al crear el usuario en MySQL' })
+      return reply.status(400).send({ error: err.message || 'Error al crear el usuario en MySQL' })
     }
   })
 
@@ -600,10 +647,7 @@ export async function userRoutes(fastify: FastifyInstance) {
 
         const existingUser = await prisma.usuario.findFirst({
           where: {
-            OR: [
-              ...(emailHash ? [{ emailHash }] : []),
-              { email: normalizedEmail },
-            ],
+            OR: [...(emailHash ? [{ emailHash }] : []), { email: normalizedEmail }],
           },
         })
         if (existingUser && existingUser.id !== id) {
@@ -618,7 +662,8 @@ export async function userRoutes(fastify: FastifyInstance) {
         passwordHash = await bcrypt.hash(body.password, 10)
       }
 
-      const targetRoleId = body.profileId !== undefined ? Number(body.profileId) : currentUser?.roleId
+      const targetRoleId =
+        body.profileId !== undefined ? Number(body.profileId) : currentUser?.roleId
       const targetRole = targetRoleId
         ? await prisma.role.findUnique({ where: { id: targetRoleId } })
         : currentUser?.role
@@ -701,7 +746,9 @@ export async function userRoutes(fastify: FastifyInstance) {
         ...(body.nombre && { nombre: encrypt(body.nombre.trim()) }),
         ...(body.apellidos !== undefined && { apellidos: encrypt(body.apellidos.trim()) }),
         ...(body.email && { email: encrypt(body.email.trim()), emailHash }),
-        ...(body.telefono !== undefined && { telefono: body.telefono ? encrypt(body.telefono.trim()) : null }),
+        ...(body.telefono !== undefined && {
+          telefono: body.telefono ? encrypt(body.telefono.trim()) : null,
+        }),
         ...(passwordHash && { passwordHash }),
         ...(body.imagen !== undefined && { imagen: body.imagen }),
         ...(body.profileId !== undefined && { roleId: Number(body.profileId) }),
@@ -722,6 +769,23 @@ export async function userRoutes(fastify: FastifyInstance) {
 
       const actualizado = decryptUser(actualizadoRaw)!
 
+      if (executor) {
+        const fechaCreacionStr = formatAuditDateTime(currentUserRaw.createdAt)
+        const creadorOriginal = `Fue creado el ${fechaCreacionStr}`
+        registrarAudit({
+          accion: 'MODIFICAR',
+          entidad: 'USUARIO',
+          entidadId: actualizado.id,
+          usuarioId: executor.id,
+          usuarioNombre: `${executor.nombre} ${executor.apellidos}`.trim(),
+          usuarioRol: executor.role.nombre,
+          descripcion: `modificó los datos del usuario ${actualizado.nombre} ${actualizado.apellidos}`,
+          contexto: `Rol: ${actualizado.role?.nombre || 'Usuario'}. Estado: ${actualizado.activo ? 'Activo' : 'Inactivo'}`,
+          creadorOriginal,
+          ipAddress: request.ip,
+        })
+      }
+
       return reply.send({
         id: actualizado.id,
         nombre: actualizado.nombre,
@@ -739,7 +803,11 @@ export async function userRoutes(fastify: FastifyInstance) {
       })
     } catch (err: any) {
       fastify.log.error(err)
-      if (err.code === 'P2002' || err.message?.includes('usuarios_email_key') || err.message?.includes('email_hash')) {
+      if (
+        err.code === 'P2002' ||
+        err.message?.includes('usuarios_email_key') ||
+        err.message?.includes('email_hash')
+      ) {
         return reply.status(400).send({
           error: 'El correo electrónico ya se encuentra registrado por otro usuario',
         })
@@ -766,7 +834,9 @@ export async function userRoutes(fastify: FastifyInstance) {
       const isAllowedRole = ['SUPERUSUARIO', 'ADMIN', 'GERENTE', 'SUPERVISOR'].includes(roleCode)
 
       if (!isSelf && !isAllowedRole) {
-        return reply.status(403).send({ error: 'No tienes permisos para cambiar el color de este usuario' })
+        return reply
+          .status(403)
+          .send({ error: 'No tienes permisos para cambiar el color de este usuario' })
       }
 
       let updatedColor: string | null = null
@@ -787,7 +857,9 @@ export async function userRoutes(fastify: FastifyInstance) {
       return reply.send({ success: true, id, color: updatedColor })
     } catch (err: any) {
       fastify.log.error(err)
-      return reply.status(500).send({ error: err.message || 'Error al actualizar el color del usuario' })
+      return reply
+        .status(500)
+        .send({ error: err.message || 'Error al actualizar el color del usuario' })
     }
   })
 
@@ -820,6 +892,21 @@ export async function userRoutes(fastify: FastifyInstance) {
         where: { id },
         data: { deletedAt: new Date() },
       })
+
+      const targetDecrypted = targetUser ? decryptUser(targetUser) : null
+      if (executor && targetDecrypted) {
+        registrarAudit({
+          accion: 'ELIMINAR',
+          entidad: 'USUARIO',
+          entidadId: id,
+          usuarioId: executor.id,
+          usuarioNombre: `${executor.nombre} ${executor.apellidos}`.trim(),
+          usuarioRol: executor.role.nombre,
+          descripcion: `eliminó al usuario ${targetDecrypted.nombre} ${targetDecrypted.apellidos}`,
+          contexto: `Rol que tenía: ${targetUser?.role?.nombre || 'Usuario'}`,
+          ipAddress: request.ip,
+        })
+      }
 
       return reply.send({ success: true, id })
     } catch (err: any) {
