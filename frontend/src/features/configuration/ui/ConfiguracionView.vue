@@ -6,6 +6,7 @@ import PaisesConfig from '@/features/countries/ui/PaisesConfig.vue'
 import HotelesConfig from '@/features/hotels/ui/HotelesConfig.vue'
 import GoalFormView from '@/features/goals/ui/GoalFormView.vue'
 import ComisionesConfig from '@/features/commissions/ui/ComisionesConfig.vue'
+import EmailTemplatesView from '@/features/notifications/ui/EmailTemplatesView.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -15,6 +16,9 @@ const userRole = computed(() => authStore.user?.roleCode?.toUpperCase())
 const isSuperOrAdmin = computed(() => userRole.value === 'SUPERUSUARIO' || userRole.value === 'ADMIN')
 const canManageCommissions = computed(
   () => isSuperOrAdmin.value || userRole.value === 'GERENTE' || userRole.value === 'CONTABLE',
+)
+const canManageEmailTemplates = computed(
+  () => isSuperOrAdmin.value || userRole.value === 'GERENTE' || userRole.value === 'SUPERVISOR',
 )
 
 // Pestaña por defecto según el rol del usuario
@@ -52,10 +56,10 @@ function handleTabChange(paneName: string | number) {
       <p class="page-subtitle">
         {{
           isSuperOrAdmin
-            ? 'Gestiona las opciones generales, estructura geográfica, comisiones y parámetros de la plataforma'
+            ? 'Gestiona las opciones generales, estructura geográfica, comisiones, plantillas de correo y parámetros de la plataforma'
             : canManageCommissions
               ? 'Establece y gestiona los porcentajes de comisiones, objetivos comerciales y metas de tus hoteles y equipo'
-              : 'Establece y gestiona los objetivos comerciales y metas de tus hoteles y equipo'
+              : 'Establece y gestiona los objetivos comerciales, metas y configuraciones de tus hoteles y equipo'
         }}
       </p>
     </div>
@@ -85,6 +89,11 @@ function handleTabChange(paneName: string | number) {
       <el-tab-pane v-if="canManageCommissions" label="Comisiones" name="comisiones">
         <!-- Componente modular de comisiones -->
         <ComisionesConfig />
+      </el-tab-pane>
+
+      <el-tab-pane v-if="canManageEmailTemplates" label="Plantillas de Email" name="plantillas">
+        <!-- Componente modular de plantillas de correo de recordatorio -->
+        <EmailTemplatesView embedded />
       </el-tab-pane>
     </el-tabs>
   </div>

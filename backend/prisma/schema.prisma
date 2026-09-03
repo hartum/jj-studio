@@ -46,6 +46,7 @@ model Usuario {
   comisiones            Comision[]
   calendarioLaboral     CalendarioLaboralFotografo[]
   passwordResetTokens   PasswordResetToken[]
+  plantillasModificadas PlantillaEmail[]            @relation("EditorPlantillas")
 
   @@map("usuarios")
 }
@@ -162,6 +163,7 @@ model SesionFotografica {
   origen                String     @default("MANUAL")
   notas                 String?    @db.Text
   googleCalendarEventId String?    @map("google_calendar_event_id")
+  emailRecordatorioEnviado Boolean @default(false) @map("email_recordatorio_enviado")
   createdAt             DateTime   @default(now()) @map("created_at")
   updatedAt             DateTime   @updatedAt @map("updated_at")
   deletedAt             DateTime?  @map("deleted_at")
@@ -185,6 +187,7 @@ model CitaVenta {
   totalVentaUsd    Float?     @map("total_venta_usd")
   notas            String?    @db.Text
   googleCalendarEventId String? @map("google_calendar_event_id")
+  emailRecordatorioEnviado Boolean @default(false) @map("email_recordatorio_enviado")
   createdAt        DateTime   @default(now()) @map("created_at")
   updatedAt        DateTime   @updatedAt @map("updated_at")
   deletedAt        DateTime?  @map("deleted_at")
@@ -292,5 +295,20 @@ model PasswordResetToken {
   usuario   Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
   @@map("password_reset_tokens")
+}
+
+model PlantillaEmail {
+  id          Int      @id @default(autoincrement())
+  tipo        String   @unique                        // "RECORDATORIO_SESION" | "RECORDATORIO_VENTA"
+  asunto      String   @db.VarChar(512)
+  cuerpoHtml  String   @db.Text @map("cuerpo_html")
+  cuerpoTexto String?  @db.Text @map("cuerpo_texto")
+  updatedBy   String?  @map("updated_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  editor      Usuario? @relation("EditorPlantillas", fields: [updatedBy], references: [id], onDelete: SetNull)
+
+  @@map("plantillas_email")
 }
 

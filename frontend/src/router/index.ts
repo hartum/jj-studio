@@ -81,6 +81,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/plantillas-email',
+      name: 'plantillas-email',
+      component: () => import('@/features/notifications/ui/EmailTemplatesView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/usuarios',
       name: 'usuarios',
       component: UsuariosView,

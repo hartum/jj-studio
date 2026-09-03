@@ -11,6 +11,8 @@ import { goalRoutes } from './features/goals/infrastructure/goal.routes.js'
 import { commissionRoutes } from './features/commissions/infrastructure/commission.routes.js'
 import { calendarioLaboralRoutes } from './features/users/infrastructure/calendario-laboral.routes.js'
 import { googleCalendarRoutes } from './features/integrations/google-calendar/google-calendar.routes.js'
+import { templateRoutes } from './features/notifications/infrastructure/template.routes.js'
+import { startReminderCron } from './features/notifications/infrastructure/reminder.cron.js'
 
 const fastify = Fastify({
   logger: true,
@@ -36,6 +38,7 @@ await fastify.register(goalRoutes)
 await fastify.register(commissionRoutes)
 await fastify.register(calendarioLaboralRoutes)
 await fastify.register(googleCalendarRoutes)
+await fastify.register(templateRoutes)
 
 fastify.get('/health', async () => {
   return { status: 'ok', timestamp: new Date().toISOString() }
@@ -50,6 +53,7 @@ const start = async () => {
     const port = Number(process.env.PORT) || 3000
     await fastify.listen({ port, host: '0.0.0.0' })
     console.log(`JJ Studio Backend running on http://localhost:${port}`)
+    startReminderCron()
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)

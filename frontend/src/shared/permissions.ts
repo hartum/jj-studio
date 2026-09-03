@@ -17,28 +17,28 @@ export interface RoleConfig {
 
 export const PERMISSION_MATRIX: Record<RoleCode, RoleConfig> = {
   SUPERUSUARIO: {
-    allowedNavRoutes: ['/inicio', '/agenda', '/ventas', '/configuracion', '/usuarios', '/hoteles'],
+    allowedNavRoutes: ['/inicio', '/agenda', '/ventas', '/configuracion', '/usuarios', '/hoteles', '/plantillas-email'],
     visibleTargetRoles: ['SUPERUSUARIO', 'ADMIN', 'GERENTE', 'SUPERVISOR', 'FOTOGRAFO', 'AGENDADOR', 'CONTABLE'],
     assignableTargetRoles: ['SUPERUSUARIO', 'ADMIN', 'GERENTE', 'SUPERVISOR', 'FOTOGRAFO', 'AGENDADOR', 'CONTABLE'],
     canCreateUsers: true,
     scopeType: 'GLOBAL',
   },
   ADMIN: {
-    allowedNavRoutes: ['/inicio', '/agenda', '/ventas', '/configuracion', '/usuarios', '/hoteles'],
+    allowedNavRoutes: ['/inicio', '/agenda', '/ventas', '/configuracion', '/usuarios', '/hoteles', '/plantillas-email'],
     visibleTargetRoles: ['ADMIN', 'GERENTE', 'SUPERVISOR', 'FOTOGRAFO', 'AGENDADOR', 'CONTABLE'],
     assignableTargetRoles: ['ADMIN', 'GERENTE', 'SUPERVISOR', 'FOTOGRAFO', 'AGENDADOR', 'CONTABLE'],
     canCreateUsers: true,
     scopeType: 'GLOBAL',
   },
   GERENTE: {
-    allowedNavRoutes: ['/inicio', '/agenda', '/ventas', '/usuarios', '/configuracion'],
+    allowedNavRoutes: ['/inicio', '/agenda', '/ventas', '/usuarios', '/configuracion', '/plantillas-email'],
     visibleTargetRoles: ['GERENTE', 'SUPERVISOR', 'FOTOGRAFO', 'AGENDADOR'],
     assignableTargetRoles: ['SUPERVISOR', 'FOTOGRAFO', 'AGENDADOR'],
     canCreateUsers: true,
     scopeType: 'AREAS',
   },
   SUPERVISOR: {
-    allowedNavRoutes: ['/inicio', '/agenda', '/ventas', '/usuarios'],
+    allowedNavRoutes: ['/inicio', '/agenda', '/ventas', '/usuarios', '/configuracion', '/plantillas-email'],
     visibleTargetRoles: ['SUPERVISOR', 'FOTOGRAFO', 'AGENDADOR'],
     assignableTargetRoles: ['FOTOGRAFO', 'AGENDADOR'],
     canCreateUsers: true,
