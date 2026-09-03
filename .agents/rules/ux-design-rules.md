@@ -66,3 +66,11 @@ Al concebir, diseñar o maquetar nuevas pantallas, vistas o componentes en **JJ 
 * **Iconografía:** `@element-plus/icons-vue` y `@lucide/vue` (`Building2`, etc.).
 * **Diálogos de Confirmación:** Modales compactos (`width: 400px` - `420px`) con icono de advertencia y acciones explícitas (*Cancelar* / *Eliminar*).
 * **Feedback:** Notificaciones no intrusivas con `ElMessage.success()` y `ElMessage.error()`.
+
+---
+
+## 6. Reglas Críticas de Intervención en CSS y Componentes
+* **Principio de Mínima Intervención:** No parchear o reescribir bordes, radios de esquina (`border-radius`) o paddings globales para resolver problemas locales de desborde/alineación. Identificar y aplicar la propiedad puntual exacta (ej. `overflow: hidden;` en contenedores) sin alterar la integridad del componente.
+* **Respeto a los Componentes Base:** Respetar la estructura y comportamiento nativo de los componentes de Element Plus (como `type="card"` en `el-tabs`). NUNCA desarmar sus bordes ni redefinir estilos internos a menos que se solicite un rediseño completo explícito.
+* **Verificación Visual Estricta:** Al validar cambios en navegador, verificar exhaustivamente que no se hayan roto o eliminado `border-radius`, bordes superiores/inferiores o alineaciones existentes en las áreas adyacentes.
+
