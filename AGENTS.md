@@ -75,6 +75,26 @@ Todas las pantallas del sistema deben seguir las directrices globales de [.agent
 
 ---
 
+## 🧼 Disciplina de Código, No-Sobreingeniería y Cero Código Muerto (Reglas Obligatorias)
+
+1. **Reutilizar antes de inventar:**
+   - Antes de escribir lógica nueva, componentes o alterar APIs, inspecciona cómo están resueltos problemas idénticos en otras pantallas del proyecto (ej. cómo `UsuariosView.vue` renderiza avatares, cómo se consumen los stores de Pinia, etc.).
+   - Copia y adapta patrones probados existentes en vez de diseñar soluciones paralelas o custom.
+
+2. **Principio de mínima intervención (No-Sobreingeniería):**
+   - **NUNCA** modificar esquemas de BD, modelos ni endpoints del backend si la información requerida ya está disponible o es accesible desde el cliente (ej. en stores de Pinia precargados).
+   - Mantén los cambios acotados únicamente al componente o función que requiere la mejora.
+
+3. **Cero código muerto ni residuos (Zero Dead Code):**
+   - Al refactorizar o sustituir una implementación por otra (ej. reemplazar un `div` con estilos custom por un `<el-avatar>`), **debes eliminar inmediatamente**:
+     - Clases CSS, variables o animaciones que hayan quedado sin uso.
+     - Imports de utilidades, funciones o iconos que ya no se llamen.
+     - Métodos, propiedades reactivas (`ref`/`reactive`) o helpers huérfanos.
+   - **Prohibido** dejar estilos huérfanos o funciones obsoletas "por si acaso". El código debe quedar limpio y pulido al terminar cada cambio.
+
+
+---
+
 ## 🛠️ Comandos Principales
 ```bash
 # Servidor MariaDB en Mac (automático)

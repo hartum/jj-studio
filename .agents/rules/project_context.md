@@ -108,9 +108,17 @@ Este archivo define el contexto obligatorio, la estructura de negocio, los roles
 
 ---
 
-## 6. Instrucciones Generales para el Agente AI
+## 6. Disciplina de Desarrollo: Anti-Sobreingeniería y Cero Código Muerto
+- **Reutilización obligatoria de patrones existentes:** Antes de codificar algo nuevo, buscar cómo está resuelto en otras vistas del proyecto (ej. `UsuariosView.vue` para avatares, stores de Pinia precargados para filtros, etc.) y reusar el mismo patrón.
+- **Principio de mínima intervención:** Prohibido modificar endpoints del backend, esquemas Prisma o modelos de dominio si el dato ya existe o se puede resolver directamente en el cliente.
+- **Eliminación sistemática de código muerto (Zero Dead Code):** Al refactorizar o reemplazar cualquier elemento (ej. pasar de un `div` custom a `<el-avatar>`), es obligatorio borrar de inmediato los estilos CSS huérfanos, imports no utilizados, variables o funciones obsoletas. Prohibido dejar basura técnica en el código.
+
+---
+
+## 7. Instrucciones Generales para el Agente AI
 - Siempre mantén la separación de responsabilidades y la restricción de visibilidad por rol y por hotel.
 - No borres ni simplifiques la lógica de negocio descrita en este documento.
 - Asegúrate de que las consultas y mutaciones respeten el tipado estricto de TypeScript sin usar `any`.
 - Respeta estrictamente la regla de NO commitear archivos `.env` bajo ninguna circunstancia.
 - Asegúrate de que las peticiones sin cuerpo (`DELETE`/`GET`) no envíen cabecera `Content-Type: application/json` para no provocar el error `400 FST_ERR_CTP_EMPTY_JSON_BODY` de Fastify 5.
+- Cumple estrictamente las pautas de Cero Código Muerto y No-Sobreingeniería en cada respuesta y edición de archivo.
