@@ -207,7 +207,6 @@ async function handleDeleteConfig(row: ComisionConfig) {
             </el-tag>
             <span class="role-desc-header">Comisión sobre las ventas de sus sesiones</span>
           </div>
-          <el-divider border-style="dashed" class="section-divider" />
 
           <div class="inputs-row">
             <div class="input-block">
@@ -246,6 +245,8 @@ async function handleDeleteConfig(row: ComisionConfig) {
           </div>
         </div>
 
+        <el-divider border-style="dashed" class="section-divider" />
+
         <!-- 2. Sección Vendedor / Agendador -->
         <div class="role-section">
           <div class="section-header-role">
@@ -259,7 +260,6 @@ async function handleDeleteConfig(row: ComisionConfig) {
             </el-tag>
             <span class="role-desc-header">Comisión por captación y apertura de sesión</span>
           </div>
-          <el-divider border-style="dashed" class="section-divider" />
 
           <div class="inputs-row">
             <div class="input-block">
@@ -298,6 +298,8 @@ async function handleDeleteConfig(row: ComisionConfig) {
           </div>
         </div>
 
+        <el-divider border-style="dashed" class="section-divider" />
+
         <!-- 3. Sección Supervisor de Hotel -->
         <div class="role-section">
           <div class="section-header-role">
@@ -313,7 +315,6 @@ async function handleDeleteConfig(row: ComisionConfig) {
               Comisión fija sobre la venta total de su hotel asignado
             </span>
           </div>
-          <el-divider border-style="dashed" class="section-divider" />
 
           <div class="inputs-row">
             <div class="slider-container">
@@ -329,6 +330,8 @@ async function handleDeleteConfig(row: ComisionConfig) {
           </div>
         </div>
 
+        <el-divider border-style="dashed" class="section-divider" />
+
         <!-- 4. Sección Gerente de Área -->
         <div class="role-section">
           <div class="section-header-role">
@@ -341,7 +344,6 @@ async function handleDeleteConfig(row: ComisionConfig) {
               Comisión fija sobre las ventas de todos los hoteles de su área
             </span>
           </div>
-          <el-divider border-style="dashed" class="section-divider" />
 
           <div class="inputs-row">
             <div class="slider-container">
@@ -357,6 +359,8 @@ async function handleDeleteConfig(row: ComisionConfig) {
           </div>
         </div>
 
+        <el-divider border-style="dashed" class="section-divider" />
+
         <!-- 5. Sección Retención Estatal / Impuestos -->
         <div class="role-section">
           <div class="section-header-role">
@@ -368,7 +372,6 @@ async function handleDeleteConfig(row: ComisionConfig) {
               Porcentaje deducido de los ingresos de cada venta antes de calcular las comisiones
             </span>
           </div>
-          <el-divider border-style="dashed" class="section-divider" />
 
           <div class="inputs-row">
             <div class="slider-container">
@@ -503,7 +506,7 @@ async function handleDeleteConfig(row: ComisionConfig) {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 4rem;
+  margin-bottom: 0;
 }
 
 .section-header-role {
@@ -557,7 +560,7 @@ async function handleDeleteConfig(row: ComisionConfig) {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
@@ -627,11 +630,11 @@ async function handleDeleteConfig(row: ComisionConfig) {
 }
 
 .section-divider {
-  margin: 0.3rem 0;
+  margin: 1.5rem 0;
 }
 
 .final-divider {
-  margin: 0.85rem 0 1.25rem 0 !important;
+  margin: 1.5rem 0 1.25rem 0 !important;
 }
 
 .card-footer-actions {
