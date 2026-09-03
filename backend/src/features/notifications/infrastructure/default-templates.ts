@@ -12,13 +12,13 @@ export const DEFAULT_TEMPLATES: Record<
   RECORDATORIO_SESION: {
     tipo: 'RECORDATORIO_SESION',
     asunto:
-      '📸 Recordatorio: Tu sesión fotográfica hoy en [hotel_nombre] / Reminder: Photo session today',
+      '📸 Recordatorio: Tu sesión de fotos en [hotel_nombre] /Photo session appointment',
     cuerpoHtml: `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recordatorio de Sesión Fotográfica - JJ Studio</title>
+  <title>Recordatorio de Sesión Fotográfica - JJ Studio Photo</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -103,7 +103,7 @@ export const DEFAULT_TEMPLATES: Record<
 <body>
   <div class="container">
     <div class="header">
-      <div class="logo-text">JJ <span class="logo-accent">STUDIO</span></div>
+      <div class="logo-text">JJ <span class="logo-accent">STUDIO PHOTO</span></div>
     </div>
 
     <h2>¡Hola, [nombre_cliente]! 👋</h2>
@@ -143,8 +143,8 @@ export const DEFAULT_TEMPLATES: Record<
     </p>
 
     <div class="footer">
-      <p style="margin-bottom: 4px;">[hotel_nombre] • [hotel_direccion]</p>
-      <p style="margin-top: 12px; font-size: 11px;">© JJ Studio. Todos los derechos reservados.</p>
+      <p style="margin-bottom: 4px;">[hotel_nombre]</p>
+      <p style="margin-top: 12px; font-size: 11px;">© JJ Studio Photo. Todos los derechos reservados.</p>
     </div>
   </div>
 </body>
@@ -160,7 +160,7 @@ Te recordamos que tienes una sesión fotográfica programada para hoy:
 
 English: Friendly reminder that your photo session is scheduled for today at [hora_sesion] at [hotel_nombre].
 
-© JJ Studio`,
+© JJ Studio Photo`,
   },
 
   RECORDATORIO_VENTA: {
@@ -172,7 +172,7 @@ English: Friendly reminder that your photo session is scheduled for today at [ho
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recordatorio de Cita de Venta - JJ Studio</title>
+  <title>Recordatorio de Cita de Venta - JJ Studio Photo</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -257,7 +257,7 @@ English: Friendly reminder that your photo session is scheduled for today at [ho
 <body>
   <div class="container">
     <div class="header">
-      <div class="logo-text">JJ <span class="logo-accent">STUDIO</span></div>
+      <div class="logo-text">JJ <span class="logo-accent">STUDIO PHOTO</span></div>
     </div>
 
     <h2>¡Hola, [nombre_cliente]! 👋</h2>
@@ -287,7 +287,7 @@ English: Friendly reminder that your photo session is scheduled for today at [ho
     </div>
 
     <p style="font-size: 14px; color: #64748b;">
-      Te esperamos en el stand / oficina de JJ Studio del hotel para que elijas tus recuerdos favoritos.
+      Te esperamos en el stand / oficina de JJ Studio Photo del hotel para que elijas tus recuerdos favoritos.
     </p>
 
     <div class="divider"></div>
@@ -297,8 +297,8 @@ English: Friendly reminder that your photo session is scheduled for today at [ho
     </p>
 
     <div class="footer">
-      <p style="margin-bottom: 4px;">[hotel_nombre] • [hotel_direccion]</p>
-      <p style="margin-top: 12px; font-size: 11px;">© JJ Studio. Todos los derechos reservados.</p>
+      <p style="margin-bottom: 4px;">[hotel_nombre]</p>
+      <p style="margin-top: 12px; font-size: 11px;">© JJ Studio Photo. Todos los derechos reservados.</p>
     </div>
   </div>
 </body>
@@ -314,7 +314,7 @@ Tus fotos están listas. Te recordamos que tienes una cita de selección de foto
 
 English: Your photos are ready! Photo viewing appointment today at [hora_cita_venta] at [hotel_nombre].
 
-© JJ Studio`,
+© JJ Studio Photo`,
   },
 }
 

@@ -10,13 +10,13 @@ import { useAuthStore } from '@/features/auth/stores/auth.store'
 import {
   Check,
   Refresh,
-  View,
   Message,
   Document,
   CopyDocument,
   InfoFilled,
   VideoPlay,
 } from '@element-plus/icons-vue'
+import { Eye, CodeXml } from '@lucide/vue'
 
 defineProps<{
   embedded?: boolean
@@ -27,12 +27,10 @@ const {
   templates,
   isLoading,
   isSaving,
-  isPreviewing,
   isResetting,
   isTestingReminders,
   fetchTemplates,
   updateTemplate,
-  previewTemplate,
   resetTemplate,
   triggerTestReminders,
 } = useEmailTemplates()
@@ -74,13 +72,50 @@ const isSuperOrAdmin = computed(() => {
   return role === 'SUPERUSUARIO' || role === 'ADMIN'
 })
 
-// Preview modal state
-const previewDialogVisible = ref(false)
-const previewSubject = ref('')
-const previewHtml = ref('')
-const previewText = ref('')
-const previewMockData = ref<Record<string, string>>({})
-const previewMode = ref<'html' | 'text'>('html')
+// Selector de vista: 'preview' (por defecto) o 'code'
+const viewMode = ref<'preview' | 'code'>('preview')
+
+// Datos de ejemplo para resolver variables en la vista previa reactiva
+const SAMPLE_MOCK_DATA: Record<string, string> = {
+  '[nombre_cliente]': 'Alejandro Martínez',
+  '[email_cliente]': 'alejandro.martinez@ejemplo.com',
+  '[telefono_cliente]': '+52 998 123 4567',
+  '[numero_habitacion]': '402',
+  '[fecha_sesion]': '15 de Marzo, 2026',
+  '[hora_sesion]': '10:30 AM',
+  '[concepto]': 'Familiar / Playa',
+  '[num_adultos]': '2',
+  '[num_ninos]': '1',
+  '[fecha_cita_venta]': '16 de Marzo, 2026',
+  '[hora_cita_venta]': '16:00',
+  '[lugar_cita_venta]': 'Lobby Principal / JJ Studio',
+  '[hotel_nombre]': 'Grand Palladium Riviera Maya',
+  '[area_nombre]': 'Riviera Maya',
+  '[pais_nombre]': 'México',
+  '[fotografo_nombre]': 'Carlos Mendoza',
+  '[supervisor_nombre]': 'Laura Gómez',
+  '[vendedor_nombre]': 'David Sánchez',
+  '[notas]': 'Sesión al atardecer en la playa.',
+}
+
+function resolveVariables(template: string, data: Record<string, string>): string {
+  if (!template) return ''
+  let result = template
+  for (const [k, v] of Object.entries(data)) {
+    result = result.split(k).join(v)
+  }
+  return result
+}
+
+const previewSubject = computed(() => {
+  const current = formState.value[activeTab.value]
+  return resolveVariables(current.asunto || '', SAMPLE_MOCK_DATA)
+})
+
+const previewHtml = computed(() => {
+  const current = formState.value[activeTab.value]
+  return resolveVariables(current.cuerpoHtml || '', SAMPLE_MOCK_DATA)
+})
 
 // Textarea refs for variable insertion
 const htmlEditorRef = ref<InputInstance | null>(null)
@@ -115,25 +150,6 @@ async function handleSave() {
     ElMessage.success('Plantilla de correo guardada con éxito')
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Error al guardar la plantilla'
-    ElMessage.error(message)
-  }
-}
-
-async function handleOpenPreview() {
-  const current = formState.value[activeTab.value]
-  try {
-    const result = await previewTemplate(activeTab.value, {
-      asunto: current.asunto,
-      cuerpoHtml: current.cuerpoHtml,
-      cuerpoTexto: current.cuerpoTexto,
-    })
-    previewSubject.value = result.asunto
-    previewHtml.value = result.html
-    previewText.value = result.text
-    previewMockData.value = result.mockData
-    previewDialogVisible.value = true
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al generar la vista previa'
     ElMessage.error(message)
   }
 }
@@ -277,32 +293,43 @@ onMounted(async () => {
         </el-tabs>
 
         <div class="template-top-actions">
-          <el-button
-            v-if="isSuperOrAdmin"
-            type="danger"
-            plain
-            size="default"
-            :icon="Refresh"
-            :loading="isResetting"
-            @click="handleReset"
-          >
-            Restablecer Defecto
-          </el-button>
-          <el-button
-            type="default"
-            size="default"
-            :icon="View"
-            :loading="isPreviewing"
-            @click="handleOpenPreview"
-          >
-            Vista Previa
-          </el-button>
+          <el-radio-group v-model="viewMode" size="default" class="view-mode-group">
+            <el-radio-button value="preview" label="preview">
+              <span class="radio-btn-content">
+                <Eye :size="15" :stroke-width="2" class="btn-icon" />
+                <span>Vista Previa</span>
+              </span>
+            </el-radio-button>
+            <el-radio-button value="code" label="code">
+              <span class="radio-btn-content">
+                <CodeXml :size="15" :stroke-width="2" class="btn-icon" />
+                <span>Código</span>
+              </span>
+            </el-radio-button>
+          </el-radio-group>
         </div>
       </div>
 
       <!-- Panel de Contenido de los Tabs (Fondo Blanco) -->
       <div class="tab-content-panel">
-        <div class="editor-layout">
+        <!-- Modo 1: Vista Previa Renderizada en Vivo -->
+        <div v-if="viewMode === 'preview'" class="preview-panel-view">
+          <div class="preview-subject-bar">
+            <span class="preview-subject-value">{{ previewSubject }}</span>
+          </div>
+
+          <div class="preview-iframe-wrapper">
+            <iframe
+              :srcdoc="previewHtml"
+              class="preview-inline-iframe"
+              sandbox="allow-same-origin"
+              title="Vista previa del correo"
+            />
+          </div>
+        </div>
+
+        <!-- Modo 2: Editor de Código -->
+        <div v-else class="editor-layout">
           <!-- Columna Izquierda: Formulario de Asunto y Código HTML -->
           <div class="editor-main">
             <!-- Asunto del Correo -->
@@ -314,7 +341,7 @@ onMounted(async () => {
               <el-input
                 ref="subjectEditorRef"
                 v-model="formState[activeTab].asunto"
-                placeholder="Ej: 📸 Recordatorio: Tu sesión fotográfica hoy en [hotel_nombre]"
+                placeholder="Ej: 📸 Recordatorio: Tu sesión de fotos en [hotel_nombre] /Photo session appointment"
                 size="large"
                 clearable
                 @focus="lastFocusedField = 'asunto'"
@@ -330,15 +357,10 @@ onMounted(async () => {
 
             <!-- Cuerpo HTML -->
             <div class="field-group">
-              <div class="field-label-row">
-                <label class="field-label">
-                  <el-icon :size="16"><Document /></el-icon>
-                  <span>Cuerpo del Correo (HTML)</span>
-                </label>
-                <el-button type="primary" link size="small" :icon="View" @click="handleOpenPreview">
-                  Previsualizar Renderizado
-                </el-button>
-              </div>
+              <label class="field-label">
+                <el-icon :size="16"><Document /></el-icon>
+                <span>Cuerpo del Correo (HTML)</span>
+              </label>
 
               <el-input
                 ref="htmlEditorRef"
@@ -370,7 +392,7 @@ onMounted(async () => {
               </el-collapse-item>
             </el-collapse>
 
-            <!-- Botón de Guardar Plantilla en la parte inferior -->
+            <!-- Botones de Acción en la parte inferior -->
             <div class="editor-bottom-actions">
               <el-button
                 type="primary"
@@ -380,6 +402,18 @@ onMounted(async () => {
                 @click="handleSave"
               >
                 Guardar Plantilla
+              </el-button>
+
+              <el-button
+                v-if="isSuperOrAdmin"
+                type="danger"
+                plain
+                size="large"
+                :icon="Refresh"
+                :loading="isResetting"
+                @click="handleReset"
+              >
+                Restablecer plantilla por defecto
               </el-button>
             </div>
           </div>
@@ -436,51 +470,6 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-
-    <!-- Modal de Vista Previa en Vivo -->
-    <el-dialog
-      v-model="previewDialogVisible"
-      title="Vista Previa del Correo de Recordatorio"
-      width="720px"
-      class="preview-dialog"
-      align-center
-    >
-      <div class="preview-dialog-content">
-        <!-- Asunto Renderizado -->
-        <div class="preview-subject-bar">
-          <span class="preview-subject-label">Asunto:</span>
-          <span class="preview-subject-value">{{ previewSubject }}</span>
-        </div>
-
-        <!-- Toggle Modo HTML / Texto -->
-        <div class="preview-mode-switch">
-          <el-radio-group v-model="previewMode" size="small">
-            <el-radio-button label="html">Vista Visual (HTML)</el-radio-button>
-            <el-radio-button label="text">Texto Plano</el-radio-button>
-          </el-radio-group>
-        </div>
-
-        <!-- Renderizado HTML en Sandbox Frame -->
-        <div v-if="previewMode === 'html'" class="preview-frame-container">
-          <iframe :srcdoc="previewHtml" class="preview-iframe" sandbox="allow-same-origin" />
-        </div>
-
-        <!-- Renderizado Texto Plano -->
-        <div v-else class="preview-plaintext-container">
-          <pre>{{ previewText }}</pre>
-        </div>
-      </div>
-
-      <template #footer>
-        <div class="dialog-footer">
-          <span class="preview-footer-hint">
-            💡 Mostrando datos de ejemplo simulados (huésped, fechas y hotel reales se insertan al
-            momento del envío).
-          </span>
-          <el-button @click="previewDialogVisible = false">Cerrar</el-button>
-        </div>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
@@ -489,6 +478,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding-top: 0.5rem;
 }
 
 .standalone-view {
@@ -546,12 +536,27 @@ onMounted(async () => {
 
 .template-top-actions {
   position: absolute;
-  right: 0;
-  top: 4px;
+  right: 1px;
+  top: -5px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   z-index: 1;
+}
+
+.view-mode-group :deep(.el-radio-button:last-child .el-radio-button__inner) {
+  border-right: 1px solid var(--toolbar-border, #e2e8f0);
+}
+
+.radio-btn-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-icon {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .tab-content-panel {
@@ -577,7 +582,9 @@ onMounted(async () => {
 
 .editor-bottom-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
   padding-top: 0.5rem;
 }
 
@@ -741,79 +748,39 @@ onMounted(async () => {
   text-overflow: ellipsis;
 }
 
-/* Modal de Vista Previa */
-.preview-dialog-content {
+/* Vista Previa Renderizada en Panel */
+.preview-panel-view {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
 .preview-subject-bar {
-  background-color: #f1f5f9;
-  border-radius: 6px;
-  padding: 0.6rem 0.85rem;
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  font-size: 0.9rem;
-}
-
-.preview-subject-label {
-  font-weight: 700;
-  color: #475569;
+  font-size: 0.95rem;
+  padding: 0.25rem 0;
 }
 
 .preview-subject-value {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--heading-color, #0f172a);
 }
 
-.preview-mode-switch {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.preview-frame-container {
-  border: 1px solid #e2e8f0;
+.preview-iframe-wrapper {
+  border: 1px solid var(--toolbar-border, #e2e8f0);
   border-radius: 8px;
   overflow: hidden;
-  height: 480px;
   background-color: #f8fafc;
+  min-height: 560px;
 }
 
-.preview-iframe {
+.preview-inline-iframe {
   width: 100%;
-  height: 100%;
+  height: 640px;
   border: none;
-}
-
-.preview-plaintext-container {
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 1rem;
-  background-color: #f8fafc;
-  max-height: 480px;
-  overflow-y: auto;
-
-  pre {
-    margin: 0;
-    font-family: inherit;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
-    color: #334155;
-  }
-}
-
-.dialog-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.preview-footer-hint {
-  font-size: 0.75rem;
-  color: #94a3b8;
+  display: block;
 }
 
 @media (max-width: 992px) {
