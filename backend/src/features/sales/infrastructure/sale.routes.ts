@@ -508,6 +508,9 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const authUserId = getAuthUserId(request) || nueva.vendedorId
       const clienteNombrePlano = decrypt(nueva.sesion.clienteNombre) || ''
+      const v = decryptUser(nueva.vendedor)
+      const vendedorNombre = v ? `${v.nombre} ${v.apellidos}`.trim() : 'Sin asignar'
+
       registrarAudit({
         accion: 'CREAR',
         entidad: 'CITA_VENTA',
@@ -519,14 +522,14 @@ export async function saleRoutes(fastify: FastifyInstance) {
         contexto: `La cita es para el cliente ${clienteNombrePlano}`,
         ipAddress: request.ip,
         metadatos: {
-          fechaHoraCita: body.fechaHoraCita,
+          fechaHoraCita: body.fechaHoraCita || nueva.fechaHoraCita.toISOString().slice(0, 16).replace('T', ' '),
+          vendedorAsignado: vendedorNombre,
           estado: nueva.estado,
           numFotosVendidas: nueva.numFotosVendidas,
           totalVentaUsd: nueva.totalVentaUsd,
         },
       })
 
-      const v = decryptUser(nueva.vendedor)
       const response: any = {
         id: nueva.id,
         sesionId: nueva.sesionId,
@@ -670,6 +673,33 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const creadorNombre = creadorSesion ? `${creadorSesion.nombre} ${creadorSesion.apellidos}`.trim() : 'un usuario'
       const creadorOriginal = formatCreadorOriginal(creadorNombre, existing.createdAt)
 
+      const existingVendedor = existing.vendedor ? decryptUser(existing.vendedor) : null
+      const existingVendedorNombre = existingVendedor
+        ? `${existingVendedor.nombre} ${existingVendedor.apellidos}`.trim()
+        : 'Sin asignar'
+      const actualVendedor = actualizada.vendedor ? decryptUser(actualizada.vendedor) : null
+      const actualVendedorNombre = actualVendedor
+        ? `${actualVendedor.nombre} ${actualVendedor.apellidos}`.trim()
+        : 'Sin asignar'
+
+      const metadatos: Record<string, any> = {
+        estadoAnterior: existing.estado,
+        estadoNuevo: actualizada.estado,
+        fechaHoraCitaAnterior: existing.fechaHoraCita.toISOString().slice(0, 16).replace('T', ' '),
+        fechaHoraCitaNueva: actualizada.fechaHoraCita.toISOString().slice(0, 16).replace('T', ' '),
+        vendedorAnterior: existingVendedorNombre,
+        vendedorNuevo: actualVendedorNombre,
+        totalVentaUsdAnterior: existing.totalVentaUsd,
+        totalVentaUsdNuevo: actualizada.totalVentaUsd,
+        numFotosVendidasAnterior: existing.numFotosVendidas,
+        numFotosVendidasNuevo: actualizada.numFotosVendidas,
+      }
+
+      if (existing.notas !== actualizada.notas) {
+        metadatos.notasAnteriores = existing.notas || ''
+        metadatos.notasNuevas = actualizada.notas || ''
+      }
+
       registrarAudit({
         accion: 'MODIFICAR',
         entidad: 'CITA_VENTA',
@@ -681,11 +711,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         contexto: `La cita era para el cliente ${updateClientePlano}`,
         creadorOriginal,
         ipAddress: request.ip,
-        metadatos: {
-          estado: actualizada.estado,
-          totalVentaUsd: actualizada.totalVentaUsd,
-          numFotosVendidas: actualizada.numFotosVendidas,
-        },
+        metadatos,
       })
 
       const v = decryptUser(actualizada.vendedor)
@@ -739,7 +765,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const cita = await prisma.citaVenta.findUnique({
         where: { id },
-        include: { sesion: true, hotel: true },
+        include: { sesion: true, hotel: true, vendedor: true },
       })
 
       if (!cita) {
@@ -753,6 +779,9 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const delAuthUserId = getAuthUserId(request) || cita.vendedorId
       const delClienteNombre = decrypt(cita.sesion.clienteNombre) || ''
+      const v = cita.vendedor ? decryptUser(cita.vendedor) : null
+      const vendedorNombre = v ? `${v.nombre} ${v.apellidos}`.trim() : 'Sin asignar'
+
       registrarAudit({
         accion: 'ELIMINAR',
         entidad: 'CITA_VENTA',
@@ -763,6 +792,13 @@ export async function saleRoutes(fastify: FastifyInstance) {
         descripcion: 'eliminó una cita de ventas',
         contexto: `La cita era para el cliente ${delClienteNombre}`,
         ipAddress: request.ip,
+        metadatos: {
+          estado: cita.estado,
+          fechaHoraCita: cita.fechaHoraCita.toISOString().slice(0, 16).replace('T', ' '),
+          vendedorAsignado: vendedorNombre,
+          totalVentaUsd: cita.totalVentaUsd,
+          numFotosVendidas: cita.numFotosVendidas,
+        },
       })
 
       // Limpiar comisiones asociadas a la venta eliminada

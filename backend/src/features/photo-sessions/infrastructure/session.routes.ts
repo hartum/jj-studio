@@ -439,8 +439,13 @@ export async function sessionRoutes(fastify: FastifyInstance) {
           origen: 'MANUAL',
           notas: body.notas ? body.notas.trim() : null,
         },
-        include: { hotel: true },
+        include: { hotel: true, fotografo: true },
       })
+
+      const fotografoDesc = nueva.fotografo ? decryptUser(nueva.fotografo) : null
+      const fotografoNombre = fotografoDesc
+        ? `${fotografoDesc.nombre} ${fotografoDesc.apellidos}`.trim()
+        : 'Sin asignar'
 
       registrarAudit({
         accion: 'CREAR',
@@ -454,8 +459,11 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         contexto: `La sesión es para el cliente ${body.clienteNombre.trim()} en el hotel ${nueva.hotel?.nombre || ''}`,
         ipAddress: request.ip,
         metadatos: {
-          fechaHoraInicio: body.fechaHoraInicio,
+          fechaHoraInicio: body.fechaHoraInicio || nueva.fechaHoraInicio.toISOString().slice(0, 16).replace('T', ' '),
+          fotografoAsignado: fotografoNombre,
           estado: nueva.estado,
+          numHabitacion: nueva.numeroHabitacion,
+          concepto: nueva.concepto,
         },
       })
 
@@ -519,7 +527,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
 
       const existing = await prisma.sesionFotografica.findUnique({
         where: { id },
-        include: { creador: true, hotel: true },
+        include: { creador: true, hotel: true, fotografo: true },
       })
       if (!existing || existing.deletedAt) {
         return reply.status(404).send({ error: 'Sesión fotográfica no encontrada' })
@@ -630,7 +638,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
           ...(body.estado && { estado: body.estado }),
           ...(body.notas !== undefined && { notas: body.notas ? body.notas.trim() : null }),
         },
-        include: { hotel: true },
+        include: { hotel: true, fotografo: true },
       })
 
       const authUserId = getAuthUserId(request)
@@ -638,6 +646,34 @@ export async function sessionRoutes(fastify: FastifyInstance) {
       const creadorNombre = creadorDesc ? `${creadorDesc.nombre} ${creadorDesc.apellidos}`.trim() : 'un usuario'
       const creadorOriginal = formatCreadorOriginal(creadorNombre, existing.createdAt)
       const clienteNombrePlano = decrypt(actualizada.clienteNombre) || ''
+
+      const existingFotografo = existing.fotografo ? decryptUser(existing.fotografo) : null
+      const existingFotografoNombre = existingFotografo
+        ? `${existingFotografo.nombre} ${existingFotografo.apellidos}`.trim()
+        : 'Sin asignar'
+      const actualFotografo = actualizada.fotografo ? decryptUser(actualizada.fotografo) : null
+      const actualFotografoNombre = actualFotografo
+        ? `${actualFotografo.nombre} ${actualFotografo.apellidos}`.trim()
+        : 'Sin asignar'
+
+      const metadatos: Record<string, any> = {
+        estadoAnterior: existing.estado,
+        estadoNuevo: actualizada.estado,
+        fechaHoraInicioAnterior: existing.fechaHoraInicio.toISOString().slice(0, 16).replace('T', ' '),
+        fechaHoraInicioNueva: actualizada.fechaHoraInicio.toISOString().slice(0, 16).replace('T', ' '),
+        fotografoAnterior: existingFotografoNombre,
+        fotografoNuevo: actualFotografoNombre,
+      }
+
+      if (existing.numeroHabitacion !== actualizada.numeroHabitacion) {
+        metadatos.habitacionAnterior = existing.numeroHabitacion || ''
+        metadatos.habitacionNueva = actualizada.numeroHabitacion || ''
+      }
+
+      if (existing.notas !== actualizada.notas) {
+        metadatos.notasAnteriores = existing.notas || ''
+        metadatos.notasNuevas = actualizada.notas || ''
+      }
 
       registrarAudit({
         accion: 'MODIFICAR',
@@ -651,10 +687,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         contexto: `La sesión es para el cliente ${clienteNombrePlano} en el hotel ${actualizada.hotel?.nombre || ''}`,
         creadorOriginal,
         ipAddress: request.ip,
-        metadatos: {
-          estado: actualizada.estado,
-          fechaHoraInicio: actualizada.fechaHoraInicio.toISOString(),
-        },
+        metadatos,
       })
 
       // Sincronizar actualización con Google Calendar
@@ -710,7 +743,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
 
       const sesion = await prisma.sesionFotografica.findUnique({
         where: { id },
-        include: { citaVenta: true, hotel: true },
+        include: { citaVenta: true, hotel: true, fotografo: true },
       })
 
       if (!sesion) {
@@ -724,6 +757,11 @@ export async function sessionRoutes(fastify: FastifyInstance) {
 
       const deleteAuthUserId = getAuthUserId(request)
       const delClienteNombre = decrypt(sesion.clienteNombre) || ''
+      const fotografoDesc = sesion.fotografo ? decryptUser(sesion.fotografo) : null
+      const fotografoNombre = fotografoDesc
+        ? `${fotografoDesc.nombre} ${fotografoDesc.apellidos}`.trim()
+        : 'Sin asignar'
+
       registrarAudit({
         accion: 'ELIMINAR',
         entidad: 'SESION',
@@ -735,6 +773,13 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         descripcion: 'eliminó una sesión de fotos',
         contexto: `La sesión era para el cliente ${delClienteNombre} en el hotel ${sesion.hotel?.nombre || ''}`,
         ipAddress: request.ip,
+        metadatos: {
+          estado: sesion.estado,
+          fechaHoraInicio: sesion.fechaHoraInicio.toISOString().slice(0, 16).replace('T', ' '),
+          fotografoAsignado: fotografoNombre,
+          numHabitacion: sesion.numeroHabitacion,
+          concepto: sesion.concepto,
+        },
       })
 
       // Eliminar evento de Google Calendar
