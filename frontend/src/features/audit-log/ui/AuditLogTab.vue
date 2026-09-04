@@ -166,6 +166,76 @@ function getEntityLabel(entidad: string): string {
   }
 }
 
+function getDisplayMetadatos(entry: any): Record<string, any> | null {
+  if (!entry.metadatos) return null
+  let data = entry.metadatos
+  if (typeof data === 'string') {
+    try {
+      data = JSON.parse(data)
+    } catch {
+      return data
+    }
+  }
+  if (!data || typeof data !== 'object') return data
+
+  // En modificaciones, mostrar únicamente los campos que cambiaron (con su valor anterior y nuevo)
+  if (entry.accion === 'MODIFICAR') {
+    const filtered: Record<string, any> = {}
+    const keys = Object.keys(data)
+    const handledNewKeys = new Set<string>()
+
+    for (const key of keys) {
+      if (key.endsWith('Anterior') || key.endsWith('Anteriores')) {
+        const base = key.endsWith('Anteriores') ? key.slice(0, -10) : key.slice(0, -8)
+        const newKey = keys.find(
+          (k) =>
+            k.startsWith(base) &&
+            (k.endsWith('Nuevo') ||
+              k.endsWith('Nueva') ||
+              k.endsWith('Nuevos') ||
+              k.endsWith('Nuevas')),
+        )
+
+        if (newKey) {
+          handledNewKeys.add(newKey)
+          // Solo si los valores son diferentes, mostrar tanto el anterior como el nuevo
+          if (data[key] !== data[newKey]) {
+            filtered[key] = data[key]
+            filtered[newKey] = data[newKey]
+          }
+          continue
+        }
+      }
+
+      // Si es una clave nueva ya evaluada junto a su anterior, ignorar
+      if (handledNewKeys.has(key)) {
+        continue
+      }
+
+      // Si es una clave tipo nuevo/nueva con par anterior pero procesada en otro orden
+      if (
+        key.endsWith('Nuevo') ||
+        key.endsWith('Nueva') ||
+        key.endsWith('Nuevos') ||
+        key.endsWith('Nuevas')
+      ) {
+        const base = key.replace(/Nuev[oas]+$/, '')
+        const prevKey = keys.find((k) => k.startsWith(base) && k.includes('Anterior'))
+        if (prevKey) {
+          continue
+        }
+      }
+
+      // Otras claves individuales
+      filtered[key] = data[key]
+    }
+
+    return Object.keys(filtered).length > 0 ? filtered : null
+  }
+
+  return Object.keys(data).length > 0 ? data : null
+}
+
 onMounted(async () => {
   if (hotelStore.hotels.length === 0) {
     hotelStore.fetchHotels().catch(() => {})
@@ -435,17 +505,23 @@ onMounted(async () => {
             </div>
 
             <!-- Metadatos expandibles opcionales -->
-            <div v-if="entry.metadatos" class="metadata-section">
+            <div v-if="getDisplayMetadatos(entry)" class="metadata-section">
               <button type="button" class="metadata-toggle-btn" @click="toggleExpand(entry.id)">
                 <span>
                   {{
-                    expandedItems[entry.id] ? 'Ocultar detalles técnicos' : 'Ver detalles técnicos'
+                    expandedItems[entry.id]
+                      ? entry.accion === 'MODIFICAR'
+                        ? 'Ocultar cambios'
+                        : 'Ocultar detalles técnicos'
+                      : entry.accion === 'MODIFICAR'
+                        ? 'Ver cambios'
+                        : 'Ver detalles técnicos'
                   }}
                 </span>
                 <ChevronDown :size="14" :class="{ rotated: expandedItems[entry.id] }" />
               </button>
               <div v-if="expandedItems[entry.id]" class="metadata-content">
-                <pre class="metadata-json">{{ JSON.stringify(entry.metadatos, null, 2) }}</pre>
+                <pre class="metadata-json">{{ JSON.stringify(getDisplayMetadatos(entry), null, 2) }}</pre>
               </div>
             </div>
           </el-card>

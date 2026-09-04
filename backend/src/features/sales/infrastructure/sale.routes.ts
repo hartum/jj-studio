@@ -682,17 +682,33 @@ export async function saleRoutes(fastify: FastifyInstance) {
         ? `${actualVendedor.nombre} ${actualVendedor.apellidos}`.trim()
         : 'Sin asignar'
 
-      const metadatos: Record<string, any> = {
-        estadoAnterior: existing.estado,
-        estadoNuevo: actualizada.estado,
-        fechaHoraCitaAnterior: existing.fechaHoraCita.toISOString().slice(0, 16).replace('T', ' '),
-        fechaHoraCitaNueva: actualizada.fechaHoraCita.toISOString().slice(0, 16).replace('T', ' '),
-        vendedorAnterior: existingVendedorNombre,
-        vendedorNuevo: actualVendedorNombre,
-        totalVentaUsdAnterior: existing.totalVentaUsd,
-        totalVentaUsdNuevo: actualizada.totalVentaUsd,
-        numFotosVendidasAnterior: existing.numFotosVendidas,
-        numFotosVendidasNuevo: actualizada.numFotosVendidas,
+      const metadatos: Record<string, any> = {}
+
+      if (existing.estado !== actualizada.estado) {
+        metadatos.estadoAnterior = existing.estado
+        metadatos.estadoNuevo = actualizada.estado
+      }
+
+      const existingFecha = existing.fechaHoraCita.toISOString().slice(0, 16).replace('T', ' ')
+      const actualFecha = actualizada.fechaHoraCita.toISOString().slice(0, 16).replace('T', ' ')
+      if (existingFecha !== actualFecha) {
+        metadatos.fechaHoraCitaAnterior = existingFecha
+        metadatos.fechaHoraCitaNueva = actualFecha
+      }
+
+      if (existing.vendedorId !== actualizada.vendedorId) {
+        metadatos.vendedorAnterior = existingVendedorNombre
+        metadatos.vendedorNuevo = actualVendedorNombre
+      }
+
+      if (existing.totalVentaUsd !== actualizada.totalVentaUsd) {
+        metadatos.totalVentaUsdAnterior = existing.totalVentaUsd
+        metadatos.totalVentaUsdNuevo = actualizada.totalVentaUsd
+      }
+
+      if (existing.numFotosVendidas !== actualizada.numFotosVendidas) {
+        metadatos.numFotosVendidasAnterior = existing.numFotosVendidas
+        metadatos.numFotosVendidasNuevo = actualizada.numFotosVendidas
       }
 
       if (existing.notas !== actualizada.notas) {
@@ -711,7 +727,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         contexto: `La cita era para el cliente ${updateClientePlano}`,
         creadorOriginal,
         ipAddress: request.ip,
-        metadatos,
+        metadatos: Object.keys(metadatos).length > 0 ? metadatos : undefined,
       })
 
       const v = decryptUser(actualizada.vendedor)

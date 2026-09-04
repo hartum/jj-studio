@@ -656,13 +656,23 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         ? `${actualFotografo.nombre} ${actualFotografo.apellidos}`.trim()
         : 'Sin asignar'
 
-      const metadatos: Record<string, any> = {
-        estadoAnterior: existing.estado,
-        estadoNuevo: actualizada.estado,
-        fechaHoraInicioAnterior: existing.fechaHoraInicio.toISOString().slice(0, 16).replace('T', ' '),
-        fechaHoraInicioNueva: actualizada.fechaHoraInicio.toISOString().slice(0, 16).replace('T', ' '),
-        fotografoAnterior: existingFotografoNombre,
-        fotografoNuevo: actualFotografoNombre,
+      const metadatos: Record<string, any> = {}
+
+      if (existing.estado !== actualizada.estado) {
+        metadatos.estadoAnterior = existing.estado
+        metadatos.estadoNuevo = actualizada.estado
+      }
+
+      const existingInicio = existing.fechaHoraInicio.toISOString().slice(0, 16).replace('T', ' ')
+      const actualInicio = actualizada.fechaHoraInicio.toISOString().slice(0, 16).replace('T', ' ')
+      if (existingInicio !== actualInicio) {
+        metadatos.fechaHoraInicioAnterior = existingInicio
+        metadatos.fechaHoraInicioNueva = actualInicio
+      }
+
+      if (existing.fotografoId !== actualizada.fotografoId) {
+        metadatos.fotografoAnterior = existingFotografoNombre
+        metadatos.fotografoNuevo = actualFotografoNombre
       }
 
       if (existing.numeroHabitacion !== actualizada.numeroHabitacion) {
@@ -687,7 +697,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         contexto: `La sesión es para el cliente ${clienteNombrePlano} en el hotel ${actualizada.hotel?.nombre || ''}`,
         creadorOriginal,
         ipAddress: request.ip,
-        metadatos,
+        metadatos: Object.keys(metadatos).length > 0 ? metadatos : undefined,
       })
 
       // Sincronizar actualización con Google Calendar
