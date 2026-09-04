@@ -367,8 +367,8 @@ onMounted(async () => {
             </div>
           </template>
 
-          <!-- Tarjeta de contenido del evento -->
-          <div class="entry-card" :class="`border-${entry.accion?.toLowerCase()}`">
+          <!-- Tarjeta el-card de Element Plus -->
+          <el-card class="timeline-card" shadow="hover">
             <div class="entry-header">
               <div class="user-block">
                 <!-- Avatar con foto o iniciales (reutilizando userStore) -->
@@ -404,27 +404,26 @@ onMounted(async () => {
               <span class="action-verb">{{ entry.descripcion }}</span>
             </div>
 
-            <!-- Contexto detallado (Cliente, Hotel, etc.) -->
+            <!-- Contexto detallado (Cliente, Hotel, etc.) sin recuadro anidado -->
+            <div v-if="entry.contexto" class="context-text">
+              {{ entry.contexto }}
+            </div>
+
             <div
-              v-if="entry.contexto || entry.hotelNombre || entry.clienteNombre"
-              class="entry-context-box"
+              v-if="entry.hotelNombre || entry.clienteNombre || entry.ipAddress"
+              class="context-meta-pills"
             >
-              <div v-if="entry.contexto" class="context-text">
-                {{ entry.contexto }}
-              </div>
-              <div class="context-meta-pills">
-                <span v-if="entry.hotelNombre" class="context-pill hotel-pill">
-                  <Building2 :size="12" />
-                  {{ entry.hotelNombre }}
-                </span>
-                <span v-if="entry.clienteNombre" class="context-pill client-pill">
-                  <UserRound :size="12" />
-                  Cliente: {{ entry.clienteNombre }}
-                </span>
-                <span v-if="entry.ipAddress" class="context-pill ip-pill">
-                  IP: {{ entry.ipAddress }}
-                </span>
-              </div>
+              <span v-if="entry.hotelNombre" class="context-pill hotel-pill">
+                <Building2 :size="12" />
+                {{ entry.hotelNombre }}
+              </span>
+              <span v-if="entry.clienteNombre" class="context-pill client-pill">
+                <UserRound :size="12" />
+                Cliente: {{ entry.clienteNombre }}
+              </span>
+              <span v-if="entry.ipAddress" class="context-pill ip-pill">
+                IP: {{ entry.ipAddress }}
+              </span>
             </div>
 
             <!-- Información de creación original (Requisito clave en modificaciones) -->
@@ -449,7 +448,7 @@ onMounted(async () => {
                 <pre class="metadata-json">{{ JSON.stringify(entry.metadatos, null, 2) }}</pre>
               </div>
             </div>
-          </div>
+          </el-card>
         </el-timeline-item>
       </el-timeline>
 
@@ -596,11 +595,8 @@ onMounted(async () => {
 
 /* Timeline Container */
 .timeline-container {
-  background-color: var(--toolbar-bg, #ffffff);
-  border: 1px solid var(--toolbar-border, #e2e8f0);
-  border-radius: 12px;
-  padding: 1.75rem 1.5rem 1.5rem 1.5rem;
   min-height: 250px;
+  padding: 0.5rem 0;
 }
 
 .empty-state-box {
@@ -655,42 +651,17 @@ onMounted(async () => {
   stroke-width: 2.5;
 }
 
-/* Tarjeta de cada entrada */
-.entry-card {
+/* Tarjeta el-card */
+.timeline-card {
   text-align: left;
-  background-color: var(--app-bg, #f8fafc);
-  border: 1px solid var(--toolbar-border, #e2e8f0);
   border-radius: 10px;
-  padding: 1rem 1.25rem;
+}
+
+:deep(.timeline-card .el-card__body) {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  transition: all 0.2s ease-in-out;
-}
-
-.entry-card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-}
-
-.border-crear {
-  border-left: 3px solid #10b981;
-}
-
-.border-modificar {
-  border-left: 3px solid #3b82f6;
-}
-
-.border-eliminar {
-  border-left: 3px solid #f56c6c;
-}
-
-.border-login {
-  border-left: 3px solid #6366f1;
-}
-
-.border-logout {
-  border-left: 3px solid #94a3b8;
+  padding: 1rem 1.25rem;
 }
 
 .entry-header {
@@ -746,17 +717,7 @@ onMounted(async () => {
   font-weight: 600;
 }
 
-/* Context Box */
-.entry-context-box {
-  background-color: var(--toolbar-bg, #ffffff);
-  border: 1px solid var(--toolbar-border, #e2e8f0);
-  border-radius: 8px;
-  padding: 0.65rem 0.85rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
+/* Context & Pills */
 .context-text {
   font-size: 0.88rem;
   color: var(--heading-color, #1e293b);
@@ -889,20 +850,9 @@ onMounted(async () => {
 }
 
 /* Dark mode adjustments */
-:root.dark .entry-card {
-  background-color: #1a1a1b;
-  border-color: #2d2d2e;
-}
-
-:root.dark .filters-card,
-:root.dark .timeline-container {
+:root.dark .filters-card {
   background-color: var(--toolbar-bg, #1d1e1f);
   border-color: var(--toolbar-border, #363637);
-}
-
-:root.dark .entry-context-box {
-  background-color: #121212;
-  border-color: #2d2d2e;
 }
 
 :root.dark .hotel-pill {
