@@ -454,13 +454,20 @@ onMounted(async () => {
                   shape="circle"
                   :size="36"
                   :style="{
-                    backgroundColor: getUserBgColor(userStore.users.find((u) => u.id === entry.usuarioId)?.color),
+                    backgroundColor: getUserBgColor(
+                      userStore.users.find((u) => u.id === entry.usuarioId)?.color,
+                    ),
                     color: '#ffffff',
                     fontWeight: '600',
                   }"
                   :title="entry.usuarioRol"
                 >
-                  {{ getUserInitials(entry.usuarioNombre?.split(' ')[0], entry.usuarioNombre?.split(' ').slice(1).join(' ')) }}
+                  {{
+                    getUserInitials(
+                      entry.usuarioNombre?.split(' ')[0],
+                      entry.usuarioNombre?.split(' ').slice(1).join(' '),
+                    )
+                  }}
                 </el-avatar>
                 <div class="user-info">
                   <span class="user-name">{{ entry.usuarioNombre }}</span>
@@ -471,7 +478,10 @@ onMounted(async () => {
               <!-- Badge único de acción y entidad -->
               <div class="entry-badges">
                 <el-tag :type="getActionTagType(entry.accion)" size="small" class="action-tag">
-                  {{ entry.accion }}<template v-if="entry.entidad && entry.entidad !== 'SISTEMA'"> · {{ getEntityLabel(entry.entidad) }}</template>
+                  {{ entry.accion }}
+                  <template v-if="entry.entidad && entry.entidad !== 'SISTEMA'">
+                    · {{ getEntityLabel(entry.entidad) }}
+                  </template>
                 </el-tag>
               </div>
             </div>
@@ -528,7 +538,9 @@ onMounted(async () => {
                 <ChevronDown :size="14" :class="{ rotated: expandedItems[entry.id] }" />
               </button>
               <div v-if="expandedItems[entry.id]" class="metadata-content">
-                <pre class="metadata-json">{{ JSON.stringify(getDisplayMetadatos(entry), null, 2) }}</pre>
+                <pre class="metadata-json">{{
+                  JSON.stringify(getDisplayMetadatos(entry), null, 2)
+                }}</pre>
               </div>
             </div>
           </el-card>
