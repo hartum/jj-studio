@@ -131,7 +131,7 @@ function getActionColor(accion: string): string {
   }
 }
 
-function getActionTagType(accion: string): 'success' | 'primary' | 'danger' | 'warning' | 'info' {
+function getActionTagType(accion: string): 'success' | 'primary' | 'danger' | 'warning' | 'info' | '' {
   switch (accion?.toUpperCase()) {
     case 'CREAR':
       return 'success'
@@ -139,9 +139,10 @@ function getActionTagType(accion: string): 'success' | 'primary' | 'danger' | 'w
       return 'primary'
     case 'ELIMINAR':
       return 'danger'
-    case 'LOGIN':
     case 'LOGOUT':
-      return 'warning'
+      return 'info'
+    case 'LOGIN':
+      return ''
     default:
       return 'info'
   }
@@ -360,8 +361,7 @@ onMounted(async () => {
           </el-tag>
           <el-tag
             :effect="filters.accion === 'LOGIN' ? 'dark' : 'plain'"
-            type="warning"
-            class="filter-chip"
+            class="filter-chip filter-chip--login"
             @click="filters.accion = filters.accion === 'LOGIN' ? '' : 'LOGIN'"
           >
             Inicios de sesión
@@ -477,7 +477,11 @@ onMounted(async () => {
 
               <!-- Badge único de acción y entidad -->
               <div class="entry-badges">
-                <el-tag :type="getActionTagType(entry.accion)" size="small" class="action-tag">
+                <el-tag
+                  :type="getActionTagType(entry.accion)"
+                  size="small"
+                  :class="['action-tag', `action-tag--${entry.accion?.toLowerCase()}`]"
+                >
                   {{ entry.accion }}
                   <template v-if="entry.entidad && entry.entidad !== 'SISTEMA'">
                     · {{ getEntityLabel(entry.entidad) }}
@@ -657,6 +661,29 @@ onMounted(async () => {
   transform: translateY(-1px);
 }
 
+.filter-chip--login.el-tag--plain {
+  background-color: transparent;
+  border-color: #c7d2fe;
+  color: #6366f1;
+}
+
+.filter-chip--login.el-tag--dark {
+  background-color: #6366f1;
+  border-color: #6366f1;
+  color: #ffffff;
+}
+
+html.dark .filter-chip--login.el-tag--plain {
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #818cf8;
+}
+
+html.dark .filter-chip--login.el-tag--dark {
+  background-color: #6366f1;
+  border-color: #6366f1;
+  color: #ffffff;
+}
+
 .reset-btn {
   font-size: 0.85rem;
   border-radius: 8px;
@@ -801,6 +828,18 @@ onMounted(async () => {
 .action-tag {
   font-weight: 600;
   border-radius: 6px;
+}
+
+.action-tag--login {
+  background-color: #eef2ff;
+  border-color: #c7d2fe;
+  color: #4f46e5;
+}
+
+html.dark .action-tag--login {
+  background-color: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.35);
+  color: #818cf8;
 }
 
 .entry-action-line {
