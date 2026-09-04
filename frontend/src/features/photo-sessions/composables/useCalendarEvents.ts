@@ -22,6 +22,7 @@ export interface ExtendedEventProps {
   roomStr?: string
   clienteNombre?: string
   iconType?: string
+  estado?: string
   [key: string]: unknown
 }
 
@@ -110,6 +111,7 @@ export function useCalendarEvents(
           roomStr,
           clienteNombre,
           paxStr,
+          estado: session.estado,
         },
       }
     })
@@ -231,6 +233,7 @@ export function useCalendarEvents(
           roomStr,
           clienteNombre,
           paxStr,
+          estado: sale.estado,
         },
       }
     })

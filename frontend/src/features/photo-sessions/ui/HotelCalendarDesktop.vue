@@ -452,7 +452,7 @@ onUnmounted(() => {
   margin: 1px 2px !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
   color: #ffffff !important;
-  min-height: 104px !important;
+  min-height: 120px !important;
 }
 
 :deep(.fc-daygrid-event) {

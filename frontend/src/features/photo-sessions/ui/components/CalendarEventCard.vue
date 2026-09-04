@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { EventContentArg } from '@fullcalendar/core'
 import { User, Delete } from '@element-plus/icons-vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
@@ -24,6 +25,29 @@ function getEventTimeText(arg: EventContentArg): string {
   }
   return arg.timeText ?? ''
 }
+
+interface StatusConfig {
+  label: string
+  color: string
+}
+
+const STATUS_MAP: Record<string, StatusConfig> = {
+  PROGRAMADA: { label: 'Programada', color: '#409eff' },
+  COMPLETADA: { label: 'Completada', color: '#67c23a' },
+  CANCELADA: { label: 'Cancelada', color: '#f56c6c' },
+  NO_SHOW: { label: 'No vino', color: '#e6a23c' },
+}
+
+const eventStatus = computed<StatusConfig>(() => {
+  const rawStatus = (
+    props.arg.event.extendedProps.estado ||
+    props.arg.event.extendedProps.rawSession?.estado ||
+    props.arg.event.extendedProps.rawSale?.estado ||
+    'PROGRAMADA'
+  ) as string
+  const normalized = String(rawStatus).toUpperCase()
+  return STATUS_MAP[normalized] || { label: rawStatus, color: '#409eff' }
+})
 </script>
 
 <template>
@@ -117,7 +141,7 @@ function getEventTimeText(arg: EventContentArg): string {
     <!-- Separador punteado -->
     <div class="jj-event-divider"></div>
 
-    <!-- Cuerpo: Habitación, Cliente y PAX -->
+    <!-- Cuerpo: Habitación, Cliente, PAX y Estado -->
     <div class="jj-event-body">
       <div v-if="arg.event.extendedProps.roomStr" class="jj-event-room">
         {{ arg.event.extendedProps.roomStr }}
@@ -127,6 +151,20 @@ function getEventTimeText(arg: EventContentArg): string {
       </div>
       <div v-if="arg.event.extendedProps.paxStr" class="jj-event-pax">
         {{ arg.event.extendedProps.paxStr }}
+      </div>
+      <div class="jj-event-status-wrapper">
+        <el-tag
+          size="small"
+          effect="dark"
+          class="jj-event-status-tag"
+          :style="{
+            backgroundColor: eventStatus.color,
+            borderColor: eventStatus.color,
+            color: '#ffffff',
+          }"
+        >
+          {{ eventStatus.label }}
+        </el-tag>
       </div>
     </div>
   </div>
@@ -283,5 +321,22 @@ function getEventTimeText(arg: EventContentArg): string {
   font-weight: 500;
   color: rgba(255, 255, 255, 0.8);
   margin-top: 1px;
+}
+
+.jj-event-status-wrapper {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.jj-event-status-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  height: 18px;
+  line-height: 18px;
+  padding: 0 6px;
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 </style>
