@@ -5,7 +5,7 @@ import { useAuditLogStore } from '../stores/audit-log.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
-import type { AuditLogFilters } from '../domain/audit-log.model'
+import type { AuditLogFilters, AuditLogEntry } from '../domain/audit-log.model'
 import {
   Search,
   RotateCcw,
@@ -166,21 +166,28 @@ function getEntityLabel(entidad: string): string {
   }
 }
 
-function getDisplayMetadatos(entry: any): Record<string, any> | null {
+function getDisplayMetadatos(entry: AuditLogEntry): Record<string, unknown> | null {
   if (!entry.metadatos) return null
-  let data = entry.metadatos
-  if (typeof data === 'string') {
+  let data: Record<string, unknown> | null = null
+
+  if (typeof entry.metadatos === 'string') {
     try {
-      data = JSON.parse(data)
+      const parsed = JSON.parse(entry.metadatos)
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        data = parsed as Record<string, unknown>
+      }
     } catch {
-      return data
+      return null
     }
+  } else if (typeof entry.metadatos === 'object' && !Array.isArray(entry.metadatos)) {
+    data = entry.metadatos as Record<string, unknown>
   }
-  if (!data || typeof data !== 'object') return data
+
+  if (!data) return null
 
   // En modificaciones, mostrar únicamente los campos que cambiaron (con su valor anterior y nuevo)
   if (entry.accion === 'MODIFICAR') {
-    const filtered: Record<string, any> = {}
+    const filtered: Record<string, unknown> = {}
     const keys = Object.keys(data)
     const handledNewKeys = new Set<string>()
 
