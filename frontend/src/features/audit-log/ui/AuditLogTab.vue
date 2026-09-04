@@ -446,49 +446,51 @@ onMounted(async () => {
 
           <!-- Tarjeta el-card de Element Plus -->
           <el-card class="timeline-card" shadow="hover">
-            <div class="entry-header">
-              <div class="user-block">
-                <!-- Avatar con foto o iniciales (reutilizando userStore) -->
-                <el-avatar
-                  :src="userStore.users.find((u) => u.id === entry.usuarioId)?.imagen || undefined"
-                  shape="circle"
-                  :size="36"
-                  :style="{
-                    backgroundColor: getUserBgColor(
-                      userStore.users.find((u) => u.id === entry.usuarioId)?.color,
-                    ),
-                    color: '#ffffff',
-                    fontWeight: '600',
-                  }"
-                  :title="entry.usuarioRol"
-                >
-                  {{
-                    getUserInitials(
-                      entry.usuarioNombre?.split(' ')[0],
-                      entry.usuarioNombre?.split(' ').slice(1).join(' '),
-                    )
-                  }}
-                </el-avatar>
-                <div class="user-info">
-                  <span class="user-name">{{ entry.usuarioNombre }}</span>
-                  <span class="user-role">({{ entry.usuarioRol?.toLowerCase() }})</span>
+            <template #header>
+              <div class="entry-header">
+                <div class="user-block">
+                  <!-- Avatar con foto o iniciales (reutilizando userStore) -->
+                  <el-avatar
+                    :src="userStore.users.find((u) => u.id === entry.usuarioId)?.imagen || undefined"
+                    shape="circle"
+                    :size="36"
+                    :style="{
+                      backgroundColor: getUserBgColor(
+                        userStore.users.find((u) => u.id === entry.usuarioId)?.color,
+                      ),
+                      color: '#ffffff',
+                      fontWeight: '600',
+                    }"
+                    :title="entry.usuarioRol"
+                  >
+                    {{
+                      getUserInitials(
+                        entry.usuarioNombre?.split(' ')[0],
+                        entry.usuarioNombre?.split(' ').slice(1).join(' '),
+                      )
+                    }}
+                  </el-avatar>
+                  <div class="user-info">
+                    <span class="user-name">{{ entry.usuarioNombre }}</span>
+                    <span class="user-role">({{ entry.usuarioRol?.toLowerCase() }})</span>
+                  </div>
+                </div>
+
+                <!-- Badge único de acción y entidad -->
+                <div class="entry-badges">
+                  <el-tag
+                    :type="getActionTagType(entry.accion)"
+                    size="small"
+                    :class="['action-tag', `action-tag--${entry.accion?.toLowerCase()}`]"
+                  >
+                    {{ entry.accion }}
+                    <template v-if="entry.entidad && entry.entidad !== 'SISTEMA'">
+                      · {{ getEntityLabel(entry.entidad) }}
+                    </template>
+                  </el-tag>
                 </div>
               </div>
-
-              <!-- Badge único de acción y entidad -->
-              <div class="entry-badges">
-                <el-tag
-                  :type="getActionTagType(entry.accion)"
-                  size="small"
-                  :class="['action-tag', `action-tag--${entry.accion?.toLowerCase()}`]"
-                >
-                  {{ entry.accion }}
-                  <template v-if="entry.entidad && entry.entidad !== 'SISTEMA'">
-                    · {{ getEntityLabel(entry.entidad) }}
-                  </template>
-                </el-tag>
-              </div>
-            </div>
+            </template>
 
             <!-- Acción principal humana -->
             <div class="entry-action-line">
@@ -779,11 +781,16 @@ html.dark .filter-chip--login.el-tag--dark {
   border-radius: 10px;
 }
 
+:deep(.timeline-card .el-card__header) {
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--toolbar-border, #e2e8f0);
+}
+
 :deep(.timeline-card .el-card__body) {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  padding: 1rem 1.25rem;
+  padding: 0.9rem 1.25rem;
 }
 
 .entry-header {
