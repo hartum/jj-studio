@@ -105,6 +105,7 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
         v-if="hotels.length > 1"
         :model-value="hotelIds"
         placeholder="Filtrar por Hotel"
+        size="large"
         class="hotel-selector"
         multiple
         collapse-tags
@@ -112,7 +113,6 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
         :max-collapse-tags="1"
         filterable
         clearable
-        :size="isMobile ? 'large' : 'default'"
         popper-class="custom-group-select-dropdown"
         @update:model-value="emit('update:hotelIds', $event)"
       >
@@ -156,7 +156,8 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
         <!-- Botón Nueva Sesión Fotográfica -->
         <el-button
           type="primary"
-          size="default"
+          size="large"
+          plain
           class="header-action-btn"
           @click="emit('newSession')"
         >
@@ -167,7 +168,8 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
         <!-- Botón Nueva Cita de Venta -->
         <el-button
           type="primary"
-          size="default"
+          size="large"
+          plain
           class="header-action-btn"
           @click="emit('newSale')"
         >
@@ -234,7 +236,6 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
 .header-buttons-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
 }
 
 .header-action-btn {
@@ -257,8 +258,8 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
 }
 
 .btn-icon-calendar {
-  width: 25px;
-  height: 25px;
+  width: 35px;
+  /*height: 38px;*/
 }
 
 .hotel-selector {
