@@ -5,9 +5,9 @@
     "semantic_hash": "2bc81a0f964a248752d70461ba7b726a"
   },
   ".prettierrc.json": {
-    "mtime": 1785346017.766261,
-    "ast_hash": "81e1a85eb3522eed48d5095183125238",
-    "semantic_hash": "81e1a85eb3522eed48d5095183125238"
+    "mtime": 1787149405.3658962,
+    "ast_hash": "7ee739a978ecc89962eb7d283afa9e31",
+    "semantic_hash": "7ee739a978ecc89962eb7d283afa9e31"
   },
   ".vscode/extensions.json": {
     "mtime": 1785346017.7655263,
@@ -15,9 +15,9 @@
     "semantic_hash": "ab10c0fef4d2d250f090368be1a0bc16"
   },
   "backend/package.json": {
-    "mtime": 1785346630.0092857,
-    "ast_hash": "b41908022ecde9b7e012abe1f4580bff",
-    "semantic_hash": "b41908022ecde9b7e012abe1f4580bff"
+    "mtime": 1788334509.5092025,
+    "ast_hash": "034ea24c5ad8e05246870a8096e138b9",
+    "semantic_hash": "034ea24c5ad8e05246870a8096e138b9"
   },
   "frontend/env.d.ts": {
     "mtime": 1785346017.7569923,
@@ -30,84 +30,29 @@
     "semantic_hash": "cef1a0b9b691ca2b558988fc9014a58a"
   },
   "frontend/package.json": {
-    "mtime": 1785346017.7665236,
-    "ast_hash": "a8c983785d3645ac664f350cce23091e",
-    "semantic_hash": "a8c983785d3645ac664f350cce23091e"
+    "mtime": 1787155639.5776443,
+    "ast_hash": "c3cc01b11dab0a9b06b1aa30068f7e69",
+    "semantic_hash": "c3cc01b11dab0a9b06b1aa30068f7e69"
   },
   "frontend/src/App.vue": {
-    "mtime": 1785346017.7670484,
-    "ast_hash": "751439c0fa737dd57e6adaa15d98d218",
-    "semantic_hash": "751439c0fa737dd57e6adaa15d98d218"
-  },
-  "frontend/src/components/HelloWorld.vue": {
-    "mtime": 1785346017.7674832,
-    "ast_hash": "ccf3aa779a8d6926a06d6f360ea76784",
-    "semantic_hash": "ccf3aa779a8d6926a06d6f360ea76784"
-  },
-  "frontend/src/components/TheWelcome.vue": {
-    "mtime": 1785346017.7677817,
-    "ast_hash": "a15cdbe3655e89d7a83a77f954515650",
-    "semantic_hash": "a15cdbe3655e89d7a83a77f954515650"
-  },
-  "frontend/src/components/WelcomeItem.vue": {
-    "mtime": 1785346017.7680268,
-    "ast_hash": "96a82a139d9303caeaa8ec746a1df20e",
-    "semantic_hash": "96a82a139d9303caeaa8ec746a1df20e"
-  },
-  "frontend/src/components/icons/IconCommunity.vue": {
-    "mtime": 1785346017.7686453,
-    "ast_hash": "32cf4fb777d971aca8014735d9453823",
-    "semantic_hash": "32cf4fb777d971aca8014735d9453823"
-  },
-  "frontend/src/components/icons/IconDocumentation.vue": {
-    "mtime": 1785346017.7689047,
-    "ast_hash": "68d68fd207b35e046e193dd2fe93f1ab",
-    "semantic_hash": "68d68fd207b35e046e193dd2fe93f1ab"
-  },
-  "frontend/src/components/icons/IconEcosystem.vue": {
-    "mtime": 1785346017.7691941,
-    "ast_hash": "9f9e035ec68b9b11ac2989ac5151221a",
-    "semantic_hash": "9f9e035ec68b9b11ac2989ac5151221a"
-  },
-  "frontend/src/components/icons/IconSupport.vue": {
-    "mtime": 1785346017.7694383,
-    "ast_hash": "8854c68d3082b218d245f1ea730d69ba",
-    "semantic_hash": "8854c68d3082b218d245f1ea730d69ba"
-  },
-  "frontend/src/components/icons/IconTooling.vue": {
-    "mtime": 1785346017.769676,
-    "ast_hash": "566807b38eb19307ed3410f2fbbb6357",
-    "semantic_hash": "566807b38eb19307ed3410f2fbbb6357"
+    "mtime": 1787589058.5506728,
+    "ast_hash": "bad6a99bed4a86c8802b98be9a59a68d",
+    "semantic_hash": "bad6a99bed4a86c8802b98be9a59a68d"
   },
   "frontend/src/main.ts": {
-    "mtime": 1785346017.771109,
-    "ast_hash": "787582f2e0c8ceb362a78df92c25daaa",
-    "semantic_hash": "787582f2e0c8ceb362a78df92c25daaa"
+    "mtime": 1786098996.8476193,
+    "ast_hash": "7d3dc959621861a6fa294e9552590dc7",
+    "semantic_hash": "7d3dc959621861a6fa294e9552590dc7"
   },
   "frontend/src/router/index.ts": {
-    "mtime": 1785346017.7700117,
-    "ast_hash": "02a9178fa62f3f68233f38a3fec1a798",
-    "semantic_hash": "02a9178fa62f3f68233f38a3fec1a798"
-  },
-  "frontend/src/stores/counter.ts": {
-    "mtime": 1785346017.7565205,
-    "ast_hash": "d59fe2308d4bf67b9997286fa5adedde",
-    "semantic_hash": "d59fe2308d4bf67b9997286fa5adedde"
-  },
-  "frontend/src/views/AboutView.vue": {
-    "mtime": 1785346017.7704616,
-    "ast_hash": "baf1a059a4c306a4f5395bb1f5990e84",
-    "semantic_hash": "baf1a059a4c306a4f5395bb1f5990e84"
-  },
-  "frontend/src/views/HomeView.vue": {
-    "mtime": 1785346017.7707405,
-    "ast_hash": "00817dd749b55896de1abfa8cbdbf7e5",
-    "semantic_hash": "00817dd749b55896de1abfa8cbdbf7e5"
+    "mtime": 1788334685.6767263,
+    "ast_hash": "a25acc0e9fb11a9684c960ae418383bd",
+    "semantic_hash": "a25acc0e9fb11a9684c960ae418383bd"
   },
   "frontend/tsconfig.app.json": {
-    "mtime": 1785346017.758393,
-    "ast_hash": "d23d3dece9cd70f4925fd79f7acc4571",
-    "semantic_hash": "d23d3dece9cd70f4925fd79f7acc4571"
+    "mtime": 1785503303.9724388,
+    "ast_hash": "31198e3303c22094b137c589a72bfa00",
+    "semantic_hash": "31198e3303c22094b137c589a72bfa00"
   },
   "frontend/tsconfig.json": {
     "mtime": 1785346017.7591379,
@@ -120,8 +65,633 @@
     "semantic_hash": "71f05a3eb52ee484e78a2232e3650c0b"
   },
   "frontend/vite.config.ts": {
-    "mtime": 1785346017.7764096,
-    "ast_hash": "aad8b5799752f14676d2f39a5cd39c6a",
-    "semantic_hash": "aad8b5799752f14676d2f39a5cd39c6a"
+    "mtime": 1786463069.6575284,
+    "ast_hash": "001dee714b0b706ef068e1f1539eeb7c",
+    "semantic_hash": "001dee714b0b706ef068e1f1539eeb7c"
+  },
+  "backend/prisma/seed.ts": {
+    "mtime": 1787505534.2014081,
+    "ast_hash": "cd957e965176f8397396ab2595d59f3e",
+    "semantic_hash": "cd957e965176f8397396ab2595d59f3e"
+  },
+  "backend/src/features/audit-log/application/audit-log.service.ts": {
+    "mtime": 1788450290.7138186,
+    "ast_hash": "6128d2dc4145354f404af8cbdc42a34f",
+    "semantic_hash": "6128d2dc4145354f404af8cbdc42a34f"
+  },
+  "backend/src/features/audit-log/infrastructure/audit-log.routes.ts": {
+    "mtime": 1788452948.3635933,
+    "ast_hash": "cf8cd866d45ae3dfd5e008bbbeef80d5",
+    "semantic_hash": "cf8cd866d45ae3dfd5e008bbbeef80d5"
+  },
+  "backend/src/features/commissions/application/commission.service.ts": {
+    "mtime": 1788331712.7978349,
+    "ast_hash": "12c45bff8a8908bb594400e2a2ff117f",
+    "semantic_hash": "12c45bff8a8908bb594400e2a2ff117f"
+  },
+  "backend/src/features/commissions/domain/commission.model.ts": {
+    "mtime": 1788331781.6882858,
+    "ast_hash": "8e6a053cc603299167de35b7e9031715",
+    "semantic_hash": "8e6a053cc603299167de35b7e9031715"
+  },
+  "backend/src/features/commissions/infrastructure/commission.routes.ts": {
+    "mtime": 1788331720.2104707,
+    "ast_hash": "b720fe7bb3a5fe8515b337db8163f818",
+    "semantic_hash": "b720fe7bb3a5fe8515b337db8163f818"
+  },
+  "backend/src/features/countries/infrastructure/country.routes.ts": {
+    "mtime": 1788450416.0340416,
+    "ast_hash": "8fe41a1d168d8c5cb19219cd0c35de3f",
+    "semantic_hash": "8fe41a1d168d8c5cb19219cd0c35de3f"
+  },
+  "backend/src/features/goals/domain/goal.model.ts": {
+    "mtime": 1786698358.7448003,
+    "ast_hash": "bc40081e430bbca34e5564d307c98855",
+    "semantic_hash": "bc40081e430bbca34e5564d307c98855"
+  },
+  "backend/src/features/goals/infrastructure/goal.routes.ts": {
+    "mtime": 1787594844.7072976,
+    "ast_hash": "992d6645f7d4043ce5afe1ef1a4c8355",
+    "semantic_hash": "992d6645f7d4043ce5afe1ef1a4c8355"
+  },
+  "backend/src/features/hotels/infrastructure/hotel.routes.ts": {
+    "mtime": 1788450398.9797714,
+    "ast_hash": "2df3121d526d12d950df786d2e629973",
+    "semantic_hash": "2df3121d526d12d950df786d2e629973"
+  },
+  "backend/src/features/integrations/google-calendar/google-calendar.routes.ts": {
+    "mtime": 1787250705.2241125,
+    "ast_hash": "c2b6112ac898799ea024420c174d8fc8",
+    "semantic_hash": "c2b6112ac898799ea024420c174d8fc8"
+  },
+  "backend/src/features/integrations/google-calendar/google-calendar.service.ts": {
+    "mtime": 1787505526.9251125,
+    "ast_hash": "b59a39a7a114dcbb8fc752d745e27fcd",
+    "semantic_hash": "b59a39a7a114dcbb8fc752d745e27fcd"
+  },
+  "backend/src/features/notifications/application/reminder.service.ts": {
+    "mtime": 1788426945.0482333,
+    "ast_hash": "e44c4484e99d9abe48e06b62d78fc249",
+    "semantic_hash": "e44c4484e99d9abe48e06b62d78fc249"
+  },
+  "backend/src/features/notifications/infrastructure/default-templates.ts": {
+    "mtime": 1788432623.591998,
+    "ast_hash": "07f4e9e9677f881c84d4ef9cb7b8d858",
+    "semantic_hash": "07f4e9e9677f881c84d4ef9cb7b8d858"
+  },
+  "backend/src/features/notifications/infrastructure/reminder.cron.ts": {
+    "mtime": 1788334611.8032758,
+    "ast_hash": "cc19663af13fc01b9bcbd0ea4c3c0345",
+    "semantic_hash": "cc19663af13fc01b9bcbd0ea4c3c0345"
+  },
+  "backend/src/features/notifications/infrastructure/template.routes.ts": {
+    "mtime": 1788426899.6189563,
+    "ast_hash": "0fc2164ef77bcca3697dea2ff7126a08",
+    "semantic_hash": "0fc2164ef77bcca3697dea2ff7126a08"
+  },
+  "backend/src/features/photo-sessions/infrastructure/session.routes.ts": {
+    "mtime": 1788505785.4460857,
+    "ast_hash": "98b3bedc0a7159678705ba77c5fa2c3e",
+    "semantic_hash": "98b3bedc0a7159678705ba77c5fa2c3e"
+  },
+  "backend/src/features/project-management/application/ports/project.repository.ts": {
+    "mtime": 1785503374.0577343,
+    "ast_hash": "ad4092ebcff88b8acfbba291bc47cf43",
+    "semantic_hash": "ad4092ebcff88b8acfbba291bc47cf43"
+  },
+  "backend/src/features/project-management/domain/project.entity.ts": {
+    "mtime": 1785503370.9901824,
+    "ast_hash": "fb7100c1225157bceac69bdbc2a48438",
+    "semantic_hash": "fb7100c1225157bceac69bdbc2a48438"
+  },
+  "backend/src/features/project-management/infrastructure/project.routes.ts": {
+    "mtime": 1785503377.0201836,
+    "ast_hash": "8b7fbbfd3c080a1fc2affb721c830dfc",
+    "semantic_hash": "8b7fbbfd3c080a1fc2affb721c830dfc"
+  },
+  "backend/src/features/sales/infrastructure/sale.routes.ts": {
+    "mtime": 1788505794.465403,
+    "ast_hash": "a0798342a6055a15a800ae711d4c99bd",
+    "semantic_hash": "a0798342a6055a15a800ae711d4c99bd"
+  },
+  "backend/src/features/users/infrastructure/calendario-laboral.routes.ts": {
+    "mtime": 1787041652.1146507,
+    "ast_hash": "98f1082b51cd0cbe84ef491c7a8e7c78",
+    "semantic_hash": "98f1082b51cd0cbe84ef491c7a8e7c78"
+  },
+  "backend/src/features/users/infrastructure/user.routes.ts": {
+    "mtime": 1788450966.950252,
+    "ast_hash": "f2afa38dec191ecc7dbed4ce172f20f8",
+    "semantic_hash": "f2afa38dec191ecc7dbed4ce172f20f8"
+  },
+  "backend/src/index.ts": {
+    "mtime": 1788450308.5917034,
+    "ast_hash": "7c7542d8e9ceea51f9f42b46b0f8c7e5",
+    "semantic_hash": "7c7542d8e9ceea51f9f42b46b0f8c7e5"
+  },
+  "backend/src/scripts/migrate-encrypt-all.ts": {
+    "mtime": 1787505845.060615,
+    "ast_hash": "3a3726cf4d51377fbe71bdab0a6be211",
+    "semantic_hash": "3a3726cf4d51377fbe71bdab0a6be211"
+  },
+  "backend/src/scripts/migrate-encrypt-sessions.ts": {
+    "mtime": 1787505540.9522285,
+    "ast_hash": "a92786e180a039308701ca17bbd8debd",
+    "semantic_hash": "a92786e180a039308701ca17bbd8debd"
+  },
+  "backend/src/scripts/migrate-encrypt-users.ts": {
+    "mtime": 1787504295.3348815,
+    "ast_hash": "b194c597120e3ef0e19e8f19305648a3",
+    "semantic_hash": "b194c597120e3ef0e19e8f19305648a3"
+  },
+  "backend/src/scripts/test-crypto.ts": {
+    "mtime": 1787504325.5448298,
+    "ast_hash": "598c2f4484ad1be365ffc183bc5b7a90",
+    "semantic_hash": "598c2f4484ad1be365ffc183bc5b7a90"
+  },
+  "backend/src/scripts/test-password-reset.ts": {
+    "mtime": 1787507400.0785115,
+    "ast_hash": "b850abf4be60de9b2d1eef3020b54599",
+    "semantic_hash": "b850abf4be60de9b2d1eef3020b54599"
+  },
+  "backend/src/scripts/test-reminders.ts": {
+    "mtime": 1788426968.965341,
+    "ast_hash": "5a4ecd90a80733b6981515b5dd876772",
+    "semantic_hash": "5a4ecd90a80733b6981515b5dd876772"
+  },
+  "backend/src/scripts/verify-encryption-e2e.ts": {
+    "mtime": 1787505559.3837225,
+    "ast_hash": "ae65823a9491313c3e41ad16e93d1e6d",
+    "semantic_hash": "ae65823a9491313c3e41ad16e93d1e6d"
+  },
+  "backend/src/shared/db.ts": {
+    "mtime": 1786458057.329922,
+    "ast_hash": "fec0e78654856f244fe8e4744c7f6b68",
+    "semantic_hash": "fec0e78654856f244fe8e4744c7f6b68"
+  },
+  "backend/src/shared/email.service.ts": {
+    "mtime": 1787669262.4700694,
+    "ast_hash": "9eedc8474b252d53ad5bd27d99e25256",
+    "semantic_hash": "9eedc8474b252d53ad5bd27d99e25256"
+  },
+  "backend/src/shared/encryption.ts": {
+    "mtime": 1787505448.0445433,
+    "ast_hash": "02697ba222f688fcd12e8425e5be45d4",
+    "semantic_hash": "02697ba222f688fcd12e8425e5be45d4"
+  },
+  "backend/src/shared/permissions.ts": {
+    "mtime": 1788329926.7829692,
+    "ast_hash": "f9e07581880e9cadc901c445aab57b67",
+    "semantic_hash": "f9e07581880e9cadc901c445aab57b67"
+  },
+  "backend/tsconfig.json": {
+    "mtime": 1785503363.0071356,
+    "ast_hash": "6158b0df9c31763e0329d4eae18ab891",
+    "semantic_hash": "6158b0df9c31763e0329d4eae18ab891"
+  },
+  "frontend/src/components/SidebarNav.vue": {
+    "mtime": 1787425593.2305279,
+    "ast_hash": "6d6bb0f2b9bbe32f8fc494850f06c695",
+    "semantic_hash": "6d6bb0f2b9bbe32f8fc494850f06c695"
+  },
+  "frontend/src/features/audit-log/domain/audit-log.model.ts": {
+    "mtime": 1788452961.7480946,
+    "ast_hash": "98ac6e4ba26d1266a1a82110b03009df",
+    "semantic_hash": "98ac6e4ba26d1266a1a82110b03009df"
+  },
+  "frontend/src/features/audit-log/stores/audit-log.store.ts": {
+    "mtime": 1788450535.4820209,
+    "ast_hash": "fa5e38919ee7a393bfc67089945aa170",
+    "semantic_hash": "fa5e38919ee7a393bfc67089945aa170"
+  },
+  "frontend/src/features/audit-log/ui/AuditLogTab.vue": {
+    "mtime": 1788507277.9967148,
+    "ast_hash": "46659a39a7179fa1e9c520ef7a6bf3e2",
+    "semantic_hash": "46659a39a7179fa1e9c520ef7a6bf3e2"
+  },
+  "frontend/src/features/auth/stores/auth.store.ts": {
+    "mtime": 1788450442.976233,
+    "ast_hash": "2f00ee913daca8c05b410ba2fee91d6b",
+    "semantic_hash": "2f00ee913daca8c05b410ba2fee91d6b"
+  },
+  "frontend/src/features/auth/ui/ForgotPasswordView.vue": {
+    "mtime": 1787507410.6237862,
+    "ast_hash": "eb0eaac8020c98984727fd352acd65b5",
+    "semantic_hash": "eb0eaac8020c98984727fd352acd65b5"
+  },
+  "frontend/src/features/auth/ui/LoginView.vue": {
+    "mtime": 1787507425.3723187,
+    "ast_hash": "276c75b7694e4c9900a3e2f8e251a42b",
+    "semantic_hash": "276c75b7694e4c9900a3e2f8e251a42b"
+  },
+  "frontend/src/features/auth/ui/ResetPasswordView.vue": {
+    "mtime": 1787507419.6905134,
+    "ast_hash": "96cf0b3ee233e2226d09ec8a86fea142",
+    "semantic_hash": "96cf0b3ee233e2226d09ec8a86fea142"
+  },
+  "frontend/src/features/commissions/domain/commission.model.ts": {
+    "mtime": 1788331786.5660882,
+    "ast_hash": "95011739bd41e3f5fa89928b2722c2c6",
+    "semantic_hash": "95011739bd41e3f5fa89928b2722c2c6"
+  },
+  "frontend/src/features/commissions/stores/commission.store.ts": {
+    "mtime": 1788330771.4817445,
+    "ast_hash": "7747ba31a208fa25eef4f517b319d211",
+    "semantic_hash": "7747ba31a208fa25eef4f517b319d211"
+  },
+  "frontend/src/features/commissions/ui/ComisionesConfig.vue": {
+    "mtime": 1788448858.2065217,
+    "ast_hash": "d5b24cb5c84a54b6ff75f89b672645f9",
+    "semantic_hash": "d5b24cb5c84a54b6ff75f89b672645f9"
+  },
+  "frontend/src/features/configuration/ui/ConfiguracionView.vue": {
+    "mtime": 1788450503.9040594,
+    "ast_hash": "ba2d27674be8345e0e48ee0fd0ab16ca",
+    "semantic_hash": "ba2d27674be8345e0e48ee0fd0ab16ca"
+  },
+  "frontend/src/features/countries/domain/country.model.ts": {
+    "mtime": 1785748748.0691905,
+    "ast_hash": "2db7b4c4f680231ba4b8f2ba890194b6",
+    "semantic_hash": "2db7b4c4f680231ba4b8f2ba890194b6"
+  },
+  "frontend/src/features/countries/domain/world-countries.data.ts": {
+    "mtime": 1785745971.2034652,
+    "ast_hash": "53511f58d9bdffc93f44c212419a010e",
+    "semantic_hash": "53511f58d9bdffc93f44c212419a010e"
+  },
+  "frontend/src/features/countries/stores/country.store.ts": {
+    "mtime": 1786290718.0189238,
+    "ast_hash": "c6cd4c54c307616364eb3ac4ebf4ee91",
+    "semantic_hash": "c6cd4c54c307616364eb3ac4ebf4ee91"
+  },
+  "frontend/src/features/countries/ui/PaisesConfig.vue": {
+    "mtime": 1787668671.4265265,
+    "ast_hash": "164d33fbb66ea62c9acfcfb2cf11c255",
+    "semantic_hash": "164d33fbb66ea62c9acfcfb2cf11c255"
+  },
+  "frontend/src/features/goals/domain/goal.model.ts": {
+    "mtime": 1786698366.8248823,
+    "ast_hash": "ba55c216b24b388c8ddb9bc85bf8666a",
+    "semantic_hash": "ba55c216b24b388c8ddb9bc85bf8666a"
+  },
+  "frontend/src/features/goals/stores/goal.store.ts": {
+    "mtime": 1788191049.7250962,
+    "ast_hash": "133a204a20676b489e29df99ba95228c",
+    "semantic_hash": "133a204a20676b489e29df99ba95228c"
+  },
+  "frontend/src/features/goals/ui/AgendadorHotelGoalCard.vue": {
+    "mtime": 1787152868.3215773,
+    "ast_hash": "f44d4cace7ae18e23032e79a716bfb87",
+    "semantic_hash": "f44d4cace7ae18e23032e79a716bfb87"
+  },
+  "frontend/src/features/goals/ui/GoalEvolutionChart.vue": {
+    "mtime": 1787135171.9876006,
+    "ast_hash": "d4b0bd26cc1167c868f8d56554255fe2",
+    "semantic_hash": "d4b0bd26cc1167c868f8d56554255fe2"
+  },
+  "frontend/src/features/goals/ui/GoalFormView.vue": {
+    "mtime": 1787148750.5250638,
+    "ast_hash": "e7ac64e5122eef45d7aabeeb8a9718ad",
+    "semantic_hash": "e7ac64e5122eef45d7aabeeb8a9718ad"
+  },
+  "frontend/src/features/goals/ui/GoalProgressCard.vue": {
+    "mtime": 1787596038.8283756,
+    "ast_hash": "348528ca4380f11b272a27bfb2e6f039",
+    "semantic_hash": "348528ca4380f11b272a27bfb2e6f039"
+  },
+  "frontend/src/features/goals/ui/PhotographerHotelGoalCard.vue": {
+    "mtime": 1787135154.6709604,
+    "ast_hash": "385ea771c2a6a865e46445e2ae6775e3",
+    "semantic_hash": "385ea771c2a6a865e46445e2ae6775e3"
+  },
+  "frontend/src/features/goals/ui/SupervisorHotelGoalCard.vue": {
+    "mtime": 1787135198.7363467,
+    "ast_hash": "b29307fc4fb37d92039894ccb0cf1f12",
+    "semantic_hash": "b29307fc4fb37d92039894ccb0cf1f12"
+  },
+  "frontend/src/features/home/composables/useDashboard.ts": {
+    "mtime": 1788332530.1321692,
+    "ast_hash": "754f199b37d5b7404da52b1c05b5520e",
+    "semantic_hash": "754f199b37d5b7404da52b1c05b5520e"
+  },
+  "frontend/src/features/home/ui/InicioView.vue": {
+    "mtime": 1787595203.9422429,
+    "ast_hash": "5d6767b9fdbb643082675d58fd195605",
+    "semantic_hash": "5d6767b9fdbb643082675d58fd195605"
+  },
+  "frontend/src/features/home/ui/dashboards/AdminDashboard.vue": {
+    "mtime": 1787595949.0655851,
+    "ast_hash": "3b746a7d19c7e71d10003a4441e16730",
+    "semantic_hash": "3b746a7d19c7e71d10003a4441e16730"
+  },
+  "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue": {
+    "mtime": 1788332596.8799348,
+    "ast_hash": "408ac184eed52982a54a98a429a2de8e",
+    "semantic_hash": "408ac184eed52982a54a98a429a2de8e"
+  },
+  "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
+    "mtime": 1788332605.5820487,
+    "ast_hash": "26bbaff26c57cb4737487c391d074eaa",
+    "semantic_hash": "26bbaff26c57cb4737487c391d074eaa"
+  },
+  "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
+    "mtime": 1788332582.1836894,
+    "ast_hash": "d49b929edd1508ba6a2509a9ab056e87",
+    "semantic_hash": "d49b929edd1508ba6a2509a9ab056e87"
+  },
+  "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue": {
+    "mtime": 1788332560.4940038,
+    "ast_hash": "7335505a967aec9b23b9e5030971f9b6",
+    "semantic_hash": "7335505a967aec9b23b9e5030971f9b6"
+  },
+  "frontend/src/features/home/ui/dashboards/SupervisorDashboard.vue": {
+    "mtime": 1788332568.9271142,
+    "ast_hash": "a090a716467ff0defc1413e19289a5f7",
+    "semantic_hash": "a090a716467ff0defc1413e19289a5f7"
+  },
+  "frontend/src/features/hotels/domain/hotel.model.ts": {
+    "mtime": 1786382724.4736776,
+    "ast_hash": "02216e200beaf1af7644c0fe84d88ef8",
+    "semantic_hash": "02216e200beaf1af7644c0fe84d88ef8"
+  },
+  "frontend/src/features/hotels/stores/hotel.store.ts": {
+    "mtime": 1786290731.128684,
+    "ast_hash": "588a41e920f976c3ad809a610490f647",
+    "semantic_hash": "588a41e920f976c3ad809a610490f647"
+  },
+  "frontend/src/features/hotels/ui/HotelFormView.vue": {
+    "mtime": 1787775199.0307996,
+    "ast_hash": "a3abdd56e70298b2e170609718ec720f",
+    "semantic_hash": "a3abdd56e70298b2e170609718ec720f"
+  },
+  "frontend/src/features/hotels/ui/HotelesConfig.vue": {
+    "mtime": 1787668674.4864645,
+    "ast_hash": "8c8773e0603e06f2ccf58cab806560de",
+    "semantic_hash": "8c8773e0603e06f2ccf58cab806560de"
+  },
+  "frontend/src/features/notifications/composables/useEmailTemplates.ts": {
+    "mtime": 1788334647.3448467,
+    "ast_hash": "c50810cd7ce58ee20e9b5ae82bdeaf65",
+    "semantic_hash": "c50810cd7ce58ee20e9b5ae82bdeaf65"
+  },
+  "frontend/src/features/notifications/ui/EmailTemplatesView.vue": {
+    "mtime": 1788448562.3110192,
+    "ast_hash": "3181b8cbc6b0d073ed070fd6ccbff246",
+    "semantic_hash": "3181b8cbc6b0d073ed070fd6ccbff246"
+  },
+  "frontend/src/features/photo-sessions/composables/useCalendarAlerts.ts": {
+    "mtime": 1787593474.6762462,
+    "ast_hash": "0a8effa46ab27f211f151abd4237cd0b",
+    "semantic_hash": "0a8effa46ab27f211f151abd4237cd0b"
+  },
+  "frontend/src/features/photo-sessions/composables/useCalendarDelete.ts": {
+    "mtime": 1787593483.402004,
+    "ast_hash": "bdcd2be5ad734cedab8397ca7cf8c43f",
+    "semantic_hash": "bdcd2be5ad734cedab8397ca7cf8c43f"
+  },
+  "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts": {
+    "mtime": 1788507784.4730053,
+    "ast_hash": "babebf14cd8ba2918422587ca3f4eaf5",
+    "semantic_hash": "babebf14cd8ba2918422587ca3f4eaf5"
+  },
+  "frontend/src/features/photo-sessions/composables/useCalendarScope.ts": {
+    "mtime": 1787850829.4428937,
+    "ast_hash": "6f33e69fc6bff2628fdf6af9fe500164",
+    "semantic_hash": "6f33e69fc6bff2628fdf6af9fe500164"
+  },
+  "frontend/src/features/photo-sessions/composables/usePhotoSessionForm.ts": {
+    "mtime": 1788333080.5254033,
+    "ast_hash": "0a21e8664d9adf73d69dd4dfe45f8d44",
+    "semantic_hash": "0a21e8664d9adf73d69dd4dfe45f8d44"
+  },
+  "frontend/src/features/photo-sessions/domain/session.model.ts": {
+    "mtime": 1786044033.6488235,
+    "ast_hash": "d179251d5a6b8f4c7bb1b1574eb13fab",
+    "semantic_hash": "d179251d5a6b8f4c7bb1b1574eb13fab"
+  },
+  "frontend/src/features/photo-sessions/stores/session.store.ts": {
+    "mtime": 1787324363.1472745,
+    "ast_hash": "f5149dbf22b1fc42c4c476a58cdc56df",
+    "semantic_hash": "f5149dbf22b1fc42c4c476a58cdc56df"
+  },
+  "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue": {
+    "mtime": 1788507812.231488,
+    "ast_hash": "bc4465b02b536d45f89779acb0e097f0",
+    "semantic_hash": "bc4465b02b536d45f89779acb0e097f0"
+  },
+  "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue": {
+    "mtime": 1788507818.686428,
+    "ast_hash": "5b9900e50ef1c83a1f033e043069eec6",
+    "semantic_hash": "5b9900e50ef1c83a1f033e043069eec6"
+  },
+  "frontend/src/features/photo-sessions/ui/HotelCalendarView.vue": {
+    "mtime": 1787850829.4547565,
+    "ast_hash": "a1e0041f3a0b621eb90bfaa442116397",
+    "semantic_hash": "a1e0041f3a0b621eb90bfaa442116397"
+  },
+  "frontend/src/features/photo-sessions/ui/PhotoSessionFormDesktop.vue": {
+    "mtime": 1788333091.988921,
+    "ast_hash": "5cdee34680f83d7e6b65621e4a3443dd",
+    "semantic_hash": "5cdee34680f83d7e6b65621e4a3443dd"
+  },
+  "frontend/src/features/photo-sessions/ui/PhotoSessionFormMobile.vue": {
+    "mtime": 1788333124.4505532,
+    "ast_hash": "66ca3999e82311fdbeed60a55559eb7d",
+    "semantic_hash": "66ca3999e82311fdbeed60a55559eb7d"
+  },
+  "frontend/src/features/photo-sessions/ui/PhotoSessionFormView.vue": {
+    "mtime": 1787850829.4569287,
+    "ast_hash": "c9e142bd3c95a2e3f162f7dfd1f5feb6",
+    "semantic_hash": "c9e142bd3c95a2e3f162f7dfd1f5feb6"
+  },
+  "frontend/src/features/photo-sessions/ui/components/CalendarAlertsPanel.vue": {
+    "mtime": 1787850829.4573674,
+    "ast_hash": "593362c9427197286e80a3c4971b2a58",
+    "semantic_hash": "593362c9427197286e80a3c4971b2a58"
+  },
+  "frontend/src/features/photo-sessions/ui/components/CalendarDeleteConfirmPopover.vue": {
+    "mtime": 1787592477.9385235,
+    "ast_hash": "e8e608175df48134f554892395e53111",
+    "semantic_hash": "e8e608175df48134f554892395e53111"
+  },
+  "frontend/src/features/photo-sessions/ui/components/CalendarDesktopToolbar.vue": {
+    "mtime": 1787592426.0745258,
+    "ast_hash": "96c165a35ae63e34d28a0d77d1152d69",
+    "semantic_hash": "96c165a35ae63e34d28a0d77d1152d69"
+  },
+  "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue": {
+    "mtime": 1788507804.83218,
+    "ast_hash": "2176847e178fcfa4bd04cb9033a47114",
+    "semantic_hash": "2176847e178fcfa4bd04cb9033a47114"
+  },
+  "frontend/src/features/photo-sessions/ui/components/CalendarHeader.vue": {
+    "mtime": 1788767500.592993,
+    "ast_hash": "a096e1b7509e074eec5c789937a8ce94",
+    "semantic_hash": "a096e1b7509e074eec5c789937a8ce94"
+  },
+  "frontend/src/features/photo-sessions/ui/components/CalendarMobileDateNavigator.vue": {
+    "mtime": 1787850829.4580524,
+    "ast_hash": "5608858cb8fbdac910c8cdacc160ae70",
+    "semantic_hash": "5608858cb8fbdac910c8cdacc160ae70"
+  },
+  "frontend/src/features/photo-sessions/ui/components/CalendarMobileHeader.vue": {
+    "mtime": 1787850829.458314,
+    "ast_hash": "16440f1ecb1ffdb79be1ccf3070cfcde",
+    "semantic_hash": "16440f1ecb1ffdb79be1ccf3070cfcde"
+  },
+  "frontend/src/features/sales/composables/useSaleAppointmentForm.ts": {
+    "mtime": 1788333085.5364196,
+    "ast_hash": "fa09ff6125aa0432251fdee9d2223660",
+    "semantic_hash": "fa09ff6125aa0432251fdee9d2223660"
+  },
+  "frontend/src/features/sales/domain/sale.model.ts": {
+    "mtime": 1787932533.6591637,
+    "ast_hash": "0aaa1c4f521230c640f02c8167b632e1",
+    "semantic_hash": "0aaa1c4f521230c640f02c8167b632e1"
+  },
+  "frontend/src/features/sales/stores/sale.store.ts": {
+    "mtime": 1787324368.587865,
+    "ast_hash": "5bc8472b67677845c528e85e91cbc45f",
+    "semantic_hash": "5bc8472b67677845c528e85e91cbc45f"
+  },
+  "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue": {
+    "mtime": 1788333096.8042936,
+    "ast_hash": "e08d642ef55f2dfeecca30b7965d300f",
+    "semantic_hash": "e08d642ef55f2dfeecca30b7965d300f"
+  },
+  "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue": {
+    "mtime": 1788333102.5383127,
+    "ast_hash": "6c43399f78426dc7b0163468324ea40d",
+    "semantic_hash": "6c43399f78426dc7b0163468324ea40d"
+  },
+  "frontend/src/features/sales/ui/SaleAppointmentFormView.vue": {
+    "mtime": 1787916994.0893,
+    "ast_hash": "814c0f0d3e9bc620b46fbd3704084411",
+    "semantic_hash": "814c0f0d3e9bc620b46fbd3704084411"
+  },
+  "frontend/src/features/users/application/ports/user-repository.port.ts": {
+    "mtime": 1785504892.3106937,
+    "ast_hash": "50fe0e41be787707d9593b089b983e1b",
+    "semantic_hash": "50fe0e41be787707d9593b089b983e1b"
+  },
+  "frontend/src/features/users/domain/calendario-laboral.model.ts": {
+    "mtime": 1787040825.3419032,
+    "ast_hash": "9de660c07feebb8d44430a0be9e5fc61",
+    "semantic_hash": "9de660c07feebb8d44430a0be9e5fc61"
+  },
+  "frontend/src/features/users/domain/profile.model.ts": {
+    "mtime": 1785740898.2114718,
+    "ast_hash": "b117350183023cc67eab11e23066b8b7",
+    "semantic_hash": "b117350183023cc67eab11e23066b8b7"
+  },
+  "frontend/src/features/users/domain/user.model.ts": {
+    "mtime": 1786865671.4609349,
+    "ast_hash": "09d33a829abd2cd6cf320f37d71773cd",
+    "semantic_hash": "09d33a829abd2cd6cf320f37d71773cd"
+  },
+  "frontend/src/features/users/stores/calendario-laboral.store.ts": {
+    "mtime": 1787051824.4616857,
+    "ast_hash": "70bfde870e5736eab3c0d853aacc415b",
+    "semantic_hash": "70bfde870e5736eab3c0d853aacc415b"
+  },
+  "frontend/src/features/users/stores/profile.store.ts": {
+    "mtime": 1786290822.5488694,
+    "ast_hash": "253d5d7804371b820b8f9a99e6e7f69c",
+    "semantic_hash": "253d5d7804371b820b8f9a99e6e7f69c"
+  },
+  "frontend/src/features/users/stores/user.store.ts": {
+    "mtime": 1786901868.3846672,
+    "ast_hash": "3090a9dd5a7020e3abf7d40213837802",
+    "semantic_hash": "3090a9dd5a7020e3abf7d40213837802"
+  },
+  "frontend/src/features/users/ui/CalendarioLaboral.vue": {
+    "mtime": 1787139099.215001,
+    "ast_hash": "e26b5f4521ad87579ba3bdf710e9873b",
+    "semantic_hash": "e26b5f4521ad87579ba3bdf710e9873b"
+  },
+  "frontend/src/features/users/ui/UsuarioFormView.vue": {
+    "mtime": 1787154262.3315876,
+    "ast_hash": "9512947c7fec9d964ac0294dc0bd8dee",
+    "semantic_hash": "9512947c7fec9d964ac0294dc0bd8dee"
+  },
+  "frontend/src/features/users/ui/UsuariosView.vue": {
+    "mtime": 1787149379.8171902,
+    "ast_hash": "80435ecaad7716fe603a169320adccfa",
+    "semantic_hash": "80435ecaad7716fe603a169320adccfa"
+  },
+  "frontend/src/features/users/utils/user-avatar.ts": {
+    "mtime": 1787130567.0174665,
+    "ast_hash": "f09498b73fbfed346834555cea861988",
+    "semantic_hash": "f09498b73fbfed346834555cea861988"
+  },
+  "frontend/src/shared/flagEmoji.ts": {
+    "mtime": 1785745352.1914127,
+    "ast_hash": "6c17c7053d0e7c5b72142f8030dbf7ba",
+    "semantic_hash": "6c17c7053d0e7c5b72142f8030dbf7ba"
+  },
+  "frontend/src/shared/formatters.ts": {
+    "mtime": 1787135122.1457312,
+    "ast_hash": "697c3ef58d1881b75d8ffc46d1d50e05",
+    "semantic_hash": "697c3ef58d1881b75d8ffc46d1d50e05"
+  },
+  "frontend/src/shared/permissions.ts": {
+    "mtime": 1788334693.724738,
+    "ast_hash": "fdd30dc94da2b75a5863acb74a3b6eaa",
+    "semantic_hash": "fdd30dc94da2b75a5863acb74a3b6eaa"
+  },
+  "package.json": {
+    "mtime": 1785856004.2397919,
+    "ast_hash": "953acab40b7877b65dfb09fe85d2bfc7",
+    "semantic_hash": "953acab40b7877b65dfb09fe85d2bfc7"
+  },
+  ".agents/rules/project_context.md": {
+    "mtime": 1788453260.396365,
+    "ast_hash": "5de9ee5117b1ca7c0b4b7d5cf797e0d6",
+    "semantic_hash": "5de9ee5117b1ca7c0b4b7d5cf797e0d6"
+  },
+  ".agents/rules/ux-design-rules.md": {
+    "mtime": 1788429382.834322,
+    "ast_hash": "f7a9d77a1241f127b7f7f41ec3835859",
+    "semantic_hash": "f7a9d77a1241f127b7f7f41ec3835859"
+  },
+  "AGENTS.md": {
+    "mtime": 1788453252.6158624,
+    "ast_hash": "3a4b37439e5164b2253c96bf6db0b327",
+    "semantic_hash": "3a4b37439e5164b2253c96bf6db0b327"
+  },
+  "Control_acceso segun roles.md": {
+    "mtime": 1785828396.097657,
+    "ast_hash": "ffe5f037c9ffeb7cb90ed067bb8201e4",
+    "semantic_hash": "ffe5f037c9ffeb7cb90ed067bb8201e4"
+  },
+  "docs/arquitectura_seguridad_y_cifrado.md": {
+    "mtime": 1787507171.8440826,
+    "ast_hash": "18ff6dd0e5e800660ac1eda0da260831",
+    "semantic_hash": "18ff6dd0e5e800660ac1eda0da260831"
+  },
+  "docs/configuracion_servicio_email_y_dominios.md": {
+    "mtime": 1787590629.2799637,
+    "ast_hash": "e5eedc88e19f4fbbb41e70d2e447a232",
+    "semantic_hash": "e5eedc88e19f4fbbb41e70d2e447a232"
+  },
+  "docs/detalles_perfil_fotografos.md": {
+    "mtime": 1788331768.6151178,
+    "ast_hash": "dd2083c1f8f4fbdd9d1325f8e9d7999f",
+    "semantic_hash": "dd2083c1f8f4fbdd9d1325f8e9d7999f"
+  },
+  "docs/guia_iconos_lucide.md": {
+    "mtime": 1787155707.3624954,
+    "ast_hash": "1436133cc8c7c2123a387a87a7f715b0",
+    "semantic_hash": "1436133cc8c7c2123a387a87a7f715b0"
+  },
+  "docs/requisitos_y_plan_trabajo.md": {
+    "mtime": 1787155693.2670326,
+    "ast_hash": "71b428536a93cb6a48bd959e7f8788e1",
+    "semantic_hash": "71b428536a93cb6a48bd959e7f8788e1"
+  },
+  "frontend/README.md": {
+    "mtime": 1785854315.7243333,
+    "ast_hash": "92ed2ca9c0697afb6a6ac6eff65c5e49",
+    "semantic_hash": "92ed2ca9c0697afb6a6ac6eff65c5e49"
   }
 }
