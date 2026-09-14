@@ -693,5 +693,310 @@
     "mtime": 1785854315.7243333,
     "ast_hash": "92ed2ca9c0697afb6a6ac6eff65c5e49",
     "semantic_hash": "92ed2ca9c0697afb6a6ac6eff65c5e49"
+  },
+  ".github/workflows/deploy.yml": {
+    "mtime": 1787506366.38316,
+    "ast_hash": "6672fb4ebd998bda5b3fb5bfe4fd10db",
+    "semantic_hash": ""
+  },
+  "backend/pnpm-workspace.yaml": {
+    "mtime": 1785509342.9237423,
+    "ast_hash": "803169c0f0ff25ed73f63424ab30f34c",
+    "semantic_hash": ""
+  },
+  "frontend/index.html": {
+    "mtime": 1785767829.5683093,
+    "ast_hash": "0a767cc30425b48a96ad7e9487b9e03e",
+    "semantic_hash": ""
+  },
+  "Tutorial_Google_Calendar_JJ_Studio.pdf": {
+    "mtime": 1787295308.893174,
+    "ast_hash": "edb401dd2d84732ac9b4e5284b933dd6",
+    "semantic_hash": ""
+  },
+  "frontend/public/apple-touch-icon-114x114.png": {
+    "mtime": 1785767790.0535526,
+    "ast_hash": "86f4396230c8ed81c024b6defc46063d",
+    "semantic_hash": ""
+  },
+  "frontend/public/apple-touch-icon-120x120.png": {
+    "mtime": 1785767790.0541475,
+    "ast_hash": "5b9d989b078e87a356785b5cfaad6f6f",
+    "semantic_hash": ""
+  },
+  "frontend/public/apple-touch-icon-180x180.png": {
+    "mtime": 1785767790.0546322,
+    "ast_hash": "cee722b5799a30faa2af8e8186eafd3d",
+    "semantic_hash": ""
+  },
+  "frontend/public/apple-touch-icon-57x57.png": {
+    "mtime": 1785767790.055035,
+    "ast_hash": "ba03efbc880745b9b056782b31d3cac9",
+    "semantic_hash": ""
+  },
+  "frontend/public/apple-touch-icon.png": {
+    "mtime": 1785767790.0557425,
+    "ast_hash": "cee722b5799a30faa2af8e8186eafd3d",
+    "semantic_hash": ""
+  },
+  "frontend/public/genfavicon-114.png": {
+    "mtime": 1785767790.0572376,
+    "ast_hash": "86f4396230c8ed81c024b6defc46063d",
+    "semantic_hash": ""
+  },
+  "frontend/public/genfavicon-120.png": {
+    "mtime": 1785767790.0580971,
+    "ast_hash": "5b9d989b078e87a356785b5cfaad6f6f",
+    "semantic_hash": ""
+  },
+  "frontend/public/genfavicon-128.png": {
+    "mtime": 1785767790.0584962,
+    "ast_hash": "560aef0e14ff042a60ea3bafa632e699",
+    "semantic_hash": ""
+  },
+  "frontend/public/genfavicon-16.png": {
+    "mtime": 1785767790.0593104,
+    "ast_hash": "e421d4c40197971bb47228c8d7a46932",
+    "semantic_hash": ""
+  },
+  "frontend/public/genfavicon-180.png": {
+    "mtime": 1785767790.0595753,
+    "ast_hash": "cee722b5799a30faa2af8e8186eafd3d",
+    "semantic_hash": ""
+  },
+  "frontend/public/genfavicon-256.png": {
+    "mtime": 1785767790.0598497,
+    "ast_hash": "79a81bc18bf9d29bec99c6b55d49f3ec",
+    "semantic_hash": ""
+  },
+  "frontend/public/genfavicon-32.png": {
+    "mtime": 1785767790.0600724,
+    "ast_hash": "a1132dd34e12c60460a6327b25ec80df",
+    "semantic_hash": ""
+  },
+  "frontend/public/genfavicon-48.png": {
+    "mtime": 1785767790.0602658,
+    "ast_hash": "72f5a775642e6269033152a341883d28",
+    "semantic_hash": ""
+  },
+  "frontend/public/genfavicon-512.png": {
+    "mtime": 1785767790.0606604,
+    "ast_hash": "c7a68ef8d68917f0c720a2a29feddc28",
+    "semantic_hash": ""
+  },
+  "frontend/public/genfavicon-57.png": {
+    "mtime": 1785767790.060867,
+    "ast_hash": "ba03efbc880745b9b056782b31d3cac9",
+    "semantic_hash": ""
+  },
+  "frontend/public/genfavicon-64.png": {
+    "mtime": 1785767790.0610533,
+    "ast_hash": "915249b3974d23cbcac88af8649eaa9d",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/_icono_cita.png": {
+    "mtime": 1787433278.9066043,
+    "ast_hash": "d8e21c2ede601e087166f2d86c5f6c5c",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/apple-touch-icon-114x114.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "86f4396230c8ed81c024b6defc46063d",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/apple-touch-icon-120x120.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "5b9d989b078e87a356785b5cfaad6f6f",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/apple-touch-icon-180x180.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "cee722b5799a30faa2af8e8186eafd3d",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/apple-touch-icon-57x57.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "ba03efbc880745b9b056782b31d3cac9",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/apple-touch-icon.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "cee722b5799a30faa2af8e8186eafd3d",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/genfavicon-114.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "86f4396230c8ed81c024b6defc46063d",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/genfavicon-120.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "5b9d989b078e87a356785b5cfaad6f6f",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/genfavicon-128.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "560aef0e14ff042a60ea3bafa632e699",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/genfavicon-16.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "e421d4c40197971bb47228c8d7a46932",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/genfavicon-180.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "cee722b5799a30faa2af8e8186eafd3d",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/genfavicon-256.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "79a81bc18bf9d29bec99c6b55d49f3ec",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/genfavicon-32.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "a1132dd34e12c60460a6327b25ec80df",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/genfavicon-48.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "72f5a775642e6269033152a341883d28",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/genfavicon-512.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "c7a68ef8d68917f0c720a2a29feddc28",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/genfavicon-57.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "ba03efbc880745b9b056782b31d3cac9",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/favicon/genfavicon-64.png": {
+    "mtime": 1785572142.0,
+    "ast_hash": "915249b3974d23cbcac88af8649eaa9d",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/icono_camara.png": {
+    "mtime": 1787433309.596621,
+    "ast_hash": "ca03ab82ca31d08dec29c3792f5871f8",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/icono_cita.png": {
+    "mtime": 1788515056.24734,
+    "ast_hash": "e86a7359b925d319261d553e21cfa2db",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/login_bg.jpg": {
+    "mtime": 1785574582.7578726,
+    "ast_hash": "1105ac64ce2a8c2c71270081b6f10222",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/logoJJ.png": {
+    "mtime": 1785571670.687301,
+    "ast_hash": "b37516102c336720bca7d4889ba04442",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/_admin.svg": {
+    "mtime": 1785765246.0,
+    "ast_hash": "96e1779df09847c351e59b1ca1b25167",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/_contable.svg": {
+    "mtime": 1785765246.0,
+    "ast_hash": "63a00ae8fa032c1d8dd9c8fd0d83eff8",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/_fotografo.svg": {
+    "mtime": 1785765246.0,
+    "ast_hash": "9f8a480e85dce901c84749a90917b6a6",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/_gerente.svg": {
+    "mtime": 1785765246.0,
+    "ast_hash": "4140bb7e4d8b2d9a775189a35bca5c33",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/_superuser.svg": {
+    "mtime": 1785765246.0,
+    "ast_hash": "b9e81ede052c1c0d7acc36dabb982141",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/admin.png": {
+    "mtime": 1785578909.928804,
+    "ast_hash": "00e04ba2726ed311df9d1fe9b846611f",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/admin.svg": {
+    "mtime": 1786633754.0,
+    "ast_hash": "7640087654da513d5825a512a543b37c",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/agendador.svg": {
+    "mtime": 1786634141.0,
+    "ast_hash": "af7f6cd55dfc1beefe657d3782dcdac0",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/contable.png": {
+    "mtime": 1785594821.154493,
+    "ast_hash": "51f5495767ef69c262a06ec213dee0d9",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/contable.svg": {
+    "mtime": 1786633275.0,
+    "ast_hash": "e16f88aca945d30207a3eafb2ee08262",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/fotografo.png": {
+    "mtime": 1785597238.4951274,
+    "ast_hash": "a3e06ab3f65d79488eb4c3a9867a899a",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/fotografo.svg": {
+    "mtime": 1786456799.0,
+    "ast_hash": "f338885b8748d1c216f3f94bf8db06e2",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/gerente.png": {
+    "mtime": 1785596574.7044723,
+    "ast_hash": "4f933dd2e250c49b1aee984893fc085c",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/gerente.svg": {
+    "mtime": 1786634141.0,
+    "ast_hash": "c9bed7a4831b33a63ee080037be2fa57",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/superuser.png": {
+    "mtime": 1785595130.416916,
+    "ast_hash": "99f9da047ca9dee50db25076695ec4a5",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/superuser.svg": {
+    "mtime": 1786633275.0,
+    "ast_hash": "14be7a4ff710d76707618d661ba906f1",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/supervisor.png": {
+    "mtime": 1785593303.478777,
+    "ast_hash": "f1257646d928c7e360a8bd61d4c3d943",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/supervisor.svg": {
+    "mtime": 1786633590.0,
+    "ast_hash": "3c5d526c5501c087e81120225818f0e8",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/user.png": {
+    "mtime": 1786634296.8919098,
+    "ast_hash": "3636fe04a785f8faa1f45cb8d1d255bb",
+    "semantic_hash": ""
+  },
+  "frontend/src/assets/users/user.svg": {
+    "mtime": 1786634344.0,
+    "ast_hash": "a21d84ee99bb7458cbd8f0cae061a74d",
+    "semantic_hash": ""
   }
 }

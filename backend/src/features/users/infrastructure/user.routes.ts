@@ -116,6 +116,9 @@ export async function userRoutes(fastify: FastifyInstance) {
           roleCode: user.role.codigo,
           roleName: user.role.nombre,
           tipoContrato: user.tipoContrato || 'ASALARIADO',
+          fechaContratacion: user.fechaContratacion
+            ? user.fechaContratacion.toISOString().split('T')[0]
+            : null,
           imagen: user.imagen || null,
           color: user.colorAsignado?.color || null,
           areaIds: user.areasAsignadas.map((a: any) => a.areaId),
@@ -385,6 +388,9 @@ export async function userRoutes(fastify: FastifyInstance) {
         profileId: u.roleId,
         status: u.activo ? 'Activo' : 'Inactivo',
         tipoContrato: u.tipoContrato || 'ASALARIADO',
+        fechaContratacion: u.fechaContratacion
+          ? u.fechaContratacion.toISOString().split('T')[0]
+          : null,
         imagen: u.imagen || null,
         color: u.colorAsignado?.color || null,
         areaIds: u.areasAsignadas.map((a: any) => a.areaId),
@@ -412,6 +418,7 @@ export async function userRoutes(fastify: FastifyInstance) {
         profileId: number | string
         status?: string
         tipoContrato?: string
+        fechaContratacion?: string | null
         imagen?: string | null
         color?: string | null
         areaIds?: number[]
@@ -516,6 +523,7 @@ export async function userRoutes(fastify: FastifyInstance) {
           imagen: body.imagen || null,
           roleId: Number(body.profileId),
           tipoContrato: body.tipoContrato === 'SIN_SALARIO' ? 'SIN_SALARIO' : 'ASALARIADO',
+          fechaContratacion: body.fechaContratacion ? new Date(body.fechaContratacion) : null,
           activo: body.status !== 'Inactivo',
           ...(areaIds.length > 0 && {
             areasAsignadas: {
@@ -574,6 +582,9 @@ export async function userRoutes(fastify: FastifyInstance) {
         profileId: decryptedNuevo.roleId,
         status: decryptedNuevo.activo ? 'Activo' : 'Inactivo',
         tipoContrato: decryptedNuevo.tipoContrato,
+        fechaContratacion: decryptedNuevo.fechaContratacion
+          ? decryptedNuevo.fechaContratacion.toISOString().split('T')[0]
+          : null,
         imagen: decryptedNuevo.imagen || null,
         color: body.color || null,
         areaIds: decryptedNuevo.areasAsignadas.map((a: any) => a.areaId),
@@ -608,6 +619,7 @@ export async function userRoutes(fastify: FastifyInstance) {
         profileId?: number | string
         status?: string
         tipoContrato?: string
+        fechaContratacion?: string | null
         imagen?: string | null
         color?: string | null
         areaIds?: number[]
@@ -753,6 +765,9 @@ export async function userRoutes(fastify: FastifyInstance) {
         ...(body.imagen !== undefined && { imagen: body.imagen }),
         ...(body.profileId !== undefined && { roleId: Number(body.profileId) }),
         ...(body.tipoContrato !== undefined && { tipoContrato: body.tipoContrato }),
+        ...(body.fechaContratacion !== undefined && {
+          fechaContratacion: body.fechaContratacion ? new Date(body.fechaContratacion) : null,
+        }),
         ...(body.status !== undefined && { activo: body.status === 'Activo' }),
       }
 
@@ -795,6 +810,9 @@ export async function userRoutes(fastify: FastifyInstance) {
         profileId: actualizado.roleId,
         status: actualizado.activo ? 'Activo' : 'Inactivo',
         tipoContrato: actualizado.tipoContrato,
+        fechaContratacion: actualizado.fechaContratacion
+          ? actualizado.fechaContratacion.toISOString().split('T')[0]
+          : null,
         imagen: actualizado.imagen || null,
         color: actualizado.colorAsignado?.color || null,
         areaIds: actualizado.areasAsignadas.map((a: any) => a.areaId),

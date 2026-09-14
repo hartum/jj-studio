@@ -12,6 +12,7 @@ import {
   getRoleSvg,
   getRoleTagType,
 } from '@/features/users/utils/user-avatar'
+import { formatAntiguedad } from '@/features/users/utils/user-date'
 import { getRolePermissions, canEditUser, canDeleteUser, type RoleCode } from '@/shared/permissions'
 import { Search, Plus, EditPen, Delete } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
@@ -220,7 +221,7 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
           label="Perfil / Rol"
           sortable
           prop="perfil.name"
-          width="270"
+          width="240"
           class-name="role-column"
         >
           <template #default="{ row }">
@@ -238,6 +239,20 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
               />
               {{ row.perfil.name }}
             </el-tag>
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          label="Antigüedad"
+          sortable
+          prop="fechaContratacion"
+          min-width="190"
+          show-overflow-tooltip
+        >
+          <template #default="{ row }">
+            <span :class="{ 'empty-value': !row.fechaContratacion }">
+              {{ formatAntiguedad(row.fechaContratacion) }}
+            </span>
           </template>
         </el-table-column>
 
@@ -364,6 +379,10 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
     font-size: 1.3rem;
     padding: 4px;
   }
+}
+
+.empty-value {
+  color: #94a3b8;
 }
 
 @media (max-width: 768px) {

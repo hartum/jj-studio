@@ -12,6 +12,7 @@ export interface User {
   profileId: number
   status: UserStatus
   tipoContrato?: TipoContrato | string
+  fechaContratacion?: string | null
   password?: string
   imagen?: string | null
   color?: string | null

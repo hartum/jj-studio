@@ -61,6 +61,7 @@ const formData = ref({
   profileId: null as number | null,
   status: 'Activo' as UserStatus,
   tipoContrato: 'ASALARIADO' as string,
+  fechaContratacion: null as string | null,
   imagen: null as string | null,
   color: '#3b82f6' as string | null,
   areaIds: [] as number[],
@@ -278,6 +279,7 @@ onMounted(async () => {
         profileId: existing.profileId,
         status: existing.status,
         tipoContrato: existing.tipoContrato || 'ASALARIADO',
+        fechaContratacion: existing.fechaContratacion || null,
         imagen: existing.imagen || null,
         color: existing.color || '#3b82f6',
         areaIds: existing.areaIds ? [...existing.areaIds] : [],
@@ -376,6 +378,7 @@ async function handleSave() {
       profileId: formData.value.profileId!,
       status: formData.value.status,
       tipoContrato: formData.value.tipoContrato || 'ASALARIADO',
+      fechaContratacion: formData.value.fechaContratacion || null,
       imagen: formData.value.imagen,
       color: isFotografo.value ? formData.value.color : null,
       areaIds: isGerente.value ? formData.value.areaIds : [],
@@ -506,6 +509,18 @@ async function handleSave() {
 
             <el-form-item label="Teléfono">
               <el-input v-model="formData.telefono" placeholder="+34 600 000 000" />
+            </el-form-item>
+
+            <el-form-item label="Fecha Contratación">
+              <el-date-picker
+                v-model="formData.fechaContratacion"
+                type="date"
+                placeholder="Selecciona la fecha de contratación"
+                format="YYYY-MM-DD"
+                value-format="YYYY-MM-DD"
+                style="width: 100%"
+                clearable
+              />
             </el-form-item>
 
             <el-form-item label="Perfil / Rol" required>

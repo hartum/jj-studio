@@ -30,6 +30,7 @@ model Usuario {
   passwordHash          String?             @map("password_hash")
   imagen                String?             @db.LongText
   tipoContrato          String              @default("ASALARIADO") @map("tipo_contrato")
+  fechaContratacion     DateTime?           @map("fecha_contratacion")
   activo                Boolean             @default(true)
   roleId                Int                 @map("role_id")
   role                  Role                @relation(fields: [roleId], references: [id])
