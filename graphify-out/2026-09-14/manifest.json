@@ -180,9 +180,9 @@
     "semantic_hash": "98f1082b51cd0cbe84ef491c7a8e7c78"
   },
   "backend/src/features/users/infrastructure/user.routes.ts": {
-    "mtime": 1789394106.7399027,
-    "ast_hash": "3a70e77cb094aa4d90d5d8ceaed40a08",
-    "semantic_hash": ""
+    "mtime": 1788450966.950252,
+    "ast_hash": "f2afa38dec191ecc7dbed4ce172f20f8",
+    "semantic_hash": "f2afa38dec191ecc7dbed4ce172f20f8"
   },
   "backend/src/index.ts": {
     "mtime": 1788450308.5917034,
@@ -585,9 +585,9 @@
     "semantic_hash": "b117350183023cc67eab11e23066b8b7"
   },
   "frontend/src/features/users/domain/user.model.ts": {
-    "mtime": 1789394117.1115034,
-    "ast_hash": "fe3a4f10b968cbae76ae4b3db4164456",
-    "semantic_hash": ""
+    "mtime": 1786865671.4609349,
+    "ast_hash": "09d33a829abd2cd6cf320f37d71773cd",
+    "semantic_hash": "09d33a829abd2cd6cf320f37d71773cd"
   },
   "frontend/src/features/users/stores/calendario-laboral.store.ts": {
     "mtime": 1787051824.4616857,
@@ -610,14 +610,14 @@
     "semantic_hash": "e26b5f4521ad87579ba3bdf710e9873b"
   },
   "frontend/src/features/users/ui/UsuarioFormView.vue": {
-    "mtime": 1789395071.742579,
-    "ast_hash": "75726e9145fc291dd4f0b5672c541aac",
-    "semantic_hash": ""
+    "mtime": 1787154262.3315876,
+    "ast_hash": "9512947c7fec9d964ac0294dc0bd8dee",
+    "semantic_hash": "9512947c7fec9d964ac0294dc0bd8dee"
   },
   "frontend/src/features/users/ui/UsuariosView.vue": {
-    "mtime": 1789394154.752617,
-    "ast_hash": "fdb1ca4fe4200d54930f4f41cad2b9e0",
-    "semantic_hash": ""
+    "mtime": 1787149379.8171902,
+    "ast_hash": "80435ecaad7716fe603a169320adccfa",
+    "semantic_hash": "80435ecaad7716fe603a169320adccfa"
   },
   "frontend/src/features/users/utils/user-avatar.ts": {
     "mtime": 1787130567.0174665,
@@ -997,11 +997,6 @@
   "frontend/src/assets/users/user.svg": {
     "mtime": 1786634344.0,
     "ast_hash": "a21d84ee99bb7458cbd8f0cae061a74d",
-    "semantic_hash": ""
-  },
-  "frontend/src/features/users/utils/user-date.ts": {
-    "mtime": 1789394168.4434366,
-    "ast_hash": "370cafb4936d145e2d81ea5e2cde5c3d",
     "semantic_hash": ""
   }
 }
