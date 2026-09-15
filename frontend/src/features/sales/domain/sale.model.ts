@@ -1,5 +1,12 @@
 export type EstadoCitaVenta = 'PROGRAMADA' | 'COMPLETADA' | 'NO_SHOW' | 'CANCELADA'
 
+export const MODO_COBRO_OPTIONS = [
+  { value: 'tarjeta', label: 'Tarjeta' },
+  { value: 'cargo habitacion', label: 'Cargo habitación' },
+  { value: 'Paypal', label: 'Paypal' },
+  { value: 'efectivo', label: 'Efectivo' },
+] as const
+
 export interface CitaVenta {
   id: number
   sesionId: number
@@ -10,6 +17,7 @@ export interface CitaVenta {
   estado: EstadoCitaVenta
   numFotosVendidas?: number | null
   totalVentaUsd?: number | null
+  modoCobro?: string | null
   notas?: string | null
   // Inherited from session join
   clienteNombre?: string
@@ -35,6 +43,7 @@ export interface CreateCitaVentaPayload {
   estado?: EstadoCitaVenta
   numFotosVendidas?: number | null
   totalVentaUsd?: number | null
+  modoCobro?: string | null
   notas?: string | null
 }
 
@@ -44,6 +53,7 @@ export interface UpdateCitaVentaPayload {
   estado?: EstadoCitaVenta
   numFotosVendidas?: number | null
   totalVentaUsd?: number | null
+  modoCobro?: string | null
   notas?: string | null
 }
 

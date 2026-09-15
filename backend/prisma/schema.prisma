@@ -189,6 +189,7 @@ model CitaVenta {
   estado           String     @default("PROGRAMADA")
   numFotosVendidas Int?       @map("num_fotos_vendidas")
   totalVentaUsd    Float?     @map("total_venta_usd")
+  modoCobro        String?    @map("modo_cobro")
   notas            String?    @db.Text
   googleCalendarEventId String? @map("google_calendar_event_id")
   emailRecordatorioEnviado Boolean @default(false) @map("email_recordatorio_enviado")

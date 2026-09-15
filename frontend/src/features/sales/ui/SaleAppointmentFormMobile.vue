@@ -27,6 +27,7 @@ const {
   selectedSeller,
   getSellerStatus,
   estadoOptions,
+  modoCobroOptions,
   isSubmitDisabled,
   selectedDateOnly,
   selectedTimeOnly,
@@ -709,10 +710,32 @@ const isSellerPhotographer = computed(() => {
           </el-form-item>
         </div>
 
+        <div class="mobile-payment-method-row">
+          <div class="mobile-card-section-label">
+            <span class="step-badge-num">6</span>
+            Modo de cobro
+          </div>
+
+          <el-select
+            v-model="formData.modoCobro"
+            placeholder="Selecciona modo de cobro"
+            clearable
+            style="width: 100%"
+            size="large"
+          >
+            <el-option
+              v-for="opt in modoCobroOptions"
+              :key="opt.value"
+              :label="opt.label"
+              :value="opt.value"
+            />
+          </el-select>
+        </div>
+
         <!-- Notas -->
         <div>
           <div class="mobile-card-section-label">
-            <span class="step-badge-num">6</span>
+            <span class="step-badge-num">7</span>
             Notas
           </div>
           <el-form-item>
@@ -729,7 +752,7 @@ const isSellerPhotographer = computed(() => {
       <!-- Estado de la Cita (Directo en el flujo del formulario, sin tarjeta) -->
       <div class="mobile-status-section">
         <div class="mobile-card-section-label">
-          <span class="step-badge-num">7</span>
+          <span class="step-badge-num">8</span>
           Estado de la cita
         </div>
         <div class="status-radio-container">
@@ -1478,6 +1501,11 @@ const isSellerPhotographer = computed(() => {
   width: 100% !important;
 }
 .spinner-containers {
+  margin-bottom: 0.85rem;
+}
+
+.mobile-payment-method-row {
+  width: 100%;
   margin-bottom: 1.25rem;
 }
 

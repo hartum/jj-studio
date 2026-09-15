@@ -36,6 +36,7 @@ const {
   selectedSeller,
   getSellerStatus,
   estadoOptions,
+  modoCobroOptions,
   isSubmitDisabled,
   selectedDateOnly,
   selectedTimeOnly,
@@ -746,6 +747,27 @@ const formattedSelectedSaleDateTime = computed(() => {
           </el-collapse-transition>
         </div>
 
+        <!-- Selector de Modo de Cobro (Desktop) -->
+        <el-card class="payment-method-card" shadow="never">
+          <div class="payment-method-card-header">
+            <span class="payment-method-card-title">MODO DE COBRO</span>
+          </div>
+          <el-select
+            v-model="formData.modoCobro"
+            placeholder="Selecciona modo de cobro"
+            clearable
+            style="width: 100%"
+            :disabled="isReadOnly"
+          >
+            <el-option
+              v-for="opt in modoCobroOptions"
+              :key="opt.value"
+              :label="opt.label"
+              :value="opt.value"
+            />
+          </el-select>
+        </el-card>
+
         <!-- Tarjeta de Estado de la Cita -->
         <el-card class="status-card" shadow="never">
           <div class="status-card-header">
@@ -872,6 +894,29 @@ const formattedSelectedSaleDateTime = computed(() => {
 }
 
 .status-card-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--nav-link-color, #64748b);
+  text-transform: uppercase;
+}
+
+/* Payment Method Card in Sidebar */
+.payment-method-card {
+  border-radius: 12px;
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  background: var(--toolbar-bg, #ffffff);
+}
+
+.payment-method-card :deep(.el-card__body) {
+  padding: 1.25rem;
+}
+
+.payment-method-card-header {
+  margin-bottom: 0.85rem;
+}
+
+.payment-method-card-title {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -1809,6 +1854,7 @@ html.dark .inline-calendar-picker :deep(.el-picker-panel) {
 
 html.dark .form-card,
 html.dark .status-card,
+html.dark .payment-method-card,
 html.dark .desktop-session-selector-card,
 html.dark .desktop-seller-selector-card,
 html.dark .session-toggle-bar,

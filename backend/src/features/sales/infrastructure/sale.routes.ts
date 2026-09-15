@@ -268,6 +268,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           estado: c.estado,
           numFotosVendidas: c.numFotosVendidas,
           totalVentaUsd: c.totalVentaUsd,
+          modoCobro: c.modoCobro || null,
           notas: c.notas || '',
           clienteNombre: decrypt(c.sesion.clienteNombre) || '',
           clienteEmail: decrypt(c.sesion.clienteEmail) || '',
@@ -346,6 +347,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         estado: cita.estado,
         numFotosVendidas: cita.numFotosVendidas,
         totalVentaUsd: cita.totalVentaUsd,
+        modoCobro: cita.modoCobro || null,
         notas: cita.notas || '',
         clienteNombre: decrypt(cita.sesion.clienteNombre) || '',
         clienteEmail: decrypt(cita.sesion.clienteEmail) || '',
@@ -379,6 +381,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         estado?: string
         numFotosVendidas?: number | null
         totalVentaUsd?: number | null
+        modoCobro?: string | null
         notas?: string
       }
 
@@ -439,6 +442,11 @@ export async function saleRoutes(fastify: FastifyInstance) {
             .status(400)
             .send({ error: 'Para completar la cita, debes indicar el nº de fotos vendidas y el total en USD' })
         }
+        if (!body.modoCobro) {
+          return reply
+            .status(400)
+            .send({ error: 'Para completar la cita, debes seleccionar un modo de cobro' })
+        }
       }
 
       // Check conflicts using session's hotelId
@@ -455,6 +463,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
             estado: targetEstado,
             numFotosVendidas: body.numFotosVendidas ?? null,
             totalVentaUsd: body.totalVentaUsd ?? null,
+            modoCobro: body.modoCobro ? body.modoCobro.trim() : null,
             notas: body.notas ? body.notas.trim() : null,
             deletedAt: null,
           },
@@ -470,6 +479,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
             estado: targetEstado,
             numFotosVendidas: body.numFotosVendidas ?? null,
             totalVentaUsd: body.totalVentaUsd ?? null,
+            modoCobro: body.modoCobro ? body.modoCobro.trim() : null,
             notas: body.notas ? body.notas.trim() : null,
           },
           include: { sesion: true, vendedor: true },
@@ -527,6 +537,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           estado: nueva.estado,
           numFotosVendidas: nueva.numFotosVendidas,
           totalVentaUsd: nueva.totalVentaUsd,
+          modoCobro: nueva.modoCobro,
         },
       })
 
@@ -540,6 +551,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         estado: nueva.estado,
         numFotosVendidas: nueva.numFotosVendidas,
         totalVentaUsd: nueva.totalVentaUsd,
+        modoCobro: nueva.modoCobro || null,
         notas: nueva.notas || '',
         clienteNombre: decrypt(nueva.sesion.clienteNombre) || '',
         googleCalendarEventId: googleEventId || null,
@@ -573,6 +585,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         estado?: string
         numFotosVendidas?: number | null
         totalVentaUsd?: number | null
+        modoCobro?: string | null
         notas?: string
       }
 
@@ -620,6 +633,12 @@ export async function saleRoutes(fastify: FastifyInstance) {
             .status(400)
             .send({ error: 'Para completar la cita, debes indicar el nº de fotos vendidas y el total en USD' })
         }
+        const modoCobro = body.modoCobro !== undefined ? body.modoCobro : existing.modoCobro
+        if (!modoCobro) {
+          return reply
+            .status(400)
+            .send({ error: 'Para completar la cita, debes seleccionar un modo de cobro' })
+        }
       }
 
       const data: any = {}
@@ -630,6 +649,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       if (body.estado !== undefined) data.estado = body.estado
       if (body.numFotosVendidas !== undefined) data.numFotosVendidas = body.numFotosVendidas
       if (body.totalVentaUsd !== undefined) data.totalVentaUsd = body.totalVentaUsd
+      if (body.modoCobro !== undefined) data.modoCobro = body.modoCobro ? body.modoCobro.trim() : null
       if (body.notas !== undefined) data.notas = body.notas ? body.notas.trim() : null
 
       const actualizada = await prisma.citaVenta.update({
@@ -716,6 +736,11 @@ export async function saleRoutes(fastify: FastifyInstance) {
         metadatos.notasNuevas = actualizada.notas || ''
       }
 
+      if (existing.modoCobro !== actualizada.modoCobro) {
+        metadatos.modoCobroAnterior = existing.modoCobro || ''
+        metadatos.modoCobroNuevo = actualizada.modoCobro || ''
+      }
+
       registrarAudit({
         accion: 'MODIFICAR',
         entidad: 'CITA_VENTA',
@@ -741,6 +766,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         estado: actualizada.estado,
         numFotosVendidas: actualizada.numFotosVendidas,
         totalVentaUsd: actualizada.totalVentaUsd,
+        modoCobro: actualizada.modoCobro || null,
         notas: actualizada.notas || '',
         clienteNombre: decrypt(actualizada.sesion.clienteNombre) || '',
         googleCalendarEventId: googleEventId || null,

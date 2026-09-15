@@ -6,11 +6,12 @@ import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { useProfileStore } from '@/features/users/stores/profile.store'
-import type {
-  CitaVenta,
-  UpdateCitaVentaPayload,
-  ConflictoCitaVenta,
-  EstadoCitaVenta,
+import {
+  type CitaVenta,
+  type UpdateCitaVentaPayload,
+  type ConflictoCitaVenta,
+  type EstadoCitaVenta,
+  MODO_COBRO_OPTIONS,
 } from '../domain/sale.model'
 import { Calendar, Check, Close } from '@element-plus/icons-vue'
 import { UserX } from '@lucide/vue'
@@ -24,6 +25,7 @@ export interface SaleAppointmentFormData {
   estado: EstadoCitaVenta
   numFotosVendidas: number | null
   totalVentaUsd: number | null
+  modoCobro: string | null
   notas: string
 }
 
@@ -86,6 +88,7 @@ export function useSaleAppointmentForm() {
     estado: 'PROGRAMADA',
     numFotosVendidas: null,
     totalVentaUsd: null,
+    modoCobro: null,
     notas: '',
   })
 
@@ -283,6 +286,7 @@ export function useSaleAppointmentForm() {
       if (formData.value.numFotosVendidas == null || formData.value.totalVentaUsd == null) {
         return true
       }
+      if (!formData.value.modoCobro) return true
     }
     return false
   })
@@ -594,6 +598,7 @@ export function useSaleAppointmentForm() {
           estado: existing.estado,
           numFotosVendidas: existing.numFotosVendidas ?? null,
           totalVentaUsd: existing.totalVentaUsd ?? null,
+          modoCobro: existing.modoCobro || null,
           notas: existing.notas || '',
         }
         if (existing.fechaHoraCita) {
@@ -662,6 +667,10 @@ export function useSaleAppointmentForm() {
         )
         return
       }
+      if (!formData.value.modoCobro) {
+        ElMessage.warning('Para completar la cita, debes seleccionar un modo de cobro')
+        return
+      }
     }
 
     isSaving.value = true
@@ -673,6 +682,7 @@ export function useSaleAppointmentForm() {
           estado: formData.value.estado,
           numFotosVendidas: formData.value.numFotosVendidas,
           totalVentaUsd: formData.value.totalVentaUsd,
+          modoCobro: formData.value.modoCobro || null,
           notas: formData.value.notas ? formData.value.notas.trim() : null,
         }
         const result = await saleStore.updateCitaVenta(citaId.value, payload)
@@ -692,6 +702,7 @@ export function useSaleAppointmentForm() {
           estado: formData.value.estado,
           numFotosVendidas: formData.value.numFotosVendidas,
           totalVentaUsd: formData.value.totalVentaUsd,
+          modoCobro: formData.value.modoCobro || null,
           notas: formData.value.notas ? formData.value.notas.trim() : null,
         })
         if (result.conflictos && result.conflictos.length > 0) {
@@ -735,6 +746,7 @@ export function useSaleAppointmentForm() {
     getSellerStatus,
     paxDisplay,
     estadoOptions,
+    modoCobroOptions: MODO_COBRO_OPTIONS,
     isSubmitDisabled,
     selectedDateOnly,
     selectedTimeOnly,
