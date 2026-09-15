@@ -170,9 +170,9 @@
     "semantic_hash": "8b7fbbfd3c080a1fc2affb721c830dfc"
   },
   "backend/src/features/sales/infrastructure/sale.routes.ts": {
-    "mtime": 1788505794.465403,
-    "ast_hash": "a0798342a6055a15a800ae711d4c99bd",
-    "semantic_hash": "a0798342a6055a15a800ae711d4c99bd"
+    "mtime": 1789489345.775682,
+    "ast_hash": "08827a70fff3cd59449aa6349aa6a377",
+    "semantic_hash": ""
   },
   "backend/src/features/users/infrastructure/calendario-laboral.routes.ts": {
     "mtime": 1787041652.1146507,
@@ -540,14 +540,14 @@
     "semantic_hash": "16440f1ecb1ffdb79be1ccf3070cfcde"
   },
   "frontend/src/features/sales/composables/useSaleAppointmentForm.ts": {
-    "mtime": 1788333085.5364196,
-    "ast_hash": "fa09ff6125aa0432251fdee9d2223660",
-    "semantic_hash": "fa09ff6125aa0432251fdee9d2223660"
+    "mtime": 1789489228.6421182,
+    "ast_hash": "7446fcd686070faae833dde731054985",
+    "semantic_hash": ""
   },
   "frontend/src/features/sales/domain/sale.model.ts": {
-    "mtime": 1787932533.6591637,
-    "ast_hash": "0aaa1c4f521230c640f02c8167b632e1",
-    "semantic_hash": "0aaa1c4f521230c640f02c8167b632e1"
+    "mtime": 1789487350.1242592,
+    "ast_hash": "bb7d0aa8786059be423b0f23fd0557ed",
+    "semantic_hash": ""
   },
   "frontend/src/features/sales/stores/sale.store.ts": {
     "mtime": 1787324368.587865,
@@ -555,14 +555,14 @@
     "semantic_hash": "5bc8472b67677845c528e85e91cbc45f"
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue": {
-    "mtime": 1788333096.8042936,
-    "ast_hash": "e08d642ef55f2dfeecca30b7965d300f",
-    "semantic_hash": "e08d642ef55f2dfeecca30b7965d300f"
+    "mtime": 1789488036.8095357,
+    "ast_hash": "7646998b7fcd5357be7c2d2079d8296e",
+    "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue": {
-    "mtime": 1788333102.5383127,
-    "ast_hash": "6c43399f78426dc7b0163468324ea40d",
-    "semantic_hash": "6c43399f78426dc7b0163468324ea40d"
+    "mtime": 1789490274.6965256,
+    "ast_hash": "98845733589b0c4ca5d2dafd52100d48",
+    "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormView.vue": {
     "mtime": 1787916994.0893,
