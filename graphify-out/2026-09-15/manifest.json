@@ -85,19 +85,19 @@
     "semantic_hash": "cf8cd866d45ae3dfd5e008bbbeef80d5"
   },
   "backend/src/features/commissions/application/commission.service.ts": {
-    "mtime": 1789399901.5421193,
-    "ast_hash": "09f81d818f9f5df66f892fded51b7dd4",
-    "semantic_hash": ""
+    "mtime": 1788331712.7978349,
+    "ast_hash": "12c45bff8a8908bb594400e2a2ff117f",
+    "semantic_hash": "12c45bff8a8908bb594400e2a2ff117f"
   },
   "backend/src/features/commissions/domain/commission.model.ts": {
-    "mtime": 1789397232.0079174,
-    "ast_hash": "a6e1db78a42680555e034f63066bb54d",
-    "semantic_hash": ""
+    "mtime": 1788331781.6882858,
+    "ast_hash": "8e6a053cc603299167de35b7e9031715",
+    "semantic_hash": "8e6a053cc603299167de35b7e9031715"
   },
   "backend/src/features/commissions/infrastructure/commission.routes.ts": {
-    "mtime": 1789399911.335352,
-    "ast_hash": "96863539dcfa0371acf1c0455eb39d59",
-    "semantic_hash": ""
+    "mtime": 1788331720.2104707,
+    "ast_hash": "b720fe7bb3a5fe8515b337db8163f818",
+    "semantic_hash": "b720fe7bb3a5fe8515b337db8163f818"
   },
   "backend/src/features/countries/infrastructure/country.routes.ts": {
     "mtime": 1788450416.0340416,
@@ -290,19 +290,19 @@
     "semantic_hash": "96cf0b3ee233e2226d09ec8a86fea142"
   },
   "frontend/src/features/commissions/domain/commission.model.ts": {
-    "mtime": 1789397326.0061393,
-    "ast_hash": "eff9a1e04ac0cf7bd80d5e7dea5fb3e7",
-    "semantic_hash": ""
+    "mtime": 1788331786.5660882,
+    "ast_hash": "95011739bd41e3f5fa89928b2722c2c6",
+    "semantic_hash": "95011739bd41e3f5fa89928b2722c2c6"
   },
   "frontend/src/features/commissions/stores/commission.store.ts": {
-    "mtime": 1789399947.924759,
-    "ast_hash": "4e4878eea2aa718d9e886562535192ee",
-    "semantic_hash": ""
+    "mtime": 1788330771.4817445,
+    "ast_hash": "7747ba31a208fa25eef4f517b319d211",
+    "semantic_hash": "7747ba31a208fa25eef4f517b319d211"
   },
   "frontend/src/features/commissions/ui/ComisionesConfig.vue": {
-    "mtime": 1789398397.890334,
-    "ast_hash": "6d9f6164af40e09b45187b2e0963d148",
-    "semantic_hash": ""
+    "mtime": 1788448858.2065217,
+    "ast_hash": "d5b24cb5c84a54b6ff75f89b672645f9",
+    "semantic_hash": "d5b24cb5c84a54b6ff75f89b672645f9"
   },
   "frontend/src/features/configuration/ui/ConfiguracionView.vue": {
     "mtime": 1788450503.9040594,
@@ -370,9 +370,9 @@
     "semantic_hash": "b29307fc4fb37d92039894ccb0cf1f12"
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1789399995.6170242,
-    "ast_hash": "7abf35c1453d0f781acc23291fef931c",
-    "semantic_hash": ""
+    "mtime": 1788332530.1321692,
+    "ast_hash": "754f199b37d5b7404da52b1c05b5520e",
+    "semantic_hash": "754f199b37d5b7404da52b1c05b5520e"
   },
   "frontend/src/features/home/ui/InicioView.vue": {
     "mtime": 1787595203.9422429,
