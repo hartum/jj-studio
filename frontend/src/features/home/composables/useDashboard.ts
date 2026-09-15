@@ -116,7 +116,10 @@ export function useDashboard() {
       if (area) paisId = area.paisId
     }
 
-    await commissionStore.fetchConfigs(paisId, hotelId).catch(() => {})
+    await Promise.all([
+      commissionStore.fetchConfigs(paisId, hotelId, currentUser.value?.id).catch(() => {}),
+      commissionStore.fetchUserConfigs().catch(() => {}),
+    ])
   }
 
   async function loadGoalsData() {
@@ -465,7 +468,23 @@ export function useDashboard() {
     return c === 'SIN_SALARIO' ? '🔵 Sin Salario / Freelance' : '🟢 Asalariado'
   })
 
+  const currentUserSpecialConfig = computed(() => {
+    if (commissionStore.currentUserConfig && commissionStore.currentUserConfig.activo !== false) {
+      return commissionStore.currentUserConfig
+    }
+    const uid = currentUser.value?.id
+    if (!uid) return null
+    return (
+      commissionStore.userConfigs.find(
+        (c) => c.usuarioId === uid && (c.activo === undefined || c.activo === true),
+      ) || null
+    )
+  })
+
   const currentImpuestoPct = computed(() => {
+    if (currentUserSpecialConfig.value) {
+      return currentUserSpecialConfig.value.impuestoPct
+    }
     return commissionStore.effectiveConfig?.impuestoPct ?? 16
   })
 
@@ -473,6 +492,20 @@ export function useDashboard() {
     const code = currentUser.value?.roleCode
     const contrato = currentUser.value?.tipoContrato
     const config = commissionStore.effectiveConfig
+
+    // Si el usuario tiene comisión especial personalizada asignada
+    if (currentUserSpecialConfig.value) {
+      const pct = currentUserSpecialConfig.value.porcentajeComision
+      const tax = currentUserSpecialConfig.value.impuestoPct
+      if (code === 'GERENTE') {
+        return `${pct}% × (Ventas − ${tax}% impuestos)`
+      }
+      if (code === 'SUPERVISOR') {
+        return `${pct}% × (Ventas del hotel − ${tax}% impuestos)`
+      }
+      return `${pct}% × (Venta − ${tax}% impuestos)`
+    }
+
     const tax = config?.impuestoPct !== undefined ? config.impuestoPct : 16
 
     if (code === 'GERENTE') {
@@ -598,6 +631,7 @@ export function useDashboard() {
     formatCurrency,
     handleNavigateToGoalForm,
     // Comisiones
+    currentUserSpecialConfig,
     currentImpuestoPct,
     myContractBadge,
     myCommissionFormula,

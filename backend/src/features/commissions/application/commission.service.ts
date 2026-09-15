@@ -1,6 +1,10 @@
 import { prisma } from '../../../shared/db.js'
 import { decryptUser } from '../../../shared/encryption.js'
-import type { ComisionConfigDTO, ResumenComisionesDTO } from '../domain/commission.model.js'
+import type {
+  ComisionConfigDTO,
+  ComisionUsuarioConfigDTO,
+  ResumenComisionesDTO,
+} from '../domain/commission.model.js'
 
 const DEFAULT_GLOBAL_CONFIG: ComisionConfigDTO = {
   paisId: null,
@@ -189,6 +193,160 @@ export async function saveCommissionConfig(data: ComisionConfigDTO): Promise<Com
   }
 }
 
+export async function getAllUserCommissionConfigs(): Promise<ComisionUsuarioConfigDTO[]> {
+  const configs = await prisma.comisionUsuarioConfig.findMany({
+    where: { deletedAt: null },
+    include: {
+      usuario: {
+        include: {
+          role: true,
+        },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  })
+
+  return configs.map((c) => {
+    const user = decryptUser(c.usuario)
+    return {
+      id: c.id,
+      usuarioId: c.usuarioId,
+      usuarioNombre: user?.nombre || '',
+      usuarioApellidos: user?.apellidos || '',
+      usuarioEmail: user?.email || '',
+      rolCodigo: c.usuario.role?.codigo || '',
+      rolNombre: c.usuario.role?.nombre || '',
+      porcentajeComision: c.porcentajeComision,
+      impuestoPct: c.impuestoPct,
+      activo: c.activo,
+    }
+  })
+}
+
+export async function getUserCommissionConfig(
+  usuarioId: string,
+): Promise<ComisionUsuarioConfigDTO | null> {
+  const c = await prisma.comisionUsuarioConfig.findFirst({
+    where: { usuarioId, deletedAt: null },
+    include: {
+      usuario: {
+        include: {
+          role: true,
+        },
+      },
+    },
+  })
+  if (!c) return null
+  const user = decryptUser(c.usuario)
+  return {
+    id: c.id,
+    usuarioId: c.usuarioId,
+    usuarioNombre: user?.nombre || '',
+    usuarioApellidos: user?.apellidos || '',
+    usuarioEmail: user?.email || '',
+    rolCodigo: c.usuario.role?.codigo || '',
+    rolNombre: c.usuario.role?.nombre || '',
+    porcentajeComision: c.porcentajeComision,
+    impuestoPct: c.impuestoPct,
+    activo: c.activo,
+  }
+}
+
+export async function saveUserCommissionConfig(data: {
+  usuarioId: string
+  porcentajeComision: number
+  impuestoPct: number
+  activo?: boolean
+}): Promise<ComisionUsuarioConfigDTO> {
+  const { usuarioId, porcentajeComision, impuestoPct, activo = true } = data
+
+  const existing = await prisma.comisionUsuarioConfig.findFirst({
+    where: { usuarioId, deletedAt: null },
+  })
+
+  let result
+  if (existing) {
+    result = await prisma.comisionUsuarioConfig.update({
+      where: { id: existing.id },
+      data: {
+        porcentajeComision,
+        impuestoPct,
+        activo,
+      },
+      include: {
+        usuario: { include: { role: true } },
+      },
+    })
+  } else {
+    result = await prisma.comisionUsuarioConfig.create({
+      data: {
+        usuarioId,
+        porcentajeComision,
+        impuestoPct,
+        activo,
+      },
+      include: {
+        usuario: { include: { role: true } },
+      },
+    })
+  }
+
+  // Recalcular comisiones pendientes para este usuario con su nueva tasa/retención
+  await recalculateCommissionsForUser(usuarioId).catch((err) => {
+    console.error('Error al recalcular comisiones para el usuario:', err)
+  })
+
+  const user = decryptUser(result.usuario)
+  return {
+    id: result.id,
+    usuarioId: result.usuarioId,
+    usuarioNombre: user?.nombre || '',
+    usuarioApellidos: user?.apellidos || '',
+    usuarioEmail: user?.email || '',
+    rolCodigo: result.usuario.role?.codigo || '',
+    rolNombre: result.usuario.role?.nombre || '',
+    porcentajeComision: result.porcentajeComision,
+    impuestoPct: result.impuestoPct,
+    activo: result.activo,
+  }
+}
+
+export async function deleteUserCommissionConfig(id: number): Promise<void> {
+  const existing = await prisma.comisionUsuarioConfig.findUnique({
+    where: { id },
+  })
+  await prisma.comisionUsuarioConfig.delete({
+    where: { id },
+  })
+  if (existing) {
+    await recalculateCommissionsForUser(existing.usuarioId).catch((err) => {
+      console.error('Error al recalcular comisiones tras eliminar configuración:', err)
+    })
+  }
+}
+
+async function calculateUserCommission(
+  usuarioId: string,
+  defaultPct: number,
+  defaultBaseCalculoUsd: number,
+  totalVentaUsd: number,
+): Promise<{ pct: number; baseCalculoUsd: number; importe: number }> {
+  const userSpecial = await prisma.comisionUsuarioConfig.findFirst({
+    where: { usuarioId, activo: true, deletedAt: null },
+  })
+
+  if (userSpecial) {
+    const impuestoPct = userSpecial.impuestoPct ?? 16.0
+    const base = Number(Math.max(0, totalVentaUsd * (1 - impuestoPct / 100)).toFixed(2))
+    const pct = userSpecial.porcentajeComision
+    const importe = Number(((base * pct) / 100).toFixed(2))
+    return { pct, baseCalculoUsd: base, importe }
+  }
+
+  const importe = Number(((defaultBaseCalculoUsd * defaultPct) / 100).toFixed(2))
+  return { pct: defaultPct, baseCalculoUsd: defaultBaseCalculoUsd, importe }
+}
+
 export async function calculateAndSaveCommissionsForSale(citaVentaId: number): Promise<void> {
   const cita = await prisma.citaVenta.findUnique({
     where: { id: citaVentaId },
@@ -233,11 +391,12 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
     })
     if (fotografo) {
       const tipoContrato = fotografo.tipoContrato || 'ASALARIADO'
-      const pct =
+      const defaultPct =
         tipoContrato === 'SIN_SALARIO'
           ? config.fotografoSinSalarioPct
           : config.fotografoAsalariadoPct
-      const importe = Number(((baseCalculoUsd * pct) / 100).toFixed(2))
+      const { pct, baseCalculoUsd: userBaseCalculoUsd, importe } =
+        await calculateUserCommission(fotografo.id, defaultPct, baseCalculoUsd, totalVentaUsd)
 
       await prisma.comision.upsert({
         where: {
@@ -254,7 +413,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
           rolEnVenta: 'FOTOGRAFO',
           tipoContrato,
           porcentajeAplicado: pct,
-          baseCalculoUsd,
+          baseCalculoUsd: userBaseCalculoUsd,
           importeComisionUsd: importe,
           estado: 'PENDIENTE',
           fechaVenta,
@@ -263,7 +422,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
           hotelId,
           tipoContrato,
           porcentajeAplicado: pct,
-          baseCalculoUsd,
+          baseCalculoUsd: userBaseCalculoUsd,
           importeComisionUsd: importe,
           fechaVenta,
         },
@@ -278,14 +437,14 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
       where: { id: vendedorUsuarioId },
       include: { role: true },
     })
-    // Apply seller commission if vendor exists
     if (vendedor) {
       const tipoContrato = vendedor.tipoContrato || 'ASALARIADO'
-      const pct =
+      const defaultPct =
         tipoContrato === 'SIN_SALARIO'
           ? config.vendedorSinSalarioPct
           : config.vendedorAsalariadoPct
-      const importe = Number(((baseCalculoUsd * pct) / 100).toFixed(2))
+      const { pct, baseCalculoUsd: userBaseCalculoUsd, importe } =
+        await calculateUserCommission(vendedor.id, defaultPct, baseCalculoUsd, totalVentaUsd)
 
       // Clean any other user previously marked as VENDEDOR for this sale
       await prisma.comision.deleteMany({
@@ -311,7 +470,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
           rolEnVenta: 'VENDEDOR',
           tipoContrato,
           porcentajeAplicado: pct,
-          baseCalculoUsd,
+          baseCalculoUsd: userBaseCalculoUsd,
           importeComisionUsd: importe,
           estado: 'PENDIENTE',
           fechaVenta,
@@ -320,7 +479,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
           hotelId,
           tipoContrato,
           porcentajeAplicado: pct,
-          baseCalculoUsd,
+          baseCalculoUsd: userBaseCalculoUsd,
           importeComisionUsd: importe,
           fechaVenta,
         },
@@ -349,8 +508,8 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
 
   for (const item of hotelSupervisores) {
     const supervisor = item.usuario
-    const pct = config.supervisorPct
-    const importe = Number(((baseCalculoUsd * pct) / 100).toFixed(2))
+    const { pct, baseCalculoUsd: userBaseCalculoUsd, importe } =
+      await calculateUserCommission(supervisor.id, config.supervisorPct, baseCalculoUsd, totalVentaUsd)
 
     await prisma.comision.upsert({
       where: {
@@ -367,7 +526,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
         rolEnVenta: 'SUPERVISOR',
         tipoContrato: supervisor.tipoContrato,
         porcentajeAplicado: pct,
-        baseCalculoUsd,
+        baseCalculoUsd: userBaseCalculoUsd,
         importeComisionUsd: importe,
         estado: 'PENDIENTE',
         fechaVenta,
@@ -376,7 +535,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
         hotelId,
         tipoContrato: supervisor.tipoContrato,
         porcentajeAplicado: pct,
-        baseCalculoUsd,
+        baseCalculoUsd: userBaseCalculoUsd,
         importeComisionUsd: importe,
         fechaVenta,
       },
@@ -397,8 +556,8 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
 
   for (const item of areaGerentes) {
     const gerente = item.usuario
-    const pct = config.gerentePct
-    const importe = Number(((baseCalculoUsd * pct) / 100).toFixed(2))
+    const { pct, baseCalculoUsd: userBaseCalculoUsd, importe } =
+      await calculateUserCommission(gerente.id, config.gerentePct, baseCalculoUsd, totalVentaUsd)
 
     await prisma.comision.upsert({
       where: {
@@ -415,7 +574,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
         rolEnVenta: 'GERENTE',
         tipoContrato: gerente.tipoContrato,
         porcentajeAplicado: pct,
-        baseCalculoUsd,
+        baseCalculoUsd: userBaseCalculoUsd,
         importeComisionUsd: importe,
         estado: 'PENDIENTE',
         fechaVenta,
@@ -424,11 +583,50 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
         hotelId,
         tipoContrato: gerente.tipoContrato,
         porcentajeAplicado: pct,
-        baseCalculoUsd,
+        baseCalculoUsd: userBaseCalculoUsd,
         importeComisionUsd: importe,
         fechaVenta,
       },
     })
+  }
+}
+
+export async function recalculateCommissionsForUser(usuarioId: string): Promise<void> {
+  const userCommissions = await prisma.comision.findMany({
+    where: {
+      usuarioId,
+      estado: { in: ['PENDIENTE', 'APROBADA'] },
+    },
+    select: { citaVentaId: true },
+  })
+
+  const salesAsFotografo = await prisma.citaVenta.findMany({
+    where: {
+      estado: 'COMPLETADA',
+      sesion: { fotografoId: usuarioId },
+    },
+    select: { id: true },
+  })
+
+  const salesAsVendedor = await prisma.citaVenta.findMany({
+    where: {
+      estado: 'COMPLETADA',
+      OR: [
+        { vendedorId: usuarioId },
+        { sesion: { creadorId: usuarioId } },
+      ],
+    },
+    select: { id: true },
+  })
+
+  const allCitaIds = new Set<number>([
+    ...userCommissions.map((c) => c.citaVentaId),
+    ...salesAsFotografo.map((s) => s.id),
+    ...salesAsVendedor.map((s) => s.id),
+  ])
+
+  for (const citaId of allCitaIds) {
+    await calculateAndSaveCommissionsForSale(citaId)
   }
 }
 

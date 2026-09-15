@@ -45,6 +45,7 @@ model Usuario {
   colorAsignado         UsuarioColor?
   metas                 Meta[]
   comisiones            Comision[]
+  comisionUsuarioConfig ComisionUsuarioConfig?
   calendarioLaboral     CalendarioLaboralFotografo[]
   passwordResetTokens   PasswordResetToken[]
   plantillasModificadas PlantillaEmail[]            @relation("EditorPlantillas")
@@ -246,6 +247,21 @@ model ComisionConfig {
 
   @@unique([paisId, hotelId])
   @@map("comision_config")
+}
+
+model ComisionUsuarioConfig {
+  id                 Int       @id @default(autoincrement())
+  usuarioId          String    @unique @map("usuario_id")
+  porcentajeComision Float     @map("porcentaje_comision")
+  impuestoPct        Float     @default(16.0) @map("impuesto_pct")
+  activo             Boolean   @default(true)
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  deletedAt          DateTime? @map("deleted_at")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("comision_usuario_config")
 }
 
 model Comision {

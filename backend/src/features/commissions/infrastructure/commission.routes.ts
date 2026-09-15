@@ -6,6 +6,10 @@ import {
   getEffectiveCommissionConfig,
   saveCommissionConfig,
   getResumenComisiones,
+  getAllUserCommissionConfigs,
+  getUserCommissionConfig,
+  saveUserCommissionConfig,
+  deleteUserCommissionConfig,
 } from '../application/commission.service.js'
 
 function getAuthUserId(request: any): string | null {
@@ -58,7 +62,11 @@ export async function commissionRoutes(fastify: FastifyInstance) {
   // GET /api/comisiones/config - Obtener configuraciones de comisiones
   fastify.get('/api/comisiones/config', async (request, reply) => {
     try {
-      const { paisId, hotelId } = request.query as { paisId?: string; hotelId?: string }
+      const { paisId, hotelId, usuarioId } = request.query as {
+        paisId?: string
+        hotelId?: string
+        usuarioId?: string
+      }
 
       const allConfigs = await getAllCommissionConfigs()
       const effectiveConfig = await getEffectiveCommissionConfig(
@@ -66,9 +74,17 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         hotelId ? Number(hotelId) : undefined,
       )
 
+      const authUserId = getAuthUserId(request)
+      const targetUserId = usuarioId || authUserId
+      let userConfig = null
+      if (targetUserId) {
+        userConfig = await getUserCommissionConfig(targetUserId)
+      }
+
       return reply.send({
         configs: allConfigs,
         effectiveConfig,
+        userConfig,
       })
     } catch (err: unknown) {
       fastify.log.error(err)
@@ -163,6 +179,114 @@ export async function commissionRoutes(fastify: FastifyInstance) {
       fastify.log.error(err)
       const message =
         err instanceof Error ? err.message : 'Error al eliminar la configuración de comisiones'
+      return reply.status(500).send({ error: message })
+    }
+  })
+
+  // GET /api/comisiones/usuarios-config - Listar configuraciones especiales de usuarios
+  fastify.get('/api/comisiones/usuarios-config', async (request, reply) => {
+    try {
+      const configs = await getAllUserCommissionConfigs()
+      return reply.send(configs)
+    } catch (err: unknown) {
+      fastify.log.error(err)
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'Error al obtener las configuraciones especiales de comisiones de usuarios'
+      return reply.status(500).send({ error: message })
+    }
+  })
+
+  // GET /api/comisiones/usuarios-config/:usuarioId - Obtener configuración especial de un usuario concreto
+  fastify.get('/api/comisiones/usuarios-config/:usuarioId', async (request, reply) => {
+    try {
+      const { usuarioId } = request.params as { usuarioId: string }
+      if (!usuarioId) {
+        return reply.status(400).send({ error: 'ID de usuario requerido' })
+      }
+      const config = await getUserCommissionConfig(usuarioId)
+      return reply.send(config)
+    } catch (err: unknown) {
+      fastify.log.error(err)
+      const message =
+        err instanceof Error ? err.message : 'Error al obtener la comisión del usuario'
+      return reply.status(500).send({ error: message })
+    }
+  })
+
+  // PUT /api/comisiones/usuarios-config - Guardar configuración especial para un usuario
+  fastify.put('/api/comisiones/usuarios-config', async (request, reply) => {
+    try {
+      const userId = getAuthUserId(request)
+      if (!userId) {
+        return reply.status(401).send({ error: 'No autenticado' })
+      }
+      const ctx = await getUserContext(userId)
+      if (!ctx || !['SUPERUSUARIO', 'ADMIN', 'GERENTE'].includes(ctx.roleCode)) {
+        return reply.status(403).send({
+          error: 'Solo Superusuarios, Administradores y Gerentes pueden editar comisiones de usuarios',
+        })
+      }
+
+      const body = request.body as {
+        usuarioId: string
+        porcentajeComision: number
+        impuestoPct: number
+        activo?: boolean
+      }
+
+      if (!body.usuarioId) {
+        return reply.status(400).send({ error: 'Debes especificar un usuario' })
+      }
+      if (body.porcentajeComision === undefined || isNaN(Number(body.porcentajeComision))) {
+        return reply.status(400).send({ error: 'El porcentaje de comisión es requerido' })
+      }
+
+      const saved = await saveUserCommissionConfig({
+        usuarioId: body.usuarioId,
+        porcentajeComision: Number(body.porcentajeComision),
+        impuestoPct:
+          body.impuestoPct !== undefined && !isNaN(Number(body.impuestoPct))
+            ? Number(body.impuestoPct)
+            : 16.0,
+        activo: body.activo ?? true,
+      })
+
+      return reply.send(saved)
+    } catch (err: unknown) {
+      fastify.log.error(err)
+      const message =
+        err instanceof Error ? err.message : 'Error al guardar la comisión del usuario'
+      return reply.status(500).send({ error: message })
+    }
+  })
+
+  // DELETE /api/comisiones/usuarios-config/:id - Eliminar comisión especial de usuario
+  fastify.delete('/api/comisiones/usuarios-config/:id', async (request, reply) => {
+    try {
+      const userId = getAuthUserId(request)
+      if (!userId) {
+        return reply.status(401).send({ error: 'No autenticado' })
+      }
+      const ctx = await getUserContext(userId)
+      if (!ctx || !['SUPERUSUARIO', 'ADMIN', 'GERENTE'].includes(ctx.roleCode)) {
+        return reply.status(403).send({
+          error: 'Solo Superusuarios, Administradores y Gerentes pueden eliminar comisiones de usuarios',
+        })
+      }
+
+      const id = Number((request.params as any).id)
+      if (!id || isNaN(id)) {
+        return reply.status(400).send({ error: 'ID de configuración inválido' })
+      }
+
+      await deleteUserCommissionConfig(id)
+      return reply.send({ success: true, id })
+    } catch (err: unknown) {
+      fastify.log.error(err)
+      const message =
+        err instanceof Error ? err.message : 'Error al eliminar la comisión del usuario'
       return reply.status(500).send({ error: message })
     }
   })

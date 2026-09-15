@@ -14,6 +14,19 @@ export interface ComisionConfig {
   activo?: boolean
 }
 
+export interface ComisionUsuarioConfig {
+  id?: number
+  usuarioId: string
+  usuarioNombre?: string
+  usuarioApellidos?: string
+  usuarioEmail?: string
+  rolCodigo?: string
+  rolNombre?: string
+  porcentajeComision: number
+  impuestoPct: number
+  activo?: boolean
+}
+
 export interface Comision {
   id: number
   citaVentaId: number

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type {
   ComisionConfig,
+  ComisionUsuarioConfig,
   Comision,
   ResumenComisiones,
 } from '../domain/commission.model'
@@ -11,6 +12,8 @@ const API_URL = import.meta.env.VITE_API_URL || '/api'
 export const useCommissionStore = defineStore('commission', () => {
   const configs = ref<ComisionConfig[]>([])
   const effectiveConfig = ref<ComisionConfig | null>(null)
+  const currentUserConfig = ref<ComisionUsuarioConfig | null>(null)
+  const userConfigs = ref<ComisionUsuarioConfig[]>([])
   const comisiones = ref<Comision[]>([])
   const resumen = ref<ResumenComisiones | null>(null)
   const isLoading = ref(false)
@@ -29,13 +32,14 @@ export const useCommissionStore = defineStore('commission', () => {
     return headers
   }
 
-  async function fetchConfigs(paisId?: number, hotelId?: number) {
+  async function fetchConfigs(paisId?: number, hotelId?: number, usuarioId?: string) {
     isLoading.value = true
     error.value = null
     try {
       const query = new URLSearchParams()
       if (paisId) query.append('paisId', String(paisId))
       if (hotelId) query.append('hotelId', String(hotelId))
+      if (usuarioId) query.append('usuarioId', usuarioId)
 
       const res = await fetch(`${API_URL}/comisiones/config?${query.toString()}`, {
         headers: getHeaders(),
@@ -44,6 +48,7 @@ export const useCommissionStore = defineStore('commission', () => {
       const data = await res.json()
       configs.value = data.configs || []
       effectiveConfig.value = data.effectiveConfig || null
+      currentUserConfig.value = data.userConfig || null
       return data
     } catch (err: unknown) {
       error.value = err instanceof Error ? err.message : String(err)
@@ -191,9 +196,81 @@ export const useCommissionStore = defineStore('commission', () => {
     }
   }
 
+  async function fetchUserConfigs() {
+    isLoading.value = true
+    error.value = null
+    try {
+      const res = await fetch(`${API_URL}/comisiones/usuarios-config`, {
+        headers: getHeaders(),
+      })
+      if (!res.ok) throw new Error('Error al cargar las comisiones de usuarios')
+      const data = await res.json()
+      userConfigs.value = data || []
+      return userConfigs.value
+    } catch (err: unknown) {
+      error.value = err instanceof Error ? err.message : String(err)
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  async function saveUserConfig(configData: {
+    usuarioId: string
+    porcentajeComision: number
+    impuestoPct: number
+    activo?: boolean
+  }) {
+    isSaving.value = true
+    error.value = null
+    try {
+      const res = await fetch(`${API_URL}/comisiones/usuarios-config`, {
+        method: 'PUT',
+        headers: getHeaders(true),
+        body: JSON.stringify(configData),
+      })
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Error al guardar la comisión del usuario')
+      }
+      const saved = await res.json()
+      await fetchUserConfigs()
+      return saved
+    } catch (err: unknown) {
+      error.value = err instanceof Error ? err.message : String(err)
+      throw err
+    } finally {
+      isSaving.value = false
+    }
+  }
+
+  async function deleteUserConfig(id: number) {
+    isLoading.value = true
+    error.value = null
+    try {
+      const res = await fetch(`${API_URL}/comisiones/usuarios-config/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(false),
+      })
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Error al eliminar la comisión del usuario')
+      }
+      await fetchUserConfigs()
+      return true
+    } catch (err: unknown) {
+      error.value = err instanceof Error ? err.message : String(err)
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     configs,
     effectiveConfig,
+    currentUserConfig,
+    userConfigs,
     comisiones,
     resumen,
     isLoading,
@@ -202,6 +279,9 @@ export const useCommissionStore = defineStore('commission', () => {
     fetchConfigs,
     saveConfig,
     deleteConfig,
+    fetchUserConfigs,
+    saveUserConfig,
+    deleteUserConfig,
     fetchResumen,
     fetchComisiones,
     updateEstadoComision,

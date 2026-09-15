@@ -14,6 +14,19 @@ export interface ComisionConfigDTO {
   activo?: boolean
 }
 
+export interface ComisionUsuarioConfigDTO {
+  id?: number
+  usuarioId: string
+  usuarioNombre?: string
+  usuarioApellidos?: string
+  usuarioEmail?: string
+  rolCodigo?: string
+  rolNombre?: string
+  porcentajeComision: number
+  impuestoPct: number
+  activo?: boolean
+}
+
 export interface ComisionDTO {
   id: number
   citaVentaId: number
