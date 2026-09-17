@@ -370,8 +370,8 @@
     "semantic_hash": "b29307fc4fb37d92039894ccb0cf1f12"
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1789673189.4205642,
-    "ast_hash": "484f6e2a326c18cb7a5f4e35f6451d91",
+    "mtime": 1789674726.1284904,
+    "ast_hash": "3591193e24bc9d52d27811d69b9c3430",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/InicioView.vue": {
@@ -390,8 +390,8 @@
     "semantic_hash": "408ac184eed52982a54a98a429a2de8e"
   },
   "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
-    "mtime": 1789662798.5937154,
-    "ast_hash": "15333c7f2dd23bcaec37750d018cb229",
+    "mtime": 1789674741.7112765,
+    "ast_hash": "dc69714d6fc3c74def08dd7628ce30ea",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
