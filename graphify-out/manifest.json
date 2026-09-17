@@ -450,9 +450,9 @@
     "semantic_hash": "bdcd2be5ad734cedab8397ca7cf8c43f"
   },
   "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts": {
-    "mtime": 1788507784.4730053,
-    "ast_hash": "babebf14cd8ba2918422587ca3f4eaf5",
-    "semantic_hash": "babebf14cd8ba2918422587ca3f4eaf5"
+    "mtime": 1789676106.8479302,
+    "ast_hash": "6fc3db27e9d785a143702cd118a2951e",
+    "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarScope.ts": {
     "mtime": 1789657163.9248738,
@@ -520,9 +520,9 @@
     "semantic_hash": "96c165a35ae63e34d28a0d77d1152d69"
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue": {
-    "mtime": 1788507804.83218,
-    "ast_hash": "2176847e178fcfa4bd04cb9033a47114",
-    "semantic_hash": "2176847e178fcfa4bd04cb9033a47114"
+    "mtime": 1789676139.8190143,
+    "ast_hash": "0fa005c8974680965c4819c8e2a72cd9",
+    "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarHeader.vue": {
     "mtime": 1789675524.0316951,

@@ -4,15 +4,136 @@
   "graph": {},
   "nodes": [
     {
+      "label": "useCalendarEvents.ts",
+      "file_type": "code",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_src_features_photo_sessions_composables_usecalendarevents",
+      "community": 18,
+      "community_name": "vue",
+      "norm_label": "usecalendarevents.ts"
+    },
+    {
+      "label": "ExtendedEventProps",
+      "file_type": "code",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "frontend_src_features_photo_sessions_composables_usecalendarevents_extendedeventprops",
+      "community": 18,
+      "community_name": "vue",
+      "norm_label": "extendedeventprops"
+    },
+    {
+      "label": "EventTooltipInfo",
+      "file_type": "code",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "frontend_src_features_photo_sessions_composables_usecalendarevents_eventtooltipinfo",
+      "community": 18,
+      "community_name": "vue",
+      "norm_label": "eventtooltipinfo"
+    },
+    {
+      "label": "useCalendarEvents()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "frontend_src_features_photo_sessions_composables_usecalendarevents_usecalendarevents",
+      "community": 18,
+      "community_name": "vue",
+      "norm_label": "usecalendarevents()"
+    },
+    {
+      "label": "CalendarEventCard.vue",
+      "file_type": "code",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
+      "community": 57,
+      "community_name": "CalendarEventCard.vue",
+      "norm_label": "calendareventcard.vue"
+    },
+    {
+      "label": "Props",
+      "file_type": "code",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_props",
+      "community": 57,
+      "community_name": "CalendarEventCard.vue",
+      "norm_label": "props"
+    },
+    {
+      "label": "emit",
+      "file_type": "code",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_emit",
+      "community": 57,
+      "community_name": "CalendarEventCard.vue",
+      "norm_label": "emit"
+    },
+    {
+      "label": "getEventTimeText()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_geteventtimetext",
+      "community": 57,
+      "community_name": "CalendarEventCard.vue",
+      "norm_label": "geteventtimetext()"
+    },
+    {
+      "label": "StatusConfig",
+      "file_type": "code",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_statusconfig",
+      "community": 57,
+      "community_name": "CalendarEventCard.vue",
+      "norm_label": "statusconfig"
+    },
+    {
+      "label": "STATUS_MAP",
+      "file_type": "code",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_status_map",
+      "community": 57,
+      "community_name": "CalendarEventCard.vue",
+      "norm_label": "status_map"
+    },
+    {
+      "label": "eventStatus",
+      "file_type": "code",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L41",
+      "_origin": "ast",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_eventstatus",
+      "community": 57,
+      "community_name": "CalendarEventCard.vue",
+      "norm_label": "eventstatus"
+    },
+    {
       "label": "HotelCalendarDesktop.vue",
       "file_type": "code",
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "hotelcalendardesktop.vue"
+      "norm_label": "hotelcalendardesktop.vue",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop"
     },
     {
       "label": "router",
@@ -20,10 +141,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L33",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_router",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "router"
+      "norm_label": "router",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_router"
     },
     {
       "label": "hotelStore",
@@ -31,10 +152,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L34",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_hotelstore",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "hotelstore"
+      "norm_label": "hotelstore",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_hotelstore"
     },
     {
       "label": "userStore",
@@ -42,10 +163,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_userstore",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "userstore"
+      "norm_label": "userstore",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_userstore"
     },
     {
       "label": "profileStore",
@@ -53,10 +174,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_profilestore",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "profilestore"
+      "norm_label": "profilestore",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_profilestore"
     },
     {
       "label": "sessionStore",
@@ -64,10 +185,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_sessionstore",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "sessionstore"
+      "norm_label": "sessionstore",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_sessionstore"
     },
     {
       "label": "saleStore",
@@ -75,10 +196,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_salestore",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "salestore"
+      "norm_label": "salestore",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_salestore"
     },
     {
       "label": "calendarRef",
@@ -86,10 +207,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L41",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendarref",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "calendarref"
+      "norm_label": "calendarref",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendarref"
     },
     {
       "label": "getCalendarEl()",
@@ -97,10 +218,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_getcalendarel",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "getcalendarel()"
+      "norm_label": "getcalendarel()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_getcalendarel"
     },
     {
       "label": "{ currentUser, userHotels, selectedHotelIds, selectedHotelName, initSelectedHotel }",
@@ -108,10 +229,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L47",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentuser_userhotels_selectedhotelids_selectedhotelname_initselectedhotel",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "{ currentuser, userhotels, selectedhotelids, selectedhotelname, initselectedhotel }"
+      "norm_label": "{ currentuser, userhotels, selectedhotelids, selectedhotelname, initselectedhotel }",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentuser_userhotels_selectedhotelids_selectedhotelname_initselectedhotel"
     },
     {
       "label": "{ overdueSessions, missingSaleSessions, overdueSales, totalAlertsCount }",
@@ -119,10 +240,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L51",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_overduesessions_missingsalesessions_overduesales_totalalertscount",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "{ overduesessions, missingsalesessions, overduesales, totalalertscount }"
+      "norm_label": "{ overduesessions, missingsalesessions, overduesales, totalalertscount }",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_overduesessions_missingsalesessions_overduesales_totalalertscount"
     },
     {
       "label": "{\n  calendarEvents,\n  highlightEventAndAssociated,\n  clearEventHighlights,\n}",
@@ -130,10 +251,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L57",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendarevents_highlighteventandassociated_cleareventhighlights",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "{\n  calendarevents,\n  highlighteventandassociated,\n  cleareventhighlights,\n}"
+      "norm_label": "{\n  calendarevents,\n  highlighteventandassociated,\n  cleareventhighlights,\n}",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendarevents_highlighteventandassociated_cleareventhighlights"
     },
     {
       "label": "{\n  deletePopoverVisible,\n  deletePopoverTarget,\n  pendingDeleteEvent,\n  deleteAssociated,\n  isDeleting,\n  hasAssociatedEvent,\n  associatedCheckboxLabel,\n  openDeleteConfirm,\n  confirmDelete,\n}",
@@ -141,10 +262,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L64",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_deletepopovervisible_deletepopovertarget_pendingdeleteevent_deleteassociated_isdeleting_hasassociatedevent_associatedcheckboxlabel_opendeleteconfirm_confirmdelete",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "{\n  deletepopovervisible,\n  deletepopovertarget,\n  pendingdeleteevent,\n  deleteassociated,\n  isdeleting,\n  hasassociatedevent,\n  associatedcheckboxlabel,\n  opendeleteconfirm,\n  confirmdelete,\n}"
+      "norm_label": "{\n  deletepopovervisible,\n  deletepopovertarget,\n  pendingdeleteevent,\n  deleteassociated,\n  isdeleting,\n  hasassociatedevent,\n  associatedcheckboxlabel,\n  opendeleteconfirm,\n  confirmdelete,\n}",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_deletepopovervisible_deletepopovertarget_pendingdeleteevent_deleteassociated_isdeleting_hasassociatedevent_associatedcheckboxlabel_opendeleteconfirm_confirmdelete"
     },
     {
       "label": "getInitialCalendarView()",
@@ -152,10 +273,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L79",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_getinitialcalendarview",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "getinitialcalendarview()"
+      "norm_label": "getinitialcalendarview()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_getinitialcalendarview"
     },
     {
       "label": "currentCalendarView",
@@ -163,10 +284,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L88",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentcalendarview",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "currentcalendarview"
+      "norm_label": "currentcalendarview",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentcalendarview"
     },
     {
       "label": "currentCalendarTitle",
@@ -174,10 +295,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L89",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentcalendartitle",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "currentcalendartitle"
+      "norm_label": "currentcalendartitle",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentcalendartitle"
     },
     {
       "label": "currentVisibleStart",
@@ -185,10 +306,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L90",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentvisiblestart",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "currentvisiblestart"
+      "norm_label": "currentvisiblestart",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentvisiblestart"
     },
     {
       "label": "currentVisibleEnd",
@@ -196,10 +317,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L91",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentvisibleend",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "currentvisibleend"
+      "norm_label": "currentvisibleend",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentvisibleend"
     },
     {
       "label": "currentPeriodStats",
@@ -207,10 +328,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L93",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentperiodstats",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "currentperiodstats"
+      "norm_label": "currentperiodstats",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentperiodstats"
     },
     {
       "label": "handleCalendarNav()",
@@ -218,10 +339,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L132",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handlecalendarnav",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "handlecalendarnav()"
+      "norm_label": "handlecalendarnav()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handlecalendarnav"
     },
     {
       "label": "handleViewChange()",
@@ -229,10 +350,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L140",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handleviewchange",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "handleviewchange()"
+      "norm_label": "handleviewchange()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handleviewchange"
     },
     {
       "label": "handleDatesSet()",
@@ -240,10 +361,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L148",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handledatesset",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "handledatesset()"
+      "norm_label": "handledatesset()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handledatesset"
     },
     {
       "label": "isContable",
@@ -251,10 +372,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L162",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_iscontable",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "iscontable"
+      "norm_label": "iscontable",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_iscontable"
     },
     {
       "label": "canCreateEvents",
@@ -262,10 +383,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L163",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_cancreateevents",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "cancreateevents"
+      "norm_label": "cancreateevents",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_cancreateevents"
     },
     {
       "label": "canEditEvents",
@@ -273,10 +394,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L164",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_caneditevents",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "caneditevents"
+      "norm_label": "caneditevents",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_caneditevents"
     },
     {
       "label": "canDeleteEvents",
@@ -284,10 +405,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L166",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_candeleteevents",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "candeleteevents"
+      "norm_label": "candeleteevents",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_candeleteevents"
     },
     {
       "label": "navigateToNewSessionForm()",
@@ -295,10 +416,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L171",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_navigatetonewsessionform",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "navigatetonewsessionform()"
+      "norm_label": "navigatetonewsessionform()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_navigatetonewsessionform"
     },
     {
       "label": "navigateToNewSaleForm()",
@@ -306,10 +427,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L184",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_navigatetonewsaleform",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "navigatetonewsaleform()"
+      "norm_label": "navigatetonewsaleform()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_navigatetonewsaleform"
     },
     {
       "label": "handleDateSelect()",
@@ -317,10 +438,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L195",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handledateselect",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "handledateselect()"
+      "norm_label": "handledateselect()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handledateselect"
     },
     {
       "label": "handleEventClick()",
@@ -328,10 +449,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L209",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handleeventclick",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "handleeventclick()"
+      "norm_label": "handleeventclick()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handleeventclick"
     },
     {
       "label": "esLocale",
@@ -339,10 +460,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L225",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_eslocale",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "eslocale"
+      "norm_label": "eslocale",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_eslocale"
     },
     {
       "label": "calendarOptions",
@@ -350,10 +471,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
       "source_location": "L243",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendaroptions",
       "community": 8,
       "community_name": "HotelCalendarDesktop.vue",
-      "norm_label": "calendaroptions"
+      "norm_label": "calendaroptions",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendaroptions"
     },
     {
       "label": "HotelCalendarMobile.vue",
@@ -361,10 +482,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "hotelcalendarmobile.vue"
+      "norm_label": "hotelcalendarmobile.vue",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile"
     },
     {
       "label": "router",
@@ -372,10 +493,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_router",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "router"
+      "norm_label": "router",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_router"
     },
     {
       "label": "hotelStore",
@@ -383,10 +504,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L39",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_hotelstore",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "hotelstore"
+      "norm_label": "hotelstore",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_hotelstore"
     },
     {
       "label": "userStore",
@@ -394,10 +515,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_userstore",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "userstore"
+      "norm_label": "userstore",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_userstore"
     },
     {
       "label": "profileStore",
@@ -405,10 +526,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L41",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_profilestore",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "profilestore"
+      "norm_label": "profilestore",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_profilestore"
     },
     {
       "label": "sessionStore",
@@ -416,10 +537,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_sessionstore",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "sessionstore"
+      "norm_label": "sessionstore",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_sessionstore"
     },
     {
       "label": "saleStore",
@@ -427,10 +548,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L43",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_salestore",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "salestore"
+      "norm_label": "salestore",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_salestore"
     },
     {
       "label": "calendarRef",
@@ -438,10 +559,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendarref",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "calendarref"
+      "norm_label": "calendarref",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendarref"
     },
     {
       "label": "getCalendarEl()",
@@ -449,10 +570,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L47",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_getcalendarel",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "getcalendarel()"
+      "norm_label": "getcalendarel()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_getcalendarel"
     },
     {
       "label": "{ currentUser, userHotels, selectedHotelIds, selectedHotelName, initSelectedHotel }",
@@ -460,10 +581,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L52",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentuser_userhotels_selectedhotelids_selectedhotelname_initselectedhotel",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "{ currentuser, userhotels, selectedhotelids, selectedhotelname, initselectedhotel }"
+      "norm_label": "{ currentuser, userhotels, selectedhotelids, selectedhotelname, initselectedhotel }",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentuser_userhotels_selectedhotelids_selectedhotelname_initselectedhotel"
     },
     {
       "label": "{ overdueSessions, missingSaleSessions, overdueSales, totalAlertsCount }",
@@ -471,10 +592,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L56",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_overduesessions_missingsalesessions_overduesales_totalalertscount",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "{ overduesessions, missingsalesessions, overduesales, totalalertscount }"
+      "norm_label": "{ overduesessions, missingsalesessions, overduesales, totalalertscount }",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_overduesessions_missingsalesessions_overduesales_totalalertscount"
     },
     {
       "label": "{\n  calendarEvents,\n  eventsCountByDate,\n  clearEventHighlights,\n}",
@@ -482,10 +603,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L62",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendarevents_eventscountbydate_cleareventhighlights",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "{\n  calendarevents,\n  eventscountbydate,\n  cleareventhighlights,\n}"
+      "norm_label": "{\n  calendarevents,\n  eventscountbydate,\n  cleareventhighlights,\n}",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendarevents_eventscountbydate_cleareventhighlights"
     },
     {
       "label": "{\n  deletePopoverVisible,\n  deletePopoverTarget,\n  pendingDeleteEvent,\n  deleteAssociated,\n  isDeleting,\n  hasAssociatedEvent,\n  associatedCheckboxLabel,\n  openDeleteConfirm,\n  confirmDelete,\n}",
@@ -493,10 +614,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L69",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_deletepopovervisible_deletepopovertarget_pendingdeleteevent_deleteassociated_isdeleting_hasassociatedevent_associatedcheckboxlabel_opendeleteconfirm_confirmdelete",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "{\n  deletepopovervisible,\n  deletepopovertarget,\n  pendingdeleteevent,\n  deleteassociated,\n  isdeleting,\n  hasassociatedevent,\n  associatedcheckboxlabel,\n  opendeleteconfirm,\n  confirmdelete,\n}"
+      "norm_label": "{\n  deletepopovervisible,\n  deletepopovertarget,\n  pendingdeleteevent,\n  deleteassociated,\n  isdeleting,\n  hasassociatedevent,\n  associatedcheckboxlabel,\n  opendeleteconfirm,\n  confirmdelete,\n}",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_deletepopovervisible_deletepopovertarget_pendingdeleteevent_deleteassociated_isdeleting_hasassociatedevent_associatedcheckboxlabel_opendeleteconfirm_confirmdelete"
     },
     {
       "label": "getInitialCalendarView()",
@@ -504,10 +625,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L84",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_getinitialcalendarview",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "getinitialcalendarview()"
+      "norm_label": "getinitialcalendarview()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_getinitialcalendarview"
     },
     {
       "label": "currentCalendarView",
@@ -515,10 +636,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L93",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentcalendarview",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "currentcalendarview"
+      "norm_label": "currentcalendarview",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentcalendarview"
     },
     {
       "label": "currentCalendarTitle",
@@ -526,10 +647,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L94",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentcalendartitle",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "currentcalendartitle"
+      "norm_label": "currentcalendartitle",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentcalendartitle"
     },
     {
       "label": "mobileSelectedDate",
@@ -537,10 +658,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L95",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_mobileselecteddate",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "mobileselecteddate"
+      "norm_label": "mobileselecteddate",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_mobileselecteddate"
     },
     {
       "label": "showMiniCalendar",
@@ -548,10 +669,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L96",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_showminicalendar",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "showminicalendar"
+      "norm_label": "showminicalendar",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_showminicalendar"
     },
     {
       "label": "mobilePickerType",
@@ -559,10 +680,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L98",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_mobilepickertype",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "mobilepickertype"
+      "norm_label": "mobilepickertype",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_mobilepickertype"
     },
     {
       "label": "handleMobileViewChange()",
@@ -570,10 +691,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L102",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlemobileviewchange",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "handlemobileviewchange()"
+      "norm_label": "handlemobileviewchange()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlemobileviewchange"
     },
     {
       "label": "handleDatesSet()",
@@ -581,10 +702,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L122",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledatesset",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "handledatesset()"
+      "norm_label": "handledatesset()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledatesset"
     },
     {
       "label": "handleDateNav()",
@@ -592,10 +713,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L140",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledatenav",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "handledatenav()"
+      "norm_label": "handledatenav()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledatenav"
     },
     {
       "label": "isContable",
@@ -603,10 +724,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L155",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_iscontable",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "iscontable"
+      "norm_label": "iscontable",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_iscontable"
     },
     {
       "label": "canCreateEvents",
@@ -614,10 +735,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L156",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_cancreateevents",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "cancreateevents"
+      "norm_label": "cancreateevents",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_cancreateevents"
     },
     {
       "label": "canEditEvents",
@@ -625,10 +746,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L157",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_caneditevents",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "caneditevents"
+      "norm_label": "caneditevents",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_caneditevents"
     },
     {
       "label": "canDeleteEvents",
@@ -636,10 +757,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L159",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_candeleteevents",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "candeleteevents"
+      "norm_label": "candeleteevents",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_candeleteevents"
     },
     {
       "label": "navigateToNewSessionForm()",
@@ -647,10 +768,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L164",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsessionform",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "navigatetonewsessionform()"
+      "norm_label": "navigatetonewsessionform()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsessionform"
     },
     {
       "label": "navigateToNewSaleForm()",
@@ -658,10 +779,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L177",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsaleform",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "navigatetonewsaleform()"
+      "norm_label": "navigatetonewsaleform()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsaleform"
     },
     {
       "label": "fabMenuOpen",
@@ -669,10 +790,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L189",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_fabmenuopen",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "fabmenuopen"
+      "norm_label": "fabmenuopen",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_fabmenuopen"
     },
     {
       "label": "toggleFabMenu()",
@@ -680,10 +801,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L191",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_togglefabmenu",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "togglefabmenu()"
+      "norm_label": "togglefabmenu()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_togglefabmenu"
     },
     {
       "label": "handleNewSessionClick()",
@@ -691,10 +812,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L195",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlenewsessionclick",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "handlenewsessionclick()"
+      "norm_label": "handlenewsessionclick()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlenewsessionclick"
     },
     {
       "label": "handleNewSaleClick()",
@@ -702,10 +823,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L200",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlenewsaleclick",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "handlenewsaleclick()"
+      "norm_label": "handlenewsaleclick()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlenewsaleclick"
     },
     {
       "label": "handleDateSelect()",
@@ -713,10 +834,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L205",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledateselect",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "handledateselect()"
+      "norm_label": "handledateselect()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledateselect"
     },
     {
       "label": "handleEventClick()",
@@ -724,10 +845,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L219",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handleeventclick",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "handleeventclick()"
+      "norm_label": "handleeventclick()",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handleeventclick"
     },
     {
       "label": "esLocale",
@@ -735,10 +856,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L235",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_eslocale",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "eslocale"
+      "norm_label": "eslocale",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_eslocale"
     },
     {
       "label": "calendarOptions",
@@ -746,10 +867,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
       "source_location": "L253",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendaroptions",
       "community": 4,
       "community_name": "HotelCalendarMobile.vue",
-      "norm_label": "calendaroptions"
+      "norm_label": "calendaroptions",
+      "id": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendaroptions"
     },
     {
       "label": "CalendarHeader.vue",
@@ -757,10 +878,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarHeader.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader",
       "community": 61,
       "community_name": "CalendarHeader.vue",
-      "norm_label": "calendarheader.vue"
+      "norm_label": "calendarheader.vue",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader"
     },
     {
       "label": "Props",
@@ -768,10 +889,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarHeader.vue",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader_props",
       "community": 61,
       "community_name": "CalendarHeader.vue",
-      "norm_label": "props"
+      "norm_label": "props",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader_props"
     },
     {
       "label": "emit",
@@ -779,10 +900,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarHeader.vue",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader_emit",
       "community": 61,
       "community_name": "CalendarHeader.vue",
-      "norm_label": "emit"
+      "norm_label": "emit",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader_emit"
     },
     {
       "label": "AreaGroup",
@@ -790,10 +911,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarHeader.vue",
       "source_location": "L29",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader_areagroup",
       "community": 61,
       "community_name": "CalendarHeader.vue",
-      "norm_label": "areagroup"
+      "norm_label": "areagroup",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader_areagroup"
     },
     {
       "label": "CountryGroup",
@@ -801,10 +922,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarHeader.vue",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader_countrygroup",
       "community": 61,
       "community_name": "CalendarHeader.vue",
-      "norm_label": "countrygroup"
+      "norm_label": "countrygroup",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader_countrygroup"
     },
     {
       "label": "groupedHotelsByCountry",
@@ -812,10 +933,10 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarHeader.vue",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader_groupedhotelsbycountry",
       "community": 61,
       "community_name": "CalendarHeader.vue",
-      "norm_label": "groupedhotelsbycountry"
+      "norm_label": "groupedhotelsbycountry",
+      "id": "frontend_src_features_photo_sessions_ui_components_calendarheader_groupedhotelsbycountry"
     },
     {
       "label": "useDashboard.ts",
@@ -1582,8 +1703,8 @@
       "source_file": "frontend/src/features/photo-sessions/composables/usePhotoSessionForm.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 18,
-      "community_name": "vue",
+      "community": 64,
+      "community_name": "usePhotoSessionForm.ts",
       "norm_label": "usephotosessionform.ts",
       "id": "frontend_src_features_photo_sessions_composables_usephotosessionform"
     },
@@ -1593,8 +1714,8 @@
       "source_file": "frontend/src/features/photo-sessions/composables/usePhotoSessionForm.ts",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 18,
-      "community_name": "vue",
+      "community": 64,
+      "community_name": "usePhotoSessionForm.ts",
       "norm_label": "hoteldisponibilidad",
       "id": "frontend_src_features_photo_sessions_composables_usephotosessionform_hoteldisponibilidad"
     },
@@ -1604,8 +1725,8 @@
       "source_file": "frontend/src/features/photo-sessions/composables/usePhotoSessionForm.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 40,
-      "community_name": "PhotoSessionFormView.vue",
+      "community": 64,
+      "community_name": "usePhotoSessionForm.ts",
       "norm_label": "usephotosessionform()",
       "id": "frontend_src_features_photo_sessions_composables_usephotosessionform_usephotosessionform"
     },
@@ -7467,9 +7588,9 @@
       "source_file": "frontend/src/features/auth/stores/auth.store.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 70,
+      "community": 18,
       "norm_label": "auth.store.ts",
-      "community_name": "auth.store.ts",
+      "community_name": "vue",
       "id": "frontend_src_features_auth_stores_auth_store"
     },
     {
@@ -7478,9 +7599,9 @@
       "source_file": "frontend/src/features/auth/stores/auth.store.ts",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 70,
+      "community": 18,
       "norm_label": "authuser",
-      "community_name": "auth.store.ts",
+      "community_name": "vue",
       "id": "frontend_src_features_auth_stores_auth_store_authuser"
     },
     {
@@ -7489,9 +7610,9 @@
       "source_file": "frontend/src/features/auth/stores/auth.store.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 70,
+      "community": 18,
       "norm_label": "useauthstore",
-      "community_name": "auth.store.ts",
+      "community_name": "vue",
       "id": "frontend_src_features_auth_stores_auth_store_useauthstore"
     },
     {
@@ -10080,58 +10201,14 @@
       "id": "frontend_src_features_photo_sessions_composables_usecalendardelete_usecalendardelete"
     },
     {
-      "label": "useCalendarEvents.ts",
-      "file_type": "code",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "usecalendarevents.ts",
-      "community_name": "vue",
-      "id": "frontend_src_features_photo_sessions_composables_usecalendarevents"
-    },
-    {
-      "label": "ExtendedEventProps",
-      "file_type": "code",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L12",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "extendedeventprops",
-      "community_name": "vue",
-      "id": "frontend_src_features_photo_sessions_composables_usecalendarevents_extendedeventprops"
-    },
-    {
-      "label": "EventTooltipInfo",
-      "file_type": "code",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 18,
-      "norm_label": "eventtooltipinfo",
-      "community_name": "vue",
-      "id": "frontend_src_features_photo_sessions_composables_usecalendarevents_eventtooltipinfo"
-    },
-    {
-      "label": "useCalendarEvents()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L51",
-      "_origin": "ast",
-      "community": 64,
-      "norm_label": "usecalendarevents()",
-      "community_name": "CalendarAlertsPanel.vue",
-      "id": "frontend_src_features_photo_sessions_composables_usecalendarevents_usecalendarevents"
-    },
-    {
       "label": "session.model.ts",
       "file_type": "code",
       "source_file": "frontend/src/features/photo-sessions/domain/session.model.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 18,
+      "community": 64,
       "norm_label": "session.model.ts",
-      "community_name": "vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_domain_session_model"
     },
     {
@@ -10140,9 +10217,9 @@
       "source_file": "frontend/src/features/photo-sessions/domain/session.model.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 18,
+      "community": 64,
       "norm_label": "estadosesion",
-      "community_name": "vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_domain_session_model_estadosesion"
     },
     {
@@ -10151,9 +10228,9 @@
       "source_file": "frontend/src/features/photo-sessions/domain/session.model.ts",
       "source_location": "L2",
       "_origin": "ast",
-      "community": 18,
+      "community": 64,
       "norm_label": "origensesion",
-      "community_name": "vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_domain_session_model_origensesion"
     },
     {
@@ -10162,9 +10239,9 @@
       "source_file": "frontend/src/features/photo-sessions/domain/session.model.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 18,
+      "community": 64,
       "norm_label": "sesionfotografica",
-      "community_name": "vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_domain_session_model_sesionfotografica"
     },
     {
@@ -10173,9 +10250,9 @@
       "source_file": "frontend/src/features/photo-sessions/domain/session.model.ts",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 18,
+      "community": 64,
       "norm_label": "createsesionpayload",
-      "community_name": "vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_domain_session_model_createsesionpayload"
     },
     {
@@ -10184,9 +10261,9 @@
       "source_file": "frontend/src/features/photo-sessions/stores/session.store.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 18,
+      "community": 64,
       "norm_label": "session.store.ts",
-      "community_name": "vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_stores_session_store"
     },
     {
@@ -10195,9 +10272,9 @@
       "source_file": "frontend/src/features/photo-sessions/stores/session.store.ts",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 18,
+      "community": 64,
       "norm_label": "getauthheaders()",
-      "community_name": "vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_stores_session_store_getauthheaders"
     },
     {
@@ -10778,9 +10855,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/PhotoSessionFormMobile.vue",
       "source_location": "L366",
       "_origin": "ast",
-      "community": 82,
+      "community": 5,
       "norm_label": "scrolltoactiveaccordion()",
-      "community_name": "handleAccordionChange",
+      "community_name": "PhotoSessionFormMobile.vue",
       "id": "frontend_src_features_photo_sessions_ui_photosessionformmobile_scrolltoactiveaccordion"
     },
     {
@@ -10789,9 +10866,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/PhotoSessionFormMobile.vue",
       "source_location": "L386",
       "_origin": "ast",
-      "community": 82,
+      "community": 5,
       "norm_label": "handleaccordionchange()",
-      "community_name": "handleAccordionChange",
+      "community_name": "PhotoSessionFormMobile.vue",
       "id": "frontend_src_features_photo_sessions_ui_photosessionformmobile_handleaccordionchange"
     },
     {
@@ -10800,9 +10877,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/PhotoSessionFormMobile.vue",
       "source_location": "L392",
       "_origin": "ast",
-      "community": 67,
+      "community": 5,
       "norm_label": "validateform()",
-      "community_name": "handleSave",
+      "community_name": "PhotoSessionFormMobile.vue",
       "id": "frontend_src_features_photo_sessions_ui_photosessionformmobile_validateform"
     },
     {
@@ -10811,9 +10888,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/PhotoSessionFormMobile.vue",
       "source_location": "L454",
       "_origin": "ast",
-      "community": 67,
+      "community": 5,
       "norm_label": "handlesave()",
-      "community_name": "handleSave",
+      "community_name": "PhotoSessionFormMobile.vue",
       "id": "frontend_src_features_photo_sessions_ui_photosessionformmobile_handlesave"
     },
     {
@@ -10822,9 +10899,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/PhotoSessionFormView.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 40,
+      "community": 64,
       "norm_label": "photosessionformview.vue",
-      "community_name": "PhotoSessionFormView.vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_ui_photosessionformview"
     },
     {
@@ -10833,9 +10910,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/PhotoSessionFormView.vue",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 40,
+      "community": 64,
       "norm_label": "form",
-      "community_name": "PhotoSessionFormView.vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_ui_photosessionformview_form"
     },
     {
@@ -10844,9 +10921,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/PhotoSessionFormView.vue",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 40,
+      "community": 64,
       "norm_label": "ismobile",
-      "community_name": "PhotoSessionFormView.vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_ui_photosessionformview_ismobile"
     },
     {
@@ -10855,9 +10932,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/PhotoSessionFormView.vue",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 40,
+      "community": 64,
       "norm_label": "checkmobile()",
-      "community_name": "PhotoSessionFormView.vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_ui_photosessionformview_checkmobile"
     },
     {
@@ -10868,7 +10945,7 @@
       "_origin": "ast",
       "community": 64,
       "norm_label": "calendaralertspanel.vue",
-      "community_name": "CalendarAlertsPanel.vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel"
     },
     {
@@ -10879,7 +10956,7 @@
       "_origin": "ast",
       "community": 64,
       "norm_label": "props",
-      "community_name": "CalendarAlertsPanel.vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel_props"
     },
     {
@@ -10890,7 +10967,7 @@
       "_origin": "ast",
       "community": 64,
       "norm_label": "router",
-      "community_name": "CalendarAlertsPanel.vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel_router"
     },
     {
@@ -10901,7 +10978,7 @@
       "_origin": "ast",
       "community": 64,
       "norm_label": "activealertpanels",
-      "community_name": "CalendarAlertsPanel.vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel_activealertpanels"
     },
     {
@@ -10912,7 +10989,7 @@
       "_origin": "ast",
       "community": 64,
       "norm_label": "totalalertscount",
-      "community_name": "CalendarAlertsPanel.vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel_totalalertscount"
     },
     {
@@ -10923,7 +11000,7 @@
       "_origin": "ast",
       "community": 64,
       "norm_label": "formatdatetime()",
-      "community_name": "CalendarAlertsPanel.vue",
+      "community_name": "usePhotoSessionForm.ts",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel_formatdatetime"
     },
     {
@@ -11002,83 +11079,6 @@
       "norm_label": "emit",
       "community_name": "CalendarDesktopToolbar.vue",
       "id": "frontend_src_features_photo_sessions_ui_components_calendardesktoptoolbar_emit"
-    },
-    {
-      "label": "CalendarEventCard.vue",
-      "file_type": "code",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 57,
-      "norm_label": "calendareventcard.vue",
-      "community_name": "CalendarEventCard.vue",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard"
-    },
-    {
-      "label": "Props",
-      "file_type": "code",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L9",
-      "_origin": "ast",
-      "community": 57,
-      "norm_label": "props",
-      "community_name": "CalendarEventCard.vue",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_props"
-    },
-    {
-      "label": "emit",
-      "file_type": "code",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L16",
-      "_origin": "ast",
-      "community": 57,
-      "norm_label": "emit",
-      "community_name": "CalendarEventCard.vue",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_emit"
-    },
-    {
-      "label": "getEventTimeText()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L20",
-      "_origin": "ast",
-      "community": 57,
-      "norm_label": "geteventtimetext()",
-      "community_name": "CalendarEventCard.vue",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_geteventtimetext"
-    },
-    {
-      "label": "StatusConfig",
-      "file_type": "code",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 57,
-      "norm_label": "statusconfig",
-      "community_name": "CalendarEventCard.vue",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_statusconfig"
-    },
-    {
-      "label": "STATUS_MAP",
-      "file_type": "code",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L34",
-      "_origin": "ast",
-      "community": 57,
-      "norm_label": "status_map",
-      "community_name": "CalendarEventCard.vue",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_status_map"
-    },
-    {
-      "label": "eventStatus",
-      "file_type": "code",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L41",
-      "_origin": "ast",
-      "community": 57,
-      "norm_label": "eventstatus",
-      "community_name": "CalendarEventCard.vue",
-      "id": "frontend_src_features_photo_sessions_ui_components_calendareventcard_eventstatus"
     },
     {
       "label": "CalendarMobileDateNavigator.vue",
@@ -11240,9 +11240,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarMobileHeader.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 64,
+      "community": 40,
       "norm_label": "calendarmobileheader.vue",
-      "community_name": "CalendarAlertsPanel.vue",
+      "community_name": "CalendarMobileHeader.vue",
       "id": "frontend_src_features_photo_sessions_ui_components_calendarmobileheader"
     },
     {
@@ -11251,9 +11251,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarMobileHeader.vue",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 64,
+      "community": 40,
       "norm_label": "props",
-      "community_name": "CalendarAlertsPanel.vue",
+      "community_name": "CalendarMobileHeader.vue",
       "id": "frontend_src_features_photo_sessions_ui_components_calendarmobileheader_props"
     },
     {
@@ -11262,9 +11262,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarMobileHeader.vue",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 64,
+      "community": 40,
       "norm_label": "emit",
-      "community_name": "CalendarAlertsPanel.vue",
+      "community_name": "CalendarMobileHeader.vue",
       "id": "frontend_src_features_photo_sessions_ui_components_calendarmobileheader_emit"
     },
     {
@@ -11273,9 +11273,9 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarMobileHeader.vue",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 64,
+      "community": 40,
       "norm_label": "geteventcountfordate()",
-      "community_name": "CalendarAlertsPanel.vue",
+      "community_name": "CalendarMobileHeader.vue",
       "id": "frontend_src_features_photo_sessions_ui_components_calendarmobileheader_geteventcountfordate"
     },
     {
@@ -13462,83 +13462,44 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L20",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarDelete.ts",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendaralerts",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_composables_usecalendardelete",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_eventtooltipinfo",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L20",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendaralerts_usecalendaralerts",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendardelete",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendardelete_usecalendardelete",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L21",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L21",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
       "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_extendedeventprops",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L21",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
       "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_usecalendarevents",
       "confidence_score": 1.0
     },
@@ -13546,35 +13507,35 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L19",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarscope",
+      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
+      "target": "frontend_src_features_photo_sessions_domain_session_model",
       "confidence_score": 1.0
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L19",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarscope_usecalendarscope",
+      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
+      "target": "frontend_src_features_photo_sessions_domain_session_model_sesionfotografica",
       "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L16",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
       "target": "frontend_src_features_photo_sessions_stores_session_store",
       "confidence_score": 1.0
     },
@@ -13582,11 +13543,11 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L16",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
       "target": "frontend_src_features_photo_sessions_stores_session_store_usesessionstore",
       "confidence_score": 1.0
     },
@@ -13594,12 +13555,12 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L28",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
+      "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel",
+      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
+      "target": "ref_vue",
       "confidence_score": 1.0
     },
     {
@@ -13607,23 +13568,173 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
-      "source_location": "L31",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendardeleteconfirmpopover",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents"
     },
     {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarDelete.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_composables_usecalendardelete",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_extendedeventprops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_extendedeventprops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_extendedeventprops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarDelete.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_composables_usecalendardelete",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_eventtooltipinfo"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_usecalendarevents"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_usecalendarevents"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
+      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_emit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
+      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_eventstatus",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
+      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_geteventtimetext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
+      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
+      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_status_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
       "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendardesktoptoolbar",
+      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
+      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_statusconfig",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
+      "target": "ref_vue",
       "confidence_score": 1.0
     },
     {
@@ -13634,9 +13745,153 @@
       "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
+      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendaralerts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendaralerts_usecalendaralerts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendardelete"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendardelete_usecalendardelete"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarscope"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarscope_usecalendarscope"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_stores_session_store"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_stores_session_store_usesessionstore"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_ui_components_calendardeleteconfirmpopover"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
+      "target": "frontend_src_features_photo_sessions_ui_components_calendardesktoptoolbar"
     },
     {
       "relation": "imports_from",
@@ -13646,9 +13901,9 @@
       "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader"
     },
     {
       "relation": "contains",
@@ -13657,9 +13912,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendarevents_highlighteventandassociated_cleareventhighlights",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendarevents_highlighteventandassociated_cleareventhighlights"
     },
     {
       "relation": "contains",
@@ -13668,9 +13923,9 @@
       "source_location": "L243",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendaroptions",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendaroptions"
     },
     {
       "relation": "contains",
@@ -13679,9 +13934,9 @@
       "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendarref",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_calendarref"
     },
     {
       "relation": "contains",
@@ -13690,9 +13945,9 @@
       "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_cancreateevents",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_cancreateevents"
     },
     {
       "relation": "contains",
@@ -13701,9 +13956,9 @@
       "source_location": "L166",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_candeleteevents",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_candeleteevents"
     },
     {
       "relation": "contains",
@@ -13712,9 +13967,9 @@
       "source_location": "L164",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_caneditevents",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_caneditevents"
     },
     {
       "relation": "contains",
@@ -13723,9 +13978,9 @@
       "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentcalendartitle",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentcalendartitle"
     },
     {
       "relation": "contains",
@@ -13734,9 +13989,9 @@
       "source_location": "L88",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentcalendarview",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentcalendarview"
     },
     {
       "relation": "contains",
@@ -13745,9 +14000,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentperiodstats",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentperiodstats"
     },
     {
       "relation": "contains",
@@ -13756,9 +14011,9 @@
       "source_location": "L47",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentuser_userhotels_selectedhotelids_selectedhotelname_initselectedhotel",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentuser_userhotels_selectedhotelids_selectedhotelname_initselectedhotel"
     },
     {
       "relation": "contains",
@@ -13767,9 +14022,9 @@
       "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentvisibleend",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentvisibleend"
     },
     {
       "relation": "contains",
@@ -13778,9 +14033,9 @@
       "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentvisiblestart",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_currentvisiblestart"
     },
     {
       "relation": "contains",
@@ -13789,9 +14044,9 @@
       "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_deletepopovervisible_deletepopovertarget_pendingdeleteevent_deleteassociated_isdeleting_hasassociatedevent_associatedcheckboxlabel_opendeleteconfirm_confirmdelete",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_deletepopovervisible_deletepopovertarget_pendingdeleteevent_deleteassociated_isdeleting_hasassociatedevent_associatedcheckboxlabel_opendeleteconfirm_confirmdelete"
     },
     {
       "relation": "contains",
@@ -13800,9 +14055,9 @@
       "source_location": "L225",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_eslocale",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_eslocale"
     },
     {
       "relation": "indirect_call",
@@ -13812,9 +14067,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "argument",
+      "confidence_score": 0.5,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_getcalendarel",
-      "confidence_score": 0.5
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_getcalendarel"
     },
     {
       "relation": "contains",
@@ -13823,9 +14078,9 @@
       "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_getinitialcalendarview",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_getinitialcalendarview"
     },
     {
       "relation": "contains",
@@ -13834,9 +14089,9 @@
       "source_location": "L132",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handlecalendarnav",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handlecalendarnav"
     },
     {
       "relation": "contains",
@@ -13845,9 +14100,9 @@
       "source_location": "L195",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handledateselect",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handledateselect"
     },
     {
       "relation": "contains",
@@ -13856,9 +14111,9 @@
       "source_location": "L148",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handledatesset",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handledatesset"
     },
     {
       "relation": "contains",
@@ -13867,9 +14122,9 @@
       "source_location": "L209",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handleeventclick",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handleeventclick"
     },
     {
       "relation": "contains",
@@ -13878,9 +14133,9 @@
       "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handleviewchange",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handleviewchange"
     },
     {
       "relation": "contains",
@@ -13889,9 +14144,9 @@
       "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_hotelstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_hotelstore"
     },
     {
       "relation": "contains",
@@ -13900,9 +14155,9 @@
       "source_location": "L162",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_iscontable",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_iscontable"
     },
     {
       "relation": "contains",
@@ -13911,9 +14166,9 @@
       "source_location": "L184",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_navigatetonewsaleform",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_navigatetonewsaleform"
     },
     {
       "relation": "contains",
@@ -13922,9 +14177,9 @@
       "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_navigatetonewsessionform",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_navigatetonewsessionform"
     },
     {
       "relation": "contains",
@@ -13933,9 +14188,9 @@
       "source_location": "L51",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_overduesessions_missingsalesessions_overduesales_totalalertscount",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_overduesessions_missingsalesessions_overduesales_totalalertscount"
     },
     {
       "relation": "contains",
@@ -13944,9 +14199,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_profilestore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_profilestore"
     },
     {
       "relation": "contains",
@@ -13955,9 +14210,9 @@
       "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_router",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_router"
     },
     {
       "relation": "contains",
@@ -13966,9 +14221,9 @@
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_salestore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_salestore"
     },
     {
       "relation": "contains",
@@ -13977,9 +14232,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_sessionstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_sessionstore"
     },
     {
       "relation": "contains",
@@ -13988,9 +14243,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_userstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_userstore"
     },
     {
       "relation": "imports_from",
@@ -14000,9 +14255,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop",
-      "target": "ref_vue",
-      "confidence_score": 1.0
+      "target": "ref_vue"
     },
     {
       "relation": "imports_from",
@@ -14024,9 +14279,9 @@
       "source_location": "L205",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_handledateselect",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_navigatetonewsessionform",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendardesktop_navigatetonewsessionform"
     },
     {
       "relation": "imports_from",
@@ -14036,9 +14291,9 @@
       "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendaralerts",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_composables_usecalendaralerts"
     },
     {
       "relation": "imports",
@@ -14048,9 +14303,9 @@
       "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendaralerts_usecalendaralerts",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_composables_usecalendaralerts_usecalendaralerts"
     },
     {
       "relation": "imports_from",
@@ -14060,9 +14315,9 @@
       "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendardelete",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_composables_usecalendardelete"
     },
     {
       "relation": "imports",
@@ -14072,45 +14327,9 @@
       "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendardelete_usecalendardelete",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_extendedeventprops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_usecalendarevents",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_composables_usecalendardelete_usecalendardelete"
     },
     {
       "relation": "imports_from",
@@ -14120,9 +14339,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarscope",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarscope"
     },
     {
       "relation": "imports",
@@ -14132,9 +14351,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarscope_usecalendarscope",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_composables_usecalendarscope_usecalendarscope"
     },
     {
       "relation": "imports_from",
@@ -14144,9 +14363,9 @@
       "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_stores_session_store",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_stores_session_store"
     },
     {
       "relation": "imports",
@@ -14156,9 +14375,9 @@
       "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_stores_session_store_usesessionstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_stores_session_store_usesessionstore"
     },
     {
       "relation": "imports_from",
@@ -14168,9 +14387,9 @@
       "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel"
     },
     {
       "relation": "imports_from",
@@ -14180,21 +14399,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendardeleteconfirmpopover",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue",
-      "source_location": "L35",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendardeleteconfirmpopover"
     },
     {
       "relation": "imports_from",
@@ -14204,9 +14411,9 @@
       "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader"
     },
     {
       "relation": "imports_from",
@@ -14216,9 +14423,9 @@
       "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendarmobiledatenavigator",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendarmobiledatenavigator"
     },
     {
       "relation": "imports_from",
@@ -14228,9 +14435,9 @@
       "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendarmobileheader",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendarmobileheader"
     },
     {
       "relation": "contains",
@@ -14239,9 +14446,9 @@
       "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendarevents_eventscountbydate_cleareventhighlights",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendarevents_eventscountbydate_cleareventhighlights"
     },
     {
       "relation": "contains",
@@ -14250,9 +14457,9 @@
       "source_location": "L253",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendaroptions",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendaroptions"
     },
     {
       "relation": "contains",
@@ -14261,9 +14468,9 @@
       "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendarref",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_calendarref"
     },
     {
       "relation": "contains",
@@ -14272,9 +14479,9 @@
       "source_location": "L156",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_cancreateevents",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_cancreateevents"
     },
     {
       "relation": "contains",
@@ -14283,9 +14490,9 @@
       "source_location": "L159",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_candeleteevents",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_candeleteevents"
     },
     {
       "relation": "contains",
@@ -14294,9 +14501,9 @@
       "source_location": "L157",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_caneditevents",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_caneditevents"
     },
     {
       "relation": "contains",
@@ -14305,9 +14512,9 @@
       "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentcalendartitle",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentcalendartitle"
     },
     {
       "relation": "contains",
@@ -14316,9 +14523,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentcalendarview",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentcalendarview"
     },
     {
       "relation": "contains",
@@ -14327,9 +14534,9 @@
       "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentuser_userhotels_selectedhotelids_selectedhotelname_initselectedhotel",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_currentuser_userhotels_selectedhotelids_selectedhotelname_initselectedhotel"
     },
     {
       "relation": "contains",
@@ -14338,9 +14545,9 @@
       "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_deletepopovervisible_deletepopovertarget_pendingdeleteevent_deleteassociated_isdeleting_hasassociatedevent_associatedcheckboxlabel_opendeleteconfirm_confirmdelete",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_deletepopovervisible_deletepopovertarget_pendingdeleteevent_deleteassociated_isdeleting_hasassociatedevent_associatedcheckboxlabel_opendeleteconfirm_confirmdelete"
     },
     {
       "relation": "contains",
@@ -14349,9 +14556,9 @@
       "source_location": "L235",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_eslocale",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_eslocale"
     },
     {
       "relation": "contains",
@@ -14360,9 +14567,9 @@
       "source_location": "L189",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_fabmenuopen",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_fabmenuopen"
     },
     {
       "relation": "indirect_call",
@@ -14372,9 +14579,9 @@
       "weight": 1.0,
       "_origin": "ast",
       "context": "argument",
+      "confidence_score": 0.5,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_getcalendarel",
-      "confidence_score": 0.5
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_getcalendarel"
     },
     {
       "relation": "contains",
@@ -14383,9 +14590,9 @@
       "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_getinitialcalendarview",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_getinitialcalendarview"
     },
     {
       "relation": "contains",
@@ -14394,9 +14601,9 @@
       "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledatenav",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledatenav"
     },
     {
       "relation": "contains",
@@ -14405,9 +14612,9 @@
       "source_location": "L205",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledateselect",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledateselect"
     },
     {
       "relation": "contains",
@@ -14416,9 +14623,9 @@
       "source_location": "L122",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledatesset",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledatesset"
     },
     {
       "relation": "contains",
@@ -14427,9 +14634,9 @@
       "source_location": "L219",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handleeventclick",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handleeventclick"
     },
     {
       "relation": "contains",
@@ -14438,9 +14645,9 @@
       "source_location": "L102",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlemobileviewchange",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlemobileviewchange"
     },
     {
       "relation": "contains",
@@ -14449,9 +14656,9 @@
       "source_location": "L200",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlenewsaleclick",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlenewsaleclick"
     },
     {
       "relation": "contains",
@@ -14460,9 +14667,9 @@
       "source_location": "L195",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlenewsessionclick",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlenewsessionclick"
     },
     {
       "relation": "contains",
@@ -14471,9 +14678,9 @@
       "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_hotelstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_hotelstore"
     },
     {
       "relation": "contains",
@@ -14482,9 +14689,9 @@
       "source_location": "L155",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_iscontable",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_iscontable"
     },
     {
       "relation": "contains",
@@ -14493,9 +14700,9 @@
       "source_location": "L98",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_mobilepickertype",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_mobilepickertype"
     },
     {
       "relation": "contains",
@@ -14504,9 +14711,9 @@
       "source_location": "L95",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_mobileselecteddate",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_mobileselecteddate"
     },
     {
       "relation": "contains",
@@ -14515,9 +14722,9 @@
       "source_location": "L177",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsaleform",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsaleform"
     },
     {
       "relation": "contains",
@@ -14526,9 +14733,9 @@
       "source_location": "L164",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsessionform",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsessionform"
     },
     {
       "relation": "contains",
@@ -14537,9 +14744,9 @@
       "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_overduesessions_missingsalesessions_overduesales_totalalertscount",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_overduesessions_missingsalesessions_overduesales_totalalertscount"
     },
     {
       "relation": "contains",
@@ -14548,9 +14755,9 @@
       "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_profilestore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_profilestore"
     },
     {
       "relation": "contains",
@@ -14559,9 +14766,9 @@
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_router",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_router"
     },
     {
       "relation": "contains",
@@ -14570,9 +14777,9 @@
       "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_salestore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_salestore"
     },
     {
       "relation": "contains",
@@ -14581,9 +14788,9 @@
       "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_sessionstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_sessionstore"
     },
     {
       "relation": "contains",
@@ -14592,9 +14799,9 @@
       "source_location": "L96",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_showminicalendar",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_showminicalendar"
     },
     {
       "relation": "contains",
@@ -14603,9 +14810,9 @@
       "source_location": "L191",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_togglefabmenu",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_togglefabmenu"
     },
     {
       "relation": "contains",
@@ -14614,9 +14821,9 @@
       "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_userstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_userstore"
     },
     {
       "relation": "imports_from",
@@ -14626,9 +14833,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile",
-      "target": "ref_vue",
-      "confidence_score": 1.0
+      "target": "ref_vue"
     },
     {
       "relation": "imports_from",
@@ -14650,9 +14857,9 @@
       "source_location": "L215",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handledateselect",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsessionform",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsessionform"
     },
     {
       "relation": "calls",
@@ -14662,9 +14869,9 @@
       "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlenewsessionclick",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsessionform",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsessionform"
     },
     {
       "relation": "calls",
@@ -14674,9 +14881,9 @@
       "source_location": "L202",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_handlenewsaleclick",
-      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsaleform",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_hotelcalendarmobile_navigatetonewsaleform"
     },
     {
       "relation": "contains",
@@ -14685,9 +14892,9 @@
       "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_components_calendarheader",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader_areagroup",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader_areagroup"
     },
     {
       "relation": "contains",
@@ -14696,9 +14903,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_components_calendarheader",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader_countrygroup",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader_countrygroup"
     },
     {
       "relation": "contains",
@@ -14707,9 +14914,9 @@
       "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_components_calendarheader",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader_emit",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader_emit"
     },
     {
       "relation": "contains",
@@ -14718,9 +14925,9 @@
       "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_components_calendarheader",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader_groupedhotelsbycountry",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader_groupedhotelsbycountry"
     },
     {
       "relation": "contains",
@@ -14729,9 +14936,9 @@
       "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_components_calendarheader",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader_props",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_photo_sessions_ui_components_calendarheader_props"
     },
     {
       "relation": "imports_from",
@@ -14741,9 +14948,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_components_calendarheader",
-      "target": "ref_vue",
-      "confidence_score": 1.0
+      "target": "ref_vue"
     },
     {
       "relation": "contains",
@@ -20072,18 +20279,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
-      "target": "ref_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/features/photo-sessions/stores/session.store.ts",
       "source_location": "L2",
       "weight": 1.0,
@@ -20102,18 +20297,6 @@
       "_origin": "ast",
       "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel",
-      "target": "ref_vue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
       "target": "ref_vue"
     },
     {
@@ -29420,42 +29603,6 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/features/photo-sessions/composables/useCalendarDelete.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendardelete",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarDelete.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendardelete",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_eventtooltipinfo"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarDelete.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendardelete",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_extendedeventprops"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarDelete.ts",
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
@@ -29486,147 +29633,6 @@
       "_origin": "ast",
       "source": "frontend_src_features_photo_sessions_composables_usecalendardelete_usecalendardelete",
       "target": "frontend_src_features_photo_sessions_stores_session_store_usesessionstore"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_eventtooltipinfo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L12",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_extendedeventprops"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L51",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
-      "target": "frontend_src_features_photo_sessions_composables_usecalendarevents_usecalendarevents"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
-      "target": "frontend_src_features_photo_sessions_domain_session_model"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
-      "target": "frontend_src_features_photo_sessions_domain_session_model_sesionfotografica"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
-      "target": "frontend_src_features_photo_sessions_stores_session_store"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents",
-      "target": "frontend_src_features_photo_sessions_stores_session_store_usesessionstore"
-    },
-    {
-      "relation": "references",
-      "context": "field",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents_extendedeventprops",
-      "target": "frontend_src_features_photo_sessions_domain_session_model_sesionfotografica"
-    },
-    {
-      "relation": "references",
-      "context": "field",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L47",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents_eventtooltipinfo",
-      "target": "frontend_src_features_photo_sessions_domain_session_model_sesionfotografica"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L56",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents_usecalendarevents",
-      "target": "frontend_src_features_photo_sessions_stores_session_store_usesessionstore"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "collection",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L494",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents_usecalendarevents",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel_formatdatetime"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "collection",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
-      "source_location": "L489",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_photo_sessions_composables_usecalendarevents_usecalendarevents",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendarmobileheader_geteventcountfordate"
     },
     {
       "relation": "contains",
@@ -30528,72 +30534,6 @@
       "confidence_score": 1.0,
       "source": "frontend_src_features_photo_sessions_ui_components_calendardesktoptoolbar",
       "target": "frontend_src_features_photo_sessions_ui_components_calendardesktoptoolbar_props"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_emit"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L41",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_eventstatus"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_geteventtimetext"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_props"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L34",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_status_map"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_photo_sessions_ui_components_calendareventcard",
-      "target": "frontend_src_features_photo_sessions_ui_components_calendareventcard_statusconfig"
     },
     {
       "relation": "contains",
@@ -32830,5 +32770,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b59eebfc63c80e1ffe5b36cf0b47d62c2b68cc5f"
+  "built_at_commit": "1cbb4670f4e9f4395bb9c47754d7a5720c4f6e66"
 }

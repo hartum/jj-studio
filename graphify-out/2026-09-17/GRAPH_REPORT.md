@@ -1,16 +1,16 @@
 # Graph Report - JJ Studio  (2026-09-17)
 
 ## Corpus Check
-- 140 files · ~236,316 words
+- 140 files · ~236,482 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1229 nodes · 1704 edges · 83 communities (72 shown, 11 thin omitted)
+- 1235 nodes · 1710 edges · 83 communities (72 shown, 11 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 16 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `89995e57`
+- Built from commit: `b59eebfc`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -137,22 +137,12 @@ Cohesion: 0.05
 Nodes (37): eslint, eslint-config-prettier, eslint-plugin-oxlint, eslint-plugin-vue, devDependencies, eslint, eslint-config-prettier, eslint-plugin-oxlint (+29 more)
 
 ### Community 4 - "HotelCalendarMobile.vue"
-Cohesion: 0.07
-Nodes (25): {
+Cohesion: 0.06
+Nodes (28): {
   calendarEvents,
   eventsCountByDate,
   clearEventHighlights,
-}, calendarOptions, calendarRef, canDeleteEvents, currentCalendarTitle, currentCalendarView, { currentUser, userHotels, selectedHotelIds, selectedHotelName, initSelectedHotel }, {
-  deletePopoverVisible,
-  deletePopoverTarget,
-  pendingDeleteEvent,
-  deleteAssociated,
-  isDeleting,
-  hasAssociatedEvent,
-  associatedCheckboxLabel,
-  openDeleteConfirm,
-  confirmDelete,
-} (+17 more)
+}, calendarOptions, calendarRef, canCreateEvents, canDeleteEvents, canEditEvents, currentCalendarTitle, currentCalendarView (+20 more)
 
 ### Community 5 - "PhotoSessionFormMobile.vue"
 Cohesion: 0.07
@@ -167,12 +157,12 @@ Cohesion: 0.07
 Nodes (26): AreaGroup, assignedPhotographers, authStore, availableHotels, CountryGroup, countryStore, currentHotel, customPhotographerGoals (+18 more)
 
 ### Community 8 - "HotelCalendarDesktop.vue"
-Cohesion: 0.07
-Nodes (22): useCalendarScope(), {
+Cohesion: 0.06
+Nodes (25): useCalendarScope(), {
   calendarEvents,
   highlightEventAndAssociated,
   clearEventHighlights,
-}, calendarOptions, calendarRef, canDeleteEvents, currentCalendarTitle, currentCalendarView, currentPeriodStats (+14 more)
+}, calendarOptions, calendarRef, canCreateEvents, canDeleteEvents, canEditEvents, currentCalendarTitle (+17 more)
 
 ### Community 9 - "EmailTemplatesView.vue"
 Cohesion: 0.08
@@ -435,28 +425,7 @@ Cohesion: 0.50
 Nodes (3): devDependencies, @types/node, @types/node
 
 ## Knowledge Gaps
-- **619 isolated node(s):** `PhotographerHotelData`, `monthsOptions`, `activeTab`, `{
-  countryStore,
-  userStore,
-  hotelStore,
-  goalStore,
-  commissionStore,
-  selectedMonths,
-  selectedMonthsLabel,
-  selectedHotelFilters,
-  currentHotelProgreso,
-  filteredProgresoHoteles,
-  globalProgresoTotals,
-  selectedHotelsSummary,
-  getSemaforoTagType,
-  getSemaforoText,
-  getProgressColor,
-  formatCurrency,
-  globalMonthlyCommissions,
-  handleUpdateCommissionStatus,
-  contableAreas,
-  contableHotels,
-}`, `AreaGroup` (+614 more)
+- **625 isolated node(s):** `router`, `hotelStore`, `userStore`, `profileStore`, `sessionStore` (+620 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -464,16 +433,16 @@ Nodes (3): devDependencies, @types/node, @types/node
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `useSaleAppointmentForm.ts`, `SupervisorHotelGoalCard.vue`, `ContableDashboard.vue`, `PhotoSessionFormView.vue`, `ConfiguracionView.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `GoalProgressCard.vue`, `AgendadorHotelGoalCard.vue`, `LoginView.vue`, `SaleAppointmentFormView.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `CalendarHeader.vue`, `CalendarAlertsPanel.vue`, `useDashboard.ts`, `auth.store.ts`, `HotelCalendarView.vue`?**
-  _High betweenness centrality (0.262) - this node is a cross-community bridge._
-- **Why does `devDependencies` connect `devDependencies` to `dependencies`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+  _High betweenness centrality (0.305) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
-  _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **What connects `PhotographerHotelData`, `monthsOptions`, `activeTab` to the rest of the system?**
-  _619 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.010) - this node is a cross-community bridge._
+- **What connects `router`, `hotelStore`, `userStore` to the rest of the system?**
+  _625 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `encryption.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.051389535786368574 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.041666666666666664 - nodes in this community are weakly interconnected._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.041666666666666664 - nodes in this community are weakly interconnected._
+- **Should `devDependencies` be split into smaller, more focused modules?**
+  _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._

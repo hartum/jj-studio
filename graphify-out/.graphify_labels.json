@@ -39,7 +39,7 @@
   "37": "Guía de Configuración del Servicio de Correo y Migración de Dominios (JJ Studio)",
   "38": "SupervisorHotelGoalCard.vue",
   "39": "ContableDashboard.vue",
-  "40": "PhotoSessionFormView.vue",
+  "40": "CalendarMobileHeader.vue",
   "41": "ConfiguracionView.vue",
   "42": "frontend/src/features/goals/domain/goal.model.ts",
   "43": "plugins",
@@ -63,13 +63,11 @@
   "61": "CalendarHeader.vue",
   "62": "CalendarDeleteConfirmPopover.vue",
   "63": ".prettierrc.json",
-  "64": "CalendarAlertsPanel.vue",
+  "64": "usePhotoSessionForm.ts",
   "65": "CalendarDesktopToolbar.vue",
   "66": "user-date.ts",
-  "67": "handleSave",
   "68": "devDependencies",
   "69": "useDashboard.ts",
-  "70": "auth.store.ts",
   "71": "frontend/tsconfig.json",
   "72": "googleapis",
   "73": "node-cron",
@@ -80,6 +78,5 @@
   "78": "env.d.ts",
   "79": "eslint.config.ts",
   "80": ".$locale",
-  "81": "vite.config.ts",
-  "82": "handleAccordionChange"
+  "81": "vite.config.ts"
 }
