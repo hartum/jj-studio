@@ -3,11 +3,12 @@ import { ref, computed } from 'vue'
 import { useDashboard } from '@/features/home/composables/useDashboard'
 import type { HotelItem } from '@/features/countries/domain/country.model'
 import type { SemaforoEstado } from '@/features/goals/domain/goal.model'
+import type { Comision } from '@/features/commissions/domain/commission.model'
 import GoalProgressCard from '@/features/goals/ui/GoalProgressCard.vue'
 import GoalEvolutionChart from '@/features/goals/ui/GoalEvolutionChart.vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 import { Money, Wallet, Tickets, Location } from '@element-plus/icons-vue'
-import { Building2 } from '@lucide/vue'
+import { Building2, RotateCcw } from '@lucide/vue'
 
 const activeTab = ref<'estadisticas' | 'comisiones'>('estadisticas')
 
@@ -203,6 +204,92 @@ const empleadosRendimiento = computed<EmpleadoRendimiento[]>(() => {
 
   return Array.from(userMap.values())
 })
+
+// Filtro de usuario para la tabla de Liquidación y Control de Comisiones
+const comisionUsuarioFilter = ref<string | null>(null)
+
+const availableContableUsers = computed(() => {
+  const activeHotelIds = new Set<number>()
+  if (selectedHotelFilters.value.length > 0) {
+    for (const id of selectedHotelFilters.value) activeHotelIds.add(id)
+  } else {
+    for (const h of contableHotels.value) activeHotelIds.add(h.id)
+  }
+
+  const areaIdSet = new Set(contableAreas.value.map((a) => a.id))
+  const userMap = new Map<string, { id: string; nombre: string; apellidos: string; rol?: string }>()
+
+  // 1. Usuarios activos asignados a hoteles o áreas del contable
+  for (const u of userStore.usersWithProfile) {
+    if (u.status !== 'Activo') continue
+    const hasHotel = (u.hotelIds || []).some((id) => activeHotelIds.has(id))
+    const hasArea = (u.areaIds || []).some((id) => areaIdSet.has(id))
+    if (hasHotel || hasArea) {
+      userMap.set(u.id, {
+        id: u.id,
+        nombre: u.nombre,
+        apellidos: u.apellidos,
+        rol: u.perfil?.name || u.perfil?.code,
+      })
+    }
+  }
+
+  // 2. Beneficiarios con comisiones en el periodo actual
+  for (const c of commissionStore.comisiones) {
+    if (activeHotelIds.has(c.hotelId) && !userMap.has(c.usuarioId)) {
+      userMap.set(c.usuarioId, {
+        id: c.usuarioId,
+        nombre: c.usuarioNombre || 'Usuario',
+        apellidos: c.usuarioApellidos || '',
+        rol: c.rolEnVenta,
+      })
+    }
+  }
+
+  return Array.from(userMap.values()).sort((a, b) =>
+    `${a.nombre} ${a.apellidos}`.localeCompare(`${b.nombre} ${b.apellidos}`),
+  )
+})
+
+const filteredComisiones = computed(() => {
+  let list = commissionStore.comisiones
+  if (comisionUsuarioFilter.value) {
+    list = list.filter((c) => c.usuarioId === comisionUsuarioFilter.value)
+  }
+  return list
+})
+
+interface TableColumnSummaryCtx {
+  property: string
+  label: string
+}
+
+interface SummaryMethodProps {
+  columns: TableColumnSummaryCtx[]
+  data: Comision[]
+}
+
+function getComisionesSummaries(param: SummaryMethodProps): string[] {
+  const { columns, data } = param
+  const sums: string[] = []
+
+  columns.forEach((column, index) => {
+    if (index === 0) {
+      sums[index] = 'Total'
+      return
+    }
+
+    if (column.property === 'importeComisionUsd' || column.label === 'Importe Comisión') {
+      const total = data.reduce((sum, item) => sum + (item.importeComisionUsd || 0), 0)
+      sums[index] = formatCurrency(total)
+      return
+    }
+
+    sums[index] = ''
+  })
+
+  return sums
+}
 
 function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEstado }): number {
   if (!row.metaImporte || row.metaImporte <= 0 || row.semaforo === 'SIN_META') return 0
@@ -497,6 +584,19 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
       <el-row :gutter="20" class="stats-row mb-4">
         <el-col :xs="24" :sm="8">
           <el-card class="dashboard-card stat-card" shadow="hover">
+            <div class="card-icon bg-primary">
+              <el-icon><Wallet /></el-icon>
+            </div>
+            <div class="stat-content">
+              <span class="stat-label">Ventas completadas</span>
+              <span class="stat-value">
+                {{ formatCurrency(commissionStore.resumen?.totalVentasUsd || 0) }}
+              </span>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :xs="24" :sm="8">
+          <el-card class="dashboard-card stat-card" shadow="hover">
             <div class="card-icon bg-success">
               <el-icon><Money /></el-icon>
             </div>
@@ -508,19 +608,6 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
               </span>
               <span class="stat-value text-success">
                 {{ formatCurrency(globalMonthlyCommissions) }}
-              </span>
-            </div>
-          </el-card>
-        </el-col>
-        <el-col :xs="24" :sm="8">
-          <el-card class="dashboard-card stat-card" shadow="hover">
-            <div class="card-icon bg-primary">
-              <el-icon><Wallet /></el-icon>
-            </div>
-            <div class="stat-content">
-              <span class="stat-label">Ventas Procesadas</span>
-              <span class="stat-value">
-                {{ formatCurrency(commissionStore.resumen?.totalVentasUsd || 0) }}
               </span>
             </div>
           </el-card>
@@ -541,15 +628,48 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
       </el-row>
 
       <!-- Tabla de Liquidación de Comisiones -->
-      <el-card
-        class="dashboard-card mb-4"
-        header="Listado de Comisiones por Venta y Usuario"
-        shadow="hover"
-      >
-        <div v-if="commissionStore.comisiones.length === 0" class="empty-hint p-4">
-          No hay registros de comisiones para el período seleccionado.
+      <el-card class="dashboard-card mb-4" shadow="hover">
+        <template #header>
+          <div class="comisiones-card-header">
+            <span class="card-header-title">Listado de Comisiones por Venta y Usuario</span>
+            <div class="comisiones-filters">
+              <el-select
+                v-model="comisionUsuarioFilter"
+                placeholder="Todos los usuarios"
+                clearable
+                filterable
+                size="default"
+                style="width: 240px"
+              >
+                <el-option
+                  v-for="u in availableContableUsers"
+                  :key="u.id"
+                  :label="`${u.nombre} ${u.apellidos}`.trim()"
+                  :value="u.id"
+                >
+                  <div class="user-select-option">
+                    <span>{{ u.nombre }} {{ u.apellidos }}</span>
+                    <el-tag v-if="u.rol" size="small" type="info" effect="plain" class="ml-2">
+                      {{ u.rol }}
+                    </el-tag>
+                  </div>
+                </el-option>
+              </el-select>
+            </div>
+          </div>
+        </template>
+
+        <div v-if="filteredComisiones.length === 0" class="empty-hint p-4 text-center">
+          No hay registros de comisiones para el usuario o período seleccionado.
         </div>
-        <el-table v-else :data="commissionStore.comisiones" stripe style="width: 100%">
+        <el-table
+          v-else
+          :data="filteredComisiones"
+          stripe
+          show-summary
+          :summary-method="getComisionesSummaries"
+          style="width: 100%"
+        >
           <el-table-column prop="fechaVenta" label="Fecha" width="110" />
           <el-table-column label="Beneficiario" min-width="170">
             <template #default="{ row }">
@@ -570,7 +690,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
             </template>
           </el-table-column>
           <el-table-column prop="hotelNombre" label="Hotel" min-width="150" />
-          <el-table-column label="Base Neta (tras imp.)" width="165" align="right">
+          <el-table-column prop="baseCalculoUsd" label="Base Neta (tras imp.)" width="165" align="right">
             <template #default="{ row }">
               <span>{{ formatCurrency(row.baseCalculoUsd) }}</span>
             </template>
@@ -580,7 +700,12 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
               <span>{{ row.porcentajeAplicado }}%</span>
             </template>
           </el-table-column>
-          <el-table-column label="Importe Comisión" width="140" align="right">
+          <el-table-column
+            prop="importeComisionUsd"
+            label="Importe Comisión"
+            width="140"
+            align="right"
+          >
             <template #default="{ row }">
               <strong class="text-success">{{ formatCurrency(row.importeComisionUsd) }}</strong>
             </template>
@@ -601,66 +726,86 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="Acciones" width="170" align="center" fixed="right">
+          <el-table-column label="Acciones" width="190" align="center" fixed="right">
             <template #default="{ row }">
-              <div style="display: flex; gap: 4px; justify-content: center">
-                <el-button
-                  v-if="row.estado === 'PENDIENTE'"
-                  type="warning"
-                  size="small"
-                  @click="handleUpdateCommissionStatus(row.id, 'APROBADA')"
-                >
-                  Aprobar
-                </el-button>
-                <el-button
-                  v-if="row.estado !== 'PAGADA'"
-                  type="success"
-                  size="small"
-                  @click="handleUpdateCommissionStatus(row.id, 'PAGADA')"
-                >
-                  Pagar
-                </el-button>
-                <span v-else class="text-xs text-muted">Liquidada</span>
+              <div style="display: flex; gap: 6px; justify-content: center; align-items: center">
+                <!-- Estado PENDIENTE: Aprobar y Pagar -->
+                <template v-if="row.estado === 'PENDIENTE'">
+                  <el-button
+                    type="warning"
+                    size="small"
+                    @click="handleUpdateCommissionStatus(row.id, 'APROBADA')"
+                  >
+                    Aprobar
+                  </el-button>
+                  <el-button
+                    type="success"
+                    size="small"
+                    @click="handleUpdateCommissionStatus(row.id, 'PAGADA')"
+                  >
+                    Pagar
+                  </el-button>
+                </template>
+
+                <!-- Estado APROBADA: Pagar y Deshacer -->
+                <template v-else-if="row.estado === 'APROBADA'">
+                  <el-button
+                    type="success"
+                    size="small"
+                    @click="handleUpdateCommissionStatus(row.id, 'PAGADA')"
+                  >
+                    Pagar
+                  </el-button>
+                  <el-popconfirm
+                    title="¿Restablecer comisión a estado Pendiente?"
+                    confirm-button-text="Restablecer"
+                    cancel-button-text="Cancelar"
+                    confirm-button-type="warning"
+                    :width="230"
+                    @confirm="handleUpdateCommissionStatus(row.id, 'PENDIENTE')"
+                  >
+                    <template #reference>
+                      <el-button
+                        type="info"
+                        plain
+                        size="small"
+                        :icon="RotateCcw"
+                        title="Deshacer aprobación"
+                      >
+                        Deshacer
+                      </el-button>
+                    </template>
+                  </el-popconfirm>
+                </template>
+
+                <!-- Estado PAGADA: Liquidada y Deshacer -->
+                <template v-else-if="row.estado === 'PAGADA'">
+                  <span class="text-xs text-muted" style="margin-right: 4px">Liquidada</span>
+                  <el-popconfirm
+                    title="¿Restablecer comisión a estado Pendiente?"
+                    confirm-button-text="Restablecer"
+                    cancel-button-text="Cancelar"
+                    confirm-button-type="warning"
+                    :width="230"
+                    @confirm="handleUpdateCommissionStatus(row.id, 'PENDIENTE')"
+                  >
+                    <template #reference>
+                      <el-button
+                        type="info"
+                        plain
+                        size="small"
+                        :icon="RotateCcw"
+                        title="Deshacer pago"
+                      >
+                        Deshacer
+                      </el-button>
+                    </template>
+                  </el-popconfirm>
+                </template>
               </div>
             </template>
           </el-table-column>
         </el-table>
-      </el-card>
-
-      <!-- Catálogo de Países y Áreas Asignadas -->
-      <el-card
-        class="dashboard-card"
-        header="Estructura de Hoteles por Áreas Asignadas"
-        shadow="hover"
-      >
-        <div v-if="groupedContableHotelsByCountry.length === 0" class="empty-hint p-4">
-          No tienes áreas asignadas actualmente. Contacta con tu administrador.
-        </div>
-        <el-collapse v-else>
-          <el-collapse-item
-            v-for="pais in groupedContableHotelsByCountry"
-            :key="pais.id"
-            :title="`${pais.nombre} (${pais.areas.length} áreas)`"
-          >
-            <div class="pais-collapse-content">
-              <div v-for="area in pais.areas" :key="area.id" class="area-item-box">
-                <span class="area-title">{{ area.nombre }}</span>
-                <el-table
-                  :data="area.hoteles || []"
-                  style="width: 100%; margin-top: 0.5rem"
-                  size="small"
-                >
-                  <el-table-column prop="nombre" label="Hotel" />
-                  <el-table-column label="Cadena / Características">
-                    <template #default="{ row }">
-                      <span>{{ row.cadenaHotelera || 'Hotel Independiente' }}</span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-            </div>
-          </el-collapse-item>
-        </el-collapse>
       </el-card>
     </div>
   </div>
@@ -694,8 +839,45 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
   }
 }
 
+.comisiones-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.card-header-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--heading-color, #0f172a);
+}
+
+.comisiones-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-select-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .tab-content-fade {
   animation: fadeIn 0.25s ease-in-out;
+}
+
+:deep(.el-table__footer-wrapper tbody td) {
+  font-weight: 700;
+  background-color: var(--el-fill-color-light, #f8fafc);
+}
+
+:deep(.el-table__footer-wrapper .cell) {
+  font-weight: 700;
+  color: var(--heading-color, #0f172a);
 }
 
 @keyframes fadeIn {

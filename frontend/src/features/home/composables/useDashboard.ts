@@ -841,7 +841,11 @@ export function useDashboard() {
   async function handleUpdateCommissionStatus(id: number, nuevoEstado: string) {
     try {
       await commissionStore.updateEstadoComision(id, nuevoEstado)
-      ElMessage.success(`Comisión marcada como ${nuevoEstado}`)
+      if (nuevoEstado === 'PENDIENTE') {
+        ElMessage.success('Comisión restablecida a estado Pendiente')
+      } else {
+        ElMessage.success(`Comisión marcada como ${nuevoEstado}`)
+      }
       await loadGoalsData()
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Error al actualizar estado'
