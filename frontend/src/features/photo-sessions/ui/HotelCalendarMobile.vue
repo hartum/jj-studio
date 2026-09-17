@@ -152,12 +152,17 @@ function handleDateNav(action: 'prev' | 'next' | 'today') {
 }
 
 // 7. Permisos de Usuario y Creación de Sesiones/Ventas
+const isContable = computed(() => currentUser.value?.roleCode?.toUpperCase() === 'CONTABLE')
+const canCreateEvents = computed(() => !isContable.value)
+const canEditEvents = computed(() => !isContable.value)
+
 const canDeleteEvents = computed(() => {
   const roleCode = currentUser.value?.roleCode?.toUpperCase()
   return roleCode === 'ADMIN' || roleCode === 'SUPERUSUARIO'
 })
 
 function navigateToNewSessionForm(startIso?: string) {
+  if (!canCreateEvents.value) return
   const query: Record<string, string> = {}
   if (selectedHotelIds.value.length === 1 && selectedHotelIds.value[0]) {
     query.hotelId = String(selectedHotelIds.value[0])
@@ -170,6 +175,7 @@ function navigateToNewSessionForm(startIso?: string) {
 }
 
 function navigateToNewSaleForm() {
+  if (!canCreateEvents.value) return
   const query: Record<string, string> = {}
   if (selectedHotelIds.value.length === 1 && selectedHotelIds.value[0]) {
     query.hotelId = String(selectedHotelIds.value[0])
@@ -197,6 +203,7 @@ function handleNewSaleClick() {
 }
 
 function handleDateSelect(selectInfo: { startStr: string }) {
+  if (!canCreateEvents.value) return
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   const selectedDate = new Date(selectInfo.startStr)
@@ -210,6 +217,7 @@ function handleDateSelect(selectInfo: { startStr: string }) {
 
 // 8. Click en Eventos: Redirección directa a edición
 function handleEventClick(clickInfo: EventClickArg) {
+  if (!canEditEvents.value) return
   const props = clickInfo.event.extendedProps as ExtendedEventProps
   if (!props) return
 
@@ -264,9 +272,10 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   slotDuration: '00:30:00',
   defaultTimedEventDuration: '01:00:00',
   expandRows: true,
-  selectable: true,
-  selectMirror: true,
+  selectable: canCreateEvents.value,
+  selectMirror: canCreateEvents.value,
   selectAllow: (selectInfo: { start: Date; end: Date }) => {
+    if (!canCreateEvents.value) return false
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     return selectInfo.start >= today
@@ -307,6 +316,7 @@ onUnmounted(() => {
       :hotel-ids="selectedHotelIds"
       :hotels="userHotels"
       :selected-hotel-name="selectedHotelName"
+      :can-create="canCreateEvents"
       :is-mobile="true"
       :show-mini-calendar="showMiniCalendar"
       @update:hotel-ids="selectedHotelIds = $event"
@@ -351,7 +361,7 @@ onUnmounted(() => {
     </el-collapse-transition>
 
     <!-- 3. Contenedor de Calendario Móvil -->
-    <div class="calendar-mobile-card">
+    <div class="calendar-mobile-card" :class="{ 'read-only-calendar': isContable }">
       <!-- Barra / Selector de Fecha Móvil (Colapsable según switch) -->
       <el-collapse-transition>
         <div v-show="showMiniCalendar">
@@ -388,7 +398,11 @@ onUnmounted(() => {
     </div>
 
     <!-- 5. Speed Dial FAB para Móvil (+ Agendar) -->
-    <div class="speed-dial-container" :class="{ 'is-open': fabMenuOpen }">
+    <div
+      v-if="canCreateEvents"
+      class="speed-dial-container"
+      :class="{ 'is-open': fabMenuOpen }"
+    >
       <!-- Backdrop al desplegar -->
       <transition name="fade">
         <div
@@ -771,5 +785,17 @@ onUnmounted(() => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* ── Estilos para Modo Solo Lectura (CONTABLE) ── */
+.read-only-calendar :deep(.fc-event),
+.read-only-calendar :deep(.fc-list-event) {
+  cursor: default !important;
+}
+
+.read-only-calendar :deep(.fc-event:hover),
+.read-only-calendar :deep(.fc-event.fc-event-hovered) {
+  transform: none !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
 }
 </style>

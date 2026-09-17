@@ -12,9 +12,12 @@ interface Props {
   selectedHotelName: string
   isMobile?: boolean
   showMiniCalendar?: boolean
+  canCreate?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  canCreate: true,
+})
 
 const emit = defineEmits<{
   (e: 'update:hotelIds', value: number[]): void
@@ -152,7 +155,7 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
         </el-option-group>
       </el-select>
 
-      <div v-if="!isMobile" class="header-buttons-row">
+      <div v-if="!isMobile && canCreate" class="header-buttons-row">
         <!-- Botón Nueva Sesión Fotográfica -->
         <el-button
           type="primary"
