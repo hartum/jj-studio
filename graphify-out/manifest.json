@@ -305,9 +305,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/configuration/ui/ConfiguracionView.vue": {
-    "mtime": 1788450503.9040594,
-    "ast_hash": "ba2d27674be8345e0e48ee0fd0ab16ca",
-    "semantic_hash": "ba2d27674be8345e0e48ee0fd0ab16ca"
+    "mtime": 1789661126.3370779,
+    "ast_hash": "011aa4ed98f8b6e7ddaf4a6bf2a2d90d",
+    "semantic_hash": ""
   },
   "frontend/src/features/countries/domain/country.model.ts": {
     "mtime": 1785748748.0691905,
@@ -350,7 +350,7 @@
     "semantic_hash": "d4b0bd26cc1167c868f8d56554255fe2"
   },
   "frontend/src/features/goals/ui/GoalFormView.vue": {
-    "mtime": 1787148750.5250638,
+    "mtime": 1789661135.0601835,
     "ast_hash": "e7ac64e5122eef45d7aabeeb8a9718ad",
     "semantic_hash": "e7ac64e5122eef45d7aabeeb8a9718ad"
   },
@@ -370,8 +370,8 @@
     "semantic_hash": "b29307fc4fb37d92039894ccb0cf1f12"
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1789657202.42791,
-    "ast_hash": "668fcd8a6f81274096dea178f47c0af4",
+    "mtime": 1789673189.4205642,
+    "ast_hash": "484f6e2a326c18cb7a5f4e35f6451d91",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/InicioView.vue": {
@@ -390,8 +390,8 @@
     "semantic_hash": "408ac184eed52982a54a98a429a2de8e"
   },
   "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
-    "mtime": 1789657423.9091172,
-    "ast_hash": "74981d76be5418ee3d657fdcc02154dc",
+    "mtime": 1789662798.5937154,
+    "ast_hash": "15333c7f2dd23bcaec37750d018cb229",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
