@@ -1,16 +1,16 @@
 # Graph Report - JJ Studio  (2026-09-17)
 
 ## Corpus Check
-- 140 files · ~235,889 words
+- 140 files · ~236,316 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1223 nodes · 1698 edges · 83 communities (72 shown, 11 thin omitted)
+- 1229 nodes · 1704 edges · 83 communities (72 shown, 11 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 16 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `699ae730`
+- Built from commit: `89995e57`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -295,8 +295,8 @@ Cohesion: 0.27
 Nodes (10): getProgressColor(), getSemaforoBg(), getSemaforoColor(), getSemaforoIcon(), getSemaforoLabel(), getSemaforoTagType(), getSemaforoText(), isSinMeta() (+2 more)
 
 ### Community 39 - "ContableDashboard.vue"
-Cohesion: 0.06
-Nodes (22): AreaGroup, CountryGroup, {
+Cohesion: 0.05
+Nodes (27): AreaGroup, CountryGroup, {
   countryStore,
   hotelStore,
   goalStore,
@@ -336,7 +336,7 @@ Nodes (22): AreaGroup, CountryGroup, {
   myMonthlyCommissions,
   myCommissionFormula,
   myCommissionTooltip,
-}, router, activeTab, AreaGroup (+14 more)
+}, router, activeTab, AreaGroup (+19 more)
 
 ### Community 40 - "PhotoSessionFormView.vue"
 Cohesion: 0.40
@@ -435,7 +435,28 @@ Cohesion: 0.50
 Nodes (3): devDependencies, @types/node, @types/node
 
 ## Knowledge Gaps
-- **614 isolated node(s):** `route`, `router`, `authStore`, `userRole`, `isSuperOrAdmin` (+609 more)
+- **619 isolated node(s):** `PhotographerHotelData`, `monthsOptions`, `activeTab`, `{
+  countryStore,
+  userStore,
+  hotelStore,
+  goalStore,
+  commissionStore,
+  selectedMonths,
+  selectedMonthsLabel,
+  selectedHotelFilters,
+  currentHotelProgreso,
+  filteredProgresoHoteles,
+  globalProgresoTotals,
+  selectedHotelsSummary,
+  getSemaforoTagType,
+  getSemaforoText,
+  getProgressColor,
+  formatCurrency,
+  globalMonthlyCommissions,
+  handleUpdateCommissionStatus,
+  contableAreas,
+  contableHotels,
+}`, `AreaGroup` (+614 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -443,16 +464,16 @@ Nodes (3): devDependencies, @types/node, @types/node
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `useSaleAppointmentForm.ts`, `SupervisorHotelGoalCard.vue`, `ContableDashboard.vue`, `PhotoSessionFormView.vue`, `ConfiguracionView.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `GoalProgressCard.vue`, `AgendadorHotelGoalCard.vue`, `LoginView.vue`, `SaleAppointmentFormView.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `CalendarHeader.vue`, `CalendarAlertsPanel.vue`, `useDashboard.ts`, `auth.store.ts`, `HotelCalendarView.vue`?**
-  _High betweenness centrality (0.271) - this node is a cross-community bridge._
+  _High betweenness centrality (0.262) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `dependencies`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **What connects `route`, `router`, `authStore` to the rest of the system?**
-  _614 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `plugins` connect `plugins` to `vue`?**
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
+- **What connects `PhotographerHotelData`, `monthsOptions`, `activeTab` to the rest of the system?**
+  _619 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `encryption.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.051389535786368574 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.041666666666666664 - nodes in this community are weakly interconnected._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.041666666666666664 - nodes in this community are weakly interconnected._
-- **Should `devDependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._

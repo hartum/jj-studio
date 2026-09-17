@@ -475,14 +475,14 @@
     "semantic_hash": "f5149dbf22b1fc42c4c476a58cdc56df"
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue": {
-    "mtime": 1788507812.231488,
-    "ast_hash": "bc4465b02b536d45f89779acb0e097f0",
-    "semantic_hash": "bc4465b02b536d45f89779acb0e097f0"
+    "mtime": 1789675569.8589144,
+    "ast_hash": "8f5d5c66d510bf391b0eb05840779a86",
+    "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue": {
-    "mtime": 1788507818.686428,
-    "ast_hash": "5b9900e50ef1c83a1f033e043069eec6",
-    "semantic_hash": "5b9900e50ef1c83a1f033e043069eec6"
+    "mtime": 1789675619.3170733,
+    "ast_hash": "cfd8ddca08b97d3a2325130ecd67f193",
+    "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarView.vue": {
     "mtime": 1787850829.4547565,
@@ -525,9 +525,9 @@
     "semantic_hash": "2176847e178fcfa4bd04cb9033a47114"
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarHeader.vue": {
-    "mtime": 1788767500.592993,
-    "ast_hash": "a096e1b7509e074eec5c789937a8ce94",
-    "semantic_hash": "a096e1b7509e074eec5c789937a8ce94"
+    "mtime": 1789675524.0316951,
+    "ast_hash": "f39f3c9943848899119f7c7832845fa1",
+    "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarMobileDateNavigator.vue": {
     "mtime": 1787850829.4580524,
