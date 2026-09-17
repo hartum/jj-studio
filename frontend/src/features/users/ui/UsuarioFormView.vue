@@ -110,6 +110,8 @@ const selectedRoleCode = computed(() => {
 
 const isFotografo = computed(() => selectedRoleCode.value === 'FOTOGRAFO')
 const isGerente = computed(() => selectedRoleCode.value === 'GERENTE')
+const isContable = computed(() => selectedRoleCode.value === 'CONTABLE')
+const isAreaRole = computed(() => isGerente.value || isContable.value)
 const isSupervisorOrFotografo = computed(
   () =>
     selectedRoleCode.value === 'SUPERVISOR' ||
@@ -119,20 +121,19 @@ const isSupervisorOrFotografo = computed(
 const isGlobalAccess = computed(
   () =>
     selectedRoleCode.value === 'SUPERUSUARIO' ||
-    selectedRoleCode.value === 'ADMIN' ||
-    selectedRoleCode.value === 'CONTABLE',
+    selectedRoleCode.value === 'ADMIN',
 )
 
 const isStatusDisabled = computed(() => {
   if (!isSelfEditing.value) return false
   const role = currentUser.value?.roleCode?.toUpperCase()
-  return role === 'GERENTE' || role === 'SUPERVISOR'
+  return role === 'GERENTE' || role === 'SUPERVISOR' || role === 'CONTABLE'
 })
 
 const isSelfEditingProfileReadonly = computed(() => {
   if (!isSelfEditing.value) return false
   const role = currentUser.value?.roleCode?.toUpperCase()
-  return role === 'GERENTE' || role === 'SUPERVISOR'
+  return role === 'GERENTE' || role === 'SUPERVISOR' || role === 'CONTABLE'
 })
 
 // --- Helpers reutilizables ---
@@ -177,9 +178,15 @@ function filterCountriesByHotels(hotelIds: Set<number>) {
 
 // --- Computed de exclusión (áreas/hoteles ya ocupados por otros usuarios) ---
 
-const assignedAreaIdsByOtherGerentes = computed<Set<number>>(() =>
-  getAssignedIdsByOtherUsers('GERENTE', 'areaIds'),
-)
+const assignedAreaIdsByOtherRoleUsers = computed<Set<number>>(() => {
+  if (selectedRoleCode.value === 'GERENTE') {
+    return getAssignedIdsByOtherUsers('GERENTE', 'areaIds')
+  }
+  if (selectedRoleCode.value === 'CONTABLE') {
+    return getAssignedIdsByOtherUsers('CONTABLE', 'areaIds')
+  }
+  return new Set()
+})
 
 const assignedHotelIdsByOtherSupervisores = computed<Set<number>>(() =>
   getAssignedIdsByOtherUsers('SUPERVISOR', 'hotelIds'),
@@ -381,7 +388,7 @@ async function handleSave() {
       fechaContratacion: formData.value.fechaContratacion || null,
       imagen: formData.value.imagen,
       color: isFotografo.value ? formData.value.color : null,
-      areaIds: isGerente.value ? formData.value.areaIds : [],
+      areaIds: isAreaRole.value ? formData.value.areaIds : [],
       hotelIds: isSupervisorOrFotografo.value ? formData.value.hotelIds : [],
       ...(formData.value.password ? { password: formData.value.password } : {}),
     }
@@ -597,17 +604,20 @@ async function handleSave() {
             </el-form-item>
 
             <!-- Asignaciones de accesos por Rol -->
-            <template v-if="isGerente">
+            <template v-if="isAreaRole">
               <el-form-item label="Áreas asignadas">
                 <small class="assignment-hint">
-                  El gerente estará a cargo de las áreas seleccionadas y todos los hoteles dentro de
-                  las mismas.
+                  {{
+                    isGerente
+                      ? 'El gerente estará a cargo de las áreas seleccionadas y todos los hoteles dentro de las mismas.'
+                      : 'El contable gestionará las liquidaciones y comisiones de las áreas seleccionadas y todos los hoteles dentro de las mismas.'
+                  }}
                 </small>
                 <div v-if="isSelfEditing" class="assigned-tags-container">
                   <el-tag
                     v-for="area in assignedAreaNames"
                     :key="area.id"
-                    type="warning"
+                    :type="isGerente ? 'warning' : 'info'"
                     effect="light"
                     size="large"
                   >
@@ -639,16 +649,16 @@ async function handleSave() {
                       :key="area.id"
                       :label="area.nombre"
                       :value="area.id"
-                      :disabled="assignedAreaIdsByOtherGerentes.has(area.id)"
+                      :disabled="assignedAreaIdsByOtherRoleUsers.has(area.id)"
                     >
                       <div class="option-item-content">
                         <el-icon class="area-option-icon"><Location /></el-icon>
                         <span>{{ area.nombre }}</span>
                         <small
-                          v-if="assignedAreaIdsByOtherGerentes.has(area.id)"
+                          v-if="assignedAreaIdsByOtherRoleUsers.has(area.id)"
                           class="disabled-label"
                         >
-                          (Asignada a otro gerente)
+                          (Asignada a otro {{ isGerente ? 'gerente' : 'contable' }})
                         </small>
                       </div>
                     </el-option>

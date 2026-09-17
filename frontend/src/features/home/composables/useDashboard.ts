@@ -609,9 +609,11 @@ export function useDashboard() {
     getSemaforoTagType,
     getSemaforoText,
     getProgressColor,
-    // Gerente
+    // Gerente y Contable
     managerAreas,
     managerHotels,
+    contableAreas: managerAreas,
+    contableHotels: managerHotels,
     managerTeam,
     // Supervisor
     supervisorHotels,

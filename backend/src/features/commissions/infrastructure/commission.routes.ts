@@ -38,9 +38,9 @@ async function getUserContext(userId: string) {
   const roleCode = user.role.codigo.toUpperCase()
   let allowedHotelIds: number[] | null = null
 
-  if (['SUPERUSUARIO', 'ADMIN', 'CONTABLE'].includes(roleCode)) {
+  if (['SUPERUSUARIO', 'ADMIN'].includes(roleCode)) {
     allowedHotelIds = null // Global
-  } else if (roleCode === 'GERENTE') {
+  } else if (roleCode === 'GERENTE' || roleCode === 'CONTABLE') {
     const areaIds = user.areasAsignadas.map((a) => a.areaId)
     const hotelsInAreas = await prisma.hotel.findMany({
       where: { areaId: { in: areaIds }, deletedAt: null },
@@ -478,6 +478,13 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         return reply
           .status(403)
           .send({ error: 'No autorizado para cambiar el estado de las comisiones' })
+      }
+
+      if (ctx.allowedHotelIds !== null) {
+        const comision = await prisma.comision.findUnique({ where: { id } })
+        if (!comision || !ctx.allowedHotelIds.includes(comision.hotelId)) {
+          return reply.status(403).send({ error: 'No tienes acceso a comisiones de este hotel' })
+        }
       }
 
       const updated = await prisma.comision.update({

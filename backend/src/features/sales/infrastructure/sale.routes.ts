@@ -83,9 +83,9 @@ async function getAllowedHotelIds(userId: string): Promise<number[] | null> {
   if (!user) return []
 
   const roleCode = user.role.codigo.toUpperCase()
-  if (['SUPERUSUARIO', 'ADMIN', 'CONTABLE'].includes(roleCode)) return null // null means global
+  if (['SUPERUSUARIO', 'ADMIN'].includes(roleCode)) return null // null means global
 
-  if (roleCode === 'GERENTE') {
+  if (roleCode === 'GERENTE' || roleCode === 'CONTABLE') {
     const areaIds = user.areasAsignadas.map((a) => a.areaId)
     const hotelsInAreas = await prisma.hotel.findMany({
       where: { areaId: { in: areaIds }, deletedAt: null },

@@ -114,11 +114,11 @@ export function useSaleAppointmentForm() {
     if (!user) return hotelStore.hotels
 
     const roleCode = user.roleCode?.toUpperCase()
-    if (roleCode === 'SUPERUSUARIO' || roleCode === 'ADMIN' || roleCode === 'CONTABLE') {
+    if (roleCode === 'SUPERUSUARIO' || roleCode === 'ADMIN') {
       return hotelStore.hotels
     }
 
-    if (roleCode === 'GERENTE') {
+    if (roleCode === 'GERENTE' || roleCode === 'CONTABLE') {
       const areaIds = new Set(user.areaIds || [])
       return hotelStore.hotels.filter((h) => areaIds.has(h.areaId))
     }

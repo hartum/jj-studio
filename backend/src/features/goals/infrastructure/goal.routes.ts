@@ -34,13 +34,15 @@ async function getUserContext(userId: string) {
   })
 }
 
-async function getAllowedHotelIds(user: NonNullable<Awaited<ReturnType<typeof getUserContext>>>): Promise<number[] | null> {
+async function getAllowedHotelIds(
+  user: NonNullable<Awaited<ReturnType<typeof getUserContext>>>,
+): Promise<number[] | null> {
   const roleCode = user.role.codigo.toUpperCase()
   if (['SUPERUSUARIO', 'ADMIN'].includes(roleCode)) {
     return null // Global access
   }
 
-  if (roleCode === 'GERENTE') {
+  if (roleCode === 'GERENTE' || roleCode === 'CONTABLE') {
     const areaIds = user.areasAsignadas.map((a) => a.areaId)
     const hotels = await prisma.hotel.findMany({
       where: { areaId: { in: areaIds }, deletedAt: null },
@@ -82,8 +84,18 @@ function calcularSemaforo(
 }
 
 const MESES_NOMBRES = [
-  'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-  'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+  'Ene',
+  'Feb',
+  'Mar',
+  'Abr',
+  'May',
+  'Jun',
+  'Jul',
+  'Ago',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dic',
 ]
 
 export async function goalRoutes(fastify: FastifyInstance) {
@@ -189,7 +201,9 @@ export async function goalRoutes(fastify: FastifyInstance) {
       }
 
       if (!body.hotelId || !body.anio || !body.mes || body.importeObjetivo === undefined) {
-        return reply.status(400).send({ error: 'Faltan campos obligatorios (hotelId, anio, mes, importeObjetivo)' })
+        return reply
+          .status(400)
+          .send({ error: 'Faltan campos obligatorios (hotelId, anio, mes, importeObjetivo)' })
       }
 
       const hotelId = Number(body.hotelId)
@@ -222,8 +236,18 @@ export async function goalRoutes(fastify: FastifyInstance) {
           where: { id: existing.id },
           data: {
             importeObjetivo,
-            sesionesObjetivo: body.sesionesObjetivo !== undefined ? (body.sesionesObjetivo != null ? Number(body.sesionesObjetivo) : null) : existing.sesionesObjetivo,
-            ventasObjetivo: body.ventasObjetivo !== undefined ? (body.ventasObjetivo != null ? Number(body.ventasObjetivo) : null) : existing.ventasObjetivo,
+            sesionesObjetivo:
+              body.sesionesObjetivo !== undefined
+                ? body.sesionesObjetivo != null
+                  ? Number(body.sesionesObjetivo)
+                  : null
+                : existing.sesionesObjetivo,
+            ventasObjetivo:
+              body.ventasObjetivo !== undefined
+                ? body.ventasObjetivo != null
+                  ? Number(body.ventasObjetivo)
+                  : null
+                : existing.ventasObjetivo,
             activo: body.activo !== undefined ? Boolean(body.activo) : true,
             deletedAt: null,
           },
@@ -303,9 +327,12 @@ export async function goalRoutes(fastify: FastifyInstance) {
       }
 
       const data: any = {}
-      if (body.importeObjetivo !== undefined) data.importeObjetivo = Math.max(0, Number(body.importeObjetivo))
-      if (body.sesionesObjetivo !== undefined) data.sesionesObjetivo = body.sesionesObjetivo != null ? Number(body.sesionesObjetivo) : null
-      if (body.ventasObjetivo !== undefined) data.ventasObjetivo = body.ventasObjetivo != null ? Number(body.ventasObjetivo) : null
+      if (body.importeObjetivo !== undefined)
+        data.importeObjetivo = Math.max(0, Number(body.importeObjetivo))
+      if (body.sesionesObjetivo !== undefined)
+        data.sesionesObjetivo = body.sesionesObjetivo != null ? Number(body.sesionesObjetivo) : null
+      if (body.ventasObjetivo !== undefined)
+        data.ventasObjetivo = body.ventasObjetivo != null ? Number(body.ventasObjetivo) : null
       if (body.activo !== undefined) data.activo = Boolean(body.activo)
 
       const updated = await prisma.meta.update({
@@ -409,12 +436,10 @@ export async function goalRoutes(fastify: FastifyInstance) {
 
       const userId = getAuthUserId(request)
       let allowedHotelIds: number[] | null = null
-      let userRole: string | null = null
 
       if (userId) {
         const user = await getUserContext(userId)
         if (user) {
-          userRole = user.role.codigo.toUpperCase()
           allowedHotelIds = await getAllowedHotelIds(user)
         }
       }
@@ -500,7 +525,7 @@ export async function goalRoutes(fastify: FastifyInstance) {
         )
         const metaImporteHotel = metaHotelObj
           ? metaHotelObj.importeObjetivo
-          : hotel.metaMensualDefault ?? 0
+          : (hotel.metaMensualDefault ?? 0)
         const esMetaConfigurada = Boolean(metaHotelObj)
 
         // Completed sales in this hotel
@@ -514,7 +539,12 @@ export async function goalRoutes(fastify: FastifyInstance) {
         const porcentajeCumplimiento =
           metaImporteHotel > 0 ? Math.round((ventasRealesUsd / metaImporteHotel) * 1000) / 10 : 0
         const desviacionMonetaria = ventasRealesUsd - metaEsperadaHoy
-        const semaforo = calcularSemaforo(ventasRealesUsd, metaImporteHotel, metaEsperadaHoy, diaActual)
+        const semaforo = calcularSemaforo(
+          ventasRealesUsd,
+          metaImporteHotel,
+          metaEsperadaHoy,
+          diaActual,
+        )
 
         // Photographers breakdown
         const fotografosAsignados = hotel.usuariosAsignados.map((ua) => ua.usuario)
@@ -527,12 +557,12 @@ export async function goalRoutes(fastify: FastifyInstance) {
           const fotografo = decryptUser(rawFotografo)!
           const metaPersonal = metasConfiguradas.find(
             (m) =>
-              m.hotelId === hotel.id &&
-              m.usuarioId === fotografo.id &&
-              m.alcanceTipo === 'USUARIO',
+              m.hotelId === hotel.id && m.usuarioId === fotografo.id && m.alcanceTipo === 'USUARIO',
           )
 
-          const metaImporteFoto = metaPersonal ? metaPersonal.importeObjetivo : cuotaEquitativaSugerida
+          const metaImporteFoto = metaPersonal
+            ? metaPersonal.importeObjetivo
+            : cuotaEquitativaSugerida
           const esMetaPersonalizada = Boolean(metaPersonal)
 
           const ventasFoto = ventasHotel.filter((c: any) => c.sesion?.fotografoId === fotografo.id)
@@ -646,7 +676,9 @@ export async function goalRoutes(fastify: FastifyInstance) {
         if (allowedHotelIds !== null) {
           const valid = requestedIds.filter((id) => allowedHotelIds.includes(id))
           if (valid.length === 0) {
-            return reply.status(403).send({ error: 'No tienes permisos sobre los hoteles seleccionados' })
+            return reply
+              .status(403)
+              .send({ error: 'No tienes permisos sobre los hoteles seleccionados' })
           }
           hotelWhere.id = { in: valid }
         } else {
@@ -683,7 +715,7 @@ export async function goalRoutes(fastify: FastifyInstance) {
 
       const metaTotalMes = targetHotels.reduce((sum, h) => {
         const m = metasMes.find((meta) => meta.hotelId === h.id)
-        return sum + (m ? m.importeObjetivo : h.metaMensualDefault ?? 0)
+        return sum + (m ? m.importeObjetivo : (h.metaMensualDefault ?? 0))
       }, 0)
 
       const ventasMes = await prisma.citaVenta.findMany({
@@ -705,14 +737,13 @@ export async function goalRoutes(fastify: FastifyInstance) {
 
       const evolucionMes: PuntoDiaEvolucion[] = []
       let acumuladoRealMes = 0
-      const isCurrentMonth =
-        targetAnio === now.getFullYear() && targetMes === now.getMonth() + 1
+      const isCurrentMonth = targetAnio === now.getFullYear() && targetMes === now.getMonth() + 1
       const currentDay = now.getDate()
 
       for (let d = 1; d <= diasEnMes; d++) {
         const objetivoAcumulado =
           metaTotalMes > 0 && diasEnMes > 0
-            ? Math.round(((metaTotalMes / diasEnMes) * d) * 100) / 100
+            ? Math.round((metaTotalMes / diasEnMes) * d * 100) / 100
             : 0
         const realDia = Math.round((ventasPorDia[d] || 0) * 100) / 100
         acumuladoRealMes += realDia
@@ -763,7 +794,7 @@ export async function goalRoutes(fastify: FastifyInstance) {
       for (let m = 1; m <= 12; m++) {
         const metaMesTotal = targetHotels.reduce((sum, h) => {
           const found = metasAnio.find((meta) => meta.hotelId === h.id && meta.mes === m)
-          return sum + (found ? found.importeObjetivo : h.metaMensualDefault ?? 0)
+          return sum + (found ? found.importeObjetivo : (h.metaMensualDefault ?? 0))
         }, 0)
 
         const realMes = Math.round((ventasPorMes[m] || 0) * 100) / 100
@@ -780,13 +811,32 @@ export async function goalRoutes(fastify: FastifyInstance) {
         })
       }
 
-      const diaActualMes = isCurrentMonth ? Math.min(currentDay, diasEnMes) : (targetMes < now.getMonth() + 1 ? diasEnMes : 0)
-      const metaEsperadaMesHoy = metaTotalMes > 0 && diasEnMes > 0 ? (metaTotalMes / diasEnMes) * diaActualMes : 0
-      const semaforoMes = calcularSemaforo(acumuladoRealMes, metaTotalMes, metaEsperadaMesHoy, diaActualMes)
-      const porcentajeMes = metaTotalMes > 0 ? Math.round((acumuladoRealMes / metaTotalMes) * 1000) / 10 : 0
+      const diaActualMes = isCurrentMonth
+        ? Math.min(currentDay, diasEnMes)
+        : targetMes < now.getMonth() + 1
+          ? diasEnMes
+          : 0
+      const metaEsperadaMesHoy =
+        metaTotalMes > 0 && diasEnMes > 0 ? (metaTotalMes / diasEnMes) * diaActualMes : 0
+      const semaforoMes = calcularSemaforo(
+        acumuladoRealMes,
+        metaTotalMes,
+        metaEsperadaMesHoy,
+        diaActualMes,
+      )
+      const porcentajeMes =
+        metaTotalMes > 0 ? Math.round((acumuladoRealMes / metaTotalMes) * 1000) / 10 : 0
 
-      const semaforoAnio = calcularSemaforo(acumuladoRealAnio, acumuladoObjetivoAnio, acumuladoObjetivoAnio, 12)
-      const porcentajeAnio = acumuladoObjetivoAnio > 0 ? Math.round((acumuladoRealAnio / acumuladoObjetivoAnio) * 1000) / 10 : 0
+      const semaforoAnio = calcularSemaforo(
+        acumuladoRealAnio,
+        acumuladoObjetivoAnio,
+        acumuladoObjetivoAnio,
+        12,
+      )
+      const porcentajeAnio =
+        acumuladoObjetivoAnio > 0
+          ? Math.round((acumuladoRealAnio / acumuladoObjetivoAnio) * 1000) / 10
+          : 0
 
       const responsePayload: EvolucionMetasResponse = {
         hotelId: singleHotel?.id,

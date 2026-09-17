@@ -63,7 +63,7 @@ export const PERMISSION_MATRIX: Record<RoleCode, RoleConfig> = {
     visibleTargetRoles: [],
     assignableTargetRoles: [],
     canCreateUsers: false,
-    scopeType: 'GLOBAL',
+    scopeType: 'AREAS',
   },
 }
 

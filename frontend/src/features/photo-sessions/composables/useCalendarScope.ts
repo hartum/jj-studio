@@ -22,13 +22,13 @@ export function useCalendarScope() {
     if (!user) return hotelStore.hotels
 
     const roleCode = user.roleCode?.toUpperCase()
-    // SUPERUSUARIO, ADMIN, CONTABLE have global access to all hotels
-    if (roleCode === 'SUPERUSUARIO' || roleCode === 'ADMIN' || roleCode === 'CONTABLE') {
+    // SUPERUSUARIO, ADMIN have global access to all hotels
+    if (roleCode === 'SUPERUSUARIO' || roleCode === 'ADMIN') {
       return hotelStore.hotels
     }
 
-    // GERENTE has access to all hotels within their assigned area(s)
-    if (roleCode === 'GERENTE') {
+    // GERENTE and CONTABLE have access to all hotels within their assigned area(s)
+    if (roleCode === 'GERENTE' || roleCode === 'CONTABLE') {
       const areaIds = new Set(user.areaIds || [])
       return hotelStore.hotels.filter((h) => areaIds.has(h.areaId))
     }

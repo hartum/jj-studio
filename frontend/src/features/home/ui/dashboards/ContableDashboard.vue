@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useDashboard, monthsOptions } from '@/features/home/composables/useDashboard'
+import type { HotelItem } from '@/features/countries/domain/country.model'
 import {
   Money,
   Wallet,
@@ -8,7 +10,6 @@ import {
 
 const {
   countryStore,
-  hotelStore,
   commissionStore,
   selectedAnio,
   selectedMes,
@@ -17,7 +18,45 @@ const {
   formatCurrency,
   globalMonthlyCommissions,
   handleUpdateCommissionStatus,
+  contableAreas,
+  contableHotels,
 } = useDashboard()
+
+interface AreaGroup {
+  id: number
+  nombre: string
+  hoteles: HotelItem[]
+}
+
+interface CountryGroup {
+  id: number
+  nombre: string
+  codigo: string
+  areas: AreaGroup[]
+}
+
+const groupedContableHotelsByCountry = computed<CountryGroup[]>(() => {
+  const groups: CountryGroup[] = []
+  const areaIds = contableAreas.value.map((a) => a.id)
+  const areaSet = new Set(areaIds)
+
+  for (const pais of countryStore.countries) {
+    const matchingAreas = (pais.areas || []).filter((a) => areaSet.has(a.id))
+    if (matchingAreas.length > 0) {
+      groups.push({
+        id: pais.id,
+        nombre: pais.nombre,
+        codigo: pais.codigo,
+        areas: matchingAreas.map((a) => ({
+          id: a.id,
+          nombre: a.nombre,
+          hoteles: a.hoteles || [],
+        })),
+      })
+    }
+  }
+  return groups
+})
 </script>
 
 <template>
@@ -27,12 +66,12 @@ const {
       <div class="controls-bar">
         <el-select
           v-model="selectedHotelFilter"
-          placeholder="Todos los Hoteles"
+          placeholder="Todos tus Hoteles"
           clearable
           size="default"
           style="width: 220px"
         >
-          <el-option v-for="h in hotelStore.hotels" :key="h.id" :label="h.nombre" :value="h.id" />
+          <el-option v-for="h in contableHotels" :key="h.id" :label="h.nombre" :value="h.id" />
         </el-select>
         <el-select v-model="selectedMes" size="default" style="width: 140px">
           <el-option
@@ -178,17 +217,20 @@ const {
       </el-table>
     </el-card>
 
-    <!-- Catálogo de Países y Áreas -->
+    <!-- Catálogo de Países y Áreas Asignadas -->
     <el-card
       class="dashboard-card"
-      header="Estructura de Hoteles por Países y Áreas"
+      header="Estructura de Hoteles por Áreas Asignadas"
       shadow="hover"
     >
-      <el-collapse>
+      <div v-if="groupedContableHotelsByCountry.length === 0" class="empty-hint p-4">
+        No tienes áreas asignadas actualmente. Contacta con tu administrador.
+      </div>
+      <el-collapse v-else>
         <el-collapse-item
-          v-for="pais in countryStore.countries"
+          v-for="pais in groupedContableHotelsByCountry"
           :key="pais.id"
-          :title="`${pais.nombre} (${pais.areas?.length || 0} áreas)`"
+          :title="`${pais.nombre} (${pais.areas.length} áreas)`"
         >
           <div class="pais-collapse-content">
             <div v-for="area in pais.areas" :key="area.id" class="area-item-box">

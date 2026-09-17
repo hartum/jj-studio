@@ -178,12 +178,12 @@ export async function sessionRoutes(fastify: FastifyInstance) {
 
         if (user) {
           const roleCode = user.role.codigo.toUpperCase()
-          const isGlobalAccess = ['SUPERUSUARIO', 'ADMIN', 'CONTABLE'].includes(roleCode)
+          const isGlobalAccess = ['SUPERUSUARIO', 'ADMIN'].includes(roleCode)
 
           if (!isGlobalAccess) {
             let allowedHotelIds: number[] = []
 
-            if (roleCode === 'GERENTE') {
+            if (roleCode === 'GERENTE' || roleCode === 'CONTABLE') {
               const areaIds = user.areasAsignadas.map((a) => a.areaId)
               const hotelsInAreas = await prisma.hotel.findMany({
                 where: { areaId: { in: areaIds }, deletedAt: null },

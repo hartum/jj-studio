@@ -384,11 +384,11 @@ export function usePhotoSessionForm() {
     if (!user) return hotelStore.hotels
 
     const roleCode = user.roleCode?.toUpperCase()
-    if (roleCode === 'SUPERUSUARIO' || roleCode === 'ADMIN' || roleCode === 'CONTABLE') {
+    if (roleCode === 'SUPERUSUARIO' || roleCode === 'ADMIN') {
       return hotelStore.hotels
     }
 
-    if (roleCode === 'GERENTE') {
+    if (roleCode === 'GERENTE' || roleCode === 'CONTABLE') {
       const areaIds = new Set(user.areaIds || [])
       return hotelStore.hotels.filter((h) => areaIds.has(h.areaId))
     }
@@ -806,7 +806,7 @@ export function usePhotoSessionForm() {
       if (existing) {
         const roleCode = currentUser.value?.roleCode?.toUpperCase()
         const isGlobalAccess =
-          roleCode === 'SUPERUSUARIO' || roleCode === 'ADMIN' || roleCode === 'CONTABLE'
+          roleCode === 'SUPERUSUARIO' || roleCode === 'ADMIN'
         const allowedHotelIds = new Set(userHotels.value.map((h) => Number(h.id)))
 
         if (
