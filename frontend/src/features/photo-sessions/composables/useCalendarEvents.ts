@@ -23,6 +23,7 @@ export interface ExtendedEventProps {
   clienteNombre?: string
   iconType?: string
   estado?: string
+  totalVentaUsd?: number | null
   [key: string]: unknown
 }
 
@@ -126,6 +127,7 @@ export function useCalendarEvents(
         fotografoId?: string | null
         fechaHoraCita: string
         estado: string
+        totalVentaUsd?: number | null
         clienteNombre: string
         numeroHabitacion?: string
         numAdultos?: number
@@ -145,6 +147,7 @@ export function useCalendarEvents(
         fotografoId: c.fotografoId || parentSession?.fotografoId || null,
         fechaHoraCita: c.fechaHoraCita,
         estado: c.estado,
+        totalVentaUsd: c.totalVentaUsd ?? parentSession?.citaVenta?.totalVentaUsd ?? null,
         clienteNombre: c.clienteNombre || parentSession?.clienteNombre || 'Cliente',
         numeroHabitacion: c.numeroHabitacion || parentSession?.numeroHabitacion || undefined,
         numAdultos: c.numAdultos ?? parentSession?.numAdultos,
@@ -163,6 +166,7 @@ export function useCalendarEvents(
             fotografoId: s.fotografoId || null,
             fechaHoraCita: s.citaVenta.fechaHoraCita,
             estado: s.citaVenta.estado,
+            totalVentaUsd: s.citaVenta.totalVentaUsd ?? null,
             clienteNombre: s.clienteNombre || 'Cliente',
             numeroHabitacion: s.numeroHabitacion || undefined,
             numAdultos: s.numAdultos,
@@ -234,6 +238,7 @@ export function useCalendarEvents(
           clienteNombre,
           paxStr,
           estado: sale.estado,
+          totalVentaUsd: sale.totalVentaUsd,
         },
       }
     })

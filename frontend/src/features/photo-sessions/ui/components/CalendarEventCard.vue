@@ -39,14 +39,28 @@ const STATUS_MAP: Record<string, StatusConfig> = {
 }
 
 const eventStatus = computed<StatusConfig>(() => {
+  const ext = props.arg.event.extendedProps
   const rawStatus = (
-    props.arg.event.extendedProps.estado ||
-    props.arg.event.extendedProps.rawSession?.estado ||
-    props.arg.event.extendedProps.rawSale?.estado ||
+    ext.estado ||
+    ext.rawSession?.estado ||
+    ext.rawSale?.estado ||
     'PROGRAMADA'
   ) as string
   const normalized = String(rawStatus).toUpperCase()
-  return STATUS_MAP[normalized] || { label: rawStatus, color: '#409eff' }
+  const baseConfig = STATUS_MAP[normalized] || { label: rawStatus, color: '#409eff' }
+
+  if (ext.type === 'sale' && normalized === 'COMPLETADA') {
+    const rawTotal = ext.totalVentaUsd ?? ext.rawSale?.totalVentaUsd
+    if (rawTotal !== undefined && rawTotal !== null && !isNaN(Number(rawTotal))) {
+      const amount = Math.round(Number(rawTotal))
+      return {
+        label: `Completada - ${amount}$`,
+        color: baseConfig.color,
+      }
+    }
+  }
+
+  return baseConfig
 })
 </script>
 
