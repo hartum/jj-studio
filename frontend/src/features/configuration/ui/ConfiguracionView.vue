@@ -15,6 +15,9 @@ const authStore = useAuthStore()
 
 const userRole = computed(() => authStore.user?.roleCode?.toUpperCase())
 const isSuperOrAdmin = computed(() => userRole.value === 'SUPERUSUARIO' || userRole.value === 'ADMIN')
+const canManageGoals = computed(
+  () => isSuperOrAdmin.value || userRole.value === 'GERENTE' || userRole.value === 'SUPERVISOR',
+)
 const canManageCommissions = computed(
   () => isSuperOrAdmin.value || userRole.value === 'GERENTE' || userRole.value === 'CONTABLE',
 )
@@ -26,7 +29,22 @@ const canManageEmailTemplates = computed(
 const defaultTab = computed(() => {
   if (isSuperOrAdmin.value) return 'paises'
   if (userRole.value === 'CONTABLE') return 'comisiones'
+  if (canManageGoals.value) return 'metas'
+  if (canManageCommissions.value) return 'comisiones'
   return 'metas'
+})
+
+const pageSubtitle = computed(() => {
+  if (isSuperOrAdmin.value) {
+    return 'Gestiona las opciones generales, estructura geográfica, comisiones, registro de actividad, plantillas de correo y parámetros de la plataforma'
+  }
+  if (userRole.value === 'CONTABLE') {
+    return 'Consulta y gestiona las configuraciones de comisiones de tus áreas y hoteles asignados'
+  }
+  if (canManageCommissions.value) {
+    return 'Establece y gestiona los porcentajes de comisiones, objetivos comerciales y metas de tus hoteles y equipo'
+  }
+  return 'Establece y gestiona los objetivos comerciales, metas y configuraciones de tus hoteles y equipo'
 })
 
 // Leer la pestaña activa desde el parámetro de consulta ?tab=
@@ -54,15 +72,7 @@ function handleTabChange(paneName: string | number) {
     <!-- Header de la sección -->
     <div class="page-header">
       <h1 class="page-title">Configuración</h1>
-      <p class="page-subtitle">
-        {{
-          isSuperOrAdmin
-            ? 'Gestiona las opciones generales, estructura geográfica, comisiones, registro de actividad, plantillas de correo y parámetros de la plataforma'
-            : canManageCommissions
-              ? 'Establece y gestiona los porcentajes de comisiones, objetivos comerciales y metas de tus hoteles y equipo'
-              : 'Establece y gestiona los objetivos comerciales, metas y configuraciones de tus hoteles y equipo'
-        }}
-      </p>
+      <p class="page-subtitle">{{ pageSubtitle }}</p>
     </div>
 
     <!-- Componente Tabs estilo tarjeta de Element Plus -->
@@ -82,7 +92,7 @@ function handleTabChange(paneName: string | number) {
         <HotelesConfig />
       </el-tab-pane>
 
-      <el-tab-pane label="Metas y Objetivos" name="metas">
+      <el-tab-pane v-if="canManageGoals" label="Metas y Objetivos" name="metas">
         <!-- Componente modular de la feature 'goals' -->
         <GoalFormView />
       </el-tab-pane>
