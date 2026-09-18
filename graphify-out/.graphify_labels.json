@@ -17,7 +17,7 @@
   "15": "ComisionesConfig.vue",
   "16": "App.vue",
   "17": "1. Requisitos Funcionales",
-  "18": "vue",
+  "18": "usePhotoSessionForm.ts",
   "19": "PhotoSessionFormDesktop.vue",
   "20": "CalendarioLaboral.vue",
   "21": "compilerOptions",
@@ -91,10 +91,8 @@
   "89": "vue-router",
   "90": "LanguageSelector.vue",
   "91": "PhotoSessionFormView.vue",
-  "92": "useLocale.ts",
-  "93": "auth.store.ts",
+  "92": "vue",
   "94": "useDashboard.ts",
-  "95": "HotelCalendarView.vue",
   "96": "handleAccordionChange",
   "97": "handleSave"
 }
