@@ -58,12 +58,9 @@
   "56": "SaleAppointmentFormView.vue",
   "57": "CalendarEventCard.vue",
   "58": "scripts",
-  "59": "email.service.ts",
+  "59": "commission.service.ts",
   "60": "ForgotPasswordView.vue",
-  "61": "CalendarHeader.vue",
-  "62": "CalendarDeleteConfirmPopover.vue",
   "63": ".prettierrc.json",
-  "64": "CalendarAlertsPanel.vue",
   "65": "CalendarDesktopToolbar.vue",
   "66": "user-date.ts",
   "67": "scripts",
@@ -90,9 +87,6 @@
   "88": "vue-ios-style-datepicker",
   "89": "vue-router",
   "90": "LanguageSelector.vue",
-  "91": "PhotoSessionFormView.vue",
   "92": "vue",
-  "94": "useDashboard.ts",
-  "96": "handleAccordionChange",
-  "97": "handleSave"
+  "94": "useDashboard.ts"
 }
