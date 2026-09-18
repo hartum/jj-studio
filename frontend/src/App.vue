@@ -6,9 +6,12 @@ import { useCountryStore } from '@/features/countries/stores/country.store'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 import { canAccessRoute, getRolePermissions } from '@/shared/permissions'
 import SidebarNav from '@/components/SidebarNav.vue'
+import LanguageSelector from '@/components/LanguageSelector.vue'
 import logoJJ from '@/assets/logoJJ.png'
-import es from 'element-plus/es/locale/lang/es'
+import { useLocale } from '@/i18n/useLocale'
 import { Sunny, Moon, SwitchButton, Menu, Close } from '@element-plus/icons-vue'
+
+const { elementPlusLocale, t } = useLocale()
 
 const route = useRoute()
 const router = useRouter()
@@ -102,7 +105,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <el-config-provider :locale="es">
+  <el-config-provider :locale="elementPlusLocale">
     <!-- Vistas de Autenticación a pantalla completa sin Sidebar/Toolbar -->
     <div v-if="isFullScreenAuthPage" class="full-screen-wrapper">
       <RouterView />
@@ -147,7 +150,7 @@ onMounted(async () => {
               class="close-drawer-btn"
               :icon="Close"
               @click="closeMobileDrawer"
-              aria-label="Cerrar menú de navegación"
+              :aria-label="t('nav.closeMenu')"
             />
           </div>
 
@@ -172,7 +175,7 @@ onMounted(async () => {
                 circle
                 :icon="Menu"
                 @click="isMobileDrawerOpen = true"
-                aria-label="Abrir menú de navegación"
+                :aria-label="t('nav.openMenu')"
               />
             </div>
 
@@ -188,6 +191,9 @@ onMounted(async () => {
             </div>
 
             <div class="toolbar-right">
+              <!-- Selector de idioma -->
+              <LanguageSelector />
+
               <!-- Usuario autenticado -->
               <div v-if="authStore.user" class="user-badge">
                 <el-avatar
@@ -216,11 +222,11 @@ onMounted(async () => {
                 type="danger"
                 link
                 :icon="SwitchButton"
-                title="Cerrar sesión"
+                :title="t('nav.logoutTitle')"
                 @click="handleLogout"
                 class="logout-btn"
               >
-                <span class="logout-text">Salir</span>
+                <span class="logout-text">{{ t('nav.logout') }}</span>
               </el-button>
             </div>
           </div>

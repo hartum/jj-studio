@@ -13,7 +13,6 @@ import { Building2 } from '@lucide/vue'
 
 const {
   countryStore,
-  hotelStore,
   goalStore,
   commissionStore,
   selectedAnio,
@@ -40,7 +39,7 @@ const {
 interface AreaGroup {
   id: number
   nombre: string
-  hoteles: any[]
+  hoteles: Record<string, unknown>[]
 }
 
 interface CountryGroup {

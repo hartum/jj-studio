@@ -5,16 +5,19 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
-import es from 'element-plus/es/locale/lang/es'
 import dayjs from 'dayjs'
 import localeData from 'dayjs/plugin/localeData'
 import updateLocale from 'dayjs/plugin/updateLocale'
-import esLocale from 'dayjs/locale/es'
+import 'dayjs/locale/es'
+import 'dayjs/locale/en'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import i18n from './i18n'
 
 dayjs.extend(localeData)
 dayjs.extend(updateLocale)
-dayjs.locale('es', esLocale)
+
+const savedLocale = localStorage.getItem('jj_locale') || 'es'
+dayjs.locale(savedLocale)
 
 // Garantizar que la propiedad weekStart sea 1 (Lunes) en cualquier fecha evaluada por Element Plus
 if (dayjs && dayjs.prototype && typeof dayjs.prototype.$locale === 'function') {
@@ -38,9 +41,8 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-app.use(ElementPlus, {
-  locale: es,
-})
+app.use(i18n)
+app.use(ElementPlus)
 app.use(VueIosDatepicker)
 
 // Register all Element Plus icons globally

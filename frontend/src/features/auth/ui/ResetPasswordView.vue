@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useLocale } from '@/i18n/useLocale'
+import LanguageSelector from '@/components/LanguageSelector.vue'
 import { Lock, CircleCheckFilled, WarningFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import logoImg from '@/assets/logoJJ.png'
@@ -8,6 +10,7 @@ import bgImg from '@/assets/login_bg.jpg'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useLocale()
 
 const token = ref('')
 const isCheckingToken = ref(true)
@@ -26,7 +29,7 @@ onMounted(async () => {
   if (!queryToken) {
     isCheckingToken.value = false
     isTokenValid.value = false
-    tokenError.value = 'No se ha proporcionado un token de recuperación válido.'
+    tokenError.value = t('auth.invalidLink')
     return
   }
 
@@ -42,11 +45,11 @@ onMounted(async () => {
       userName.value = data.nombre || ''
     } else {
       isTokenValid.value = false
-      tokenError.value = data.error || 'El enlace de recuperación es inválido o ha expirado.'
+      tokenError.value = data.error || t('auth.invalidLink')
     }
-  } catch (err: unknown) {
+  } catch {
     isTokenValid.value = false
-    tokenError.value = 'Error al verificar el enlace de recuperación.'
+    tokenError.value = t('auth.invalidLink')
   } finally {
     isCheckingToken.value = false
   }
@@ -54,17 +57,17 @@ onMounted(async () => {
 
 async function handleResetPassword() {
   if (!password.value) {
-    ElMessage.warning('Por favor introduce tu nueva contraseña')
+    ElMessage.warning(t('auth.enterNewPassword'))
     return
   }
 
   if (password.value.length < 6) {
-    ElMessage.warning('La contraseña debe tener al menos 6 caracteres')
+    ElMessage.warning(t('auth.passwordTooShort'))
     return
   }
 
   if (password.value !== confirmPassword.value) {
-    ElMessage.warning('Las contraseñas no coinciden')
+    ElMessage.warning(t('auth.passwordMismatch'))
     return
   }
 
@@ -85,7 +88,7 @@ async function handleResetPassword() {
     }
 
     isCompleted.value = true
-    ElMessage.success('¡Contraseña actualizada con éxito!')
+    ElMessage.success(t('auth.passwordUpdated'))
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Error al restablecer la contraseña'
     ElMessage.error(message)
@@ -99,6 +102,11 @@ async function handleResetPassword() {
   <div class="login-fullscreen">
     <!-- Columna Izquierda: Formulario -->
     <div class="login-left-side">
+      <!-- Selector de idioma -->
+      <div class="login-lang-wrapper">
+        <LanguageSelector />
+      </div>
+
       <div class="form-wrapper">
         <!-- Logo -->
         <div class="logo-container">
@@ -108,7 +116,7 @@ async function handleResetPassword() {
         <!-- Estado 1: Verificando Token -->
         <div v-if="isCheckingToken" class="loading-block">
           <div class="spinner"></div>
-          <p class="loading-text">Verificando enlace de seguridad...</p>
+          <p class="loading-text">{{ t('auth.verifyingLink') }}</p>
         </div>
 
         <!-- Estado 2: Token Inválido o Expirado -->
@@ -116,7 +124,7 @@ async function handleResetPassword() {
           <div class="error-icon-wrapper">
             <el-icon :size="48" color="#ef4444"><WarningFilled /></el-icon>
           </div>
-          <h2 class="error-title">Enlace no válido</h2>
+          <h2 class="error-title">{{ t('auth.invalidLink') }}</h2>
           <p class="error-description">{{ tokenError }}</p>
           <div class="form-actions-row" style="margin-top: 1.5rem;">
             <el-button
@@ -125,7 +133,7 @@ async function handleResetPassword() {
               class="action-button"
               @click="router.push('/forgot-password')"
             >
-              Solicitar nuevo enlace
+              {{ t('auth.requestNewLink') }}
             </el-button>
           </div>
         </div>
@@ -135,9 +143,9 @@ async function handleResetPassword() {
           <div class="success-icon-wrapper">
             <el-icon :size="48" color="#10b981"><CircleCheckFilled /></el-icon>
           </div>
-          <h2 class="success-title">¡Contraseña restablecida!</h2>
+          <h2 class="success-title">{{ t('auth.passwordResetTitle') }}</h2>
           <p class="success-description">
-            Tu nueva contraseña ha sido guardada correctamente. Ya puedes acceder a JJ Studio.
+            {{ t('auth.passwordResetDesc') }}
           </p>
           <div class="form-actions-row" style="margin-top: 2rem;">
             <el-button
@@ -146,7 +154,7 @@ async function handleResetPassword() {
               class="action-button"
               @click="router.push('/login')"
             >
-              INICIAR SESIÓN
+              {{ t('auth.login') }}
             </el-button>
           </div>
         </div>
@@ -154,12 +162,12 @@ async function handleResetPassword() {
         <!-- Estado 4: Formulario de Nueva Contraseña -->
         <div v-else class="content-block">
           <div class="header-text">
-            <h1 class="form-title">Nueva Contraseña</h1>
+            <h1 class="form-title">{{ t('auth.newPasswordTitle') }}</h1>
             <p v-if="userEmail" class="form-subtitle">
-              Establece una nueva contraseña para la cuenta <strong>{{ userEmail }}</strong>.
+              {{ t('auth.newPasswordSubtitle', { email: userEmail }) }}
             </p>
             <p v-else class="form-subtitle">
-              Introduce y confirma tu nueva contraseña de acceso.
+              {{ t('auth.newPasswordGeneric') }}
             </p>
           </div>
 
@@ -170,7 +178,7 @@ async function handleResetPassword() {
                 type="password"
                 show-password
                 autocomplete="new-password"
-                placeholder="Nueva contraseña (mínimo 6 caracteres)"
+                :placeholder="t('auth.newPassword')"
                 :prefix-icon="Lock"
                 size="large"
                 class="login-input"
@@ -183,7 +191,7 @@ async function handleResetPassword() {
                 type="password"
                 show-password
                 autocomplete="new-password"
-                placeholder="Confirmar nueva contraseña"
+                :placeholder="t('auth.confirmPassword')"
                 :prefix-icon="Lock"
                 size="large"
                 class="login-input"
@@ -200,7 +208,7 @@ async function handleResetPassword() {
                 class="action-button"
                 @click="handleResetPassword"
               >
-                GUARDAR CONTRASEÑA
+                {{ t('auth.savePassword') }}
               </el-button>
             </div>
           </el-form>
@@ -230,6 +238,14 @@ async function handleResetPassword() {
   background-color: var(--toolbar-bg, #ffffff);
   box-sizing: border-box;
   padding: 2rem;
+  position: relative;
+}
+
+.login-lang-wrapper {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
 }
 
 .form-wrapper {

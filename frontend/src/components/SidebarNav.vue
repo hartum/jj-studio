@@ -46,17 +46,17 @@ function handleHotelClick(hotelId: number) {
   <nav class="sidebar-nav">
     <RouterLink to="/inicio" class="nav-link" @click="handleNavClick">
       <el-icon :size="18"><House /></el-icon>
-      <span>Inicio</span>
+      <span>{{ $t('nav.home') }}</span>
     </RouterLink>
 
     <RouterLink v-if="canSeeConfig" to="/configuracion" class="nav-link" @click="handleNavClick">
       <el-icon :size="18"><Setting /></el-icon>
-      <span>Configuración</span>
+      <span>{{ $t('nav.configuration') }}</span>
     </RouterLink>
 
     <RouterLink v-if="canSeeUsers" to="/usuarios" class="nav-link" @click="handleNavClick">
       <el-icon :size="18"><User /></el-icon>
-      <span>Usuarios</span>
+      <span>{{ $t('nav.users') }}</span>
     </RouterLink>
 
     <!-- Línea de separación -->
@@ -64,7 +64,7 @@ function handleHotelClick(hotelId: number) {
 
     <RouterLink v-if="canSeeAgenda" to="/agenda" class="nav-link" @click="handleNavClick">
       <el-icon :size="18"><Calendar /></el-icon>
-      <span>Agenda</span>
+      <span>{{ $t('nav.schedule') }}</span>
     </RouterLink>
 
     <!-- Estructura Jerárquica: Países -> Áreas -> Hoteles -->
@@ -87,7 +87,7 @@ function handleHotelClick(hotelId: number) {
             v-for="hotel in area.hoteles"
             :key="hotel.id"
             class="tree-node node-hotel clickable-node"
-            title="Ver agenda del hotel"
+            :title="$t('nav.viewHotelSchedule')"
             @click="handleHotelClick(hotel.id)"
           >
             <el-icon :size="18" class="node-icon hotel-icon"><Building2 /></el-icon>

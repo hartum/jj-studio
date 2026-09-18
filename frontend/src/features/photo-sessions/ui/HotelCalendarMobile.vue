@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useLocale } from '@/i18n/useLocale'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -232,28 +233,12 @@ function handleEventClick(clickInfo: EventClickArg) {
 }
 
 // 9. Configuración de FullCalendar Móvil
-const esLocale = {
-  code: 'es',
-  week: { dow: 1, doy: 4 },
-  buttonText: {
-    prev: 'Ant',
-    next: 'Sig',
-    today: 'Hoy',
-    month: 'Mes',
-    week: 'Semana',
-    day: 'Día',
-    list: 'Agenda',
-  },
-  weekText: 'Sm',
-  allDayText: 'Todo el día',
-  moreLinkText: 'más',
-  noEventsText: 'No hay sesiones registradas',
-}
+const { fullCalendarLocale } = useLocale()
 
 const calendarOptions = computed<CalendarOptions>(() => ({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
   initialView: getInitialCalendarView(),
-  locale: esLocale,
+  locale: fullCalendarLocale.value,
   headerToolbar: false,
   eventDisplay: 'block',
   eventTimeFormat: {
@@ -291,6 +276,13 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   datesSet: handleDatesSet,
   events: calendarEvents.value,
 }))
+
+watch(fullCalendarLocale, (newLocale) => {
+  const calendarApi = calendarRef.value?.getApi()
+  if (calendarApi) {
+    calendarApi.setOption('locale', newLocale)
+  }
+})
 
 // 10. Ciclo de vida
 onMounted(async () => {

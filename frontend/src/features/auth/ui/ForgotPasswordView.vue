@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useLocale } from '@/i18n/useLocale'
+import LanguageSelector from '@/components/LanguageSelector.vue'
 import { Message, ArrowLeft } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import logoImg from '@/assets/logoJJ.png'
 import bgImg from '@/assets/login_bg.jpg'
 
 const router = useRouter()
+const { t } = useLocale()
 
 const email = ref('')
 const isLoading = ref(false)
@@ -14,7 +17,7 @@ const isSubmitted = ref(false)
 
 async function handleForgotPassword() {
   if (!email.value || !email.value.includes('@')) {
-    ElMessage.warning('Por favor introduce un correo electrónico válido')
+    ElMessage.warning(t('auth.invalidEmail'))
     return
   }
 
@@ -45,6 +48,11 @@ async function handleForgotPassword() {
   <div class="login-fullscreen">
     <!-- Columna Izquierda: Formulario a pantalla completa -->
     <div class="login-left-side">
+      <!-- Selector de idioma -->
+      <div class="login-lang-wrapper">
+        <LanguageSelector />
+      </div>
+
       <div class="form-wrapper">
         <!-- Logo de la empresa -->
         <div class="logo-container">
@@ -53,9 +61,9 @@ async function handleForgotPassword() {
 
         <div v-if="!isSubmitted" class="content-block">
           <div class="header-text">
-            <h1 class="form-title">Recuperar Contraseña</h1>
+            <h1 class="form-title">{{ t('auth.recoverTitle') }}</h1>
             <p class="form-subtitle">
-              Introduce tu correo electrónico y te enviaremos un enlace seguro para restablecer tu contraseña.
+              {{ t('auth.recoverSubtitle') }}
             </p>
           </div>
 
@@ -67,7 +75,7 @@ async function handleForgotPassword() {
                 type="email"
                 autocomplete="email"
                 name="email"
-                placeholder="Correo electrónico"
+                :placeholder="t('auth.email')"
                 :prefix-icon="Message"
                 size="large"
                 class="login-input"
@@ -84,14 +92,14 @@ async function handleForgotPassword() {
                 class="submit-button"
                 @click="handleForgotPassword"
               >
-                ENVIAR ENLACE
+                {{ t('auth.sendLink') }}
               </el-button>
             </div>
 
             <div class="form-footer-links">
               <router-link to="/login" class="back-link">
                 <el-icon><ArrowLeft /></el-icon>
-                <span>Volver al inicio de sesión</span>
+                <span>{{ t('auth.backToLogin') }}</span>
               </router-link>
             </div>
           </el-form>
@@ -102,12 +110,12 @@ async function handleForgotPassword() {
           <div class="success-icon-wrapper">
             <el-icon :size="48" color="#10b981"><Message /></el-icon>
           </div>
-          <h2 class="success-title">¡Revisa tu bandeja de entrada!</h2>
+          <h2 class="success-title">{{ t('auth.checkInbox') }}</h2>
           <p class="success-description">
-            Si el correo <strong>{{ email }}</strong> está registrado en JJ Studio, recibirás un enlace de recuperación en los próximos minutos.
+            {{ t('auth.checkInboxDesc', { email }) }}
           </p>
           <div class="success-note">
-            ⏱️ El enlace caduca en <strong>30 minutos</strong>. Si no lo encuentras, revisa tu carpeta de spam.
+            ⏱️ {{ t('auth.linkExpiry') }}
           </div>
 
           <div class="form-actions-row" style="margin-top: 2rem;">
@@ -116,7 +124,7 @@ async function handleForgotPassword() {
               class="back-btn"
               @click="router.push('/login')"
             >
-              Volver al Login
+              {{ t('auth.backToLoginBtn') }}
             </el-button>
           </div>
         </div>
@@ -146,6 +154,14 @@ async function handleForgotPassword() {
   background-color: var(--toolbar-bg, #ffffff);
   box-sizing: border-box;
   padding: 2rem;
+  position: relative;
+}
+
+.login-lang-wrapper {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
 }
 
 .form-wrapper {

@@ -2,6 +2,8 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
+import { useLocale } from '@/i18n/useLocale'
+import LanguageSelector from '@/components/LanguageSelector.vue'
 import { User, Lock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import logoImg from '@/assets/logoJJ.png'
@@ -9,6 +11,7 @@ import bgImg from '@/assets/login_bg.jpg'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const { t } = useLocale()
 
 const email = ref('')
 const password = ref('')
@@ -25,7 +28,7 @@ onMounted(() => {
 
 async function handleLogin() {
   if (!email.value || !password.value) {
-    ElMessage.warning('Por favor introduce tu correo electrónico y contraseña')
+    ElMessage.warning(t('auth.fillCredentials'))
     return
   }
 
@@ -39,10 +42,10 @@ async function handleLogin() {
       localStorage.removeItem('remembered_email')
     }
 
-    ElMessage.success('¡Sesión iniciada correctamente!')
+    ElMessage.success(t('auth.loginSuccess'))
     router.push('/inicio')
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al iniciar sesión'
+    const message = err instanceof Error ? err.message : t('auth.loginError')
     ElMessage.error(message)
   } finally {
     isLoading.value = false
@@ -54,6 +57,11 @@ async function handleLogin() {
   <div class="login-fullscreen">
     <!-- Columna Izquierda: Formulario a pantalla completa -->
     <div class="login-left-side">
+      <!-- Selector de idioma en Login -->
+      <div class="login-lang-wrapper">
+        <LanguageSelector />
+      </div>
+
       <div class="form-wrapper">
         <!-- Logo de la empresa -->
         <div class="logo-container">
@@ -68,7 +76,7 @@ async function handleLogin() {
               type="email"
               autocomplete="email"
               name="email"
-              placeholder="Correo electrónico"
+              :placeholder="t('auth.email')"
               :prefix-icon="User"
               size="large"
               class="login-input"
@@ -83,7 +91,7 @@ async function handleLogin() {
               show-password
               autocomplete="current-password"
               name="password"
-              placeholder="Contraseña"
+              :placeholder="t('auth.password')"
               :prefix-icon="Lock"
               size="large"
               class="login-input"
@@ -92,7 +100,9 @@ async function handleLogin() {
           </el-form-item>
 
           <div class="form-actions-row">
-            <el-checkbox v-model="rememberMe" class="remember-checkbox"> Recordarme </el-checkbox>
+            <el-checkbox v-model="rememberMe" class="remember-checkbox">
+              {{ t('auth.rememberMe') }}
+            </el-checkbox>
 
             <el-button
               type="primary"
@@ -102,12 +112,14 @@ async function handleLogin() {
               class="login-button"
               @click="handleLogin"
             >
-              INICIAR SESIÓN
+              {{ t('auth.login') }}
             </el-button>
           </div>
 
           <div class="form-footer-links">
-            <router-link to="/forgot-password" class="footer-link">¿Olvidaste tu contraseña?</router-link>
+            <router-link to="/forgot-password" class="footer-link">
+              {{ t('auth.forgotPassword') }}
+            </router-link>
           </div>
         </el-form>
       </div>
@@ -136,6 +148,14 @@ async function handleLogin() {
   background-color: var(--toolbar-bg, #ffffff);
   box-sizing: border-box;
   padding: 2rem;
+  position: relative;
+}
+
+.login-lang-wrapper {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
 }
 
 .form-wrapper {
