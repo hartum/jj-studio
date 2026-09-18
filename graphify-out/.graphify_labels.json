@@ -17,7 +17,7 @@
   "15": "ComisionesConfig.vue",
   "16": "App.vue",
   "17": "1. Requisitos Funcionales",
-  "18": "usePhotoSessionForm.ts",
+  "18": "vue",
   "19": "PhotoSessionFormDesktop.vue",
   "20": "CalendarioLaboral.vue",
   "21": "compilerOptions",
@@ -60,7 +60,7 @@
   "58": "scripts",
   "59": "email.service.ts",
   "60": "ForgotPasswordView.vue",
-  "61": "vue",
+  "61": "CalendarHeader.vue",
   "62": "CalendarDeleteConfirmPopover.vue",
   "63": ".prettierrc.json",
   "64": "CalendarAlertsPanel.vue",
@@ -89,5 +89,12 @@
   "87": "vue-i18n",
   "88": "vue-ios-style-datepicker",
   "89": "vue-router",
-  "90": "LanguageSelector.vue"
+  "90": "LanguageSelector.vue",
+  "91": "PhotoSessionFormView.vue",
+  "92": "useLocale.ts",
+  "93": "auth.store.ts",
+  "94": "useDashboard.ts",
+  "95": "HotelCalendarView.vue",
+  "96": "handleAccordionChange",
+  "97": "handleSave"
 }

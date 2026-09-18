@@ -340,74 +340,74 @@
     "semantic_hash": "133a204a20676b489e29df99ba95228c"
   },
   "frontend/src/features/goals/ui/AgendadorHotelGoalCard.vue": {
-    "mtime": 1787152868.3215773,
-    "ast_hash": "f44d4cace7ae18e23032e79a716bfb87",
-    "semantic_hash": "f44d4cace7ae18e23032e79a716bfb87"
+    "mtime": 1789713814.9591458,
+    "ast_hash": "dd333aa6b732b7d142b88c088387ee57",
+    "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/GoalEvolutionChart.vue": {
-    "mtime": 1787135171.9876006,
-    "ast_hash": "d4b0bd26cc1167c868f8d56554255fe2",
-    "semantic_hash": "d4b0bd26cc1167c868f8d56554255fe2"
+    "mtime": 1789713760.3129535,
+    "ast_hash": "2b5ef287438f035829ebba9bcbc38e62",
+    "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/GoalFormView.vue": {
-    "mtime": 1789661135.0601835,
-    "ast_hash": "e7ac64e5122eef45d7aabeeb8a9718ad",
-    "semantic_hash": "e7ac64e5122eef45d7aabeeb8a9718ad"
+    "mtime": 1789714449.810663,
+    "ast_hash": "0b130fdbb6dc2c82f7f1cdfdcbd5bf1a",
+    "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/GoalProgressCard.vue": {
-    "mtime": 1787596038.8283756,
-    "ast_hash": "348528ca4380f11b272a27bfb2e6f039",
-    "semantic_hash": "348528ca4380f11b272a27bfb2e6f039"
+    "mtime": 1789713736.9000053,
+    "ast_hash": "d7ba0e06b81450d3e5fd17595127ebac",
+    "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/PhotographerHotelGoalCard.vue": {
-    "mtime": 1787135154.6709604,
-    "ast_hash": "385ea771c2a6a865e46445e2ae6775e3",
-    "semantic_hash": "385ea771c2a6a865e46445e2ae6775e3"
+    "mtime": 1789713779.8818245,
+    "ast_hash": "bd30571d9378b62d1258aa31f4989c58",
+    "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/SupervisorHotelGoalCard.vue": {
-    "mtime": 1787135198.7363467,
-    "ast_hash": "b29307fc4fb37d92039894ccb0cf1f12",
-    "semantic_hash": "b29307fc4fb37d92039894ccb0cf1f12"
+    "mtime": 1789713800.1624284,
+    "ast_hash": "2d2719cfe263a54949fc12fd45ca5a95",
+    "semantic_hash": ""
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1789674726.1284904,
-    "ast_hash": "3591193e24bc9d52d27811d69b9c3430",
+    "mtime": 1789715124.1363893,
+    "ast_hash": "79d812826004766a25c0a6271ed474c9",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/InicioView.vue": {
-    "mtime": 1787595203.9422429,
-    "ast_hash": "5d6767b9fdbb643082675d58fd195605",
-    "semantic_hash": "5d6767b9fdbb643082675d58fd195605"
+    "mtime": 1789713578.6610765,
+    "ast_hash": "88b0a90a1aa24f6ba50a8bb473ddedc3",
+    "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/AdminDashboard.vue": {
-    "mtime": 1787595949.0655851,
-    "ast_hash": "3b746a7d19c7e71d10003a4441e16730",
-    "semantic_hash": "3b746a7d19c7e71d10003a4441e16730"
+    "mtime": 1789714370.668126,
+    "ast_hash": "8d0bbda21e914e191c71484bb5088d63",
+    "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue": {
-    "mtime": 1788332596.8799348,
-    "ast_hash": "408ac184eed52982a54a98a429a2de8e",
-    "semantic_hash": "408ac184eed52982a54a98a429a2de8e"
+    "mtime": 1789714402.2315526,
+    "ast_hash": "b23ff05e9a10f06f23432f964e1c40e0",
+    "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
-    "mtime": 1789674741.7112765,
-    "ast_hash": "dc69714d6fc3c74def08dd7628ce30ea",
+    "mtime": 1789713720.170617,
+    "ast_hash": "878e1dce175957a3cee651310129a08e",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
-    "mtime": 1788332582.1836894,
-    "ast_hash": "d49b929edd1508ba6a2509a9ab056e87",
-    "semantic_hash": "d49b929edd1508ba6a2509a9ab056e87"
+    "mtime": 1789714394.9040673,
+    "ast_hash": "56ae5bbf578d268def23d87edf5712f4",
+    "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue": {
-    "mtime": 1789712479.3192897,
-    "ast_hash": "715df2d120b1958801dbdd03049c14a9",
+    "mtime": 1789714381.215178,
+    "ast_hash": "ecbbde2d8b3ae9d974a67d91bccbb89a",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/SupervisorDashboard.vue": {
-    "mtime": 1788332568.9271142,
-    "ast_hash": "a090a716467ff0defc1413e19289a5f7",
-    "semantic_hash": "a090a716467ff0defc1413e19289a5f7"
+    "mtime": 1789714387.4286816,
+    "ast_hash": "dd9ab039f0aaf3cbfad559540d783fdf",
+    "semantic_hash": ""
   },
   "frontend/src/features/hotels/domain/hotel.model.ts": {
     "mtime": 1786382724.4736776,
@@ -1015,13 +1015,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.ts": {
-    "mtime": 1789712267.0556755,
-    "ast_hash": "59e7c083cd9a9299602d2cb0389d8344",
+    "mtime": 1789715113.446362,
+    "ast_hash": "80cfec5c34a66753c622f891ba415963",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.ts": {
-    "mtime": 1789712259.6014404,
-    "ast_hash": "cf2f86ade9a74340103b8bac2803720b",
+    "mtime": 1789715105.3496764,
+    "ast_hash": "8cd1ee2b4ba647860ebb11be38f02a9e",
     "semantic_hash": ""
   },
   "frontend/src/i18n/useLocale.ts": {

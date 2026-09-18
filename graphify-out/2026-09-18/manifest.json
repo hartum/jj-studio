@@ -30,19 +30,19 @@
     "semantic_hash": "cef1a0b9b691ca2b558988fc9014a58a"
   },
   "frontend/package.json": {
-    "mtime": 1787155639.5776443,
-    "ast_hash": "c3cc01b11dab0a9b06b1aa30068f7e69",
-    "semantic_hash": "c3cc01b11dab0a9b06b1aa30068f7e69"
+    "mtime": 1789712254.3942266,
+    "ast_hash": "c46c0e2c68a39314a043dd67b15ec751",
+    "semantic_hash": ""
   },
   "frontend/src/App.vue": {
-    "mtime": 1787589058.5506728,
-    "ast_hash": "bad6a99bed4a86c8802b98be9a59a68d",
-    "semantic_hash": "bad6a99bed4a86c8802b98be9a59a68d"
+    "mtime": 1789712321.0152268,
+    "ast_hash": "69687e4fbb285fd7468ee1191c948704",
+    "semantic_hash": ""
   },
   "frontend/src/main.ts": {
-    "mtime": 1786098996.8476193,
-    "ast_hash": "7d3dc959621861a6fa294e9552590dc7",
-    "semantic_hash": "7d3dc959621861a6fa294e9552590dc7"
+    "mtime": 1789712296.5762632,
+    "ast_hash": "44c3c0e40318903e693072fb6da5cde0",
+    "semantic_hash": ""
   },
   "frontend/src/router/index.ts": {
     "mtime": 1788334685.6767263,
@@ -250,9 +250,9 @@
     "semantic_hash": "6158b0df9c31763e0329d4eae18ab891"
   },
   "frontend/src/components/SidebarNav.vue": {
-    "mtime": 1787425593.2305279,
-    "ast_hash": "6d6bb0f2b9bbe32f8fc494850f06c695",
-    "semantic_hash": "6d6bb0f2b9bbe32f8fc494850f06c695"
+    "mtime": 1789712328.4857693,
+    "ast_hash": "fd7c042a00b2df17f79670c40b60802f",
+    "semantic_hash": ""
   },
   "frontend/src/features/audit-log/domain/audit-log.model.ts": {
     "mtime": 1788452961.7480946,
@@ -275,19 +275,19 @@
     "semantic_hash": "2f00ee913daca8c05b410ba2fee91d6b"
   },
   "frontend/src/features/auth/ui/ForgotPasswordView.vue": {
-    "mtime": 1787507410.6237862,
-    "ast_hash": "eb0eaac8020c98984727fd352acd65b5",
-    "semantic_hash": "eb0eaac8020c98984727fd352acd65b5"
+    "mtime": 1789712374.3505878,
+    "ast_hash": "6552f119d767516cf071cb4dd5fca397",
+    "semantic_hash": ""
   },
   "frontend/src/features/auth/ui/LoginView.vue": {
-    "mtime": 1787507425.3723187,
-    "ast_hash": "276c75b7694e4c9900a3e2f8e251a42b",
-    "semantic_hash": "276c75b7694e4c9900a3e2f8e251a42b"
+    "mtime": 1789712347.937697,
+    "ast_hash": "6577d95684425ad3b69d30494c199bd2",
+    "semantic_hash": ""
   },
   "frontend/src/features/auth/ui/ResetPasswordView.vue": {
-    "mtime": 1787507419.6905134,
-    "ast_hash": "96cf0b3ee233e2226d09ec8a86fea142",
-    "semantic_hash": "96cf0b3ee233e2226d09ec8a86fea142"
+    "mtime": 1789712473.272719,
+    "ast_hash": "aeb9642f1dd57ae5b9f9c5b27ba5942c",
+    "semantic_hash": ""
   },
   "frontend/src/features/commissions/domain/commission.model.ts": {
     "mtime": 1789397326.0061393,
@@ -400,9 +400,9 @@
     "semantic_hash": "d49b929edd1508ba6a2509a9ab056e87"
   },
   "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue": {
-    "mtime": 1788332560.4940038,
-    "ast_hash": "7335505a967aec9b23b9e5030971f9b6",
-    "semantic_hash": "7335505a967aec9b23b9e5030971f9b6"
+    "mtime": 1789712479.3192897,
+    "ast_hash": "715df2d120b1958801dbdd03049c14a9",
+    "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/SupervisorDashboard.vue": {
     "mtime": 1788332568.9271142,
@@ -475,13 +475,13 @@
     "semantic_hash": "f5149dbf22b1fc42c4c476a58cdc56df"
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue": {
-    "mtime": 1789675569.8589144,
-    "ast_hash": "8f5d5c66d510bf391b0eb05840779a86",
+    "mtime": 1789712428.834283,
+    "ast_hash": "b09dd3a4eedac654f861f90621b68d6b",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue": {
-    "mtime": 1789675619.3170733,
-    "ast_hash": "cfd8ddca08b97d3a2325130ecd67f193",
+    "mtime": 1789712454.6729565,
+    "ast_hash": "7b2be4e4614da588c60d929ff9efd6b8",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarView.vue": {
@@ -1002,6 +1002,31 @@
   "frontend/src/features/users/utils/user-date.ts": {
     "mtime": 1789394168.4434366,
     "ast_hash": "370cafb4936d145e2d81ea5e2cde5c3d",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/LanguageSelector.vue": {
+    "mtime": 1789712288.412305,
+    "ast_hash": "2a0611c5dffc8f6e9b3d98fc8c73955d",
+    "semantic_hash": ""
+  },
+  "frontend/src/i18n/index.ts": {
+    "mtime": 1789712271.357653,
+    "ast_hash": "fb20271a56ffb57280f0247e595c457a",
+    "semantic_hash": ""
+  },
+  "frontend/src/i18n/locales/en.ts": {
+    "mtime": 1789712267.0556755,
+    "ast_hash": "59e7c083cd9a9299602d2cb0389d8344",
+    "semantic_hash": ""
+  },
+  "frontend/src/i18n/locales/es.ts": {
+    "mtime": 1789712259.6014404,
+    "ast_hash": "cf2f86ade9a74340103b8bac2803720b",
+    "semantic_hash": ""
+  },
+  "frontend/src/i18n/useLocale.ts": {
+    "mtime": 1789712279.0364854,
+    "ast_hash": "34ba2bda50af2a7e4200798439a98ae4",
     "semantic_hash": ""
   }
 }
