@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, watch } from 'vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuditLogStore } from '../stores/audit-log.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
+import { useLocale } from '@/i18n/useLocale'
 import type { AuditLogFilters, AuditLogEntry } from '../domain/audit-log.model'
 import {
   Search,
@@ -22,6 +23,7 @@ import {
   ChevronDown,
 } from '@lucide/vue'
 
+const { t } = useLocale()
 const auditStore = useAuditLogStore()
 const hotelStore = useHotelStore()
 const userStore = useUserStore()
@@ -45,9 +47,9 @@ function toggleExpand(id: number) {
 }
 
 // Shortcuts para el selector de fechas
-const dateShortcuts = [
+const dateShortcuts = computed(() => [
   {
-    text: 'Hoy',
+    text: t('auditLog.shortcuts.today'),
     value: () => {
       const end = new Date()
       const start = new Date()
@@ -55,7 +57,7 @@ const dateShortcuts = [
     },
   },
   {
-    text: 'Últimos 7 días',
+    text: t('auditLog.shortcuts.last7Days'),
     value: () => {
       const end = new Date()
       const start = new Date()
@@ -64,7 +66,7 @@ const dateShortcuts = [
     },
   },
   {
-    text: 'Últimos 30 días',
+    text: t('auditLog.shortcuts.last30Days'),
     value: () => {
       const end = new Date()
       const start = new Date()
@@ -73,14 +75,14 @@ const dateShortcuts = [
     },
   },
   {
-    text: 'Este mes',
+    text: t('auditLog.shortcuts.thisMonth'),
     value: () => {
       const end = new Date()
       const start = new Date(end.getFullYear(), end.getMonth(), 1)
       return [start, end]
     },
   },
-]
+])
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -151,19 +153,19 @@ function getActionTagType(accion: string): 'success' | 'primary' | 'danger' | 'w
 function getEntityLabel(entidad: string): string {
   switch (entidad?.toUpperCase()) {
     case 'SESION':
-      return 'Sesión de Fotos'
+      return t('auditLog.entities.photoSession')
     case 'CITA_VENTA':
-      return 'Cita de Ventas'
+      return t('auditLog.entities.saleAppointment')
     case 'USUARIO':
-      return 'Usuario'
+      return t('auditLog.entities.user')
     case 'HOTEL':
-      return 'Hotel'
+      return t('auditLog.entities.hotel')
     case 'AREA':
-      return 'Zona / Área'
+      return t('auditLog.entities.area')
     case 'PAIS':
-      return 'País'
+      return t('auditLog.entities.country')
     default:
-      return entidad || 'Registro'
+      return entidad || t('auditLog.entities.record')
   }
 }
 
@@ -262,10 +264,10 @@ onMounted(async () => {
       <div class="filters-grid">
         <!-- Búsqueda por cliente -->
         <div class="filter-item">
-          <label class="filter-label">Nombre del Cliente</label>
+          <label class="filter-label">{{ t('auditLog.filters.clientName') }}</label>
           <el-input
             v-model="filters.clienteNombre"
-            placeholder="Buscar por cliente..."
+            :placeholder="t('auditLog.filters.clientSearchPlaceholder')"
             :prefix-icon="Search"
             clearable
             size="large"
@@ -275,10 +277,10 @@ onMounted(async () => {
 
         <!-- Filtro por Hotel -->
         <div class="filter-item">
-          <label class="filter-label">Hotel</label>
+          <label class="filter-label">{{ t('auditLog.filters.hotel') }}</label>
           <el-select
             v-model="filters.hotelId"
-            placeholder="Todos los hoteles"
+            :placeholder="t('auditLog.filters.allHotels')"
             clearable
             filterable
             size="large"
@@ -290,10 +292,10 @@ onMounted(async () => {
 
         <!-- Filtro por Usuario -->
         <div class="filter-item">
-          <label class="filter-label">Usuario que realizó la acción</label>
+          <label class="filter-label">{{ t('auditLog.filters.user') }}</label>
           <el-select
             v-model="filters.usuarioId"
-            placeholder="Todos los usuarios"
+            :placeholder="t('auditLog.filters.allUsers')"
             clearable
             filterable
             size="large"
@@ -310,13 +312,13 @@ onMounted(async () => {
 
         <!-- Filtro por Rango de Fechas -->
         <div class="filter-item filter-dates">
-          <label class="filter-label">Rango de Fechas</label>
+          <label class="filter-label">{{ t('auditLog.filters.dateRange') }}</label>
           <el-date-picker
             v-model="filters.fechaRango"
             type="daterange"
-            range-separator="a"
-            start-placeholder="Desde"
-            end-placeholder="Hasta"
+            :range-separator="t('auditLog.filters.dateRangeSeparator')"
+            :start-placeholder="t('auditLog.filters.startDate')"
+            :end-placeholder="t('auditLog.filters.endDate')"
             size="large"
             :shortcuts="dateShortcuts"
             class="full-width"
@@ -327,13 +329,13 @@ onMounted(async () => {
       <!-- Fila secundaria: chips de acción rápida y botón de reset -->
       <div class="secondary-toolbar">
         <div class="action-chips">
-          <span class="chips-label">Tipo de acción:</span>
+          <span class="chips-label">{{ t('auditLog.filters.actionTypeLabel') }}</span>
           <el-tag
             :effect="filters.accion === '' ? 'dark' : 'plain'"
             class="filter-chip"
             @click="filters.accion = ''"
           >
-            Todas
+            {{ t('auditLog.filters.all') }}
           </el-tag>
           <el-tag
             :effect="filters.accion === 'CREAR' ? 'dark' : 'plain'"
@@ -341,7 +343,7 @@ onMounted(async () => {
             class="filter-chip"
             @click="filters.accion = filters.accion === 'CREAR' ? '' : 'CREAR'"
           >
-            Creaciones
+            {{ t('auditLog.filters.creations') }}
           </el-tag>
           <el-tag
             :effect="filters.accion === 'MODIFICAR' ? 'dark' : 'plain'"
@@ -349,7 +351,7 @@ onMounted(async () => {
             class="filter-chip"
             @click="filters.accion = filters.accion === 'MODIFICAR' ? '' : 'MODIFICAR'"
           >
-            Modificaciones
+            {{ t('auditLog.filters.modifications') }}
           </el-tag>
           <el-tag
             :effect="filters.accion === 'ELIMINAR' ? 'dark' : 'plain'"
@@ -357,14 +359,14 @@ onMounted(async () => {
             class="filter-chip"
             @click="filters.accion = filters.accion === 'ELIMINAR' ? '' : 'ELIMINAR'"
           >
-            Eliminaciones
+            {{ t('auditLog.filters.deletions') }}
           </el-tag>
           <el-tag
             :effect="filters.accion === 'LOGIN' ? 'dark' : 'plain'"
             class="filter-chip filter-chip--login"
             @click="filters.accion = filters.accion === 'LOGIN' ? '' : 'LOGIN'"
           >
-            Inicios de sesión
+            {{ t('auditLog.filters.logins') }}
           </el-tag>
           <el-tag
             :effect="filters.accion === 'LOGOUT' ? 'dark' : 'plain'"
@@ -372,12 +374,12 @@ onMounted(async () => {
             class="filter-chip"
             @click="filters.accion = filters.accion === 'LOGOUT' ? '' : 'LOGOUT'"
           >
-            Cierres de sesión
+            {{ t('auditLog.filters.logouts') }}
           </el-tag>
         </div>
 
         <el-button plain size="default" :icon="RotateCcw" class="reset-btn" @click="resetFilters">
-          Limpiar filtros
+          {{ t('auditLog.filters.resetFilters') }}
         </el-button>
       </div>
     </div>
@@ -387,15 +389,15 @@ onMounted(async () => {
       <div class="results-count">
         <el-icon class="count-icon"><Clock /></el-icon>
         <span>
-          Mostrando
+          {{ t('auditLog.results.showing') }}
           <strong>{{ logs.length }}</strong>
-          de
+          {{ t('auditLog.results.of') }}
           <strong>{{ total }}</strong>
-          registros
+          {{ t('auditLog.results.records') }}
         </span>
       </div>
       <div v-if="isLoading" class="loading-badge">
-        <span>Actualizando historial...</span>
+        <span>{{ t('auditLog.results.updating') }}</span>
       </div>
     </div>
 
@@ -403,11 +405,11 @@ onMounted(async () => {
     <div v-loading="isLoading" class="timeline-container">
       <div v-if="logs.length === 0 && !isLoading" class="empty-state-box">
         <el-empty
-          description="No se encontraron registros de actividad con los filtros seleccionados"
+          :description="t('auditLog.empty.description')"
           :image-size="120"
         >
           <el-button type="primary" plain @click="resetFilters">
-            Restablecer todos los filtros
+            {{ t('auditLog.empty.resetButton') }}
           </el-button>
         </el-empty>
       </div>
@@ -512,10 +514,10 @@ onMounted(async () => {
               </span>
               <span v-if="entry.clienteNombre" class="context-pill client-pill">
                 <UserRound :size="12" />
-                Cliente: {{ entry.clienteNombre }}
+                {{ t('auditLog.details.client', { name: entry.clienteNombre }) }}
               </span>
               <span v-if="entry.ipAddress" class="context-pill ip-pill">
-                IP: {{ entry.ipAddress }}
+                {{ t('auditLog.details.ip', { ip: entry.ipAddress }) }}
               </span>
             </div>
 
@@ -534,11 +536,11 @@ onMounted(async () => {
                   {{
                     expandedItems[entry.id]
                       ? entry.accion === 'MODIFICAR'
-                        ? 'Ocultar cambios'
-                        : 'Ocultar detalles técnicos'
+                        ? t('auditLog.details.hideChanges')
+                        : t('auditLog.details.hideTechnicalDetails')
                       : entry.accion === 'MODIFICAR'
-                        ? 'Ver cambios'
-                        : 'Ver detalles técnicos'
+                        ? t('auditLog.details.showChanges')
+                        : t('auditLog.details.showTechnicalDetails')
                   }}
                 </span>
                 <ChevronDown :size="14" :class="{ rotated: expandedItems[entry.id] }" />
@@ -563,11 +565,11 @@ onMounted(async () => {
           class="load-more-btn"
           @click="handleLoadMore"
         >
-          Cargar más actividades (mostrando {{ logs.length }} de {{ total }})
+          {{ t('auditLog.details.loadMore', { count: logs.length, total }) }}
         </el-button>
       </div>
       <div v-else-if="logs.length > 0 && !isLoading" class="end-of-records">
-        <span>Has llegado al final del registro de actividad.</span>
+        <span>{{ t('auditLog.details.endOfRecords') }}</span>
       </div>
     </div>
   </div>

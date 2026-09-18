@@ -4,6 +4,7 @@ import { useCountryStore } from '../stores/country.store'
 import { WORLD_COUNTRIES } from '../domain/world-countries.data'
 import type { Pais, AreaItem, HotelItem } from '../domain/country.model'
 import { getFlagEmoji } from '@/shared/flagEmoji'
+import { useLocale } from '@/i18n/useLocale'
 import {
   Plus,
   Delete,
@@ -24,6 +25,7 @@ interface TreeNode {
   children?: TreeNode[]
 }
 
+const { t } = useLocale()
 const countryStore = useCountryStore()
 
 const selectedCountryCode = ref<string>('')
@@ -71,7 +73,7 @@ const treeData = computed<TreeNode[]>(() => {
 
 async function handleAddCountry() {
   if (!selectedCountryCode.value) {
-    ElMessage.warning('Por favor selecciona un país de la lista')
+    ElMessage.warning(t('countriesConfig.toasts.selectCountryWarning'))
     return
   }
 
@@ -82,7 +84,7 @@ async function handleAddCountry() {
     (c) => c.codigo.toUpperCase() === target.codigo.toUpperCase(),
   )
   if (alreadyExists) {
-    ElMessage.warning('El país seleccionado ya se encuentra en el sistema')
+    ElMessage.warning(t('countriesConfig.toasts.countryAlreadyExists'))
     return
   }
 
@@ -93,10 +95,10 @@ async function handleAddCountry() {
       nombre: target.nombre,
       codigoTelefono: target.codigoTelefono,
     })
-    ElMessage.success(`País "${target.nombre}" añadido correctamente`)
+    ElMessage.success(t('countriesConfig.toasts.countryAdded', { name: target.nombre }))
     selectedCountryCode.value = ''
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al añadir el país'
+    const message = err instanceof Error ? err.message : t('countriesConfig.toasts.addCountryError')
     ElMessage.error(message)
   } finally {
     isAdding.value = false
@@ -106,9 +108,9 @@ async function handleAddCountry() {
 async function handleDeleteCountry(pais: Pais) {
   try {
     await countryStore.deleteCountry(pais.id)
-    ElMessage.success(`País "${pais.nombre}" eliminado correctamente`)
+    ElMessage.success(t('countriesConfig.toasts.countryDeleted', { name: pais.nombre }))
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al eliminar el país'
+    const message = err instanceof Error ? err.message : t('countriesConfig.toasts.deleteCountryError')
     ElMessage.error(message)
   }
 }
@@ -125,7 +127,7 @@ function cancelAddAreaForm() {
 
 async function handleCreateArea(paisId: number) {
   if (!newAreaName.value.trim()) {
-    ElMessage.warning('Por favor introduce el nombre del área')
+    ElMessage.warning(t('countriesConfig.toasts.areaNameRequired'))
     return
   }
 
@@ -135,10 +137,10 @@ async function handleCreateArea(paisId: number) {
       paisId,
       nombre: newAreaName.value.trim(),
     })
-    ElMessage.success(`Área "${newAreaName.value.trim()}" creada correctamente`)
+    ElMessage.success(t('countriesConfig.toasts.areaCreated', { name: newAreaName.value.trim() }))
     cancelAddAreaForm()
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al crear el área'
+    const message = err instanceof Error ? err.message : t('countriesConfig.toasts.createAreaError')
     ElMessage.error(message)
   } finally {
     isCreatingArea.value = false
@@ -148,9 +150,9 @@ async function handleCreateArea(paisId: number) {
 async function handleDeleteArea(area: AreaItem) {
   try {
     await countryStore.deleteArea(area.id)
-    ElMessage.success(`Área "${area.nombre}" eliminada correctamente`)
+    ElMessage.success(t('countriesConfig.toasts.areaDeleted', { name: area.nombre }))
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al eliminar el área'
+    const message = err instanceof Error ? err.message : t('countriesConfig.toasts.deleteAreaError')
     ElMessage.error(message)
   }
 }
@@ -163,7 +165,7 @@ async function handleDeleteArea(area: AreaItem) {
       <el-select
         v-model="selectedCountryCode"
         filterable
-        placeholder="Buscar y seleccionar país para añadir..."
+        :placeholder="t('countriesConfig.searchCountryPlaceholder')"
         size="large"
         class="country-select"
       >
@@ -192,7 +194,7 @@ async function handleDeleteArea(area: AreaItem) {
         :disabled="!selectedCountryCode"
         @click="handleAddCountry"
       >
-        Añadir País
+        {{ t('countriesConfig.addCountryButton') }}
       </el-button>
     </div>
 
@@ -214,14 +216,14 @@ async function handleDeleteArea(area: AreaItem) {
                     type="primary"
                     link
                     :icon="Plus"
-                    title="Añadir área"
+                    :title="t('countriesConfig.addAreaTooltip')"
                     class="action-btn"
                     @click.stop="showAddAreaForm(data.rawPais.id)"
                   />
                   <el-popconfirm
-                    :title="`¿Eliminar el país ${data.rawPais.nombre}?`"
-                    confirm-button-text="Eliminar"
-                    cancel-button-text="Cancelar"
+                    :title="t('countriesConfig.deleteCountryConfirm', { name: data.rawPais.nombre })"
+                    :confirm-button-text="t('countriesConfig.delete')"
+                    :cancel-button-text="t('countriesConfig.cancel')"
                     confirm-button-type="danger"
                     :width="240"
                     @confirm="handleDeleteCountry(data.rawPais)"
@@ -231,7 +233,7 @@ async function handleDeleteArea(area: AreaItem) {
                         type="danger"
                         link
                         :icon="Delete"
-                        title="Eliminar país"
+                        :title="t('countriesConfig.deleteCountryTooltip')"
                         class="action-btn delete-btn"
                         @click.stop
                       />
@@ -243,7 +245,7 @@ async function handleDeleteArea(area: AreaItem) {
                 <div v-else class="forms-container" @click.stop>
                   <el-input
                     v-model="newAreaName"
-                    placeholder="Nombre del área..."
+                    :placeholder="t('countriesConfig.areaNamePlaceholder')"
                     size="small"
                     class="area-inline-input"
                     @keyup.enter="handleCreateArea(data.rawPais.id)"
@@ -265,14 +267,14 @@ async function handleDeleteArea(area: AreaItem) {
             <template v-else-if="data.type === 'area' && data.rawArea">
               <el-icon class="node-icon area-icon"><Location /></el-icon>
               <span class="node-title area-title">{{ data.rawArea.nombre }}</span>
-              <span class="count-badge">({{ (data.rawArea.hoteles || []).length }} hoteles)</span>
+              <span class="count-badge">{{ t('countriesConfig.hotelsCount', { count: (data.rawArea.hoteles || []).length }) }}</span>
 
               <!-- Botón Eliminar Área (Icono Papelera) -->
               <div class="node-actions" @click.stop>
                 <el-popconfirm
-                  :title="`¿Eliminar el área ${data.rawArea.nombre}?`"
-                  confirm-button-text="Eliminar"
-                  cancel-button-text="Cancelar"
+                  :title="t('countriesConfig.deleteAreaConfirm', { name: data.rawArea.nombre })"
+                  :confirm-button-text="t('countriesConfig.delete')"
+                  :cancel-button-text="t('countriesConfig.cancel')"
                   confirm-button-type="danger"
                   :width="240"
                   @confirm="handleDeleteArea(data.rawArea)"
@@ -282,7 +284,7 @@ async function handleDeleteArea(area: AreaItem) {
                       type="danger"
                       link
                       :icon="Delete"
-                      title="Eliminar área"
+                      :title="t('countriesConfig.deleteAreaTooltip')"
                       class="action-btn delete-btn"
                       @click.stop
                     />

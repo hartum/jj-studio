@@ -7,6 +7,7 @@ import {
   type VariableInfo,
 } from '../composables/useEmailTemplates'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
+import { useLocale } from '@/i18n/useLocale'
 import {
   Check,
   Refresh,
@@ -22,6 +23,7 @@ defineProps<{
   embedded?: boolean
 }>()
 
+const { t } = useLocale()
 const authStore = useAuthStore()
 const {
   templates,
@@ -137,7 +139,7 @@ function syncFormWithTemplates() {
 async function handleSave() {
   const current = formState.value[activeTab.value]
   if (!current.asunto.trim() || !current.cuerpoHtml.trim()) {
-    ElMessage.warning('El asunto y el cuerpo HTML son obligatorios')
+    ElMessage.warning(t('emailTemplates.toasts.subjectAndHtmlRequired'))
     return
   }
 
@@ -147,9 +149,9 @@ async function handleSave() {
       cuerpoHtml: current.cuerpoHtml,
       cuerpoTexto: current.cuerpoTexto,
     })
-    ElMessage.success('Plantilla de correo guardada con éxito')
+    ElMessage.success(t('emailTemplates.toasts.templateSaved'))
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al guardar la plantilla'
+    const message = err instanceof Error ? err.message : t('emailTemplates.toasts.saveError')
     ElMessage.error(message)
   }
 }
@@ -157,18 +159,18 @@ async function handleSave() {
 async function handleReset() {
   try {
     await ElMessageBox.confirm(
-      '¿Estás seguro de que deseas restablecer esta plantilla al diseño por defecto oficial de JJ Studio? Se perderán las modificaciones personalizadas no guardadas.',
-      'Restablecer Plantilla',
+      t('emailTemplates.dialogs.resetConfirmText'),
+      t('emailTemplates.dialogs.resetConfirmTitle'),
       {
-        confirmButtonText: 'Restablecer',
-        cancelButtonText: 'Cancelar',
+        confirmButtonText: t('emailTemplates.dialogs.resetConfirmButton'),
+        cancelButtonText: t('emailTemplates.dialogs.cancelButton'),
         type: 'warning',
       },
     )
 
     await resetTemplate(activeTab.value)
     syncFormWithTemplates()
-    ElMessage.success('Plantilla restablecida a los valores por defecto')
+    ElMessage.success(t('emailTemplates.toasts.templateReset'))
   } catch {
     // cancelled or error
   }
@@ -177,11 +179,11 @@ async function handleReset() {
 async function handleTestReminders() {
   try {
     await ElMessageBox.confirm(
-      'Esta acción buscará las citas y sesiones programadas para HOY y enviará un correo de recordatorio real a los clientes que tengan email registrado y aún no hayan recibido recordatorio.',
-      'Disparar Recordatorios de Hoy',
+      t('emailTemplates.dialogs.testConfirmText'),
+      t('emailTemplates.dialogs.testConfirmTitle'),
       {
-        confirmButtonText: 'Enviar Recordatorios',
-        cancelButtonText: 'Cancelar',
+        confirmButtonText: t('emailTemplates.dialogs.testConfirmButton'),
+        cancelButtonText: t('emailTemplates.dialogs.cancelButton'),
         type: 'info',
       },
     )
@@ -191,11 +193,16 @@ async function handleTestReminders() {
     const sales = res.result?.citasVenta || { found: 0, sent: 0, failed: 0 }
 
     ElMessage.success(
-      `Proceso completado: ${ses.sent} recordatorios de sesión enviados (${ses.found} encontradas) y ${sales.sent} de citas de venta (${sales.found} encontradas).`,
+      t('emailTemplates.dialogs.testSuccessSummary', {
+        sesSent: ses.sent,
+        sesFound: ses.found,
+        salesSent: sales.sent,
+        salesFound: sales.found,
+      }),
     )
   } catch (err: unknown) {
     if (err !== 'cancel') {
-      const message = err instanceof Error ? err.message : 'Error al ejecutar recordatorios'
+      const message = err instanceof Error ? err.message : t('emailTemplates.toasts.testRemindersError')
       ElMessage.error(message)
     }
   }
@@ -235,7 +242,7 @@ function insertVariable(varKey: string) {
   }
 
   ElMessage.info({
-    message: `Variable ${varKey} insertada`,
+    message: t('emailTemplates.toasts.variableInserted', { varKey }),
     duration: 1500,
   })
 }
@@ -243,7 +250,7 @@ function insertVariable(varKey: string) {
 function copyVariableToClipboard(varKey: string) {
   navigator.clipboard.writeText(varKey)
   ElMessage.success({
-    message: `Copiado: ${varKey}`,
+    message: t('emailTemplates.toasts.copied', { varKey }),
     duration: 1500,
   })
 }
@@ -263,10 +270,9 @@ onMounted(async () => {
     <!-- Header (cuando no está incrustado en pestañas de configuración) -->
     <div v-if="!embedded" class="page-header">
       <div>
-        <h1 class="page-title">Plantillas de Correo</h1>
+        <h1 class="page-title">{{ t('emailTemplates.title') }}</h1>
         <p class="page-subtitle">
-          Configura el asunto y contenido HTML de los emails automáticos que reciben los clientes el
-          día de su cita.
+          {{ t('emailTemplates.subtitle') }}
         </p>
       </div>
 
@@ -279,7 +285,7 @@ onMounted(async () => {
           :loading="isTestingReminders"
           @click="handleTestReminders"
         >
-          Probar Recordatorios Hoy
+          {{ t('emailTemplates.testRemindersToday') }}
         </el-button>
       </div>
     </div>
@@ -288,8 +294,8 @@ onMounted(async () => {
     <div class="email-templates-container" v-loading="isLoading">
       <div class="template-nav-bar">
         <el-tabs v-model="activeTab" type="card" class="type-tabs">
-          <el-tab-pane label="📸 Recordatorio de Sesión" name="RECORDATORIO_SESION" />
-          <el-tab-pane label="📅 Recordatorio de Cita de Venta" name="RECORDATORIO_VENTA" />
+          <el-tab-pane :label="t('emailTemplates.tabs.photoSessionReminder')" name="RECORDATORIO_SESION" />
+          <el-tab-pane :label="t('emailTemplates.tabs.saleAppointmentReminder')" name="RECORDATORIO_VENTA" />
         </el-tabs>
 
         <div class="template-top-actions">
@@ -297,13 +303,13 @@ onMounted(async () => {
             <el-radio-button value="preview" label="preview">
               <span class="radio-btn-content">
                 <Eye :size="15" :stroke-width="2" class="btn-icon" />
-                <span>Vista Previa</span>
+                <span>{{ t('emailTemplates.viewModes.preview') }}</span>
               </span>
             </el-radio-button>
             <el-radio-button value="code" label="code">
               <span class="radio-btn-content">
                 <CodeXml :size="15" :stroke-width="2" class="btn-icon" />
-                <span>Código</span>
+                <span>{{ t('emailTemplates.viewModes.code') }}</span>
               </span>
             </el-radio-button>
           </el-radio-group>
@@ -336,22 +342,18 @@ onMounted(async () => {
             <div class="field-group">
               <label class="field-label">
                 <el-icon :size="16"><Message /></el-icon>
-                <span>Asunto del Correo (Subject)</span>
+                <span>{{ t('emailTemplates.editor.subjectLabel') }}</span>
               </label>
               <el-input
                 ref="subjectEditorRef"
                 v-model="formState[activeTab].asunto"
-                placeholder="Ej: 📸 Recordatorio: Tu sesión de fotos en [hotel_nombre] /Photo session appointment"
+                :placeholder="t('emailTemplates.editor.subjectPlaceholder')"
                 size="large"
                 clearable
                 @focus="lastFocusedField = 'asunto'"
               />
               <p class="field-hint">
-                Puedes insertar variables como
-                <code>[hotel_nombre]</code>
-                o
-                <code>[fecha_sesion]</code>
-                en el asunto.
+                {{ t('emailTemplates.editor.subjectHint') }}
               </p>
             </div>
 
@@ -359,7 +361,7 @@ onMounted(async () => {
             <div class="field-group">
               <label class="field-label">
                 <el-icon :size="16"><Document /></el-icon>
-                <span>Cuerpo del Correo (HTML)</span>
+                <span>{{ t('emailTemplates.editor.htmlLabel') }}</span>
               </label>
 
               <el-input
@@ -368,26 +370,25 @@ onMounted(async () => {
                 type="textarea"
                 :rows="18"
                 class="code-editor-textarea"
-                placeholder="Pega o edita el código HTML aquí..."
+                :placeholder="t('emailTemplates.editor.htmlPlaceholder')"
                 @focus="lastFocusedField = 'cuerpoHtml'"
               />
               <p class="field-hint">
-                Soporta etiquetas HTML estándar y estilos en línea (CSS inline) compatibles con
-                clientes de correo (Gmail, Outlook, Apple Mail).
+                {{ t('emailTemplates.editor.htmlHint') }}
               </p>
             </div>
 
             <!-- Texto Plano Fallback (Opcional / Colapsable) -->
             <el-collapse class="plaintext-collapse">
               <el-collapse-item
-                title="Texto Alternativo en Plano (Plain Text Fallback)"
+                :title="t('emailTemplates.editor.plaintextTitle')"
                 name="plaintext"
               >
                 <el-input
                   v-model="formState[activeTab].cuerpoTexto"
                   type="textarea"
                   :rows="6"
-                  placeholder="Versión solo texto para clientes antiguos..."
+                  :placeholder="t('emailTemplates.editor.plaintextPlaceholder')"
                 />
               </el-collapse-item>
             </el-collapse>
@@ -401,7 +402,7 @@ onMounted(async () => {
                 :loading="isSaving"
                 @click="handleSave"
               >
-                Guardar Plantilla
+                {{ t('emailTemplates.editor.saveButton') }}
               </el-button>
 
               <el-button
@@ -413,7 +414,7 @@ onMounted(async () => {
                 :loading="isResetting"
                 @click="handleReset"
               >
-                Restablecer plantilla por defecto
+                {{ t('emailTemplates.editor.resetButton') }}
               </el-button>
             </div>
           </div>
@@ -422,16 +423,16 @@ onMounted(async () => {
           <div class="variables-sidebar">
             <div class="variables-card">
               <div class="variables-header">
-                <span class="variables-title">Variables Disponibles</span>
+                <span class="variables-title">{{ t('emailTemplates.variables.title') }}</span>
                 <el-tooltip
-                  content="Haz clic en cualquier variable para insertarla en la posición actual del cursor"
+                  :content="t('emailTemplates.variables.tooltip')"
                   placement="top"
                 >
                   <el-icon class="info-icon"><InfoFilled /></el-icon>
                 </el-tooltip>
               </div>
               <p class="variables-desc">
-                Haz clic en una variable para insertarla en el campo activo (Asunto o HTML):
+                {{ t('emailTemplates.variables.instructions') }}
               </p>
 
               <div class="variables-scroll">
@@ -455,12 +456,12 @@ onMounted(async () => {
                           link
                           size="small"
                           :icon="CopyDocument"
-                          title="Copiar al portapapeles"
+                          :title="t('emailTemplates.variables.copyTooltip')"
                           @click.stop="copyVariableToClipboard(v.key)"
                         />
                       </div>
                       <div class="pill-label">{{ v.label }}</div>
-                      <div class="pill-example">Ej: {{ v.example }}</div>
+                      <div class="pill-example">{{ t('emailTemplates.variables.example', { example: v.example }) }}</div>
                     </div>
                   </div>
                 </div>

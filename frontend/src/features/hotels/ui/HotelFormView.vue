@@ -4,9 +4,11 @@ import { useRoute, useRouter } from 'vue-router'
 import { useHotelStore } from '../stores/hotel.store'
 import { useCountryStore } from '@/features/countries/stores/country.store'
 import { getFlagEmoji } from '@/shared/flagEmoji'
+import { useLocale } from '@/i18n/useLocale'
 import { ArrowLeft, Check, Close } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
+const { t } = useLocale()
 const route = useRoute()
 const router = useRouter()
 const hotelStore = useHotelStore()
@@ -62,7 +64,7 @@ onMounted(async () => {
         longitud: existing.longitud || null,
       }
     } else {
-      ElMessage.error('Hotel no encontrado')
+      ElMessage.error(t('hotelsConfig.toasts.hotelNotFound'))
       router.push('/configuracion?tab=hoteles')
     }
   } else {
@@ -102,7 +104,7 @@ function handleCancel() {
 
 async function handleSave() {
   if (!formData.value.nombre.trim() || !formData.value.areaId) {
-    ElMessage.warning('Por favor completa todos los campos requeridos (*)')
+    ElMessage.warning(t('hotelsConfig.toasts.requiredFields'))
     return
   }
 
@@ -119,7 +121,7 @@ async function handleSave() {
         email: formData.value.email,
         telefono: formData.value.telefono,
       })
-      ElMessage.success('Hotel actualizado correctamente')
+      ElMessage.success(t('hotelsConfig.toasts.hotelUpdated'))
     } else {
       await hotelStore.addHotel({
         areaId: formData.value.areaId,
@@ -131,11 +133,11 @@ async function handleSave() {
         email: formData.value.email,
         telefono: formData.value.telefono,
       })
-      ElMessage.success('Hotel creado correctamente')
+      ElMessage.success(t('hotelsConfig.toasts.hotelCreated'))
     }
     router.push('/configuracion?tab=hoteles')
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al guardar el hotel'
+    const message = err instanceof Error ? err.message : t('hotelsConfig.toasts.saveError')
     ElMessage.error(message)
   } finally {
     isSaving.value = false
@@ -151,13 +153,13 @@ async function handleSave() {
         <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleCancel" />
         <div>
           <h1 class="page-title">
-            {{ isEditing ? 'Editar Hotel' : 'Nuevo Hotel' }}
+            {{ isEditing ? t('hotelsConfig.form.titleEdit') : t('hotelsConfig.form.titleNew') }}
           </h1>
           <p class="page-subtitle">
             {{
               isEditing
-                ? 'Modifica los datos operativos y área asignada al hotel'
-                : 'Completa la información para dar de alta un nuevo hotel'
+                ? t('hotelsConfig.form.subtitleEdit')
+                : t('hotelsConfig.form.subtitleNew')
             }}
           </p>
         </div>
@@ -173,12 +175,12 @@ async function handleSave() {
       class="hotel-form"
       @submit.prevent="handleSave"
     >
-      <el-form-item label="Nombre del Hotel *" required>
-        <el-input v-model="formData.nombre" placeholder="Ej. Riu Cancún" />
+      <el-form-item :label="t('hotelsConfig.form.hotelNameRequired')" required>
+        <el-input v-model="formData.nombre" :placeholder="t('hotelsConfig.form.hotelNamePlaceholder')" />
       </el-form-item>
 
-      <el-form-item label="Área Asignada *" required>
-        <el-select v-model="formData.areaId" placeholder="Selecciona un área" style="width: 100%">
+      <el-form-item :label="t('hotelsConfig.form.assignedAreaRequired')" required>
+        <el-select v-model="formData.areaId" :placeholder="t('hotelsConfig.form.selectAreaPlaceholder')" style="width: 100%">
           <el-option
             v-for="area in allAreasFlat"
             :key="area.id"
@@ -188,38 +190,38 @@ async function handleSave() {
         </el-select>
       </el-form-item>
 
-      <el-form-item label="Cadena Hotelera">
+      <el-form-item :label="t('hotelsConfig.form.hotelChain')">
         <el-input
           v-model="formData.cadenaHotelera"
-          placeholder="Ej. RIU, Iberostar, Hyatt, Secrets"
+          :placeholder="t('hotelsConfig.form.hotelChainPlaceholder')"
         />
       </el-form-item>
 
-      <el-form-item label="Categoría / Estrellas">
+      <el-form-item :label="t('hotelsConfig.form.stars')">
         <el-rate v-model="formData.estrellas" />
       </el-form-item>
 
-      <el-form-item label="Persona de Contacto">
+      <el-form-item :label="t('hotelsConfig.form.contactPerson')">
         <el-input
           v-model="formData.personaContacto"
-          placeholder="Ej. Director de Animación / Gerente"
+          :placeholder="t('hotelsConfig.form.contactPersonPlaceholder')"
         />
       </el-form-item>
 
-      <el-form-item label="Teléfono de Contacto">
-        <el-input v-model="formData.telefono" placeholder="+52 998 000 0000" />
+      <el-form-item :label="t('hotelsConfig.form.contactPhone')">
+        <el-input v-model="formData.telefono" :placeholder="t('hotelsConfig.form.contactPhonePlaceholder')" />
       </el-form-item>
 
-      <el-form-item label="Correo Electrónico">
-        <el-input v-model="formData.email" placeholder="contacto@hotel.com" />
+      <el-form-item :label="t('hotelsConfig.form.email')">
+        <el-input v-model="formData.email" :placeholder="t('hotelsConfig.form.emailPlaceholder')" />
       </el-form-item>
 
-      <el-form-item label="Dirección Física">
+      <el-form-item :label="t('hotelsConfig.form.address')">
         <el-input
           v-model="formData.direccion"
           type="textarea"
           :rows="3"
-          placeholder="Dirección completa del hotel"
+          :placeholder="t('hotelsConfig.form.addressPlaceholder')"
         />
       </el-form-item>
 
@@ -231,14 +233,14 @@ async function handleSave() {
           :loading="isSaving"
           @click="handleSave"
         >
-          {{ isEditing ? 'Guardar Cambios' : 'Crear Hotel' }}
+          {{ isEditing ? t('hotelsConfig.form.saveChanges') : t('hotelsConfig.form.createHotel') }}
         </el-button>
         <el-button
           :size="isMobile ? 'large' : 'default'"
           :icon="Close"
           @click="handleCancel"
         >
-          Cancelar
+          {{ t('hotelsConfig.form.cancel') }}
         </el-button>
       </el-form-item>
     </el-form>

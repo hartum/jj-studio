@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useLocale } from '@/i18n/useLocale'
 import type { SaleAppointmentFormContext } from '../composables/useSaleAppointmentForm'
 import {
   ArrowLeft,
@@ -20,6 +21,7 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
+const { t, locale } = useLocale()
 
 const {
   formData,
@@ -63,26 +65,13 @@ function formatSessionDate(dateStr?: string | null): string {
   if (!dateStr) return '-'
   try {
     const d = new Date(dateStr)
-    const weekdays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
-    const months = [
-      'Enero',
-      'Febrero',
-      'Marzo',
-      'Abril',
-      'Mayo',
-      'Junio',
-      'Julio',
-      'Agosto',
-      'Septiembre',
-      'Octubre',
-      'Noviembre',
-      'Diciembre',
-    ]
-    const weekday = weekdays[d.getDay()]
-    const day = d.getDate()
-    const month = months[d.getMonth()]
-    const year = d.getFullYear()
-    return `${weekday}, ${day} ${month}, ${year}`
+    const loc = locale.value === 'en' ? 'en-US' : 'es-ES'
+    return d.toLocaleDateString(loc, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
   } catch {
     return dateStr
   }
@@ -100,7 +89,7 @@ function formatSessionTime(dateStr?: string | null): string {
 
 function formatPersonas(adultos: number = 1, ninos: number = 0): string {
   const total = (adultos || 0) + (ninos || 0)
-  return `${total} (${adultos || 0} ad., ${ninos || 0} niños)`
+  return t('sales.summary.peopleFormat', { total, adults: adultos || 0, children: ninos || 0 })
 }
 
 function toggleSessionsList() {
@@ -249,7 +238,7 @@ const formattedSelectedSaleDateTime = computed(() => {
         <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleGoBack" />
         <div>
           <h1 class="page-title">
-            {{ isEditing ? 'Editar Cita de Venta' : 'Nueva Cita de Venta' }}
+            {{ isEditing ? $t('sales.titleEdit') : $t('sales.titleNew') }}
           </h1>
         </div>
       </div>
@@ -261,7 +250,7 @@ const formattedSelectedSaleDateTime = computed(() => {
       <div class="form-main-col">
         <!-- Read-only lock banner -->
         <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-          Para editar esta cita contacta con tu gerente de área o administrador.
+          {{ $t('sales.readOnlyNotice') }}
         </el-alert>
 
         <!-- Conflict banner -->
@@ -274,7 +263,7 @@ const formattedSelectedSaleDateTime = computed(() => {
           class="conflict-banner"
         >
           <template #title>
-            Hay {{ conflicts.length }} cita(s) de venta en la misma franja horaria (±1h)
+            {{ $t('sales.conflicts.desktopTitle', { count: conflicts.length }) }}
           </template>
           <div v-for="c in conflicts" :key="c.id" class="conflict-item">
             {{ c.clienteNombre }} — {{ c.fechaHoraCita }}
@@ -287,7 +276,7 @@ const formattedSelectedSaleDateTime = computed(() => {
             <div class="card-header-with-date">
               <span class="ref-card-title">
                 <el-icon :size="24"><Money /></el-icon>
-                Cita venta fotos
+                {{ $t('sales.photoSaleAppointment') }}
               </span>
               <div v-if="formattedSelectedSaleDateTime" class="header-datetime-preview">
                 <el-tag effect="plain" round size="large" class="header-datetime-tag">
@@ -331,7 +320,7 @@ const formattedSelectedSaleDateTime = computed(() => {
                   <div class="schedule-section-header-row">
                     <div class="schedule-subheading">
                       <span class="step-badge">1</span>
-                      <span>SELECCIONA HORARIO</span>
+                      <span>{{ $t('sales.steps.stepTime') }}</span>
                     </div>
                   </div>
                   <div class="time-slots-grid">
@@ -380,7 +369,7 @@ const formattedSelectedSaleDateTime = computed(() => {
 
                 <!-- Inputs de Fotos Vendidas y Total USD (Debajo de las horas) -->
                 <div class="sales-inputs-row">
-                  <el-form-item label="Nº de Fotos Vendidas *" required>
+                  <el-form-item :label="$t('sales.form.photosSoldRequired')" required>
                     <el-input-number
                       v-model="formData.numFotosVendidas"
                       :min="0"
@@ -390,7 +379,7 @@ const formattedSelectedSaleDateTime = computed(() => {
                     />
                   </el-form-item>
 
-                  <el-form-item label="Total en USD *" required>
+                  <el-form-item :label="$t('sales.form.totalUsdRequired')" required>
                     <el-input-number
                       v-model="formData.totalVentaUsd"
                       :min="0"
@@ -409,12 +398,12 @@ const formattedSelectedSaleDateTime = computed(() => {
             </div>
 
             <!-- Notes -->
-            <el-form-item label="Notas">
+            <el-form-item :label="$t('sales.form.notes')">
               <el-input
                 v-model="formData.notas"
                 type="textarea"
                 :rows="5"
-                placeholder="Notas sobre la cita de venta..."
+                :placeholder="$t('sales.form.notesPlaceholder')"
               />
             </el-form-item>
 
@@ -427,9 +416,9 @@ const formattedSelectedSaleDateTime = computed(() => {
                 :disabled="isSubmitDisabled"
                 @click="handleSave"
               >
-                {{ isEditing ? 'Guardar Cambios' : 'Agendar Cita' }}
+                {{ isEditing ? $t('sales.actions.saveChanges') : $t('sales.actions.scheduleAppointment') }}
               </el-button>
-              <el-button :icon="Close" @click="handleGoBack">Cancelar</el-button>
+              <el-button :icon="Close" @click="handleGoBack">{{ $t('sales.actions.cancel') }}</el-button>
             </div>
           </el-form>
         </el-card>
@@ -453,8 +442,8 @@ const formattedSelectedSaleDateTime = computed(() => {
               <el-icon :size="22"><Camera /></el-icon>
             </div>
             <div class="session-info-box">
-              <span class="session-category-label">SIN SESIÓN ASOCIADA</span>
-              <span class="session-title-label">Elige una sesión de fotos</span>
+              <span class="session-category-label">{{ $t('sales.sessionPicker.noSessionAssociated') }}</span>
+              <span class="session-title-label">{{ $t('sales.sessionPicker.chooseSession') }}</span>
             </div>
           </div>
 
@@ -482,7 +471,7 @@ const formattedSelectedSaleDateTime = computed(() => {
               </div>
 
               <div class="session-selected-titles">
-                <span class="session-selected-badge-label">FOTÓGRAFO ASIGNADO</span>
+                <span class="session-selected-badge-label">{{ $t('sales.sessionPicker.assignedPhotographer') }}</span>
                 <span class="session-selected-name">{{ photographerName }}</span>
               </div>
 
@@ -492,7 +481,7 @@ const formattedSelectedSaleDateTime = computed(() => {
                 class="session-view-action-btn-selected"
                 @click.stop="router.push(`/agenda/${formData.sesionId}/editar`)"
               >
-                Ver sesión
+                {{ $t('sales.sessionPicker.viewSession') }}
               </el-button>
             </div>
 
@@ -500,34 +489,34 @@ const formattedSelectedSaleDateTime = computed(() => {
 
             <div class="session-selected-details">
               <div class="detail-row">
-                <span class="detail-label">Hotel:</span>
+                <span class="detail-label">{{ $t('sales.summary.hotel') }}</span>
                 <span class="detail-value">{{ sessionInfo.hotelNombre }}</span>
               </div>
               <div class="detail-row">
-                <span class="detail-label">Cliente:</span>
+                <span class="detail-label">{{ $t('sales.summary.client') }}</span>
                 <span class="detail-value">{{ sessionInfo.clienteNombre }}</span>
               </div>
               <div class="detail-row">
-                <span class="detail-label">Fecha:</span>
+                <span class="detail-label">{{ $t('sales.summary.date') }}</span>
                 <span class="detail-value">
                   {{ formatSessionDate(sessionInfo.fechaHoraInicio) }}
                 </span>
               </div>
               <div class="detail-row">
-                <span class="detail-label">Hora:</span>
+                <span class="detail-label">{{ $t('sales.summary.time') }}</span>
                 <span class="detail-value">
                   {{ formatSessionTime(sessionInfo.fechaHoraInicio) }}
                 </span>
               </div>
               <div class="detail-row">
-                <span class="detail-label">Personas:</span>
+                <span class="detail-label">{{ $t('sales.summary.people') }}</span>
                 <span class="detail-value">
                   {{ formatPersonas(sessionInfo.numAdultos, sessionInfo.numNinos) }}
                 </span>
               </div>
               <div class="detail-row">
-                <span class="detail-label">Motivo:</span>
-                <span class="detail-value">{{ sessionInfo.concepto || 'Otro' }}</span>
+                <span class="detail-label">{{ $t('sales.summary.reason') }}</span>
+                <span class="detail-value">{{ sessionInfo.concepto || $t('sales.summary.otherReason') }}</span>
               </div>
             </div>
           </div>
@@ -541,7 +530,7 @@ const formattedSelectedSaleDateTime = computed(() => {
             @click="toggleSessionsList"
           >
             <span class="toggle-text">
-              {{ showSessionsList ? 'OCULTAR SESIONES' : 'VER SESIONES' }}
+              {{ showSessionsList ? $t('sales.sessionPicker.hideSessions') : $t('sales.sessionPicker.viewSessions') }}
             </span>
             <el-icon class="toggle-icon" :class="{ 'is-rotated': showSessionsList }">
               <ChevronDown :size="18" />
@@ -552,7 +541,7 @@ const formattedSelectedSaleDateTime = computed(() => {
           <el-collapse-transition>
             <div v-if="showSessionsList" class="session-dropdown-container">
               <div v-if="availableSessions.length === 0" class="session-empty-state">
-                No hay sesiones fotográficas pendientes de agendar cita de venta.
+                {{ $t('sales.sessionPicker.noPendingSessions') }}
               </div>
               <div v-else class="session-dropdown-list">
                 <div
@@ -593,7 +582,7 @@ const formattedSelectedSaleDateTime = computed(() => {
                       <div class="pick-item-meta">
                         <span>{{ formatDateTime(session.fechaHoraInicio) }}</span>
                         <span v-if="session.numeroHabitacion">
-                          · Hab. {{ session.numeroHabitacion }}
+                          {{ $t('sales.sessionPicker.roomPrefix', { room: session.numeroHabitacion }) }}
                         </span>
                       </div>
                     </div>
@@ -605,7 +594,7 @@ const formattedSelectedSaleDateTime = computed(() => {
                       :type="session.estado === 'COMPLETADA' ? 'success' : 'primary'"
                       effect="light"
                     >
-                      {{ session.estado === 'COMPLETADA' ? 'Completada' : 'Programada' }}
+                      {{ session.estado === 'COMPLETADA' ? $t('sales.status.completed') : $t('sales.status.scheduled') }}
                     </el-tag>
                   </div>
                 </div>
@@ -614,7 +603,7 @@ const formattedSelectedSaleDateTime = computed(() => {
                   <el-icon style="vertical-align: middle; margin-right: 4px; color: #e6a23c">
                     <WarnTriangleFilled />
                   </el-icon>
-                  {{ excludedSessionsCount }} sesión(es) canceladas o no-show no se muestran.
+                  {{ $t('sales.conflicts.excludedNote', { count: excludedSessionsCount }) }}
                 </div>
               </div>
             </div>
@@ -660,13 +649,13 @@ const formattedSelectedSaleDateTime = computed(() => {
                 class="seller-subtitle-label"
                 :class="{ 'text-white-subtle': isSellerPhotographer }"
               >
-                Vendedor
+                {{ $t('sales.steps.seller') }}
               </span>
               <span class="seller-title-label" :class="{ 'text-white': isSellerPhotographer }">
                 {{
                   selectedSeller
                     ? `${selectedSeller.nombre} ${selectedSeller.apellidos}`
-                    : 'Selecciona vendedor'
+                    : $t('sales.sellerPicker.selectSeller')
                 }}
               </span>
             </div>
@@ -681,7 +670,7 @@ const formattedSelectedSaleDateTime = computed(() => {
             @click="toggleSellersList"
           >
             <span class="toggle-text">
-              {{ showSellersList ? 'OCULTAR VENDEDORES' : 'VER VENDEDORES' }}
+              {{ showSellersList ? $t('sales.sellerPicker.hideSellers') : $t('sales.sellerPicker.viewSellers') }}
             </span>
             <el-icon class="toggle-icon" :class="{ 'is-rotated': showSellersList }">
               <ChevronDown :size="18" />
@@ -692,10 +681,10 @@ const formattedSelectedSaleDateTime = computed(() => {
           <el-collapse-transition>
             <div v-if="showSellersList" class="seller-dropdown-container">
               <div v-if="!formData.hotelId" class="seller-empty-state">
-                Selecciona primero una sesión de fotos para ver los vendedores de su hotel.
+                {{ $t('sales.sellerPicker.selectSessionFirst') }}
               </div>
               <div v-else-if="sellers.length === 0" class="seller-empty-state">
-                No hay agendadores o fotógrafos asignados a este hotel.
+                {{ $t('sales.sellerPicker.noSellersInHotel') }}
               </div>
               <div v-else class="seller-dropdown-list">
                 <div
@@ -750,11 +739,11 @@ const formattedSelectedSaleDateTime = computed(() => {
         <!-- Selector de Modo de Cobro (Desktop) -->
         <el-card class="payment-method-card" shadow="never">
           <div class="payment-method-card-header">
-            <span class="payment-method-card-title">MODO DE COBRO</span>
+            <span class="payment-method-card-title">{{ $t('sales.steps.paymentMethodUpper') }}</span>
           </div>
           <el-select
             v-model="formData.modoCobro"
-            placeholder="Selecciona modo de cobro"
+            :placeholder="$t('sales.form.selectPaymentMethod')"
             clearable
             style="width: 100%"
             :disabled="isReadOnly"
@@ -771,7 +760,7 @@ const formattedSelectedSaleDateTime = computed(() => {
         <!-- Tarjeta de Estado de la Cita -->
         <el-card class="status-card" shadow="never">
           <div class="status-card-header">
-            <span class="status-card-title">ESTADO DE LA CITA</span>
+            <span class="status-card-title">{{ $t('sales.steps.statusUpper') }}</span>
           </div>
           <div class="status-grid">
             <button

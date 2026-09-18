@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useLocale } from '@/i18n/useLocale'
 import type { SaleAppointmentFormContext } from '../composables/useSaleAppointmentForm'
 import { ArrowLeft, Check, Close, Camera, WarnTriangleFilled, User } from '@element-plus/icons-vue'
 import { ChevronDown } from '@lucide/vue'
@@ -11,6 +12,7 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
+const { t, locale } = useLocale()
 
 const {
   formData,
@@ -149,26 +151,13 @@ function formatSessionDate(dateStr?: string | null): string {
   if (!dateStr) return '-'
   try {
     const d = new Date(dateStr)
-    const weekdays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
-    const months = [
-      'Enero',
-      'Febrero',
-      'Marzo',
-      'Abril',
-      'Mayo',
-      'Junio',
-      'Julio',
-      'Agosto',
-      'Septiembre',
-      'Octubre',
-      'Noviembre',
-      'Diciembre',
-    ]
-    const weekday = weekdays[d.getDay()]
-    const day = d.getDate()
-    const month = months[d.getMonth()]
-    const year = d.getFullYear()
-    return `${weekday}, ${day} ${month}, ${year}`
+    const loc = locale.value === 'en' ? 'en-US' : 'es-ES'
+    return d.toLocaleDateString(loc, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
   } catch {
     return dateStr
   }
@@ -186,7 +175,7 @@ function formatSessionTime(dateStr?: string | null): string {
 
 function formatPersonas(adultos: number = 1, ninos: number = 0): string {
   const total = (adultos || 0) + (ninos || 0)
-  return `${total} (${adultos || 0} ad., ${ninos || 0} niños)`
+  return t('sales.summary.peopleFormat', { total, adults: adultos || 0, children: ninos || 0 })
 }
 
 function toggleSessionsList() {
@@ -239,14 +228,14 @@ const isSellerPhotographer = computed(() => {
     <div class="mobile-header">
       <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleGoBack" />
       <h1 class="mobile-title">
-        {{ isEditing ? 'Editar Cita de Venta' : 'Nueva Cita de Venta' }}
+        {{ isEditing ? $t('sales.titleEdit') : $t('sales.titleNew') }}
       </h1>
     </div>
 
     <!-- Selector de Citas Estilo Card (Móvil) -->
     <div class="mobile-card-section-label">
       <span class="step-badge-num">1</span>
-      Sesión asociada
+      {{ $t('sales.steps.sessionMobile') }}
     </div>
     <div
       class="mobile-session-selector-card"
@@ -263,8 +252,8 @@ const isSellerPhotographer = computed(() => {
           <el-icon :size="22"><Camera /></el-icon>
         </div>
         <div class="session-info-box">
-          <span class="session-category-label">SIN SESIÓN ASOCIADA</span>
-          <span class="session-title-label">Elige una sesión de fotos</span>
+          <span class="session-category-label">{{ $t('sales.sessionPicker.noSessionAssociated') }}</span>
+          <span class="session-title-label">{{ $t('sales.sessionPicker.chooseSession') }}</span>
         </div>
       </div>
 
@@ -292,7 +281,7 @@ const isSellerPhotographer = computed(() => {
           </div>
 
           <div class="session-selected-titles">
-            <span class="session-selected-badge-label">FOTÓGRAFO ASIGNADO</span>
+            <span class="session-selected-badge-label">{{ $t('sales.sessionPicker.assignedPhotographer') }}</span>
             <span class="session-selected-name">{{ photographerName }}</span>
           </div>
 
@@ -302,7 +291,7 @@ const isSellerPhotographer = computed(() => {
             class="session-view-action-btn-selected"
             @click.stop="router.push(`/agenda/${formData.sesionId}/editar`)"
           >
-            Ver sesión
+            {{ $t('sales.sessionPicker.viewSession') }}
           </el-button>
         </div>
 
@@ -310,30 +299,30 @@ const isSellerPhotographer = computed(() => {
 
         <div class="session-selected-details">
           <div class="detail-row">
-            <span class="detail-label">Hotel:</span>
+            <span class="detail-label">{{ $t('sales.summary.hotel') }}</span>
             <span class="detail-value">{{ sessionInfo.hotelNombre }}</span>
           </div>
           <div class="detail-row">
-            <span class="detail-label">Cliente:</span>
+            <span class="detail-label">{{ $t('sales.summary.client') }}</span>
             <span class="detail-value">{{ sessionInfo.clienteNombre }}</span>
           </div>
           <div class="detail-row">
-            <span class="detail-label">Fecha:</span>
+            <span class="detail-label">{{ $t('sales.summary.date') }}</span>
             <span class="detail-value">{{ formatSessionDate(sessionInfo.fechaHoraInicio) }}</span>
           </div>
           <div class="detail-row">
-            <span class="detail-label">Hora:</span>
+            <span class="detail-label">{{ $t('sales.summary.time') }}</span>
             <span class="detail-value">{{ formatSessionTime(sessionInfo.fechaHoraInicio) }}</span>
           </div>
           <div class="detail-row">
-            <span class="detail-label">Personas:</span>
+            <span class="detail-label">{{ $t('sales.summary.people') }}</span>
             <span class="detail-value">
               {{ formatPersonas(sessionInfo.numAdultos, sessionInfo.numNinos) }}
             </span>
           </div>
           <div class="detail-row">
-            <span class="detail-label">Motivo:</span>
-            <span class="detail-value">{{ sessionInfo.concepto || 'Otro' }}</span>
+            <span class="detail-label">{{ $t('sales.summary.reason') }}</span>
+            <span class="detail-value">{{ sessionInfo.concepto || $t('sales.summary.otherReason') }}</span>
           </div>
         </div>
       </div>
@@ -347,7 +336,7 @@ const isSellerPhotographer = computed(() => {
         @click="toggleSessionsList"
       >
         <span class="toggle-text">
-          {{ showSessionsList ? 'OCULTAR SESIONES' : 'VER SESIONES' }}
+          {{ showSessionsList ? $t('sales.sessionPicker.hideSessions') : $t('sales.sessionPicker.viewSessions') }}
         </span>
         <el-icon class="toggle-icon" :class="{ 'is-rotated': showSessionsList }">
           <ChevronDown :size="18" />
@@ -358,7 +347,7 @@ const isSellerPhotographer = computed(() => {
       <el-collapse-transition>
         <div v-if="showSessionsList" class="session-dropdown-container">
           <div v-if="availableSessions.length === 0" class="session-empty-state">
-            No hay sesiones fotográficas pendientes de agendar cita de venta.
+            {{ $t('sales.sessionPicker.noPendingSessions') }}
           </div>
           <div v-else class="session-dropdown-list">
             <div
@@ -397,7 +386,7 @@ const isSellerPhotographer = computed(() => {
                   <div class="pick-item-meta">
                     <span>{{ formatDateTime(session.fechaHoraInicio) }}</span>
                     <span v-if="session.numeroHabitacion">
-                      · Hab. {{ session.numeroHabitacion }}
+                      {{ $t('sales.sessionPicker.roomPrefix', { room: session.numeroHabitacion }) }}
                     </span>
                   </div>
                 </div>
@@ -409,7 +398,7 @@ const isSellerPhotographer = computed(() => {
                   :type="session.estado === 'COMPLETADA' ? 'success' : 'primary'"
                   effect="light"
                 >
-                  {{ session.estado === 'COMPLETADA' ? 'Completada' : 'Programada' }}
+                  {{ session.estado === 'COMPLETADA' ? $t('sales.status.completed') : $t('sales.status.scheduled') }}
                 </el-tag>
               </div>
             </div>
@@ -418,7 +407,7 @@ const isSellerPhotographer = computed(() => {
             <el-icon style="vertical-align: middle; margin-right: 4px; color: #e6a23c">
               <WarnTriangleFilled />
             </el-icon>
-            {{ excludedSessionsCount }} sesión(es) canceladas o no-show no se muestran.
+            {{ $t('sales.conflicts.excludedNote', { count: excludedSessionsCount }) }}
           </div>
         </div>
       </el-collapse-transition>
@@ -430,7 +419,7 @@ const isSellerPhotographer = computed(() => {
       <div class="mobile-calendar-section">
         <div class="mobile-card-section-label">
           <span class="step-badge-num">2</span>
-          Fecha de la venta
+          {{ $t('sales.steps.date') }}
         </div>
 
         <div class="calendar-panel-box">
@@ -454,7 +443,7 @@ const isSellerPhotographer = computed(() => {
           <div class="schedule-section-header-row">
             <div class="schedule-subheading">
               <span class="step-badge-num">3</span>
-              <span>Hora de la venta</span>
+              <span>{{ $t('sales.steps.time') }}</span>
               <el-tag
                 v-if="selectedTimeOnly"
                 effect="plain"
@@ -518,9 +507,7 @@ const isSellerPhotographer = computed(() => {
               </template>
               <template #title>
                 <span>
-                  Hay
-                  <strong>{{ conflicts.length }}</strong>
-                  cita(s) de venta en el mismo hotel dentro de la franja de 1 hora (±1h)
+                  {{ $t('sales.conflicts.mobileTitle', { count: conflicts.length }) }}
                 </span>
               </template>
             </el-alert>
@@ -531,7 +518,7 @@ const isSellerPhotographer = computed(() => {
       <!-- Selector de Vendedor Estilo Card (Móvil) -->
       <div class="mobile-card-section-label">
         <span class="step-badge-num">4</span>
-        Vendedor
+        {{ $t('sales.steps.seller') }}
       </div>
       <div
         class="mobile-seller-selector-card"
@@ -571,7 +558,7 @@ const isSellerPhotographer = computed(() => {
               {{
                 selectedSeller
                   ? `${selectedSeller.nombre} ${selectedSeller.apellidos}`
-                  : 'Selecciona vendedor'
+                  : $t('sales.sellerPicker.selectSeller')
               }}
             </span>
             <span
@@ -593,7 +580,7 @@ const isSellerPhotographer = computed(() => {
           @click="toggleSellersList"
         >
           <span class="toggle-text">
-            {{ showSellersList ? 'OCULTAR VENDEDORES' : 'VER VENDEDORES' }}
+            {{ showSellersList ? $t('sales.sellerPicker.hideSellers') : $t('sales.sellerPicker.viewSellers') }}
           </span>
           <el-icon class="toggle-icon" :class="{ 'is-rotated': showSellersList }">
             <ChevronDown :size="18" />
@@ -604,10 +591,10 @@ const isSellerPhotographer = computed(() => {
         <el-collapse-transition>
           <div v-if="showSellersList" class="seller-dropdown-container">
             <div v-if="!formData.hotelId" class="seller-empty-state">
-              Selecciona primero una sesión de fotos para ver los vendedores de su hotel.
+              {{ $t('sales.sellerPicker.selectSessionFirst') }}
             </div>
             <div v-else-if="sellers.length === 0" class="seller-empty-state">
-              No hay agendadores o fotógrafos asignados a este hotel.
+              {{ $t('sales.sellerPicker.noSellersInHotel') }}
             </div>
             <div v-else class="seller-dropdown-list">
               <div
@@ -666,7 +653,7 @@ const isSellerPhotographer = computed(() => {
 
       <!-- Read-only lock banner -->
       <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-        Para editar esta cita contacta con tu gerente de área o administrador.
+        {{ $t('sales.readOnlyNotice') }}
       </el-alert>
 
       <!-- Datos de Venta y Notas (Directo en el flujo del formulario, sin tarjeta) -->
@@ -680,10 +667,10 @@ const isSellerPhotographer = computed(() => {
         <!-- Fotos Vendidas y Total USD en 2 columnas (50% cada una) -->
         <div class="mobile-card-section-label">
           <span class="step-badge-num">5</span>
-          Venta
+          {{ $t('sales.steps.sale') }}
         </div>
         <div class="mobile-form-row-2 spinner-containers">
-          <el-form-item label="Fotos Vendidas">
+          <el-form-item :label="$t('sales.form.photosSold')">
             <el-input-number
               v-model="formData.numFotosVendidas"
               :min="0"
@@ -694,7 +681,7 @@ const isSellerPhotographer = computed(() => {
             />
           </el-form-item>
 
-          <el-form-item label="Total en USD">
+          <el-form-item :label="$t('sales.form.totalUsd')">
             <el-input-number
               v-model="formData.totalVentaUsd"
               :min="0"
@@ -713,12 +700,12 @@ const isSellerPhotographer = computed(() => {
         <div class="mobile-payment-method-row">
           <div class="mobile-card-section-label">
             <span class="step-badge-num">6</span>
-            Modo de cobro
+            {{ $t('sales.steps.paymentMethod') }}
           </div>
 
           <el-select
             v-model="formData.modoCobro"
-            placeholder="Selecciona modo de cobro"
+            :placeholder="$t('sales.form.selectPaymentMethod')"
             clearable
             style="width: 100%"
             size="large"
@@ -736,14 +723,14 @@ const isSellerPhotographer = computed(() => {
         <div>
           <div class="mobile-card-section-label">
             <span class="step-badge-num">7</span>
-            Notas
+            {{ $t('sales.steps.notes') }}
           </div>
           <el-form-item>
             <el-input
               v-model="formData.notas"
               type="textarea"
               :rows="5"
-              placeholder="Notas sobre la cita de venta..."
+              :placeholder="$t('sales.form.notesPlaceholder')"
             />
           </el-form-item>
         </div>
@@ -753,7 +740,7 @@ const isSellerPhotographer = computed(() => {
       <div class="mobile-status-section">
         <div class="mobile-card-section-label">
           <span class="step-badge-num">8</span>
-          Estado de la cita
+          {{ $t('sales.steps.status') }}
         </div>
         <div class="status-radio-container">
           <el-radio-group
@@ -790,7 +777,7 @@ const isSellerPhotographer = computed(() => {
         class="mobile-submit-btn"
         @click="handleSave"
       >
-        {{ isEditing ? 'Guardar Cambios' : 'Agendar Cita' }}
+        {{ isEditing ? $t('sales.actions.saveChanges') : $t('sales.actions.scheduleAppointment') }}
       </el-button>
     </div>
   </div>

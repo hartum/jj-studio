@@ -111,7 +111,7 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
 
   for (const h of hotels) {
     const countryId = h.paisId || 0
-    const countryName = h.paisNombre || 'Sin País'
+    const countryName = h.paisNombre || t('goalsConfig.noCountry')
     const countryObj = countryStore.countries.find(
       (c) => c.id === countryId || c.nombre === countryName,
     )
@@ -128,7 +128,7 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
 
     const countryGroup = groupsMap.get(countryId)!
     const areaId = h.areaId || 0
-    const areaName = h.areaNombre || 'Sin Área'
+    const areaName = h.areaNombre || t('goalsConfig.noArea')
 
     let areaGroup = countryGroup.areas.find((a) => a.id === areaId)
     if (!areaGroup) {
@@ -221,7 +221,7 @@ watch([selectedHotelId, selectedAnio, selectedMes], async () => {
 
 async function handleSaveHotelGoal() {
   if (!selectedHotelId.value) {
-    ElMessage.warning('Por favor selecciona un hotel')
+    ElMessage.warning(t('goalsConfig.selectHotelWarning'))
     return
   }
 
@@ -251,10 +251,10 @@ async function handleSaveHotelGoal() {
       }
     }
 
-    ElMessage.success('¡Metas guardadas correctamente para el mes seleccionado!')
+    ElMessage.success(t('goalsConfig.goalsSavedSuccess'))
     await loadHotelGoals()
   } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : 'Error al guardar las metas'
+    const errorMsg = err instanceof Error ? err.message : t('goalsConfig.saveError')
     ElMessage.error(errorMsg)
   } finally {
     isSaving.value = false
@@ -268,7 +268,7 @@ function applySuggestedDivisionToAll() {
     map[foto.id] = quota
   }
   customPhotographerGoals.value = map
-  ElMessage.info('Cuotas sugeridas equitativas aplicadas a todos los fotógrafos')
+  ElMessage.info(t('goalsConfig.suggestedAppliedInfo'))
 }
 
 function applyRouteQueryParams() {
@@ -333,7 +333,7 @@ watch(
       <div class="filter-field hotel-field">
         <el-select
           v-model="selectedHotelId"
-          placeholder="Selecciona un hotel..."
+          :placeholder="$t('goalsConfig.selectHotelPlaceholder')"
           filterable
           clearable
           size="large"
@@ -392,7 +392,7 @@ watch(
 
     <!-- Empty State -->
     <div v-if="!currentHotel" class="empty-hotel-box">
-      <el-empty description="Selecciona un hotel para configurar sus metas mensuales." />
+      <el-empty :description="$t('goalsConfig.emptyHotel')" />
     </div>
 
     <!-- Main Configuration Area -->
@@ -403,7 +403,7 @@ watch(
           <div class="card-header-flex">
             <div class="header-left-title">
               <el-icon class="hotel-icon"><Building2 /></el-icon>
-              <span>Meta Mensual del Hotel: {{ currentHotel.nombre }}</span>
+              <span>{{ $t('goalsConfig.hotelMonthlyGoal', { hotel: currentHotel.nombre }) }}</span>
             </div>
             <el-tag type="primary" size="large">
               {{ selectedMonthLabel }} {{ selectedAnio }}
@@ -416,7 +416,7 @@ watch(
           <el-row :gutter="24" align="middle">
             <el-col :xs="24" :md="8">
               <div class="input-goal-box">
-                <label class="input-goal-label">Importe Objetivo del Mes (USD):</label>
+                <label class="input-goal-label">{{ $t('goalsConfig.monthlyTargetAmount') }}</label>
                 <el-input-number
                   v-model="hotelTargetAmount"
                   :min="0"
@@ -430,7 +430,7 @@ watch(
                   </template>
                 </el-input-number>
                 <span class="help-text" v-if="defaultHotelTarget">
-                  Meta por defecto del hotel: {{ formatCurrency(defaultHotelTarget) }}
+                  {{ $t('goalsConfig.defaultHotelTarget', { amount: formatCurrency(defaultHotelTarget) }) }}
                 </span>
               </div>
             </el-col>
@@ -439,15 +439,13 @@ watch(
               <div class="division-info-box">
                 <div class="division-header">
                   <el-icon class="share-icon"><Share /></el-icon>
-                  <span class="division-title">Reparto Equitativo Sugerido</span>
+                  <span class="division-title">{{ $t('goalsConfig.suggestedEquitableDistribution') }}</span>
                 </div>
                 <p class="division-description">
-                  Con
-                  <strong>{{ assignedPhotographers.length }} fotógrafos activos</strong> asignados a
-                  este hotel, la cuota igualitaria recomendada por persona es de:
+                  {{ $t('goalsConfig.suggestedDescription', { count: assignedPhotographers.length }) }}
                 </p>
                 <div class="suggested-quota-badge">
-                  {{ formatCurrency(suggestedQuotaPerPhotographer) }} <small>/ fotógrafo</small>
+                  {{ formatCurrency(suggestedQuotaPerPhotographer) }} <small>{{ $t('goalsConfig.perPhotographer') }}</small>
                 </div>
               </div>
             </el-col>
@@ -461,11 +459,9 @@ watch(
           <div class="card-subheader-flex">
             <div class="header-left-title">
               <el-icon class="user-icon"><User /></el-icon>
-              <span
-                >Metas Individuales del Equipo de Fotografía ({{
-                  assignedPhotographers.length
-                }})</span
-              >
+              <span>{{
+                $t('goalsConfig.individualGoalsTeam', { count: assignedPhotographers.length })
+              }}</span>
             </div>
             <el-button
               type="primary"
@@ -474,20 +470,20 @@ watch(
               @click="applySuggestedDivisionToAll"
               :disabled="assignedPhotographers.length === 0"
             >
-              Aplicar meta sugerida a todos
+              {{ $t('goalsConfig.applySuggestedToAll') }}
             </el-button>
           </div>
 
           <div v-if="assignedPhotographers.length === 0" class="no-photographers">
             <el-empty
-              description="No hay fotógrafos activos asignados a este hotel."
+              :description="$t('goalsConfig.noPhotographers')"
               :image-size="70"
             />
           </div>
 
           <div v-else class="photographers-table-wrapper">
             <el-table :data="assignedPhotographers" style="width: 100%" stripe>
-              <el-table-column label="Fotógrafo" min-width="240">
+              <el-table-column :label="$t('goalsConfig.photographer')" min-width="240">
                 <template #default="{ row }">
                   <div class="foto-cell">
                     <el-avatar
@@ -510,7 +506,7 @@ watch(
                 </template>
               </el-table-column>
 
-              <el-table-column label="Meta Sugerida" width="160" align="center">
+              <el-table-column :label="$t('goalsConfig.suggestedGoal')" width="160" align="center">
                 <template #default>
                   <span class="text-muted">{{
                     formatCurrency(suggestedQuotaPerPhotographer)
@@ -518,7 +514,7 @@ watch(
                 </template>
               </el-table-column>
 
-              <el-table-column label="Meta Asignada (USD)" min-width="220">
+              <el-table-column :label="$t('goalsConfig.assignedGoalUsd')" min-width="220">
                 <template #default="{ row }">
                   <el-input-number
                     v-model="customPhotographerGoals[row.id]"
@@ -546,7 +542,7 @@ watch(
               :loading="isSaving"
               @click="handleSaveHotelGoal"
             >
-              Guardar Configuración de Metas
+              {{ $t('goalsConfig.saveGoalsButton') }}
             </el-button>
           </div>
         </div>

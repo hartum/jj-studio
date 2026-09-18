@@ -4,19 +4,15 @@
 
 /**
  * Calcula la antigüedad de un usuario desde su fecha de contratación hasta hoy,
- * retornando una cadena en lenguaje natural y comprensible en español.
- *
- * Ejemplos:
- * - "2 años, 3 meses y 1 día"
- * - "5 meses y 14 días"
- * - "1 año y 2 meses"
- * - "25 días"
- * - "0 días"
- * - "—" (si no tiene fecha asignada)
+ * retornando una cadena en lenguaje natural según el idioma.
  *
  * @param fecha Fecha de contratación (string ISO / YYYY-MM-DD o Date)
+ * @param locale Idioma ('es' o 'en')
  */
-export function formatAntiguedad(fecha: string | Date | null | undefined): string {
+export function formatAntiguedad(
+  fecha: string | Date | null | undefined,
+  locale: string = 'es',
+): string {
   if (!fecha) return '—'
 
   let start: Date
@@ -48,8 +44,10 @@ export function formatAntiguedad(fecha: string | Date | null | undefined): strin
   const now = new Date()
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
+  const isEn = locale === 'en'
+
   if (start.getTime() > today.getTime()) {
-    return 'Contrato futuro'
+    return isEn ? 'Future contract' : 'Contrato futuro'
   }
 
   let years = today.getFullYear() - start.getFullYear()
@@ -70,16 +68,30 @@ export function formatAntiguedad(fecha: string | Date | null | undefined): strin
 
   const chunks: string[] = []
   if (years > 0) {
-    chunks.push(`${years} ${years === 1 ? 'año' : 'años'}`)
+    if (isEn) {
+      chunks.push(`${years} ${years === 1 ? 'year' : 'years'}`)
+    } else {
+      chunks.push(`${years} ${years === 1 ? 'año' : 'años'}`)
+    }
   }
   if (months > 0) {
-    chunks.push(`${months} ${months === 1 ? 'mes' : 'meses'}`)
+    if (isEn) {
+      chunks.push(`${months} ${months === 1 ? 'month' : 'months'}`)
+    } else {
+      chunks.push(`${months} ${months === 1 ? 'mes' : 'meses'}`)
+    }
   }
   if (days > 0 || chunks.length === 0) {
-    chunks.push(`${days} ${days === 1 ? 'día' : 'días'}`)
+    if (isEn) {
+      chunks.push(`${days} ${days === 1 ? 'day' : 'days'}`)
+    } else {
+      chunks.push(`${days} ${days === 1 ? 'día' : 'días'}`)
+    }
   }
 
-  const first = chunks[0] ?? '0 días'
+  const zeroDefault = isEn ? '0 days' : '0 días'
+  const andWord = isEn ? 'and' : 'y'
+  const first = chunks[0] ?? zeroDefault
   const second = chunks[1]
   const third = chunks[2]
 
@@ -87,10 +99,10 @@ export function formatAntiguedad(fecha: string | Date | null | undefined): strin
     return first
   }
   if (chunks.length === 2 && second) {
-    return `${first} y ${second}`
+    return `${first} ${andWord} ${second}`
   }
   if (chunks.length === 3 && second && third) {
-    return `${first}, ${second} y ${third}`
+    return `${first}, ${second} ${andWord} ${third}`
   }
 
   return first

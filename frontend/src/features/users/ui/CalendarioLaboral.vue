@@ -1,27 +1,29 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useCalendarioLaboralStore } from '../stores/calendario-laboral.store'
 import type {
   CalendarioLaboralFotografo,
   MotivoCalendarioLaboral,
 } from '../domain/calendario-laboral.model'
+import { useLocale } from '@/i18n/useLocale'
 import { Delete } from '@element-plus/icons-vue'
 import { CalendarX2 } from '@lucide/vue'
 import { ElMessage } from 'element-plus'
 
 const props = defineProps<{ usuarioId: string }>()
 
+const { t } = useLocale()
 const store = useCalendarioLaboralStore()
 
 const selectedRange = ref<[Date, Date] | null>(null)
 const isSubmitting = ref(false)
 
-const motivoOptions: { label: string; value: MotivoCalendarioLaboral; type: string }[] = [
-  { label: 'Baja', value: 'BAJA', type: 'danger' },
-  { label: 'Vacaciones', value: 'VACACIONES', type: 'primary' },
-  { label: 'Permiso', value: 'PERMISO', type: 'warning' },
-  { label: 'Otro', value: 'OTRO', type: 'info' },
-]
+const motivoOptions = computed<{ label: string; value: MotivoCalendarioLaboral; type: string }[]>(() => [
+  { label: t('users.calendar.motivos.baja'), value: 'BAJA', type: 'danger' },
+  { label: t('users.calendar.motivos.vacaciones'), value: 'VACACIONES', type: 'primary' },
+  { label: t('users.calendar.motivos.permiso'), value: 'PERMISO', type: 'warning' },
+  { label: t('users.calendar.motivos.otro'), value: 'OTRO', type: 'info' },
+])
 
 function formatDateDisplay(dateStr: string): string {
   if (!dateStr) return ''
@@ -94,6 +96,10 @@ watch(selectedRange, async (newRange) => {
 
   // Determine default motivo
   const defaultMotivo: MotivoCalendarioLaboral = startIso === endIso ? 'BAJA' : 'VACACIONES'
+  const defaultMotivoLabel =
+    defaultMotivo === 'BAJA'
+      ? t('users.calendar.toasts.oneDaySickLeave')
+      : t('users.calendar.toasts.vacation')
 
   isSubmitting.value = true
   try {
@@ -103,12 +109,12 @@ watch(selectedRange, async (newRange) => {
       motivo: defaultMotivo,
     })
     ElMessage.success(
-      `Ausencia registrada (${defaultMotivo === 'BAJA' ? 'Baja de 1 día' : 'Vacaciones'})`,
+      t('users.calendar.toasts.absenceRegistered', { motivo: defaultMotivoLabel }),
     )
     // Clear selection so the user can select another date/range freely
     selectedRange.value = null
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al registrar la ausencia'
+    const message = err instanceof Error ? err.message : t('users.calendar.toasts.registerError')
     ElMessage.error(message)
   } finally {
     isSubmitting.value = false
@@ -122,9 +128,9 @@ async function handleMotivoChange(
 ) {
   try {
     await store.updateRegistro(row.id, { motivo: newMotivo })
-    ElMessage.success('Motivo actualizado')
+    ElMessage.success(t('users.calendar.toasts.reasonUpdated'))
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al actualizar motivo'
+    const message = err instanceof Error ? err.message : t('users.calendar.toasts.updateReasonError')
     ElMessage.error(message)
     await store.fetchRegistros(props.usuarioId)
   }
@@ -133,9 +139,9 @@ async function handleMotivoChange(
 async function handleDelete(id: number) {
   try {
     await store.deleteRegistro(id)
-    ElMessage.success('Registro eliminado')
+    ElMessage.success(t('users.calendar.toasts.recordDeleted'))
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al eliminar el registro'
+    const message = err instanceof Error ? err.message : t('users.calendar.toasts.deleteError')
     ElMessage.error(message)
   }
 }
@@ -160,9 +166,7 @@ watch(
   <div class="calendario-laboral-wrapper">
     <div class="section-description">
       <p>
-        Selecciona un día o rango de fechas en el calendario para registrar una ausencia laboral
-        (vacaciones, baja o permiso). Los días no disponibles reducirán automáticamente el tope de
-        sesiones simultáneas permitidas en los hoteles correspondientes.
+        {{ $t('users.calendar.description') }}
       </p>
     </div>
 
@@ -181,19 +185,19 @@ watch(
       <div class="calendar-legend">
         <div class="legend-item">
           <span class="legend-dot dot-baja"></span>
-          <span>Baja Médica</span>
+          <span>{{ $t('users.calendar.sickLeave') }}</span>
         </div>
         <div class="legend-item">
           <span class="legend-dot dot-vacaciones"></span>
-          <span>Vacaciones</span>
+          <span>{{ $t('users.calendar.vacation') }}</span>
         </div>
         <div class="legend-item">
           <span class="legend-dot dot-permiso"></span>
-          <span>Permiso</span>
+          <span>{{ $t('users.calendar.leaveOfAbsence') }}</span>
         </div>
         <div class="legend-item">
           <span class="legend-dot dot-otro"></span>
-          <span>Otro</span>
+          <span>{{ $t('users.calendar.other') }}</span>
         </div>
       </div>
     </div>
@@ -203,10 +207,15 @@ watch(
       <div class="table-header">
         <h3 class="table-title">
           <el-icon class="title-icon"><CalendarX2 /></el-icon>
-          <span>Registro de Ausencias Laborales</span>
+          <span>{{ $t('users.calendar.absencesTitle') }}</span>
         </h3>
         <el-tag type="info" round effect="plain" class="total-tag">
-          {{ store.registros.length }} {{ store.registros.length === 1 ? 'registro' : 'registros' }}
+          {{
+            $t('users.calendar.recordsCount', {
+              count: store.registros.length,
+              unit: store.registros.length === 1 ? $t('users.calendar.recordSingular') : $t('users.calendar.recordPlural')
+            })
+          }}
         </el-tag>
       </div>
 
@@ -215,18 +224,18 @@ watch(
         v-loading="store.isLoading && isSubmitting"
         stripe
         style="width: 100%"
-        empty-text="No hay ausencias ni bajas registradas para este usuario."
+        :empty-text="$t('users.calendar.emptyText')"
         class="ausencias-table"
       >
         <!-- Columna de Periodo de Ausencia -->
-        <el-table-column label="Periodo de Ausencia" min-width="210">
+        <el-table-column :label="$t('users.calendar.absencePeriod')" min-width="210">
           <template #default="{ row }">
             <div class="date-column-content">
               <span v-if="row.fechaInicio === row.fechaFin" class="date-text">
                 {{ formatDateDisplay(row.fechaInicio) }}
               </span>
               <span v-else class="date-text">
-                {{ formatDateDisplay(row.fechaInicio) }} &nbsp;al&nbsp;
+                {{ formatDateDisplay(row.fechaInicio) }} &nbsp;{{ $t('users.calendar.to') }}&nbsp;
                 {{ formatDateDisplay(row.fechaFin) }}
               </span>
             </div>
@@ -234,17 +243,21 @@ watch(
         </el-table-column>
 
         <!-- Columna de Duración -->
-        <el-table-column label="Días" width="95">
+        <el-table-column :label="$t('users.calendar.days')" width="95">
           <template #default="{ row }">
             <span class="days-count">
-              {{ calculateDays(row.fechaInicio, row.fechaFin) }}
-              {{ calculateDays(row.fechaInicio, row.fechaFin) === 1 ? 'día' : 'días' }}
+              {{
+                $t('users.calendar.daysCount', {
+                  count: calculateDays(row.fechaInicio, row.fechaFin),
+                  unit: calculateDays(row.fechaInicio, row.fechaFin) === 1 ? $t('users.calendar.daySingular') : $t('users.calendar.dayPlural')
+                })
+              }}
             </span>
           </template>
         </el-table-column>
 
         <!-- Columna de Motivo (Editable Online) -->
-        <el-table-column label="Motivo de Ausencia" min-width="150">
+        <el-table-column :label="$t('users.calendar.absenceReason')" min-width="150">
           <template #default="{ row }">
             <el-select
               v-model="row.motivo"
@@ -267,18 +280,18 @@ watch(
         </el-table-column>
 
         <!-- Columna de Acciones -->
-        <el-table-column label="Acciones" width="100" align="center">
+        <el-table-column :label="$t('users.calendar.actions')" width="100" align="center">
           <template #default="{ row }">
             <el-popconfirm
-              title="¿Eliminar esta ausencia del calendario?"
-              confirm-button-text="Eliminar"
-              cancel-button-text="Cancelar"
+              :title="$t('users.calendar.deleteConfirm')"
+              :confirm-button-text="$t('users.calendar.confirmDelete')"
+              :cancel-button-text="$t('users.calendar.cancelDelete')"
               confirm-button-type="danger"
               :width="220"
               @confirm="handleDelete(row.id)"
             >
               <template #reference>
-                <el-button type="danger" link :icon="Delete" size="small"> Eliminar </el-button>
+                <el-button type="danger" link :icon="Delete" size="small"> {{ $t('users.calendar.delete') }} </el-button>
               </template>
             </el-popconfirm>
           </template>

@@ -14,6 +14,7 @@ import { Check, Close } from '@element-plus/icons-vue'
 import { UserX, Calendar } from '@lucide/vue'
 import { ElMessage } from 'element-plus'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
+import { useLocale } from '@/i18n/useLocale'
 
 export interface HotelDisponibilidad {
   hotelId: number
@@ -35,6 +36,7 @@ export interface HotelDisponibilidad {
 }
 
 export function usePhotoSessionForm() {
+  const { t, locale } = useLocale()
   const route = useRoute()
   const router = useRouter()
   const sessionStore = useSessionStore()
@@ -120,12 +122,12 @@ export function usePhotoSessionForm() {
   })
 
   const formattedSelectedSessionDateTime = computed(() => {
-    if (!formData.value.fechaHoraInicio) return 'Sin fecha seleccionada'
+    if (!formData.value.fechaHoraInicio) return t('sessions.summary.noDateSelected')
     try {
       const parts = formData.value.fechaHoraInicio.split('T')
       const datePart = parts[0]
       const timePart = parts[1]
-      if (!datePart) return 'Sin fecha seleccionada'
+      if (!datePart) return t('sessions.summary.noDateSelected')
       const dateNumbers = datePart.split('-').map((n) => parseInt(n, 10))
       if (dateNumbers.length < 3) return formData.value.fechaHoraInicio
 
@@ -134,8 +136,9 @@ export function usePhotoSessionForm() {
       const day = dateNumbers[2] ?? 1
       const d = new Date(year, month - 1, day)
 
-      const weekday = d.toLocaleDateString('es-ES', { weekday: 'long' })
-      const monthName = d.toLocaleDateString('es-ES', { month: 'long' })
+      const loc = locale.value === 'en' ? 'en-US' : 'es-ES'
+      const weekday = d.toLocaleDateString(loc, { weekday: 'long' })
+      const monthName = d.toLocaleDateString(loc, { month: 'long' })
       const capitalizedWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1)
 
       const timeFormatted = timePart ? timePart.substring(0, 5) : '10:00'
@@ -188,12 +191,12 @@ export function usePhotoSessionForm() {
   }
 
   const formattedSelectedCitaVentaDateTime = computed(() => {
-    if (!fechaHoraCitaVenta.value) return 'Sin cita de venta'
+    if (!fechaHoraCitaVenta.value) return t('sessions.summary.noSaleAppointment')
     try {
       const parts = fechaHoraCitaVenta.value.split('T')
       const datePart = parts[0]
       const timePart = parts[1]
-      if (!datePart) return 'Sin cita de venta'
+      if (!datePart) return t('sessions.summary.noSaleAppointment')
       const dateNumbers = datePart.split('-').map((n) => parseInt(n, 10))
       if (dateNumbers.length < 3) return fechaHoraCitaVenta.value
 
@@ -202,8 +205,9 @@ export function usePhotoSessionForm() {
       const day = dateNumbers[2] ?? 1
       const d = new Date(year, month - 1, day)
 
-      const weekday = d.toLocaleDateString('es-ES', { weekday: 'long' })
-      const monthName = d.toLocaleDateString('es-ES', { month: 'long' })
+      const loc = locale.value === 'en' ? 'en-US' : 'es-ES'
+      const weekday = d.toLocaleDateString(loc, { weekday: 'long' })
+      const monthName = d.toLocaleDateString(loc, { month: 'long' })
       const capitalizedWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1)
 
       const timeFormatted = timePart ? timePart.substring(0, 5) : '11:00'
@@ -214,7 +218,7 @@ export function usePhotoSessionForm() {
   })
 
   const formattedSelectedCheckoutDate = computed(() => {
-    if (!formData.value.fechaSalida) return 'Sin fecha de checkout'
+    if (!formData.value.fechaSalida) return t('sessions.summary.noCheckoutDate')
     try {
       const dateNumbers = formData.value.fechaSalida.split('-').map((n) => parseInt(n, 10))
       if (dateNumbers.length < 3) return formData.value.fechaSalida
@@ -224,8 +228,9 @@ export function usePhotoSessionForm() {
       const day = dateNumbers[2] ?? 1
       const d = new Date(year, month - 1, day)
 
-      const weekday = d.toLocaleDateString('es-ES', { weekday: 'long' })
-      const monthName = d.toLocaleDateString('es-ES', { month: 'long' })
+      const loc = locale.value === 'en' ? 'en-US' : 'es-ES'
+      const weekday = d.toLocaleDateString(loc, { weekday: 'long' })
+      const monthName = d.toLocaleDateString(loc, { month: 'long' })
       const capitalizedWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1)
 
       return `${capitalizedWeekday}, ${day} ${monthName} ${year}`
@@ -234,17 +239,17 @@ export function usePhotoSessionForm() {
     }
   })
 
-  const estadoSesionOptions: {
+  const estadoSesionOptions = computed<{
     value: EstadoSesion
     label: string
     color: string
     icon: Component
-  }[] = [
-    { value: 'PROGRAMADA', label: 'PROGRAMADA', color: '#409eff', icon: Calendar },
-    { value: 'COMPLETADA', label: 'COMPLETADA', color: '#67c23a', icon: Check },
-    { value: 'CANCELADA', label: 'CANCELADA', color: '#f56c6c', icon: Close },
-    { value: 'NO_SHOW', label: 'NO VINO', color: '#e6a23c', icon: UserX },
-  ]
+  }[]>(() => [
+    { value: 'PROGRAMADA', label: t('sessions.status.scheduled'), color: '#409eff', icon: Calendar },
+    { value: 'COMPLETADA', label: t('sessions.status.completed'), color: '#67c23a', icon: Check },
+    { value: 'CANCELADA', label: t('sessions.status.cancelled'), color: '#f56c6c', icon: Close },
+    { value: 'NO_SHOW', label: t('sessions.status.noShow'), color: '#e6a23c', icon: UserX },
+  ])
 
   const sessionStateTagType = computed<'' | 'primary' | 'success' | 'warning' | 'danger' | 'info'>(
     () => {
@@ -295,13 +300,13 @@ export function usePhotoSessionForm() {
 
   const isSaving = ref(false)
 
-  const defaultConceptos = [
-    'Cumpleaños',
-    'Foto familiar',
-    'Pedida de matrimonio',
-    'Revelación de género',
-    'Otro',
-  ]
+  const defaultConceptos = computed(() => [
+    t('sessions.concepts.birthday'),
+    t('sessions.concepts.familyPhoto'),
+    t('sessions.concepts.marriageProposal'),
+    t('sessions.concepts.genderReveal'),
+    t('sessions.concepts.other'),
+  ])
 
   // Watch sales appointment date for conflict check
   watch(
@@ -469,7 +474,7 @@ export function usePhotoSessionForm() {
   const selectedPhotographerName = computed(() => {
     if (!formData.value.fotografoId) return ''
     const p = selectedPhotographer.value
-    return p ? `${p.nombre} ${p.apellidos}`.trim() : 'El fotógrafo'
+    return p ? `${p.nombre} ${p.apellidos}`.trim() : t('sessions.summary.thePhotographer')
   })
 
   // Obtener estado individual y disponibilidad para cada fotógrafo
@@ -485,7 +490,7 @@ export function usePhotoSessionForm() {
       const motivo = pAvail.motivoAusencia ? ` (${pAvail.motivoAusencia})` : ''
       return {
         status: 'absent',
-        label: `Ausente${motivo}`,
+        label: `${t('sessions.photographerStatus.absent')}${motivo}`,
         tagClass: 'tag-busy',
         disabled: true,
       }
@@ -495,7 +500,7 @@ export function usePhotoSessionForm() {
     if (pAvail?.ocupado) {
       return {
         status: 'occupied',
-        label: 'Ocupado en este horario',
+        label: t('sessions.photographerStatus.occupied'),
         tagClass: 'tag-busy',
         disabled: true,
       }
@@ -505,7 +510,7 @@ export function usePhotoSessionForm() {
     if (isTopeAlcanzado.value && !isCurrentlySelected) {
       return {
         status: 'quota_full',
-        label: 'No disponible (Tope alcanzado)',
+        label: t('sessions.photographerStatus.quotaFull'),
         tagClass: 'tag-busy',
         disabled: true,
       }
@@ -515,7 +520,7 @@ export function usePhotoSessionForm() {
     if (isCurrentlySelected) {
       return {
         status: 'assigned',
-        label: 'Asignado a esta sesión',
+        label: t('sessions.photographerStatus.assigned'),
         tagClass: 'tag-assigned',
         disabled: false,
       }
@@ -524,7 +529,7 @@ export function usePhotoSessionForm() {
     // 6. Si está libre
     return {
       status: 'available',
-      label: 'Disponible',
+      label: t('sessions.photographerStatus.available'),
       tagClass: 'tag-available',
       disabled: false,
     }
@@ -554,23 +559,24 @@ export function usePhotoSessionForm() {
   })
 
   const selectedHotelDisplayName = computed(() => {
-    if (!selectedHotel.value) return 'Sin hotel'
+    if (!selectedHotel.value) return t('sessions.summary.noHotel')
     return selectedHotel.value.nombre
   })
 
   const summaryFormattedDate = computed(() => {
-    if (!formData.value.fechaHoraInicio) return 'Sin fecha'
+    if (!formData.value.fechaHoraInicio) return t('sessions.summary.noDate')
     try {
       const datePart = formData.value.fechaHoraInicio.split('T')[0]
-      if (!datePart) return 'Sin fecha'
+      if (!datePart) return t('sessions.summary.noDate')
       const parts = datePart.split('-').map(Number)
       const year = parts[0] ?? 2026
       const month = parts[1] ?? 1
       const day = parts[2] ?? 1
       const d = new Date(year, month - 1, day)
-      const weekday = d.toLocaleDateString('es-ES', { weekday: 'long' })
+      const loc = locale.value === 'en' ? 'en-US' : 'es-ES'
+      const weekday = d.toLocaleDateString(loc, { weekday: 'long' })
       const capitalizedWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1)
-      const monthName = d.toLocaleDateString('es-ES', { month: 'long' })
+      const monthName = d.toLocaleDateString(loc, { month: 'long' })
       const capitalizedMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1)
       return `${capitalizedWeekday}, ${day} ${capitalizedMonth}, ${year}`
     } catch {
@@ -593,22 +599,25 @@ export function usePhotoSessionForm() {
     const ninos = Number(formData.value.numNinos) || 0
     const total = adultos + ninos
 
-    if (total === 0) return '0 personas'
+    if (total === 0) return t('sessions.summary.zeroPeople')
     if (adultos > 0 && ninos > 0) {
-      return `${total} (${adultos} ad., ${ninos} ${ninos === 1 ? 'niño' : 'niños'})`
+      const childrenLabel = ninos === 1 ? t('sessions.summary.childSingle') : t('sessions.summary.childPlural')
+      return t('sessions.summary.peopleFormat', { total, adults: adultos, children: ninos, childrenLabel })
     }
     if (ninos > 0) {
-      return `${ninos} ${ninos === 1 ? 'niño' : 'niños'}`
+      const childrenLabel = ninos === 1 ? t('sessions.summary.childSingle') : t('sessions.summary.childPlural')
+      return `${ninos} ${childrenLabel}`
     }
-    return `${adultos} ${adultos === 1 ? 'adulto' : 'adultos'}`
+    const adultLabel = adultos === 1 ? t('sessions.summary.adultSingle') : t('sessions.summary.adultPlural')
+    return `${adultos} ${adultLabel}`
   })
 
   const summaryClienteNombre = computed(() => {
-    return formData.value.clienteNombre?.trim() || 'Sin especificar'
+    return formData.value.clienteNombre?.trim() || t('sessions.summary.unspecified')
   })
 
   const summaryMotivo = computed(() => {
-    return formData.value.concepto?.trim() || 'Sin especificar'
+    return formData.value.concepto?.trim() || t('sessions.summary.unspecified')
   })
 
   // Mes visible actualmente en el panel del calendario
@@ -814,7 +823,7 @@ export function usePhotoSessionForm() {
           userHotels.value.length > 0 &&
           !allowedHotelIds.has(Number(existing.hotelId))
         ) {
-          ElMessage.error('No tienes acceso a las sesiones fotográficas de este hotel')
+          ElMessage.error(t('sessions.toasts.noAccessHotel'))
           handleGoBack()
           return
         }
@@ -841,7 +850,7 @@ export function usePhotoSessionForm() {
           fechaHoraCitaVenta.value = existing.citaVenta.fechaHoraCita || ''
         }
       } else {
-        ElMessage.error('Sesión fotográfica no encontrada')
+        ElMessage.error(t('sessions.toasts.sessionNotFound'))
         handleGoBack()
       }
     } else {
@@ -873,24 +882,24 @@ export function usePhotoSessionForm() {
 
   async function handleSaveSession() {
     if (!formData.value.clienteNombre.trim()) {
-      ElMessage.warning('El nombre del cliente es obligatorio')
+      ElMessage.warning(t('sessions.toasts.clientNameRequired'))
       return
     }
 
     if (!formData.value.hotelId) {
-      ElMessage.warning('Debes seleccionar un hotel')
+      ElMessage.warning(t('sessions.toasts.hotelRequired'))
       return
     }
 
     if (!formData.value.fechaHoraInicio) {
-      ElMessage.warning('Debes seleccionar la fecha y hora de inicio')
+      ElMessage.warning(t('sessions.toasts.startDateTimeRequired'))
       return
     }
 
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     if (!isEditing.value && new Date(formData.value.fechaHoraInicio) < today) {
-      ElMessage.error('No se pueden crear sesiones fotográficas en fechas anteriores al día actual')
+      ElMessage.error(t('sessions.toasts.pastDateSessionError'))
       return
     }
 
@@ -899,18 +908,16 @@ export function usePhotoSessionForm() {
       fechaHoraCitaVenta.value &&
       new Date(fechaHoraCitaVenta.value) < today
     ) {
-      ElMessage.error('No se pueden crear citas de venta en fechas anteriores al día actual')
+      ElMessage.error(t('sessions.toasts.pastDateSaleError'))
       return
     }
 
     if (conflictsCitaVenta.value.length > 0) {
-      ElMessage.warning('Atención: Hay conflictos de horario con otras citas de venta')
+      ElMessage.warning(t('sessions.toasts.saleConflictsWarning'))
     }
 
     if (formData.value.estado === 'PROGRAMADA' && isTopeAlcanzado.value) {
-      ElMessage.error(
-        'Tope alcanzado: no se pueden agendar más sesiones a esta misma hora en este hotel.',
-      )
+      ElMessage.error(t('sessions.toasts.quotaFullError'))
       return
     }
 
@@ -920,7 +927,10 @@ export function usePhotoSessionForm() {
       ausenciaFotografoActual.value
     ) {
       ElMessage.error(
-        `${selectedPhotographerName.value} no está disponible en la fecha seleccionada (${ausenciaFotografoActual.value.motivo}).`,
+        t('sessions.toasts.photographerAbsentError', {
+          photographer: selectedPhotographerName.value,
+          motivo: ausenciaFotografoActual.value.motivo,
+        }),
       )
       return
     }
@@ -950,14 +960,14 @@ export function usePhotoSessionForm() {
           estado: formData.value.estado,
           notas: formData.value.notas ? formData.value.notas.trim() : null,
         })
-        ElMessage.success('Sesión fotográfica actualizada correctamente')
+        ElMessage.success(t('sessions.toasts.sessionUpdated'))
       } else {
         const created = await sessionStore.addSession({
           ...formData.value,
           creadorId: currentUser.value?.id,
         })
         savedSessionId = created.id
-        ElMessage.success('Sesión fotográfica agendada correctamente')
+        ElMessage.success(t('sessions.toasts.sessionCreated'))
       }
 
       // Process Cita de Venta if fechaHoraCitaVenta is provided AND changed
@@ -981,7 +991,7 @@ export function usePhotoSessionForm() {
       await Promise.all([sessionStore.fetchSessions(), saleStore.fetchCitasVenta()])
       handleGoBack()
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error al guardar la sesión'
+      const msg = err instanceof Error ? err.message : t('sessions.toasts.saveError')
       ElMessage.error(msg)
     } finally {
       isSaving.value = false

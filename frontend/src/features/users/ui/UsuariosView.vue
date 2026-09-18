@@ -14,10 +14,12 @@ import {
 } from '@/features/users/utils/user-avatar'
 import { formatAntiguedad } from '@/features/users/utils/user-date'
 import { getRolePermissions, canEditUser, canDeleteUser, type RoleCode } from '@/shared/permissions'
+import { useLocale } from '@/i18n/useLocale'
 import { Search, Plus, EditPen, Delete } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
 const router = useRouter()
+const { t, locale } = useLocale()
 const userStore = useUserStore()
 const profileStore = useProfileStore()
 const authStore = useAuthStore()
@@ -126,9 +128,9 @@ function navigateToEdit(user: UserWithProfile) {
 async function handleDeleteUser(userId: string) {
   try {
     await userStore.deleteUser(userId)
-    ElMessage.success('Usuario eliminado correctamente')
+    ElMessage.success(t('users.toasts.userDeleted'))
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al eliminar el usuario'
+    const message = err instanceof Error ? err.message : t('users.toasts.deleteError')
     ElMessage.error(message)
   }
 }
@@ -146,12 +148,12 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
     <!-- Header de la sección -->
     <div class="page-header">
       <div>
-        <h1 class="page-title">Gestión de Usuarios</h1>
-        <p class="page-subtitle">Administra los usuarios del sistema y sus perfiles de acceso</p>
+        <h1 class="page-title">{{ $t('users.title') }}</h1>
+        <p class="page-subtitle">{{ $t('users.subtitle') }}</p>
       </div>
 
       <el-button type="primary" :icon="Plus" size="large" @click="navigateToCreate">
-        Nuevo Usuario
+        {{ $t('users.newUser') }}
       </el-button>
     </div>
 
@@ -159,15 +161,13 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
     <div class="toolbar-bar">
       <el-input
         v-model="searchQuery"
-        placeholder="Buscar por nombre, email o perfil..."
+        :placeholder="$t('users.searchPlaceholder')"
         :prefix-icon="Search"
         clearable
         class="search-input"
       />
 
-      <el-tag type="info">
-        Total: <strong>{{ filteredUsers.length }}</strong> usuarios
-      </el-tag>
+      <el-tag type="info" v-html="$t('users.totalUsers', { count: filteredUsers.length })" />
     </div>
 
     <!-- Tabla de Usuarios con Element Plus -->
@@ -179,7 +179,7 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
         stripe
         style="width: 100%"
       >
-        <el-table-column label="Nombre" sortable prop="nombre" width="160">
+        <el-table-column :label="$t('users.table.firstName')" sortable prop="nombre" width="160">
           <template #default="{ row }">
             <div class="user-cell">
               <el-avatar
@@ -201,7 +201,7 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
 
         <el-table-column
           prop="apellidos"
-          label="Apellidos"
+          :label="$t('users.table.lastName')"
           show-overflow-tooltip
           sortable
           width="180"
@@ -209,16 +209,16 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
 
         <el-table-column
           prop="email"
-          label="E-mail"
+          :label="$t('users.table.email')"
           sortable
           min-width="260"
           show-overflow-tooltip
         />
 
-        <el-table-column prop="telefono" label="Teléfono" sortable width="150" />
+        <el-table-column prop="telefono" :label="$t('users.table.phone')" sortable width="150" />
 
         <el-table-column
-          label="Perfil / Rol"
+          :label="$t('users.table.role')"
           sortable
           prop="perfil.name"
           width="240"
@@ -243,7 +243,7 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
         </el-table-column>
 
         <el-table-column
-          label="Antigüedad"
+          :label="$t('users.table.seniority')"
           sortable
           prop="fechaContratacion"
           min-width="190"
@@ -251,12 +251,12 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
         >
           <template #default="{ row }">
             <span :class="{ 'empty-value': !row.fechaContratacion }">
-              {{ formatAntiguedad(row.fechaContratacion) }}
+              {{ formatAntiguedad(row.fechaContratacion, locale) }}
             </span>
           </template>
         </el-table-column>
 
-        <el-table-column label="Color" width="75" align="center">
+        <el-table-column :label="$t('users.table.color')" width="75" align="center">
           <template #default="{ row }">
             <div
               v-if="row.perfil?.code?.toUpperCase() === 'FOTOGRAFO'"
@@ -281,7 +281,7 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
           </template>
         </el-table-column>
 
-        <el-table-column label="Acciones" width="100" align="center" fixed="right">
+        <el-table-column :label="$t('users.table.actions')" width="100" align="center" fixed="right">
           <template #default="{ row }">
             <div class="action-buttons">
               <el-button
@@ -289,22 +289,22 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
                 type="primary"
                 link
                 :icon="EditPen"
-                title="Editar usuario"
+                :title="$t('users.editUserTooltip')"
                 @click="navigateToEdit(row)"
               />
               <el-popconfirm
                 v-if="
                   canDeleteUser(currentUser?.roleCode, row.perfil?.code, currentUser?.id, row.id)
                 "
-                :title="`¿Eliminar al usuario ${row.nombre} ${row.apellidos}?`"
-                confirm-button-text="Eliminar"
-                cancel-button-text="Cancelar"
+                :title="$t('users.deleteConfirm', { name: `${row.nombre} ${row.apellidos}` })"
+                :confirm-button-text="$t('users.delete')"
+                :cancel-button-text="$t('users.cancel')"
                 confirm-button-type="danger"
                 :width="240"
                 @confirm="handleDeleteUser(row.id)"
               >
                 <template #reference>
-                  <el-button type="danger" link :icon="Delete" title="Eliminar usuario" />
+                  <el-button type="danger" link :icon="Delete" :title="$t('users.deleteUserTooltip')" />
                 </template>
               </el-popconfirm>
             </div>

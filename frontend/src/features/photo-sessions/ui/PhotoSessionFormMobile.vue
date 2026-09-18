@@ -18,9 +18,13 @@ import {
   UserX,
 } from '@lucide/vue'
 
+import { useLocale } from '@/i18n/useLocale'
+
 const props = defineProps<{
   form: PhotoSessionFormContext
 }>()
+
+const { t, locale } = useLocale()
 
 const {
   formData,
@@ -63,16 +67,17 @@ const {
 
 // Formato compacto para las etiquetas de la cabecera en móvil (evita que el texto se corte)
 const mobileSessionPreview = computed(() => {
-  if (!formData.value.fechaHoraInicio) return 'Sin fecha'
+  if (!formData.value.fechaHoraInicio) return t('sessions.summary.noDate')
   try {
     const parts = formData.value.fechaHoraInicio.split('T')
     const datePart = parts[0]
     const timePart = parts[1]
-    if (!datePart) return 'Sin fecha'
+    if (!datePart) return t('sessions.summary.noDate')
     const [y, m, d] = datePart.split('-').map(Number)
     if (!y || !m || !d) return formData.value.fechaHoraInicio
     const dateObj = new Date(y, m - 1, d)
-    const monthShort = dateObj.toLocaleDateString('es-ES', { month: 'short' })
+    const loc = locale.value === 'en' ? 'en-US' : 'es-ES'
+    const monthShort = dateObj.toLocaleDateString(loc, { month: 'short' })
     const time = timePart ? timePart.substring(0, 5) : ''
     return time ? `${d} ${monthShort} ${y}, ${time}` : `${d} ${monthShort} ${y}`
   } catch {
@@ -82,16 +87,17 @@ const mobileSessionPreview = computed(() => {
 
 const mobileCitaVentaPreview = computed(() => {
   const cita = fechaHoraCitaVenta?.value || loadedSession?.value?.citaVenta?.fechaHoraCita
-  if (!cita) return 'Sin cita'
+  if (!cita) return t('sessions.summary.noSaleShort')
   try {
     const parts = cita.split('T')
     const datePart = parts[0]
     const timePart = parts[1]
-    if (!datePart) return 'Sin cita'
+    if (!datePart) return t('sessions.summary.noSaleShort')
     const [y, m, d] = datePart.split('-').map(Number)
     if (!y || !m || !d) return cita
     const dateObj = new Date(y, m - 1, d)
-    const monthShort = dateObj.toLocaleDateString('es-ES', { month: 'short' })
+    const loc = locale.value === 'en' ? 'en-US' : 'es-ES'
+    const monthShort = dateObj.toLocaleDateString(loc, { month: 'short' })
     const time = timePart ? timePart.substring(0, 5) : ''
     return time ? `${d} ${monthShort} ${y}, ${time}` : `${d} ${monthShort} ${y}`
   } catch {
@@ -101,12 +107,13 @@ const mobileCitaVentaPreview = computed(() => {
 
 const mobileCheckoutPreview = computed(() => {
   const salida = formData.value.fechaSalida
-  if (!salida) return 'Sin checkout'
+  if (!salida) return t('sessions.summary.noCheckout')
   try {
     const [y, m, d] = salida.split('-').map(Number)
     if (!y || !m || !d) return salida
     const dateObj = new Date(y, m - 1, d)
-    const monthShort = dateObj.toLocaleDateString('es-ES', { month: 'short' })
+    const loc = locale.value === 'en' ? 'en-US' : 'es-ES'
+    const monthShort = dateObj.toLocaleDateString(loc, { month: 'short' })
     return `${d} ${monthShort} ${y}`
   } catch {
     return salida
@@ -330,21 +337,21 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 }
 
 // Opciones para el selector de estado de la cita
-const estadoOptions = [
-  { value: 'PROGRAMADA', label: 'Programada', icon: Calendar },
-  { value: 'NO_SHOW', label: 'No vino', icon: UserX },
-  { value: 'CANCELADA', label: 'Cancelada', icon: Close },
-  { value: 'COMPLETADA', label: 'Completada', icon: Check },
-]
+const estadoOptions = computed(() => [
+  { value: 'PROGRAMADA', label: t('sessions.status.scheduledShort'), icon: Calendar },
+  { value: 'NO_SHOW', label: t('sessions.status.noShowShort'), icon: UserX },
+  { value: 'CANCELADA', label: t('sessions.status.cancelledShort'), icon: Close },
+  { value: 'COMPLETADA', label: t('sessions.status.completedShort'), icon: Check },
+])
 
 // Opciones para botones de motivo de sesión (estilo Estado de Sesión)
-const motivoOptions = [
-  { label: 'Cumpleaños', value: 'Cumpleaños', icon: Balloon },
-  { label: 'Foto familiar', value: 'Foto familiar', icon: Users },
-  { label: 'Pedida matrimonio', value: 'Pedida de matrimonio', icon: Gem },
-  { label: 'Revelación género', value: 'Revelación de género', icon: Baby },
-  { label: 'Otro', value: 'Otro', icon: Sparkles },
-]
+const motivoOptions = computed(() => [
+  { label: t('sessions.concepts.birthday'), value: 'Cumpleaños', icon: Balloon },
+  { label: t('sessions.concepts.familyPhoto'), value: 'Foto familiar', icon: Users },
+  { label: t('sessions.concepts.marriageProposalShort'), value: 'Pedida de matrimonio', icon: Gem },
+  { label: t('sessions.concepts.genderRevealShort'), value: 'Revelación de género', icon: Baby },
+  { label: t('sessions.concepts.other'), value: 'Otro', icon: Sparkles },
+])
 
 // Establecer 'Otro' como motivo seleccionado por defecto si no hay ninguno
 if (!formData.value.concepto) {
@@ -394,13 +401,13 @@ function validateForm(): boolean {
 
   // 1. Nombre del cliente obligatorio
   if (!data.clienteNombre || !data.clienteNombre.trim()) {
-    ElMessage.warning('Por favor, indica el nombre del cliente')
+    ElMessage.warning(t('sessions.toasts.clientNameRequiredMobile'))
     return false
   }
 
   // 2. Hotel obligatorio
   if (!data.hotelId) {
-    ElMessage.warning('Por favor, selecciona un hotel')
+    ElMessage.warning(t('sessions.toasts.hotelRequiredMobile'))
     return false
   }
 
@@ -408,7 +415,7 @@ function validateForm(): boolean {
   if (data.clienteEmail && data.clienteEmail.trim()) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(data.clienteEmail.trim())) {
-      ElMessage.warning('El formato del correo electrónico no es válido')
+      ElMessage.warning(t('sessions.toasts.emailInvalid'))
       return false
     }
   }
@@ -417,34 +424,34 @@ function validateForm(): boolean {
   const adultos = Number(data.numAdultos) || 0
   const ninos = Number(data.numNinos) || 0
   if (adultos === 0 && ninos === 0) {
-    ElMessage.warning('Debe haber al menos 1 participante (al menos 1 adulto o 1 niño)')
+    ElMessage.warning(t('sessions.toasts.atLeastOneParticipant'))
     return false
   }
 
   // 5. Fecha de sesión obligatoria
   if (!selectedDateOnly.value) {
     activeScheduleAccordion.value = 'sesion'
-    ElMessage.warning('Por favor, selecciona una fecha para la sesión de fotos')
+    ElMessage.warning(t('sessions.toasts.dateRequiredMobile'))
     return false
   }
 
   // 6. Horario de sesión obligatorio
   if (!selectedTimeOnly.value) {
     activeScheduleAccordion.value = 'sesion'
-    ElMessage.warning('Por favor, selecciona un horario para la sesión de fotos')
+    ElMessage.warning(t('sessions.toasts.timeRequiredMobile'))
     return false
   }
 
   // 7. Ausencia del fotógrafo (solo si hay fotógrafo seleccionado)
   if (data.fotografoId && isFotografoAusente.value) {
-    ElMessage.warning('El fotógrafo seleccionado tiene una ausencia en esta fecha')
+    ElMessage.warning(t('sessions.toasts.photographerAbsentErrorMobile'))
     return false
   }
 
   // 8. Tope de sesiones simultáneas
   if (isTopeAlcanzado.value) {
     activeScheduleAccordion.value = 'sesion'
-    ElMessage.warning('Se ha alcanzado el tope de sesiones simultáneas para esta hora')
+    ElMessage.warning(t('sessions.toasts.quotaFullErrorMobile'))
     return false
   }
 
@@ -468,7 +475,7 @@ function handleSave() {
     <div class="mobile-header">
       <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleGoBack" />
       <h1 class="mobile-title">
-        {{ isEditing ? 'Editar Sesión' : 'Nueva Sesión' }}
+        {{ isEditing ? $t('sessions.titleMobileEdit') : $t('sessions.titleMobileNew') }}
       </h1>
     </div>
 
@@ -476,14 +483,13 @@ function handleSave() {
     <div class="mobile-step-body">
       <!-- Read-only lock banner -->
       <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-        Esta sesión no está en estado programada. Para editarla contacta con tu gerente de área o
-        administrador.
+        {{ $t('sessions.readOnlyNotice') }}
       </el-alert>
 
       <!-- 1 Datos del cliente -->
       <div class="mobile-card-section-label">
         <span class="step-badge-num">1</span>
-        <span>Datos del cliente</span>
+        <span>{{ $t('sessions.clientInfo.clientData') }}</span>
       </div>
 
       <el-form
@@ -494,22 +500,22 @@ function handleSave() {
         class="mobile-client-form"
       >
         <!-- Fila 1: Nombre del Cliente -->
-        <el-form-item label="Nombre del Cliente" required>
+        <el-form-item :label="$t('sessions.clientInfo.clientName')" required>
           <el-input
             v-model="formData.clienteNombre"
             size="large"
-            placeholder="Ej. Familia López / Pareja Smith"
+            :placeholder="$t('sessions.clientInfo.clientNamePlaceholder')"
             :prefix-icon="User"
           />
         </el-form-item>
 
         <!-- Fila 2: Hotel (solo si el usuario tiene acceso a más de 1 hotel) -->
-        <el-form-item v-if="userHotels.length > 1" label="Hotel" required>
+        <el-form-item v-if="userHotels.length > 1" :label="$t('sessions.clientInfo.hotel')" required>
           <el-select
             v-model="formData.hotelId"
             size="large"
             style="width: 100%"
-            placeholder="Selecciona hotel"
+            :placeholder="$t('sessions.clientInfo.selectHotel')"
           >
             <el-option
               v-for="hotel in userHotels"
@@ -526,7 +532,7 @@ function handleSave() {
             <template #label>
               <span class="pax-item-label">
                 <el-icon class="pax-label-icon"><Users :size="16" /></el-icon>
-                <span>Adultos</span>
+                <span>{{ $t('sessions.clientInfo.adults') }}</span>
               </span>
             </template>
             <el-input-number
@@ -543,7 +549,7 @@ function handleSave() {
             <template #label>
               <span class="pax-item-label">
                 <el-icon class="pax-label-icon"><Baby :size="16" /></el-icon>
-                <span>Niños</span>
+                <span>{{ $t('sessions.clientInfo.children') }}</span>
               </span>
             </template>
             <el-input-number
@@ -560,35 +566,35 @@ function handleSave() {
         <!-- Switch para mostrar/ocultar campos adicionales -->
         <div class="mobile-switch-row">
           <el-switch v-model="showAllClientFields" size="default" />
-          <span class="switch-label">Más datos del cliente</span>
+          <span class="switch-label">{{ $t('sessions.clientInfo.moreClientData') }}</span>
         </div>
 
         <!-- Fila 4 Condicional: Nº de Habitación, Email y Teléfono al 100% de ancho -->
         <transition name="el-fade-in">
           <div v-if="showAllClientFields" class="mobile-form-extra-fields">
-            <el-form-item label="Nº de Habitación">
+            <el-form-item :label="$t('sessions.clientInfo.roomNumber')">
               <el-input
                 v-model="formData.numeroHabitacion"
                 size="large"
-                placeholder="Ej. 304B / Villa 12"
+                :placeholder="$t('sessions.clientInfo.roomNumberPlaceholder')"
                 :prefix-icon="Building2"
               />
             </el-form-item>
 
-            <el-form-item label="Email del Cliente">
+            <el-form-item :label="$t('sessions.clientInfo.clientEmail')">
               <el-input
                 v-model="formData.clienteEmail"
                 size="large"
-                placeholder="cliente@ejemplo.com"
+                :placeholder="$t('sessions.clientInfo.clientEmailPlaceholder')"
                 :prefix-icon="Message"
               />
             </el-form-item>
 
-            <el-form-item label="Teléfono del Cliente">
+            <el-form-item :label="$t('sessions.clientInfo.clientPhone')">
               <el-input
                 v-model="formData.clienteTelefono"
                 size="large"
-                placeholder="+34 600 000 000"
+                :placeholder="$t('sessions.clientInfo.clientPhonePlaceholder')"
                 :prefix-icon="Phone"
               />
             </el-form-item>
@@ -599,7 +605,7 @@ function handleSave() {
       <!-- 2 Establece fechas -->
       <div class="mobile-card-section-label mobile-card-section-label--schedule">
         <span class="step-badge-num">2</span>
-        <span>Establece fechas</span>
+        <span>{{ $t('sessions.schedule.setDates') }}</span>
       </div>
 
       <!-- Acordeón de Planificación (Sesión, Cita de Venta, Checkout) al final del Paso 1 -->
@@ -618,7 +624,7 @@ function handleSave() {
                   <Camera :size="24" :stroke-width="2" />
                 </el-icon>
                 <span class="accordion-title-text">
-                  Sesión
+                  {{ $t('sessions.schedule.session') }}
                   <span class="required-asterisk">*</span>
                 </span>
               </div>
@@ -658,7 +664,7 @@ function handleSave() {
             <div class="schedule-section-block">
               <div class="schedule-section-header-row">
                 <div class="schedule-section-title-group">
-                  <span class="schedule-section-title">Horario disponible</span>
+                  <span class="schedule-section-title">{{ $t('sessions.schedule.availableSchedule') }}</span>
                   <el-tag
                     v-if="selectedTimeOnly"
                     effect="plain"
@@ -725,7 +731,7 @@ function handleSave() {
                     class="status-indicator-dot"
                     :class="isTopeAlcanzado ? 'dot-danger' : 'dot-success'"
                   ></span>
-                  <span>Sesiones disponibles:</span>
+                  <span>{{ $t('sessions.schedule.availableSessions') }}</span>
                 </div>
                 <div class="disponibilidad-badge">
                   <el-tag
@@ -736,10 +742,10 @@ function handleSave() {
                   >
                     {{
                       isTopeAlcanzado
-                        ? 'Tope alcanzado'
-                        : `${disponibilidadHotel.cupoLibre} ${
-                            disponibilidadHotel.cupoLibre === 1 ? 'sesión libre' : 'sesiones libres'
-                          }`
+                        ? $t('sessions.schedule.quotaReached')
+                        : (disponibilidadHotel.cupoLibre === 1
+                            ? $t('sessions.schedule.freeSessionSingle')
+                            : $t('sessions.schedule.freeSessionPlural', { count: disponibilidadHotel.cupoLibre }))
                     }}
                   </el-tag>
                 </div>
@@ -747,12 +753,12 @@ function handleSave() {
               <div class="disponibilidad-details">
                 <span class="detail-item">
                   <strong>{{ disponibilidadHotel.disponibles }}</strong>
-                  / {{ disponibilidadHotel.totalFotografos }} fotógrafos activos
+                  / {{ $t('sessions.schedule.activePhotographersCount', { available: disponibilidadHotel.disponibles, total: disponibilidadHotel.totalFotografos }).split('/')[1] }}
                 </span>
                 <span class="detail-separator">•</span>
                 <span class="detail-item">
                   <strong>{{ disponibilidadHotel.sesionesSimultaneas }}</strong>
-                  sesiones a esta hora
+                  {{ $t('sessions.schedule.simultaneousSessionsCount', { count: disponibilidadHotel.sesionesSimultaneas }).replace(String(disponibilidadHotel.sesionesSimultaneas), '') }}
                 </span>
               </div>
 
@@ -766,11 +772,10 @@ function handleSave() {
               >
                 <template #title>
                   <span v-if="disponibilidadHotel.disponibles === 0">
-                    No hay fotógrafos disponibles en este hotel para la fecha seleccionada.
+                    {{ $t('sessions.alerts.quotaNoPhotographers') }}
                   </span>
                   <span v-else>
-                    Tope de {{ disponibilidadHotel.disponibles }} sesiones simultáneas alcanzado
-                    para esta hora.
+                    {{ $t('sessions.alerts.quotaMaxSessions', { count: disponibilidadHotel.disponibles }) }}
                   </span>
                 </template>
               </el-alert>
@@ -786,7 +791,7 @@ function handleSave() {
                 <el-icon class="accordion-icon">
                   <Calendar :size="24" :stroke-width="2" />
                 </el-icon>
-                <span class="accordion-title-text">Venta</span>
+                <span class="accordion-title-text">{{ $t('sessions.schedule.salesAppointment') }}</span>
               </div>
               <el-tag
                 :type="activeScheduleAccordion === 'cita-venta' ? 'primary' : 'info'"
@@ -823,7 +828,7 @@ function handleSave() {
             <div class="schedule-section-block">
               <div class="schedule-section-header-row">
                 <div class="schedule-section-title-group">
-                  <span class="schedule-section-title">Horario de venta</span>
+                  <span class="schedule-section-title">{{ $t('sessions.schedule.salesSchedule') }}</span>
                   <el-tag
                     v-if="selectedCitaVentaTimeOnly"
                     effect="plain"
@@ -886,8 +891,7 @@ function handleSave() {
                 <el-alert type="warning" show-icon :closable="false">
                   <template #title>
                     <span>
-                      <strong>{{ conflictsCitaVenta.length }}</strong>
-                      cita(s) de venta en el mismo hotel en esta franja (±1h)
+                      {{ $t('sessions.alerts.saleConflicts', { count: conflictsCitaVenta.length }) }}
                     </span>
                   </template>
                 </el-alert>
@@ -904,7 +908,7 @@ function handleSave() {
                 <el-icon class="accordion-icon">
                   <PlaneTakeoff :size="24" :stroke-width="2" />
                 </el-icon>
-                <span class="accordion-title-text">Checkout</span>
+                <span class="accordion-title-text">{{ $t('sessions.schedule.checkout') }}</span>
               </div>
               <el-tag
                 :type="activeScheduleAccordion === 'checkout' ? 'primary' : 'info'"
@@ -942,7 +946,7 @@ function handleSave() {
       <!-- 3 Elige fotógrafo -->
       <div class="mobile-card-section-label mobile-card-section-label--photographer">
         <span class="step-badge-num">3</span>
-        <span>Elige fotógrafo</span>
+        <span>{{ $t('sessions.schedule.choosePhotographer') }}</span>
       </div>
 
       <!-- Selector de Fotógrafo Estilo Card Desplegable -->
@@ -977,7 +981,7 @@ function handleSave() {
           </div>
           <div class="photographer-info-box">
             <span v-if="selectedPhotographer" class="photographer-badge-label">
-              FOTÓGRAFO ASIGNADO
+              {{ $t('sessions.summary.assignedPhotographer') }}
             </span>
             <span
               class="photographer-title-label"
@@ -986,11 +990,11 @@ function handleSave() {
               {{
                 selectedPhotographer
                   ? `${selectedPhotographer.nombre} ${selectedPhotographer.apellidos}`
-                  : 'Selecciona fotógrafo'
+                  : $t('sessions.summary.selectPhotographer')
               }}
             </span>
             <span v-if="!selectedPhotographer" class="photographer-subtitle-label">
-              Elige un fotógrafo para la sesión
+              {{ $t('sessions.summary.choosePhotographerDesc') }}
             </span>
           </div>
         </div>
@@ -1000,15 +1004,15 @@ function handleSave() {
           <div class="photographer-selected-divider" />
           <div class="photographer-selected-details">
             <div v-if="selectedHotelDisplayName" class="detail-row">
-              <span class="detail-label">Hotel:</span>
+              <span class="detail-label">{{ $t('sessions.summary.hotel') }}</span>
               <span class="detail-value">{{ selectedHotelDisplayName }}</span>
             </div>
             <div v-if="formData.clienteNombre?.trim()" class="detail-row">
-              <span class="detail-label">Cliente:</span>
+              <span class="detail-label">{{ $t('sessions.summary.client') }}</span>
               <span class="detail-value">{{ formData.clienteNombre }}</span>
             </div>
             <div v-if="formData.numeroHabitacion?.trim()" class="detail-row">
-              <span class="detail-label">Habitación:</span>
+              <span class="detail-label">{{ $t('sessions.summary.room') }}</span>
               <span class="detail-value">{{ formData.numeroHabitacion }}</span>
             </div>
             <div
@@ -1019,36 +1023,36 @@ function handleSave() {
               "
               class="detail-row"
             >
-              <span class="detail-label">Fecha:</span>
+              <span class="detail-label">{{ $t('sessions.summary.date') }}</span>
               <span class="detail-value">{{ summaryFormattedDate }}</span>
             </div>
             <div v-if="selectedTimeOnly" class="detail-row">
-              <span class="detail-label">Hora:</span>
+              <span class="detail-label">{{ $t('sessions.summary.time') }}</span>
               <span class="detail-value">{{ selectedTimeOnly }}</span>
             </div>
             <div
               v-if="summaryPersonas && summaryPersonas !== 'Sin participantes'"
               class="detail-row"
             >
-              <span class="detail-label">Personas:</span>
+              <span class="detail-label">{{ $t('sessions.summary.people') }}</span>
               <span class="detail-value">{{ summaryPersonas }}</span>
             </div>
             <div
               v-if="mobileCitaVentaPreview && mobileCitaVentaPreview !== 'Sin cita'"
               class="detail-row"
             >
-              <span class="detail-label">Cita Venta:</span>
+              <span class="detail-label">{{ $t('sessions.summary.saleAppointment') }}</span>
               <span class="detail-value">{{ mobileCitaVentaPreview }}</span>
             </div>
             <div
               v-if="mobileCheckoutPreview && mobileCheckoutPreview !== 'Sin checkout'"
               class="detail-row"
             >
-              <span class="detail-label">Checkout:</span>
+              <span class="detail-label">{{ $t('sessions.summary.checkout') }}</span>
               <span class="detail-value">{{ mobileCheckoutPreview }}</span>
             </div>
             <div v-if="formData.concepto?.trim()" class="detail-row">
-              <span class="detail-label">Motivo:</span>
+              <span class="detail-label">{{ $t('sessions.summary.reason') }}</span>
               <span class="detail-value">{{ formData.concepto }}</span>
             </div>
           </div>
@@ -1066,7 +1070,7 @@ function handleSave() {
           @click="togglePhotographersList"
         >
           <span class="toggle-text">
-            {{ showPhotographersList ? 'OCULTAR FOTÓGRAFOS' : 'VER FOTÓGRAFOS' }}
+            {{ showPhotographersList ? $t('sessions.schedule.hidePhotographers') : $t('sessions.schedule.viewPhotographers') }}
           </span>
           <el-icon class="toggle-icon" :class="{ 'is-rotated': showPhotographersList }">
             <ChevronDown :size="18" />
@@ -1077,10 +1081,10 @@ function handleSave() {
         <el-collapse-transition>
           <div v-if="showPhotographersList" class="photographer-dropdown-container">
             <div v-if="!formData.hotelId" class="photographer-empty-state">
-              Selecciona primero un hotel para ver sus fotógrafos.
+              {{ $t('sessions.schedule.selectHotelFirst') }}
             </div>
             <div v-else-if="photographers.length === 0" class="photographer-empty-state">
-              No hay fotógrafos activos en este hotel.
+              {{ $t('sessions.schedule.noPhotographersInHotel') }}
             </div>
             <div v-else class="photographer-dropdown-list">
               <div
@@ -1127,7 +1131,7 @@ function handleSave() {
                 </div>
 
                 <div class="pick-item-tags">
-                  <el-tag size="small" type="success" effect="light">Fotógrafo</el-tag>
+                  <el-tag size="small" type="success" effect="light">{{ $t('sessions.schedule.photographerRole') }}</el-tag>
                 </div>
               </div>
             </div>
@@ -1138,7 +1142,7 @@ function handleSave() {
       <!-- 4 Otros datos -->
       <div class="mobile-card-section-label mobile-card-section-label--details">
         <span class="step-badge-num">4</span>
-        <span>Otros datos</span>
+        <span>{{ $t('sessions.details.otherData') }}</span>
       </div>
 
       <!-- Concepto / Motivo de la Sesión y Notas Adicionales -->
@@ -1146,7 +1150,7 @@ function handleSave() {
         <div class="mobile-details-form">
           <!-- Concepto / Motivo de la Sesión (Botones estilo Estado de Sesión) -->
           <div class="motivo-section">
-            <label class="form-field-label">CONCEPTO / MOTIVO DE LA SESIÓN</label>
+            <label class="form-field-label">{{ $t('sessions.details.conceptLabelUpper') }}</label>
             <div class="motivo-grid">
               <button
                 v-for="opt in motivoOptions"
@@ -1167,13 +1171,13 @@ function handleSave() {
 
           <!-- Notas Adicionales -->
           <div class="notas-section">
-            <label class="form-field-label">NOTAS ADICIONALES</label>
+            <label class="form-field-label">{{ $t('sessions.details.notesLabelUpper') }}</label>
             <el-input
               v-model="formData.notas"
               size="large"
               type="textarea"
               :rows="3"
-              placeholder="Ej. Fotos en la playa al atardecer, vestidos de blanco."
+              :placeholder="$t('sessions.details.notesPlaceholder')"
             />
           </div>
         </div>
@@ -1182,7 +1186,7 @@ function handleSave() {
       <!-- 5 Estado de la cita -->
       <div class="mobile-card-section-label mobile-card-section-label--status">
         <span class="step-badge-num">5</span>
-        <span>Estado de la cita</span>
+        <span>{{ $t('sessions.status.appointmentStatus') }}</span>
       </div>
 
       <!-- Selector de Estado de la Cita (3 arriba + 1 abajo) -->
@@ -1229,7 +1233,7 @@ function handleSave() {
         :disabled="isReadOnly"
         @click="handleSave"
       >
-        <span>{{ isEditing ? 'Guardar' : 'Agendar' }}</span>
+        <span>{{ isEditing ? $t('sessions.actions.save') : $t('sessions.actions.schedule') }}</span>
         <el-icon class="btn-icon-right">
           <Check :size="18" />
         </el-icon>

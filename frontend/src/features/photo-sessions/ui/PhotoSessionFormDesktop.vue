@@ -14,9 +14,13 @@ import {
   Gem,
 } from '@lucide/vue'
 
+import { useLocale } from '@/i18n/useLocale'
+
 const props = defineProps<{
   form: PhotoSessionFormContext
 }>()
+
+const { t } = useLocale()
 
 const {
   timeSlots,
@@ -148,13 +152,13 @@ function selectCitaVentaMinute(min: string) {
   selectCitaVentaTimeSlot(`${hour}:${min}`)
 }
 
-const motivoOptions = [
-  { label: 'Cumpleaños', value: 'Cumpleaños', icon: Balloon },
-  { label: 'Foto familiar', value: 'Foto familiar', icon: Users },
-  { label: 'Pedida matrimonio', value: 'Pedida de matrimonio', icon: Gem },
-  { label: 'Revelación género', value: 'Revelación de género', icon: Baby },
-  { label: 'Otro', value: 'Otro', icon: Sparkles },
-]
+const motivoOptions = computed(() => [
+  { label: t('sessions.concepts.birthday'), value: 'Cumpleaños', icon: Balloon },
+  { label: t('sessions.concepts.familyPhoto'), value: 'Foto familiar', icon: Users },
+  { label: t('sessions.concepts.marriageProposalShort'), value: 'Pedida de matrimonio', icon: Gem },
+  { label: t('sessions.concepts.genderRevealShort'), value: 'Revelación de género', icon: Baby },
+  { label: t('sessions.concepts.other'), value: 'Otro', icon: Sparkles },
+])
 
 if (!formData.value.concepto) {
   formData.value.concepto = 'Otro'
@@ -249,7 +253,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
         <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleGoBack" />
         <div class="header-titles">
           <h1 class="page-title">
-            {{ isEditing ? 'Editar Sesión Fotográfica' : 'Nueva Sesión Fotográfica' }}
+            {{ isEditing ? $t('sessions.titleEdit') : $t('sessions.titleNew') }}
           </h1>
         </div>
       </div>
@@ -265,8 +269,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
         class="form-alert-banner"
       >
         <template #title>
-          Sesión Vencida — Esta sesión estaba programada para la fecha elegida y ya ha pasado. Por
-          favor actualiza su estado.
+          {{ $t('sessions.alerts.overdueTitle') }}
         </template>
       </el-alert>
 
@@ -278,8 +281,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
         class="form-alert-banner"
       >
         <template #title>
-          Sin Cita de Venta — Esta sesión está completada pero aún no tiene una cita de venta
-          programada.
+          {{ $t('sessions.alerts.noSaleTitle') }}
         </template>
         <template #default>
           <div style="margin-top: 0.5rem">
@@ -288,7 +290,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
               size="small"
               @click="router.push(`/ventas/nueva?sesionId=${loadedSession?.id}`)"
             >
-              Agendar Cita de Venta
+              {{ $t('sessions.alerts.scheduleSale') }}
             </el-button>
           </div>
         </template>
@@ -302,7 +304,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
         class="form-alert-banner"
       >
         <template #title>
-          No Show en Venta — El cliente no se presentó a la cita de venta. Puedes reprogramarla.
+          {{ $t('sessions.alerts.saleNoShowTitle') }}
         </template>
         <template #default>
           <div style="margin-top: 0.5rem">
@@ -311,7 +313,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
               size="small"
               @click="router.push(`/ventas/${loadedSession?.citaVenta?.id}/editar`)"
             >
-              Reprogramar Cita de Venta
+              {{ $t('sessions.alerts.rescheduleSale') }}
             </el-button>
           </div>
         </template>
@@ -320,8 +322,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 
     <!-- Read-only lock banner -->
     <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-      Esta sesión no está en estado programada. Para editarla contacta con tu gerente de área o
-      administrador.
+      {{ $t('sessions.readOnlyNotice') }}
     </el-alert>
 
     <!-- Layout de 2 Columnas -->
@@ -339,28 +340,28 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
           <el-card class="form-card client-info-card" shadow="never">
             <div class="card-section-header">
               <el-icon class="card-section-icon"><User /></el-icon>
-              <h2 class="card-section-title">Información del Cliente</h2>
+              <h2 class="card-section-title">{{ $t('sessions.clientInfo.title') }}</h2>
             </div>
 
             <div class="client-info-fields">
               <!-- Fila 1: Nombre del Cliente (ancho completo) -->
-              <el-form-item label="Nombre del Cliente" required>
+              <el-form-item :label="$t('sessions.clientInfo.clientName')" required>
                 <el-input
                   v-model="formData.clienteNombre"
                   size="large"
-                  placeholder="Ej. Familia López / Pareja Smith"
+                  :placeholder="$t('sessions.clientInfo.clientNamePlaceholder')"
                   :prefix-icon="User"
                 />
               </el-form-item>
 
               <!-- Fila 2: Hotel y Nº de Habitación -->
               <div class="form-row-2">
-                <el-form-item label="Hotel" required>
+                <el-form-item :label="$t('sessions.clientInfo.hotel')" required>
                   <el-select
                     v-model="formData.hotelId"
                     size="large"
                     style="width: 100%"
-                    placeholder="Selecciona hotel"
+                    :placeholder="$t('sessions.clientInfo.selectHotel')"
                   >
                     <el-option
                       v-for="hotel in userHotels"
@@ -371,11 +372,11 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                   </el-select>
                 </el-form-item>
 
-                <el-form-item label="Nº de Habitación">
+                <el-form-item :label="$t('sessions.clientInfo.roomNumber')">
                   <el-input
                     v-model="formData.numeroHabitacion"
                     size="large"
-                    placeholder="Ej. 304B / Villa 12"
+                    :placeholder="$t('sessions.clientInfo.roomNumberPlaceholder')"
                     :prefix-icon="Building2"
                   />
                 </el-form-item>
@@ -383,20 +384,20 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 
               <!-- Fila 3: Email y Teléfono -->
               <div class="form-row-2">
-                <el-form-item label="Email del Cliente">
+                <el-form-item :label="$t('sessions.clientInfo.clientEmail')">
                   <el-input
                     v-model="formData.clienteEmail"
                     size="large"
-                    placeholder="cliente@ejemplo.com"
+                    :placeholder="$t('sessions.clientInfo.clientEmailPlaceholder')"
                     :prefix-icon="Message"
                   />
                 </el-form-item>
 
-                <el-form-item label="Teléfono del Cliente">
+                <el-form-item :label="$t('sessions.clientInfo.clientPhone')">
                   <el-input
                     v-model="formData.clienteTelefono"
                     size="large"
-                    placeholder="+34 600 000 000"
+                    :placeholder="$t('sessions.clientInfo.clientPhonePlaceholder')"
                     :prefix-icon="Phone"
                   />
                 </el-form-item>
@@ -408,7 +409,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                   <template #label>
                     <span class="pax-item-label">
                       <el-icon class="pax-label-icon"><Users /></el-icon>
-                      <span>Adultos</span>
+                      <span>{{ $t('sessions.clientInfo.adults') }}</span>
                     </span>
                   </template>
                   <el-input-number
@@ -425,7 +426,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                   <template #label>
                     <span class="pax-item-label">
                       <el-icon class="pax-label-icon"><Baby /></el-icon>
-                      <span>Niños</span>
+                      <span>{{ $t('sessions.clientInfo.children') }}</span>
                     </span>
                   </template>
                   <el-input-number
@@ -450,7 +451,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                   <div class="accordion-header-title">
                     <div class="card-header-title-group">
                       <el-icon class="card-section-icon"><Camera :size="18" /></el-icon>
-                      <h2 class="card-section-title">Fecha y Hora de la Sesión</h2>
+                      <h2 class="card-section-title">{{ $t('sessions.schedule.title') }}</h2>
                     </div>
                     <div class="header-datetime-preview">
                       <el-tag
@@ -494,24 +495,24 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                           class="fotografo-absence-legend uniform-box"
                         >
                           <span class="legend-label">
-                            Ausencias de {{ selectedPhotographerName }}:
+                            {{ $t('sessions.schedule.legendTitle', { photographer: selectedPhotographerName }) }}
                           </span>
                           <div class="calendar-legend">
                             <div class="legend-item">
                               <span class="legend-dot dot-baja"></span>
-                              <span>Baja Médica</span>
+                              <span>{{ $t('sessions.schedule.medicalLeave') }}</span>
                             </div>
                             <div class="legend-item">
                               <span class="legend-dot dot-vacaciones"></span>
-                              <span>Vacaciones</span>
+                              <span>{{ $t('sessions.schedule.vacations') }}</span>
                             </div>
                             <div class="legend-item">
                               <span class="legend-dot dot-permiso"></span>
-                              <span>Permiso</span>
+                              <span>{{ $t('sessions.schedule.permission') }}</span>
                             </div>
                             <div class="legend-item">
                               <span class="legend-dot dot-otro"></span>
-                              <span>Otro</span>
+                              <span>{{ $t('sessions.schedule.otherAbsence') }}</span>
                             </div>
                           </div>
                         </div>
@@ -531,9 +532,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                           <template #title>
                             <span>
                               <strong>{{ selectedPhotographerName }}</strong>
-                              tiene una ausencia registrada (
-                              <strong>{{ ausenciaFotografoActual.motivo }}</strong>
-                              ) en la fecha seleccionada. No es posible asignarlo a esta sesión.
+                              {{ $t('sessions.alerts.photographerAbsentTitle', { photographer: '', motivo: ausenciaFotografoActual.motivo }) }}
                             </span>
                           </template>
                         </el-alert>
@@ -550,7 +549,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                                 class="status-indicator-dot"
                                 :class="isTopeAlcanzado ? 'dot-danger' : 'dot-success'"
                               ></span>
-                              <span>Sesiones disponibiles:</span>
+                              <span>{{ $t('sessions.schedule.availableSessions') }}</span>
                             </div>
                             <div class="disponibilidad-badge">
                               <el-tag
@@ -561,12 +560,10 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                               >
                                 {{
                                   isTopeAlcanzado
-                                    ? 'Tope alcanzado'
-                                    : `${disponibilidadHotel.cupoLibre} ${
-                                        disponibilidadHotel.cupoLibre === 1
-                                          ? 'sesión libre'
-                                          : 'sesiones libres'
-                                      }`
+                                    ? $t('sessions.schedule.quotaReached')
+                                    : (disponibilidadHotel.cupoLibre === 1
+                                        ? $t('sessions.schedule.freeSessionSingle')
+                                        : $t('sessions.schedule.freeSessionPlural', { count: disponibilidadHotel.cupoLibre }))
                                 }}
                               </el-tag>
                             </div>
@@ -574,12 +571,12 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                           <div class="disponibilidad-details">
                             <span class="detail-item">
                               <strong>{{ disponibilidadHotel.disponibles }}</strong>
-                              / {{ disponibilidadHotel.totalFotografos }} fotógrafos activos
+                              / {{ $t('sessions.schedule.activePhotographersCount', { available: disponibilidadHotel.disponibles, total: disponibilidadHotel.totalFotografos }).split('/')[1] }}
                             </span>
                             <span class="detail-separator">•</span>
                             <span class="detail-item">
                               <strong>{{ disponibilidadHotel.sesionesSimultaneas }}</strong>
-                              sesiones a esta hora
+                              {{ $t('sessions.schedule.simultaneousSessionsCount', { count: disponibilidadHotel.sesionesSimultaneas }).replace(String(disponibilidadHotel.sesionesSimultaneas), '') }}
                             </span>
                           </div>
 
@@ -593,12 +590,10 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                           >
                             <template #title>
                               <span v-if="disponibilidadHotel.disponibles === 0">
-                                No hay fotógrafos disponibles en este hotel para la fecha
-                                seleccionada (todos ausentes o sin fotógrafos asignados).
+                                {{ $t('sessions.alerts.quotaNoPhotographers') }}
                               </span>
                               <span v-else>
-                                Tope de {{ disponibilidadHotel.disponibles }} sesiones simultáneas
-                                alcanzado para esta hora.
+                                {{ $t('sessions.alerts.quotaMaxSessions', { count: disponibilidadHotel.disponibles }) }}
                               </span>
                             </template>
                           </el-alert>
@@ -612,7 +607,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                       <div class="schedule-section-block">
                         <div class="schedule-subheading">
                           <span class="step-badge">1</span>
-                          <span>SELECCIONA HORARIO</span>
+                          <span>{{ $t('sessions.schedule.stepTime') }}</span>
                         </div>
                         <div class="time-slots-grid">
                           <el-badge
@@ -660,14 +655,14 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                       <div class="schedule-section-block">
                         <div class="schedule-subheading">
                           <span class="step-badge">2</span>
-                          <span>FOTÓGRAFO DISPONIBLE</span>
+                          <span>{{ $t('sessions.schedule.stepPhotographer') }}</span>
                         </div>
 
                         <div v-if="photographers.length === 0" class="empty-photographers-msg">
                           <span v-if="!formData.hotelId">
-                            Selecciona un hotel primero para consultar disponibilidad.
+                            {{ $t('sessions.schedule.selectHotelFirst') }}
                           </span>
-                          <span v-else>No hay fotógrafos activos en este hotel.</span>
+                          <span v-else>{{ $t('sessions.schedule.noPhotographersInHotel') }}</span>
                         </div>
 
                         <div v-else class="photographers-card-list">
@@ -724,8 +719,8 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                               >
                                 {{
                                   String(formData.fotografoId) === String(photographer.id)
-                                    ? 'Seleccionado'
-                                    : 'Seleccionar'
+                                    ? $t('sessions.schedule.selected')
+                                    : $t('sessions.schedule.select')
                                 }}
                               </el-button>
                             </div>
@@ -750,9 +745,9 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                         class="calendar-label-btn"
                         @click.stop="router.push(`/ventas/${loadedSession?.citaVenta?.id}/editar`)"
                       >
-                        <h2 class="card-section-title">Fecha/Hora Cita de Ventas</h2>
+                        <h2 class="card-section-title">{{ $t('sessions.schedule.salesAppointmentTitle') }}</h2>
                       </el-button>
-                      <h2 v-else class="card-section-title">Fecha/Hora Cita de Ventas</h2>
+                      <h2 v-else class="card-section-title">{{ $t('sessions.schedule.salesAppointmentTitle') }}</h2>
                     </div>
                     <div class="header-datetime-preview">
                       <el-tag
@@ -795,7 +790,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                           <template #title>
                             <span>
                               <strong>{{ conflictsCitaVenta.length }}</strong>
-                              cita(s) de venta en el mismo hotel en esta franja (±1h)
+                              {{ $t('sessions.alerts.saleConflicts', { count: conflictsCitaVenta.length }).replace(String(conflictsCitaVenta.length), '') }}
                             </span>
                           </template>
                         </el-alert>
@@ -807,7 +802,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                       <div class="schedule-section-block">
                         <div class="schedule-subheading">
                           <span class="step-badge">1</span>
-                          <span>SELECCIONA HORARIO DE VENTA</span>
+                          <span>{{ $t('sessions.schedule.stepSalesTime') }}</span>
                         </div>
                         <div class="time-slots-grid">
                           <el-badge
@@ -863,7 +858,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                       <el-icon class="card-section-icon">
                         <PlaneTakeoff :size="18" />
                       </el-icon>
-                      <h2 class="card-section-title">Fecha de Checkout</h2>
+                      <h2 class="card-section-title">{{ $t('sessions.schedule.checkoutTitle') }}</h2>
                     </div>
                     <div class="header-datetime-preview">
                       <el-tag
@@ -905,13 +900,13 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
           <el-card class="form-card details-card" shadow="never">
             <div class="card-section-header">
               <el-icon class="card-section-icon"><Edit /></el-icon>
-              <h2 class="card-section-title">Detalles de la Sesión</h2>
+              <h2 class="card-section-title">{{ $t('sessions.details.title') }}</h2>
             </div>
 
             <div class="details-fields">
               <!-- Concepto / Motivo de la Sesión -->
               <div class="motivo-section">
-                <label class="form-field-label">Concepto / Motivo de la Sesión</label>
+                <label class="form-field-label">{{ $t('sessions.details.conceptLabel') }}</label>
                 <div class="motivo-grid">
                   <button
                     v-for="opt in motivoOptions"
@@ -931,13 +926,13 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
               </div>
 
               <!-- Notas Adicionales -->
-              <el-form-item label="Notas Adicionales">
+              <el-form-item :label="$t('sessions.details.notesLabel')">
                 <el-input
                   v-model="formData.notas"
                   size="large"
                   type="textarea"
                   :rows="3"
-                  placeholder="Ej. Fotos en la playa al atardecer, vestidos de blanco."
+                  :placeholder="$t('sessions.details.notesPlaceholder')"
                 />
               </el-form-item>
             </div>
@@ -953,9 +948,9 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
               :disabled="isReadOnly || isTopeAlcanzado || isFotografoAusente"
               @click="handleSaveSession"
             >
-              {{ isEditing ? 'Guardar Cambios' : 'Agendar Sesión' }}
+              {{ isEditing ? $t('sessions.actions.saveChanges') : $t('sessions.actions.scheduleSession') }}
             </el-button>
-            <el-button size="large" :icon="Close" @click="handleGoBack">Cancelar</el-button>
+            <el-button size="large" :icon="Close" @click="handleGoBack">{{ $t('sessions.actions.cancel') }}</el-button>
           </div>
         </el-form>
       </div>
@@ -986,36 +981,36 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
               }}
             </el-avatar>
             <div class="summary-photographer-meta">
-              <span class="summary-photographer-label">FOTÓGRAFO ASIGNADO</span>
+              <span class="summary-photographer-label">{{ $t('sessions.summary.assignedPhotographer') }}</span>
               <span class="summary-photographer-name">
-                {{ selectedPhotographerName || 'Sin asignar' }}
+                {{ selectedPhotographerName || $t('sessions.summary.unassigned') }}
               </span>
             </div>
           </div>
 
           <div class="summary-details-list">
             <div class="summary-detail-row">
-              <span class="summary-detail-key">Cliente:</span>
+              <span class="summary-detail-key">{{ $t('sessions.summary.client') }}</span>
               <span class="summary-detail-val">{{ summaryClienteNombre }}</span>
             </div>
             <div class="summary-detail-row">
-              <span class="summary-detail-key">Fecha:</span>
+              <span class="summary-detail-key">{{ $t('sessions.summary.date') }}</span>
               <span class="summary-detail-val">{{ summaryFormattedDate }}</span>
             </div>
             <div class="summary-detail-row">
-              <span class="summary-detail-key">Hora:</span>
+              <span class="summary-detail-key">{{ $t('sessions.summary.time') }}</span>
               <span class="summary-detail-val">{{ selectedTimeOnly || '10:00' }}</span>
             </div>
             <div class="summary-detail-row">
-              <span class="summary-detail-key">Hotel:</span>
+              <span class="summary-detail-key">{{ $t('sessions.summary.hotel') }}</span>
               <span class="summary-detail-val">{{ selectedHotelDisplayName }}</span>
             </div>
             <div class="summary-detail-row">
-              <span class="summary-detail-key">Personas:</span>
+              <span class="summary-detail-key">{{ $t('sessions.summary.people') }}</span>
               <span class="summary-detail-val">{{ summaryPersonas }}</span>
             </div>
             <div class="summary-detail-row">
-              <span class="summary-detail-key">Motivo:</span>
+              <span class="summary-detail-key">{{ $t('sessions.summary.reason') }}</span>
               <span class="summary-detail-val">{{ summaryMotivo }}</span>
             </div>
           </div>
@@ -1024,7 +1019,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
         <!-- 2. Tarjeta de Estado de Sesión -->
         <el-card class="status-card" shadow="never">
           <div class="status-card-header">
-            <span class="status-card-title">ESTADO DE SESIÓN</span>
+            <span class="status-card-title">{{ $t('sessions.status.sessionStatus') }}</span>
           </div>
           <div class="status-grid">
             <button

@@ -2,6 +2,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
+import { useLocale } from '@/i18n/useLocale'
 import PaisesConfig from '@/features/countries/ui/PaisesConfig.vue'
 import HotelesConfig from '@/features/hotels/ui/HotelesConfig.vue'
 import GoalFormView from '@/features/goals/ui/GoalFormView.vue'
@@ -9,6 +10,7 @@ import ComisionesConfig from '@/features/commissions/ui/ComisionesConfig.vue'
 import EmailTemplatesView from '@/features/notifications/ui/EmailTemplatesView.vue'
 import AuditLogTab from '@/features/audit-log/ui/AuditLogTab.vue'
 
+const { t } = useLocale()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
@@ -36,15 +38,15 @@ const defaultTab = computed(() => {
 
 const pageSubtitle = computed(() => {
   if (isSuperOrAdmin.value) {
-    return 'Gestiona las opciones generales, estructura geográfica, comisiones, registro de actividad, plantillas de correo y parámetros de la plataforma'
+    return t('configuration.subtitles.admin')
   }
   if (userRole.value === 'CONTABLE') {
-    return 'Consulta y gestiona las configuraciones de comisiones de tus áreas y hoteles asignados'
+    return t('configuration.subtitles.accountant')
   }
   if (canManageCommissions.value) {
-    return 'Establece y gestiona los porcentajes de comisiones, objetivos comerciales y metas de tus hoteles y equipo'
+    return t('configuration.subtitles.manager')
   }
-  return 'Establece y gestiona los objetivos comerciales, metas y configuraciones de tus hoteles y equipo'
+  return t('configuration.subtitles.default')
 })
 
 // Leer la pestaña activa desde el parámetro de consulta ?tab=
@@ -71,7 +73,7 @@ function handleTabChange(paneName: string | number) {
   <div class="view-container">
     <!-- Header de la sección -->
     <div class="page-header">
-      <h1 class="page-title">Configuración</h1>
+      <h1 class="page-title">{{ t('configuration.title') }}</h1>
       <p class="page-subtitle">{{ pageSubtitle }}</p>
     </div>
 
@@ -82,32 +84,32 @@ function handleTabChange(paneName: string | number) {
       class="config-tabs"
       @tab-change="handleTabChange"
     >
-      <el-tab-pane v-if="isSuperOrAdmin" label="Paises & Areas" name="paises">
+      <el-tab-pane v-if="isSuperOrAdmin" :label="t('configuration.tabs.countriesAndAreas')" name="paises">
         <!-- Componente modular de la feature 'countries' -->
         <PaisesConfig />
       </el-tab-pane>
 
-      <el-tab-pane v-if="isSuperOrAdmin" label="Hoteles" name="hoteles">
+      <el-tab-pane v-if="isSuperOrAdmin" :label="t('configuration.tabs.hotels')" name="hoteles">
         <!-- Componente modular de la feature 'hotels' -->
         <HotelesConfig />
       </el-tab-pane>
 
-      <el-tab-pane v-if="canManageGoals" label="Metas y Objetivos" name="metas">
+      <el-tab-pane v-if="canManageGoals" :label="t('configuration.tabs.goalsAndObjectives')" name="metas">
         <!-- Componente modular de la feature 'goals' -->
         <GoalFormView />
       </el-tab-pane>
 
-      <el-tab-pane v-if="canManageCommissions" label="Comisiones" name="comisiones">
+      <el-tab-pane v-if="canManageCommissions" :label="t('configuration.tabs.commissions')" name="comisiones">
         <!-- Componente modular de comisiones -->
         <ComisionesConfig />
       </el-tab-pane>
 
-      <el-tab-pane v-if="canManageEmailTemplates" label="Plantillas de Email" name="plantillas">
+      <el-tab-pane v-if="canManageEmailTemplates" :label="t('configuration.tabs.emailTemplates')" name="plantillas">
         <!-- Componente modular de plantillas de correo de recordatorio -->
         <EmailTemplatesView embedded />
       </el-tab-pane>
 
-      <el-tab-pane v-if="isSuperOrAdmin" label="Actividad" name="actividad">
+      <el-tab-pane v-if="isSuperOrAdmin" :label="t('configuration.tabs.activity')" name="actividad">
         <!-- Componente modular de auditoría y registro de actividad -->
         <AuditLogTab />
       </el-tab-pane>

@@ -1,5 +1,6 @@
 import { ref, computed, onMounted, watch, type Component } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useLocale } from '@/i18n/useLocale'
 import { useSaleStore } from '../stores/sale.store'
 import { useSessionStore } from '@/features/photo-sessions/stores/session.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
@@ -11,7 +12,6 @@ import {
   type UpdateCitaVentaPayload,
   type ConflictoCitaVenta,
   type EstadoCitaVenta,
-  MODO_COBRO_OPTIONS,
 } from '../domain/sale.model'
 import { Calendar, Check, Close } from '@element-plus/icons-vue'
 import { UserX } from '@lucide/vue'
@@ -64,6 +64,7 @@ export interface VendedoresDisponibilidadResponse {
 }
 
 export function useSaleAppointmentForm() {
+  const { t, locale } = useLocale()
   const route = useRoute()
   const router = useRouter()
   const saleStore = useSaleStore()
@@ -167,9 +168,9 @@ export function useSaleAppointmentForm() {
   })
 
   const photographerName = computed(() => {
-    if (!sessionInfo.value.fotografoId) return 'Sin asignar'
+    if (!sessionInfo.value.fotografoId) return t('sales.summary.unassigned')
     const user = photographerUser.value
-    return user ? `${user.nombre} ${user.apellidos}` : 'Desconocido'
+    return user ? `${user.nombre} ${user.apellidos}` : t('sales.summary.unknown')
   })
 
   // Sellers list for assignment (filtered by hotel: only Agendador and Fotógrafo)
@@ -197,7 +198,7 @@ export function useSaleAppointmentForm() {
           apellidos: u.apellidos,
           color: u.color,
           imagen: u.imagen,
-          perfilNombre: perfil?.name || perfil?.code || 'Vendedor',
+          perfilNombre: perfil?.name || perfil?.code || t('sales.steps.seller'),
           roleCode: perfilCode,
           isFotografo: perfilCode === 'FOTOGRAFO',
         }
@@ -352,20 +353,18 @@ export function useSaleAppointmentForm() {
     if (!selectedDateOnly.value || !selectedTimeOnly.value) {
       return {
         status: 'pending',
-        label: 'Elige fecha y hora',
+        label: t('sales.sellerPicker.statusChooseDateTime'),
         tagClass: 'tag-pending',
         disabled: false,
       }
     }
 
-    const sAvail = vendedoresDisponibilidad.value?.vendedores?.find(
-      (v) => String(v.id) === sIdStr,
-    )
+    const sAvail = vendedoresDisponibilidad.value?.vendedores?.find((v) => String(v.id) === sIdStr)
 
     if (!sAvail) {
       return {
         status: 'available',
-        label: 'Disponible',
+        label: t('sales.sellerPicker.statusAvailable'),
         tagClass: 'tag-available',
         disabled: false,
       }
@@ -375,7 +374,7 @@ export function useSaleAppointmentForm() {
       const motivo = sAvail.motivoAusencia ? ` (${sAvail.motivoAusencia})` : ''
       return {
         status: 'absent',
-        label: `Ausente${motivo}`,
+        label: t('sales.sellerPicker.statusAbsent', { motivo }),
         tagClass: 'tag-busy',
         disabled: true,
       }
@@ -385,7 +384,7 @@ export function useSaleAppointmentForm() {
       const motivo = sAvail.motivoOcupado ? ` (${sAvail.motivoOcupado})` : ' (Ocupado)'
       return {
         status: 'occupied',
-        label: `Ocupado${motivo}`,
+        label: t('sales.sellerPicker.statusOccupied', { motivo }),
         tagClass: 'tag-busy',
         disabled: true,
       }
@@ -394,7 +393,7 @@ export function useSaleAppointmentForm() {
     if (isCurrentlySelected) {
       return {
         status: 'assigned',
-        label: 'Seleccionado',
+        label: t('sales.sellerPicker.statusAssigned'),
         tagClass: 'tag-available',
         disabled: false,
       }
@@ -402,7 +401,7 @@ export function useSaleAppointmentForm() {
 
     return {
       status: 'available',
-      label: 'Disponible',
+      label: t('sales.sellerPicker.statusAvailable'),
       tagClass: 'tag-available',
       disabled: false,
     }
@@ -424,7 +423,10 @@ export function useSaleAppointmentForm() {
 
   // PAX display
   const paxDisplay = computed(() => {
-    return `${sessionInfo.value.numAdultos}.${sessionInfo.value.numNinos} PAX`
+    return t('sales.summary.paxFormat', {
+      adults: sessionInfo.value.numAdultos,
+      children: sessionInfo.value.numNinos,
+    })
   })
 
   function formatDateTime(dateStr?: string | null): string {
@@ -432,13 +434,21 @@ export function useSaleAppointmentForm() {
     return dateStr.replace('T', ' ').slice(0, 16)
   }
 
-  const estadoOptions: { value: EstadoCitaVenta; label: string; color: string; icon: Component }[] =
-    [
-      { value: 'PROGRAMADA', label: 'Programada', color: '#409eff', icon: Calendar },
-      { value: 'NO_SHOW', label: 'No vino', color: '#e6a23c', icon: UserX },
-      { value: 'CANCELADA', label: 'Cancelada', color: '#f56c6c', icon: Close },
-      { value: 'COMPLETADA', label: 'Completada', color: '#67c23a', icon: Check },
-    ]
+  const estadoOptions = computed<
+    { value: EstadoCitaVenta; label: string; color: string; icon: Component }[]
+  >(() => [
+    { value: 'PROGRAMADA', label: t('sales.status.scheduled'), color: '#409eff', icon: Calendar },
+    { value: 'NO_SHOW', label: t('sales.status.noShow'), color: '#e6a23c', icon: UserX },
+    { value: 'CANCELADA', label: t('sales.status.cancelled'), color: '#f56c6c', icon: Close },
+    { value: 'COMPLETADA', label: t('sales.status.completed'), color: '#67c23a', icon: Check },
+  ])
+
+  const modoCobroOptions = computed(() => [
+    { value: 'tarjeta', label: t('sales.paymentMethods.card') },
+    { value: 'cargo habitacion', label: t('sales.paymentMethods.roomCharge') },
+    { value: 'Paypal', label: t('sales.paymentMethods.paypal') },
+    { value: 'efectivo', label: t('sales.paymentMethods.cash') },
+  ])
 
   function formatDateIso(d: Date | string | unknown): string {
     if (!d) return ''
@@ -585,7 +595,7 @@ export function useSaleAppointmentForm() {
         loadedCita.value = existing
         const allowedHotelIds = new Set(userHotels.value.map((h) => Number(h.id)))
         if (!allowedHotelIds.has(Number(existing.hotelId))) {
-          ElMessage.error('No tienes acceso a las citas de venta de este hotel')
+          ElMessage.error(t('sales.toasts.noAccessHotel'))
           handleGoBack()
           return
         }
@@ -619,8 +629,9 @@ export function useSaleAppointmentForm() {
           hotelNombre: existing.hotelNombre || '',
         }
       } else {
-        ElMessage.error('Cita de venta no encontrada')
+        ElMessage.error(t('sales.toasts.appointmentNotFound'))
         handleGoBack()
+        return
       }
     } else {
       // Creating new: check for sesionId query param
@@ -637,38 +648,36 @@ export function useSaleAppointmentForm() {
 
   async function handleSave() {
     if (!formData.value.sesionId) {
-      ElMessage.warning('Debes seleccionar una sesión fotográfica')
+      ElMessage.warning(t('sales.toasts.sessionRequired'))
       return
     }
     if (!formData.value.fechaHoraCita) {
-      ElMessage.warning('Debes seleccionar la fecha y hora de la cita')
+      ElMessage.warning(t('sales.toasts.dateTimeRequired'))
       return
     }
 
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     if (!isEditing.value && new Date(formData.value.fechaHoraCita) < today) {
-      ElMessage.error('No se pueden crear citas de venta en fechas anteriores al día actual')
+      ElMessage.error(t('sales.toasts.pastDateError'))
       return
     }
 
     if (formData.value.estado === 'COMPLETADA') {
       if (!formData.value.sesionId) {
-        ElMessage.warning('Debes seleccionar una sesión fotográfica para completar la cita')
+        ElMessage.warning(t('sales.toasts.completeSessionRequired'))
         return
       }
       if (!formData.value.vendedorId) {
-        ElMessage.warning('Debes seleccionar un vendedor para completar la cita')
+        ElMessage.warning(t('sales.toasts.completeSellerRequired'))
         return
       }
       if (formData.value.numFotosVendidas == null || formData.value.totalVentaUsd == null) {
-        ElMessage.warning(
-          'Para completar la cita, indica el nº de fotos vendidas y el total en USD',
-        )
+        ElMessage.warning(t('sales.toasts.completeAmountsRequired'))
         return
       }
       if (!formData.value.modoCobro) {
-        ElMessage.warning('Para completar la cita, debes seleccionar un modo de cobro')
+        ElMessage.warning(t('sales.toasts.completePaymentMethodRequired'))
         return
       }
     }
@@ -688,10 +697,10 @@ export function useSaleAppointmentForm() {
         const result = await saleStore.updateCitaVenta(citaId.value, payload)
         if (result.conflictos && result.conflictos.length > 0) {
           ElMessage.warning(
-            `Cita actualizada, pero hay ${result.conflictos.length} cita(s) solapada(s) en el mismo hotel`,
+            t('sales.toasts.appointmentUpdatedWithConflicts', { count: result.conflictos.length }),
           )
         } else {
-          ElMessage.success('Cita de venta actualizada correctamente')
+          ElMessage.success(t('sales.toasts.appointmentUpdated'))
         }
       } else {
         const result = await saleStore.addCitaVenta({
@@ -707,16 +716,16 @@ export function useSaleAppointmentForm() {
         })
         if (result.conflictos && result.conflictos.length > 0) {
           ElMessage.warning(
-            `Cita creada, pero hay ${result.conflictos.length} cita(s) solapada(s) en el mismo hotel`,
+            t('sales.toasts.appointmentCreatedWithConflicts', { count: result.conflictos.length }),
           )
         } else {
-          ElMessage.success('Cita de venta agendada correctamente')
+          ElMessage.success(t('sales.toasts.appointmentCreated'))
         }
       }
       await Promise.all([sessionStore.fetchSessions(), saleStore.fetchCitasVenta()])
       handleGoBack()
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error al guardar la cita de venta'
+      const msg = err instanceof Error ? err.message : t('sales.toasts.saveError')
       ElMessage.error(msg)
     } finally {
       isSaving.value = false
@@ -746,7 +755,7 @@ export function useSaleAppointmentForm() {
     getSellerStatus,
     paxDisplay,
     estadoOptions,
-    modoCobroOptions: MODO_COBRO_OPTIONS,
+    modoCobroOptions,
     isSubmitDisabled,
     selectedDateOnly,
     selectedTimeOnly,
@@ -765,6 +774,7 @@ export function useSaleAppointmentForm() {
     profileStore,
     router,
     route,
+    locale,
   }
 }
 

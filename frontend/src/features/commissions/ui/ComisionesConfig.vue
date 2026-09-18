@@ -4,6 +4,7 @@ import { useCommissionStore } from '../stores/commission.store'
 import { useCountryStore } from '@/features/countries/stores/country.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { useUserStore } from '@/features/users/stores/user.store'
+import { useLocale } from '@/i18n/useLocale'
 import { ElMessage } from 'element-plus'
 import { Check, InfoFilled, Location, Delete, EditPen } from '@element-plus/icons-vue'
 import { Building2, HandCoins, UserRound, Percent } from '@lucide/vue'
@@ -15,6 +16,7 @@ import {
 } from '@/features/users/utils/user-avatar'
 import type { ComisionConfig, ComisionUsuarioConfig } from '../domain/commission.model'
 
+const { t } = useLocale()
 const commissionStore = useCommissionStore()
 const countryStore = useCountryStore()
 const hotelStore = useHotelStore()
@@ -189,9 +191,9 @@ async function handleSave() {
       hotelId: selectedHotelId.value,
       ...formData.value,
     })
-    ElMessage.success('Configuración de comisiones guardada correctamente')
+    ElMessage.success(t('commissions.toasts.configSaved'))
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al guardar la configuración'
+    const message = err instanceof Error ? err.message : t('commissions.toasts.saveConfigError')
     ElMessage.error(message)
   }
 }
@@ -204,17 +206,17 @@ async function handleDeleteConfig(row: ComisionConfig) {
       selectedPaisId.value || undefined,
       selectedHotelId.value || undefined,
     )
-    ElMessage.success('Configuración de comisiones eliminada correctamente')
+    ElMessage.success(t('commissions.toasts.configDeleted'))
     await loadConfig()
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al eliminar la configuración'
+    const message = err instanceof Error ? err.message : t('commissions.toasts.deleteConfigError')
     ElMessage.error(message)
   }
 }
 
 async function handleSaveUserConfig() {
   if (!selectedUsuarioId.value) {
-    ElMessage.warning('Debes seleccionar un usuario')
+    ElMessage.warning(t('commissions.toasts.userRequired'))
     return
   }
   try {
@@ -224,9 +226,9 @@ async function handleSaveUserConfig() {
       impuestoPct: userFormData.value.impuestoPct,
       activo: userFormData.value.activo,
     })
-    ElMessage.success('Comisión especial de usuario guardada correctamente')
+    ElMessage.success(t('commissions.toasts.userConfigSaved'))
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al guardar la comisión'
+    const message = err instanceof Error ? err.message : t('commissions.toasts.saveUserConfigError')
     ElMessage.error(message)
   }
 }
@@ -235,7 +237,7 @@ async function handleDeleteUserConfig(row: ComisionUsuarioConfig) {
   if (!row.id) return
   try {
     await commissionStore.deleteUserConfig(row.id)
-    ElMessage.success('Comisión especial de usuario eliminada correctamente')
+    ElMessage.success(t('commissions.toasts.userConfigDeleted'))
     if (selectedUsuarioId.value === row.usuarioId) {
       userFormData.value = {
         porcentajeComision: 10,
@@ -244,7 +246,7 @@ async function handleDeleteUserConfig(row: ComisionUsuarioConfig) {
       }
     }
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al eliminar la comisión'
+    const message = err instanceof Error ? err.message : t('commissions.toasts.deleteUserConfigError')
     ElMessage.error(message)
   }
 }
@@ -268,7 +270,7 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
         <template v-if="!isModoUsuario">
           <el-select
             v-model="selectedPaisId"
-            placeholder="🌐 Configuración Global (Por defecto)"
+            :placeholder="$t('commissions.globalConfigPlaceholder')"
             clearable
             size="large"
             class="country-select"
@@ -284,7 +286,7 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
 
           <el-select
             v-model="selectedHotelId"
-            placeholder="Todos los hoteles del país seleccionado"
+            :placeholder="$t('commissions.allHotelsCountryPlaceholder')"
             clearable
             filterable
             size="large"
@@ -325,7 +327,7 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
         <template v-else>
           <el-select
             v-model="selectedUsuarioId"
-            placeholder="Selecciona un usuario..."
+            :placeholder="$t('commissions.selectUserPlaceholder')"
             filterable
             :filter-method="onFilterUser"
             clearable
@@ -379,7 +381,7 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
       <!-- Lado Derecho: Switch Usuario -->
       <div class="toolbar-right">
         <div class="user-switch-box">
-          <span class="switch-label">Por Usuario</span>
+          <span class="switch-label">{{ $t('commissions.byUser') }}</span>
           <el-switch
             v-model="isModoUsuario"
             size="large"
@@ -396,17 +398,17 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
         <div class="role-section">
           <div class="section-header-role">
             <el-tag type="success" size="large" effect="light" class="role-tag">
-              <img :src="getRoleSvg('FOTOGRAFO')" class="role-header-icon" alt="Fotógrafo" />
-              Fotógrafo
+              <img :src="getRoleSvg('FOTOGRAFO')" class="role-header-icon" :alt="$t('commissions.photographer')" />
+              {{ $t('commissions.photographer') }}
             </el-tag>
-            <span class="role-desc-header">Comisión sobre las ventas de sus sesiones</span>
+            <span class="role-desc-header">{{ $t('commissions.photographerDesc') }}</span>
           </div>
 
           <div class="inputs-row">
             <div class="input-block">
               <div class="contract-label">
-                <span class="contract-badge salaried">Contratado</span>
-                <span class="contract-hint">Fotógrafo en plantilla con sueldo base</span>
+                <span class="contract-badge salaried">{{ $t('commissions.salaried') }}</span>
+                <span class="contract-hint">{{ $t('commissions.photographerSalariedHint') }}</span>
               </div>
               <div class="slider-container">
                 <el-slider
@@ -422,8 +424,8 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
 
             <div class="input-block">
               <div class="contract-label">
-                <span class="contract-badge commission-only">Freelance</span>
-                <span class="contract-hint">Fotógrafo freelance o sin sueldo fijo</span>
+                <span class="contract-badge commission-only">{{ $t('commissions.freelance') }}</span>
+                <span class="contract-hint">{{ $t('commissions.photographerFreelanceHint') }}</span>
               </div>
               <div class="slider-container">
                 <el-slider
@@ -448,18 +450,18 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
               <img
                 :src="getRoleSvg('AGENDADOR')"
                 class="role-header-icon"
-                alt="Vendedor / Agendador"
+                :alt="$t('commissions.seller')"
               />
-              Vendedor / Agendador
+              {{ $t('commissions.seller') }}
             </el-tag>
-            <span class="role-desc-header">Comisión por captación y apertura de sesión</span>
+            <span class="role-desc-header">{{ $t('commissions.sellerDesc') }}</span>
           </div>
 
           <div class="inputs-row">
             <div class="input-block">
               <div class="contract-label">
-                <span class="contract-badge salaried">Contratado</span>
-                <span class="contract-hint">Agendador en plantilla con sueldo base</span>
+                <span class="contract-badge salaried">{{ $t('commissions.salaried') }}</span>
+                <span class="contract-hint">{{ $t('commissions.sellerSalariedHint') }}</span>
               </div>
               <div class="slider-container">
                 <el-slider
@@ -475,8 +477,8 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
 
             <div class="input-block">
               <div class="contract-label">
-                <span class="contract-badge commission-only">Freelance</span>
-                <span class="contract-hint">Captador o comisionista externo</span>
+                <span class="contract-badge commission-only">{{ $t('commissions.freelance') }}</span>
+                <span class="contract-hint">{{ $t('commissions.sellerFreelanceHint') }}</span>
               </div>
               <div class="slider-container">
                 <el-slider
@@ -501,12 +503,12 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
               <img
                 :src="getRoleSvg('SUPERVISOR')"
                 class="role-header-icon"
-                alt="Supervisor de Hotel"
+                :alt="$t('commissions.supervisor')"
               />
-              Supervisor de Hotel
+              {{ $t('commissions.supervisor') }}
             </el-tag>
             <span class="role-desc-header">
-              Comisión fija sobre la venta total de su hotel asignado
+              {{ $t('commissions.supervisorDesc') }}
             </span>
           </div>
 
@@ -530,12 +532,12 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
         <div class="role-section">
           <div class="section-header-role">
             <el-tag type="danger" size="large" effect="light" class="role-tag">
-              <img :src="getRoleSvg('GERENTE')" class="role-header-icon" alt="Gerente de Área" />
-              Gerente de Área
+              <img :src="getRoleSvg('GERENTE')" class="role-header-icon" :alt="$t('commissions.manager')" />
+              {{ $t('commissions.manager') }}
             </el-tag>
 
             <span class="role-desc-header">
-              Comisión fija sobre las ventas de todos los hoteles de su área
+              {{ $t('commissions.managerDesc') }}
             </span>
           </div>
 
@@ -560,10 +562,10 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
           <div class="section-header-role">
             <el-tag type="info" size="large" effect="light" class="role-tag tax-tag">
               <HandCoins :size="18" class="role-lucide-icon" />
-              Estado / Retención Impuestos
+              {{ $t('commissions.taxRetention') }}
             </el-tag>
             <span class="role-desc-header">
-              Porcentaje deducido de los ingresos de cada venta antes de calcular las comisiones
+              {{ $t('commissions.taxRetentionDesc') }}
             </span>
           </div>
 
@@ -588,9 +590,7 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
           <div class="summary-info">
             <el-icon><InfoFilled /></el-icon>
             <span>
-              Las modificaciones afectarán de manera inmediata a las nuevas ventas que se completen.
-              Las ventas ya cerradas mantienen su valor original registrado en el momento de la
-              venta.
+              {{ $t('commissions.standardInfoNotice') }}
             </span>
           </div>
 
@@ -602,7 +602,7 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
             class="save-btn"
             @click="handleSave"
           >
-            Guardar Configuración de Comisiones
+            {{ $t('commissions.saveConfigButton') }}
           </el-button>
         </div>
       </div>
@@ -612,9 +612,9 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
         <!-- Sin usuario seleccionado -->
         <div v-if="!selectedUsuarioId" class="empty-user-selection">
           <el-icon :size="42" color="#94a3b8"><UserRound /></el-icon>
-          <h3 class="empty-user-title">Comisión Especial por Usuario</h3>
+          <h3 class="empty-user-title">{{ $t('commissions.specialUserTitle') }}</h3>
           <p class="empty-user-desc">
-            Selecciona un usuario en el desplegable superior para configurar su porcentaje de comisión y su retención personalizada.
+            {{ $t('commissions.specialUserDesc') }}
           </p>
         </div>
 
@@ -664,10 +664,10 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
             <div class="section-header-role">
               <el-tag type="primary" size="large" effect="light" class="role-tag">
                 <el-icon :size="18" class="role-lucide-icon"><Percent /></el-icon>
-                Porcentaje de Comisión
+                {{ $t('commissions.commissionPercentage') }}
               </el-tag>
               <span class="role-desc-header">
-                Porcentaje de comisión fija sobre las ventas en las que participe este usuario
+                {{ $t('commissions.userCommissionDesc') }}
               </span>
             </div>
 
@@ -692,10 +692,10 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
             <div class="section-header-role">
               <el-tag type="info" size="large" effect="light" class="role-tag tax-tag">
                 <HandCoins :size="18" class="role-lucide-icon" />
-                Estado / Retención Impuestos
+                {{ $t('commissions.taxRetention') }}
               </el-tag>
               <span class="role-desc-header">
-                Porcentaje deducido de los ingresos de cada venta antes de calcular su comisión
+                {{ $t('commissions.userTaxRetentionDesc') }}
               </span>
             </div>
 
@@ -720,7 +720,7 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
             <div class="summary-info">
               <el-icon><InfoFilled /></el-icon>
               <span>
-                Esta comisión personalizada anula las reglas de país y hotel para {{ selectedUser?.nombre || 'este usuario' }} y se aplicará a todas sus ventas.
+                {{ $t('commissions.userSpecialInfoNotice', { name: selectedUser?.nombre || $t('commissions.thisUser') }) }}
               </span>
             </div>
 
@@ -732,7 +732,7 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
               class="save-btn"
               @click="handleSaveUserConfig"
             >
-              Guardar Configuración de Usuario
+              {{ $t('commissions.saveUserConfigButton') }}
             </el-button>
           </div>
         </template>
@@ -741,16 +741,16 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
 
     <!-- TABLA 1: Configuraciones Geográficas Guardadas (Modo País / Hotel) -->
     <div v-if="!isModoUsuario && commissionStore.configs.length > 0" class="saved-configs-section">
-      <h4 class="section-subtitle">Configuraciones Guardadas en el Sistema</h4>
+      <h4 class="section-subtitle">{{ $t('commissions.savedConfigsTitle') }}</h4>
       <el-table :data="commissionStore.configs" border stripe style="width: 100%">
-        <el-table-column prop="paisNombre" label="País" min-width="150" />
-        <el-table-column prop="hotelNombre" label="Hotel" min-width="160" />
-        <el-table-column label="Retención Estado" align="center" width="150">
+        <el-table-column prop="paisNombre" :label="$t('commissions.table.country')" min-width="150" />
+        <el-table-column prop="hotelNombre" :label="$t('commissions.table.hotel')" min-width="160" />
+        <el-table-column :label="$t('commissions.table.taxRetention')" align="center" width="150">
           <template #default="{ row }">
             <span class="text-danger font-semibold">-{{ row.impuestoPct ?? 16 }}%</span>
           </template>
         </el-table-column>
-        <el-table-column label="Fotógrafo Contratado | Freelance" align="center" width="220">
+        <el-table-column :label="$t('commissions.table.photographerSalariedFreelance')" align="center" width="220">
           <template #default="{ row }">
             <span>
               {{ row.fotografoAsalariadoPct }}% |
@@ -758,7 +758,7 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="Vendedor Contratado | Freelance" align="center" width="220">
+        <el-table-column :label="$t('commissions.table.sellerSalariedFreelance')" align="center" width="220">
           <template #default="{ row }">
             <span>
               {{ row.vendedorAsalariadoPct }}% |
@@ -766,28 +766,28 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="Supervisor" align="center" width="110">
+        <el-table-column :label="$t('commissions.table.supervisor')" align="center" width="110">
           <template #default="{ row }">
             <span>{{ row.supervisorPct }}%</span>
           </template>
         </el-table-column>
-        <el-table-column label="Gerente" align="center" width="110">
+        <el-table-column :label="$t('commissions.table.manager')" align="center" width="110">
           <template #default="{ row }">
             <span>{{ row.gerentePct }}%</span>
           </template>
         </el-table-column>
-        <el-table-column label="Acciones" width="90" align="center">
+        <el-table-column :label="$t('commissions.table.actions')" width="90" align="center">
           <template #default="{ row }">
             <el-popconfirm
-              title="¿Eliminar esta configuración de comisiones?"
-              confirm-button-text="Eliminar"
-              cancel-button-text="Cancelar"
+              :title="$t('commissions.deleteConfigConfirm')"
+              :confirm-button-text="$t('commissions.delete')"
+              :cancel-button-text="$t('commissions.cancel')"
               confirm-button-type="danger"
               :width="260"
               @confirm="handleDeleteConfig(row)"
             >
               <template #reference>
-                <el-button type="danger" link :icon="Delete" title="Eliminar configuración" />
+                <el-button type="danger" link :icon="Delete" :title="$t('commissions.deleteConfigTooltip')" />
               </template>
             </el-popconfirm>
           </template>
@@ -797,10 +797,10 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
 
     <!-- TABLA 2: Comisiones Especiales de Usuarios Guardadas (Modo Usuario) -->
     <div v-if="isModoUsuario" class="saved-configs-section">
-      <h4 class="section-subtitle">Comisiones Especiales de Usuarios Guardadas</h4>
+      <h4 class="section-subtitle">{{ $t('commissions.savedUserConfigsTitle') }}</h4>
       <el-empty
         v-if="commissionStore.userConfigs.length === 0"
-        description="No hay comisiones especiales de usuarios configuradas"
+        :description="$t('commissions.noUserConfigs')"
         :image-size="60"
       />
       <el-table
@@ -810,7 +810,7 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
         stripe
         style="width: 100%"
       >
-        <el-table-column label="Usuario" min-width="220">
+        <el-table-column :label="$t('commissions.table.user')" min-width="220">
           <template #default="{ row }">
             <div class="table-user-cell">
               <span class="user-cell-name">{{ row.usuarioNombre }} {{ row.usuarioApellidos }}</span>
@@ -819,7 +819,7 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
           </template>
         </el-table-column>
 
-        <el-table-column label="Perfil / Rol" min-width="160" class-name="role-column">
+        <el-table-column :label="$t('commissions.table.role')" min-width="160" class-name="role-column">
           <template #default="{ row }">
             <el-tag
               v-if="row.rolCodigo"
@@ -838,38 +838,38 @@ function onEditUserConfig(row: ComisionUsuarioConfig) {
           </template>
         </el-table-column>
 
-        <el-table-column label="% Comisión Especial" align="center" width="180">
+        <el-table-column :label="$t('commissions.table.specialCommissionPct')" align="center" width="180">
           <template #default="{ row }">
             <span class="font-bold user-pct-highlight">{{ row.porcentajeComision }}%</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="Retención Estado" align="center" width="160">
+        <el-table-column :label="$t('commissions.table.taxRetention')" align="center" width="160">
           <template #default="{ row }">
             <span class="text-danger font-semibold">-{{ row.impuestoPct }}%</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="Acciones" width="110" align="center">
+        <el-table-column :label="$t('commissions.table.actions')" width="110" align="center">
           <template #default="{ row }">
             <div class="table-actions">
               <el-button
                 type="primary"
                 link
                 :icon="EditPen"
-                title="Editar comisión especial"
+                :title="$t('commissions.editUserConfigTooltip')"
                 @click="onEditUserConfig(row)"
               />
               <el-popconfirm
-                title="¿Eliminar esta comisión especial de usuario?"
-                confirm-button-text="Eliminar"
-                cancel-button-text="Cancelar"
+                :title="$t('commissions.deleteUserConfigConfirm')"
+                :confirm-button-text="$t('commissions.delete')"
+                :cancel-button-text="$t('commissions.cancel')"
                 confirm-button-type="danger"
                 :width="260"
                 @confirm="handleDeleteUserConfig(row)"
               >
                 <template #reference>
-                  <el-button type="danger" link :icon="Delete" title="Eliminar comisión especial" />
+                  <el-button type="danger" link :icon="Delete" :title="$t('commissions.deleteUserConfigTooltip')" />
                 </template>
               </el-popconfirm>
             </div>

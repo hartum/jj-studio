@@ -27,12 +27,14 @@ import { Building2 } from '@lucide/vue'
 import { ElMessage } from 'element-plus'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
 import { getRolePermissions, canEditUser, type RoleCode } from '@/shared/permissions'
+import { useLocale } from '@/i18n/useLocale'
 import { Cropper, CircleStencil } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css'
 import CalendarioLaboral from './CalendarioLaboral.vue'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useLocale()
 const userStore = useUserStore()
 const profileStore = useProfileStore()
 const countryStore = useCountryStore()
@@ -272,7 +274,7 @@ onMounted(async () => {
           existing.id,
         )
       ) {
-        ElMessage.error('No tienes permisos para editar este usuario')
+        ElMessage.error(t('users.toasts.noPermissionEdit'))
         router.push('/usuarios')
         return
       }
@@ -293,7 +295,7 @@ onMounted(async () => {
         hotelIds: existing.hotelIds ? [...existing.hotelIds] : [],
       }
     } else {
-      ElMessage.error('Usuario no encontrado')
+      ElMessage.error(t('users.toasts.userNotFound'))
       router.push('/usuarios')
     }
   } else {
@@ -314,7 +316,7 @@ function onFileSelected(event: Event) {
   if (!file) return
 
   if (!file.type.startsWith('image/')) {
-    ElMessage.error('Por favor selecciona un archivo de imagen válido')
+    ElMessage.error(t('users.toasts.validImageRequired'))
     return
   }
 
@@ -334,7 +336,7 @@ function applyCrop() {
   if (canvas) {
     formData.value.imagen = canvas.toDataURL('image/png')
     cropperDialogVisible.value = false
-    ElMessage.success('Imagen recortada y asignada correctamente')
+    ElMessage.success(t('users.toasts.imageCroppedSuccess'))
   }
 }
 
@@ -342,7 +344,7 @@ function removeAvatar() {
   formData.value.imagen = null
   imageToCrop.value = null
   cropperDialogVisible.value = false
-  ElMessage.info('Imagen eliminada. Se usará el avatar por defecto.')
+  ElMessage.info(t('users.toasts.imageRemovedSuccess'))
 }
 
 function zoom(factor: number) {
@@ -359,19 +361,19 @@ function handleCancel() {
 
 async function handleSave() {
   if (!formData.value.nombre.trim()) {
-    ElMessage.warning('El nombre es obligatorio')
+    ElMessage.warning(t('users.toasts.nameRequired'))
     return
   }
   if (!formData.value.email.trim()) {
-    ElMessage.warning('El email es obligatorio')
+    ElMessage.warning(t('users.toasts.emailRequired'))
     return
   }
   if (!isEditing.value && !formData.value.password) {
-    ElMessage.warning('La contraseña es obligatoria para nuevos usuarios')
+    ElMessage.warning(t('users.toasts.passwordRequired'))
     return
   }
   if (!formData.value.profileId) {
-    ElMessage.warning('Debes seleccionar un perfil para el usuario')
+    ElMessage.warning(t('users.toasts.profileRequired'))
     return
   }
 
@@ -395,14 +397,14 @@ async function handleSave() {
 
     if (isEditing.value && userId.value) {
       await userStore.updateUser(userId.value, payload)
-      ElMessage.success('Usuario actualizado correctamente')
+      ElMessage.success(t('users.toasts.userUpdated'))
     } else {
       await userStore.addUser(payload)
-      ElMessage.success('Usuario creado correctamente')
+      ElMessage.success(t('users.toasts.userCreated'))
     }
     router.push('/usuarios')
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Error al conectar con la base de datos'
+    const message = err instanceof Error ? err.message : t('users.toasts.dbError')
     ElMessage.error(message)
   } finally {
     isSaving.value = false
@@ -418,13 +420,13 @@ async function handleSave() {
         <el-button :icon="ArrowLeft" circle @click="handleCancel" class="back-btn" />
         <div>
           <h1 class="page-title">
-            {{ isEditing ? 'Editar Usuario' : 'Nuevo Usuario' }}
+            {{ isEditing ? $t('users.form.titleEdit') : $t('users.form.titleNew') }}
           </h1>
           <p class="page-subtitle">
             {{
               isEditing
-                ? 'Modifica los datos, perfil, accesos e imagen del usuario'
-                : 'Completa la información para dar de alta a un nuevo usuario'
+                ? $t('users.form.subtitleEdit')
+                : $t('users.form.subtitleNew')
             }}
           </p>
         </div>
@@ -440,7 +442,7 @@ async function handleSave() {
       @submit.prevent="handleSave"
     >
       <!-- Campo Fotografía / Avatar de Usuario -->
-      <el-form-item label="Imagen">
+      <el-form-item :label="$t('users.form.image')">
         <div class="avatar-field-container">
           <el-avatar
             :src="formData.imagen || undefined"
@@ -466,7 +468,7 @@ async function handleSave() {
             />
             <div class="avatar-buttons">
               <el-button type="primary" :icon="Upload" @click="triggerFileInput">
-                {{ formData.imagen ? 'Cambiar Imagen' : 'Subir Imagen' }}
+                {{ formData.imagen ? $t('users.form.changeImage') : $t('users.form.uploadImage') }}
               </el-button>
               <el-button
                 v-if="formData.imagen"
@@ -475,14 +477,14 @@ async function handleSave() {
                 :icon="Delete"
                 @click="removeAvatar"
               >
-                Quitar Imagen
+                {{ $t('users.form.removeImage') }}
               </el-button>
             </div>
             <small class="avatar-hint">
               {{
                 formData.imagen
-                  ? 'Imagen personalizada cargada.'
-                  : 'Sin imagen asignada. Mostrando imagen por defecto según perfil seleccionado.'
+                  ? $t('users.form.customImageLoaded')
+                  : $t('users.form.defaultImageHint')
               }}
             </small>
           </div>
@@ -491,38 +493,38 @@ async function handleSave() {
 
       <!-- Tabs de Datos y Calendario Laboral -->
       <el-tabs v-model="activeTab" type="card" class="user-form-tabs">
-        <el-tab-pane label="Datos del Usuario" name="datos">
+        <el-tab-pane :label="$t('users.form.userDataTab')" name="datos">
           <div class="tab-pane-content">
-            <el-form-item label="Nombre" required>
-              <el-input v-model="formData.nombre" placeholder="Ej. Juan" />
+            <el-form-item :label="$t('users.form.firstName')" required>
+              <el-input v-model="formData.nombre" :placeholder="$t('users.form.firstNamePlaceholder')" />
             </el-form-item>
 
-            <el-form-item label="Apellidos" required>
-              <el-input v-model="formData.apellidos" placeholder="Ej. Pérez" />
+            <el-form-item :label="$t('users.form.lastName')" required>
+              <el-input v-model="formData.apellidos" :placeholder="$t('users.form.lastNamePlaceholder')" />
             </el-form-item>
 
-            <el-form-item :label="isEditing ? 'Contraseña' : 'Contraseña *'" :required="!isEditing">
+            <el-form-item :label="isEditing ? $t('users.form.password') : $t('users.form.passwordRequired')" :required="!isEditing">
               <el-input
                 v-model="formData.password"
                 type="password"
                 show-password
-                :placeholder="isEditing ? 'Dejar en blanco para no cambiar' : '••••••••'"
+                :placeholder="isEditing ? $t('users.form.passwordEditPlaceholder') : $t('users.form.passwordNewPlaceholder')"
               />
             </el-form-item>
 
-            <el-form-item label="Email" required>
-              <el-input v-model="formData.email" placeholder="juan@ejemplo.es" />
+            <el-form-item :label="$t('users.form.email')" required>
+              <el-input v-model="formData.email" :placeholder="$t('users.form.emailPlaceholder')" />
             </el-form-item>
 
-            <el-form-item label="Teléfono">
-              <el-input v-model="formData.telefono" placeholder="+34 600 000 000" />
+            <el-form-item :label="$t('users.form.phone')">
+              <el-input v-model="formData.telefono" :placeholder="$t('users.form.phonePlaceholder')" />
             </el-form-item>
 
-            <el-form-item label="Fecha Contratación">
+            <el-form-item :label="$t('users.form.hireDate')">
               <el-date-picker
                 v-model="formData.fechaContratacion"
                 type="date"
-                placeholder="Selecciona la fecha de contratación"
+                :placeholder="$t('users.form.hireDatePlaceholder')"
                 format="YYYY-MM-DD"
                 value-format="YYYY-MM-DD"
                 style="width: 100%"
@@ -530,7 +532,7 @@ async function handleSave() {
               />
             </el-form-item>
 
-            <el-form-item label="Perfil / Rol" required>
+            <el-form-item :label="$t('users.form.role')" required>
               <div v-if="isSelfEditingProfileReadonly">
                 <el-tag
                   v-if="selectedProfile"
@@ -550,7 +552,7 @@ async function handleSave() {
               <el-select
                 v-else
                 v-model="formData.profileId"
-                placeholder="Selecciona un perfil"
+                :placeholder="$t('users.form.rolePlaceholder')"
                 style="width: 100%"
                 filterable
                 popper-class="profile-select-popper"
@@ -588,7 +590,7 @@ async function handleSave() {
               </el-select>
             </el-form-item>
 
-            <el-form-item v-if="isFotografo" label="Color asignado">
+            <el-form-item v-if="isFotografo" :label="$t('users.form.assignedColor')">
               <div style="display: flex; align-items: center; gap: 12px">
                 <el-color-picker v-model="formData.color" />
                 <span
@@ -598,19 +600,19 @@ async function handleSave() {
                   {{ formData.color }}
                 </span>
                 <span v-else style="font-size: 0.85rem; color: var(--el-text-color-secondary)">
-                  Sin color asignado
+                  {{ $t('users.form.noColorAssigned') }}
                 </span>
               </div>
             </el-form-item>
 
             <!-- Asignaciones de accesos por Rol -->
             <template v-if="isAreaRole">
-              <el-form-item label="Áreas asignadas">
+              <el-form-item :label="$t('users.form.assignedAreas')">
                 <small class="assignment-hint">
                   {{
                     isGerente
-                      ? 'El gerente estará a cargo de las áreas seleccionadas y todos los hoteles dentro de las mismas.'
-                      : 'El contable gestionará las liquidaciones y comisiones de las áreas seleccionadas y todos los hoteles dentro de las mismas.'
+                      ? $t('users.form.managerAreasHint')
+                      : $t('users.form.accountantAreasHint')
                   }}
                 </small>
                 <div v-if="isSelfEditing" class="assigned-tags-container">
@@ -627,7 +629,7 @@ async function handleSave() {
                     <span>{{ area.nombre }} ({{ area.paisNombre }})</span>
                   </el-tag>
                   <span v-if="assignedAreaNames.length === 0" class="empty-hint"
-                    >Sin áreas asignadas</span
+                    >{{ $t('users.form.noAssignedAreas') }}</span
                   >
                 </div>
                 <el-select
@@ -635,7 +637,7 @@ async function handleSave() {
                   v-model="formData.areaIds"
                   multiple
                   filterable
-                  placeholder="Selecciona una o varias áreas"
+                  :placeholder="$t('users.form.selectAreasPlaceholder')"
                   style="width: 100%"
                   popper-class="custom-group-select-dropdown"
                 >
@@ -658,7 +660,7 @@ async function handleSave() {
                           v-if="assignedAreaIdsByOtherRoleUsers.has(area.id)"
                           class="disabled-label"
                         >
-                          (Asignada a otro {{ isGerente ? 'gerente' : 'contable' }})
+                          {{ isGerente ? $t('users.form.assignedToOtherManager') : $t('users.form.assignedToOtherAccountant') }}
                         </small>
                       </div>
                     </el-option>
@@ -668,11 +670,13 @@ async function handleSave() {
             </template>
 
             <template v-else-if="isSupervisorOrFotografo">
-              <el-form-item label="Hoteles asignados">
+              <el-form-item :label="$t('users.form.assignedHotels')">
                 <small class="assignment-hint">
-                  Indica los hoteles sobre los que este
-                  {{ selectedRoleCode === 'SUPERVISOR' ? 'supervisor' : 'fotógrafo' }} podrá
-                  gestionar u operar.
+                  {{
+                    $t('users.form.assignedHotelsHint', {
+                      role: selectedRoleCode === 'SUPERVISOR' ? $t('users.form.roleSupervisor') : $t('users.form.rolePhotographer')
+                    })
+                  }}
                 </small>
                 <div
                   v-if="isSelfEditing && selectedRoleCode === 'SUPERVISOR'"
@@ -693,7 +697,7 @@ async function handleSave() {
                     >
                   </el-tag>
                   <span v-if="assignedHotelNames.length === 0" class="empty-hint"
-                    >Sin hoteles asignados</span
+                    >{{ $t('users.form.noAssignedHotels') }}</span
                   >
                 </div>
 
@@ -702,7 +706,7 @@ async function handleSave() {
                   v-model="formData.hotelIds"
                   multiple
                   filterable
-                  placeholder="Selecciona uno o varios hoteles"
+                  :placeholder="$t('users.form.selectHotelsPlaceholder')"
                   style="width: 100%"
                   popper-class="custom-group-select-dropdown"
                 >
@@ -747,7 +751,7 @@ async function handleSave() {
                             "
                             class="disabled-label"
                           >
-                            (Asignado a otro supervisor)
+                            {{ $t('users.form.assignedToOtherSupervisor') }}
                           </small>
                         </div>
                       </el-option>
@@ -758,55 +762,55 @@ async function handleSave() {
             </template>
 
             <template v-else-if="isGlobalAccess">
-              <el-form-item label="Alcance">
+              <el-form-item :label="$t('users.form.scope')">
                 <el-alert
                   type="info"
                   :closable="false"
                   show-icon
-                  title="Acceso Global"
-                  description="Este usuario tendrá visibilidad y acceso total sobre todos los países, áreas y hoteles del sistema."
+                  :title="$t('users.form.globalAccessTitle')"
+                  :description="$t('users.form.globalAccessDescription')"
                 />
               </el-form-item>
             </template>
 
-            <el-form-item label="Tipo Contrato">
+            <el-form-item :label="$t('users.form.contractType')">
               <el-switch
                 v-model="formData.tipoContrato"
                 active-value="ASALARIADO"
                 inactive-value="SIN_SALARIO"
-                active-text="Contratado"
-                inactive-text="Freelance"
+                :active-text="$t('users.form.salaried')"
+                :inactive-text="$t('users.form.freelance')"
               />
-              <small class="assignment-hint"> &nbsp; *Necesario para calcular tipo comisión </small>
+              <small class="assignment-hint"> &nbsp; {{ $t('users.form.contractTypeHint') }} </small>
             </el-form-item>
 
-            <el-form-item v-if="!isStatusDisabled" label="Estado">
-              <el-switch v-model="isActivo" active-text="Activo" inactive-text="Inactivo" />
+            <el-form-item v-if="!isStatusDisabled" :label="$t('users.form.status')">
+              <el-switch v-model="isActivo" :active-text="$t('users.form.active')" :inactive-text="$t('users.form.inactive')" />
             </el-form-item>
 
             <el-form-item class="form-actions-item">
               <el-button type="primary" :icon="Check" :loading="isSaving" @click="handleSave">
-                {{ isEditing ? 'Guardar Cambios' : 'Crear Usuario' }}
+                {{ isEditing ? $t('users.form.saveChanges') : $t('users.form.createUser') }}
               </el-button>
-              <el-button :icon="Close" @click="handleCancel">Cancelar</el-button>
+              <el-button :icon="Close" @click="handleCancel">{{ $t('users.form.cancel') }}</el-button>
             </el-form-item>
           </div>
         </el-tab-pane>
 
-        <el-tab-pane label="Calendario Laboral" name="calendario" :disabled="!isEditing">
+        <el-tab-pane :label="$t('users.form.calendarTab')" name="calendario" :disabled="!isEditing">
           <template #label>
             <span
               :title="
-                !isEditing ? 'Debes guardar el usuario para gestionar su calendario laboral' : ''
+                !isEditing ? $t('users.form.saveUserFirstForCalendar') : ''
               "
             >
-              Calendario Laboral
+              {{ $t('users.form.calendarTab') }}
             </span>
           </template>
           <div class="tab-pane-content">
             <CalendarioLaboral v-if="isEditing && userId" :usuario-id="userId" />
             <div v-else class="empty-hint" style="padding: 2.5rem; text-align: center">
-              Debes guardar el nuevo usuario antes de poder gestionar su calendario laboral.
+              {{ $t('users.form.saveUserBeforeCalendarHint') }}
             </div>
           </div>
         </el-tab-pane>
@@ -816,7 +820,7 @@ async function handleSave() {
     <!-- Diálogo para Recorte de Imagen -->
     <el-dialog
       v-model="cropperDialogVisible"
-      title="Recortar Imagen de Usuario"
+      :title="$t('users.form.cropperTitle')"
       width="550px"
       :close-on-click-modal="false"
       destroy-on-close
@@ -833,16 +837,16 @@ async function handleSave() {
         />
         <div class="cropper-controls">
           <el-button-group>
-            <el-button :icon="ZoomIn" @click="zoom(1.2)">Acercar</el-button>
-            <el-button :icon="ZoomOut" @click="zoom(0.8)">Alejar</el-button>
-            <el-button :icon="RefreshLeft" @click="rotate(-90)">Rotar Izq.</el-button>
-            <el-button :icon="RefreshRight" @click="rotate(90)">Rotar Der.</el-button>
+            <el-button :icon="ZoomIn" @click="zoom(1.2)">{{ $t('users.form.zoomIn') }}</el-button>
+            <el-button :icon="ZoomOut" @click="zoom(0.8)">{{ $t('users.form.zoomOut') }}</el-button>
+            <el-button :icon="RefreshLeft" @click="rotate(-90)">{{ $t('users.form.rotateLeft') }}</el-button>
+            <el-button :icon="RefreshRight" @click="rotate(90)">{{ $t('users.form.rotateRight') }}</el-button>
           </el-button-group>
         </div>
       </div>
       <template #footer>
-        <el-button @click="cropperDialogVisible = false">Cancelar</el-button>
-        <el-button type="primary" :icon="Check" @click="applyCrop"> Guardar Recorte </el-button>
+        <el-button @click="cropperDialogVisible = false">{{ $t('users.form.cropperCancel') }}</el-button>
+        <el-button type="primary" :icon="Check" @click="applyCrop"> {{ $t('users.form.saveCrop') }} </el-button>
       </template>
     </el-dialog>
   </div>

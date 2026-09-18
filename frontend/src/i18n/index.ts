@@ -1,6 +1,6 @@
 import { createI18n } from 'vue-i18n'
-import es from './locales/es'
-import en from './locales/en'
+import es from './locales/es.json'
+import en from './locales/en.json'
 
 const savedLocale = (localStorage.getItem('jj_locale') as 'es' | 'en') || 'es'
 
