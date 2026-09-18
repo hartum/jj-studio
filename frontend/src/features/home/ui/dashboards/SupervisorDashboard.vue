@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDashboard, monthsOptions } from '@/features/home/composables/useDashboard'
+import { useDashboard } from '@/features/home/composables/useDashboard'
 import SupervisorHotelGoalCard from '@/features/goals/ui/SupervisorHotelGoalCard.vue'
 import GoalEvolutionChart from '@/features/goals/ui/GoalEvolutionChart.vue'
 import { Money } from '@element-plus/icons-vue'
@@ -9,6 +9,8 @@ const {
   commissionStore,
   selectedAnio,
   selectedMes,
+  selectedMonthDate,
+  selectedMonthLabel,
   selectedHotelFilter,
   formatCurrency,
   supervisorHotels,
@@ -21,25 +23,27 @@ const {
 <template>
   <div class="dashboard-section">
     <div class="section-header-row">
-      <h2 class="section-title">Control de Metas y Comisiones</h2>
+      <h2 class="section-title">{{ $t('dashboard.supervisorControlTitle') }}</h2>
       <div class="controls-bar">
         <el-select
           v-model="selectedHotelFilter"
-          placeholder="Selecciona un Hotel"
+          :placeholder="$t('dashboard.selectHotel')"
           clearable
           size="default"
           style="width: 220px"
         >
           <el-option v-for="h in supervisorHotels" :key="h.id" :label="h.nombre" :value="h.id" />
         </el-select>
-        <el-select v-model="selectedMes" size="default" style="width: 140px">
-          <el-option
-            v-for="m in monthsOptions"
-            :key="m.value"
-            :label="m.label"
-            :value="m.value"
-          />
-        </el-select>
+        <el-date-picker
+          v-model="selectedMonthDate"
+          type="month"
+          :placeholder="$t('dashboard.selectMonth')"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          size="default"
+          style="width: 140px"
+          :clearable="false"
+        />
       </div>
     </div>
 
@@ -51,8 +55,8 @@ const {
             <el-icon style="vertical-align: middle; margin-right: 6px; color: #c026d3"
               ><Money
             /></el-icon>
-            Tus Comisiones —
-            {{ monthsOptions.find((m) => m.value === selectedMes)?.label }} {{ selectedAnio }}
+            {{ $t('dashboard.yourCommissions') }} —
+            {{ selectedMonthLabel }} {{ selectedAnio }}
           </span>
           <el-tooltip
             :content="myCommissionTooltip"
@@ -75,7 +79,7 @@ const {
       >
         <div>
           <div style="font-size: 0.85rem; color: var(--el-text-color-secondary)">
-            Tu comisión acumulada:
+            {{ $t('dashboard.accumulatedCommission') }}
           </div>
           <div style="font-size: 1.8rem; font-weight: 800; color: #c026d3">
             {{ formatCurrency(supervisorMonthlyCommissions) }}
@@ -85,7 +89,7 @@ const {
           <div
             style="font-size: 0.825rem; color: var(--el-text-color-secondary); margin-bottom: 4px"
           >
-            Total comisiones generadas en tus hoteles:
+            {{ $t('dashboard.totalCommissionsGenerated') }}
           </div>
           <div style="font-size: 1.3rem; font-weight: 700; color: #0f172a">
             {{ formatCurrency(commissionStore.resumen?.totalComisionesUsd || 0) }}
@@ -99,7 +103,7 @@ const {
       <div v-if="goalStore.progresoHoteles.length === 0" class="mb-4">
         <el-card class="dashboard-card" shadow="hover">
           <el-empty
-            description="No hay información de metas disponible para el período seleccionado."
+            :description="$t('dashboard.noGoalsAvailablePeriod')"
           />
         </el-card>
       </div>
@@ -107,7 +111,7 @@ const {
         v-for="hotelProg in goalStore.progresoHoteles"
         :key="hotelProg.hotelId"
         :hotel-progreso="hotelProg"
-        :month-label="monthsOptions.find((m) => m.value === selectedMes)?.label || ''"
+        :month-label="selectedMonthLabel"
         :selected-anio="selectedAnio"
       />
     </div>

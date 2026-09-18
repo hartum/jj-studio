@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { formatCurrency } from '@/shared/formatters'
 import type { FotografoProgreso, HotelProgresoResumen, SemaforoEstado } from '../domain/goal.model'
 import {
@@ -12,6 +13,8 @@ import {
   Calendar,
 } from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   hotelNombre: string
@@ -46,16 +49,14 @@ function getCappedPercentage(val?: number): number {
   return Math.min(Math.max(0, val), 100)
 }
 
-
-
 const numFotografos = computed(() => {
   return props.hotelProgreso.fotografos?.length || 0
 })
 
 const fotografoSubtitle = computed(() => {
   const count = numFotografos.value
-  const label = count === 1 ? '1 fotógrafo' : `${count} fotógrafos`
-  return `Progreso global de todo el equipo (${label})`
+  const label = count === 1 ? t('dashboard.goalCard.photographerSingle') : t('dashboard.goalCard.photographerPlural', { count })
+  return t('dashboard.goalCard.teamGlobalProgress', { label })
 })
 
 const displayHotelTitle = computed(() => {
@@ -63,7 +64,7 @@ const displayHotelTitle = computed(() => {
   if (name.toLowerCase().startsWith('hotel')) {
     return name
   }
-  return `Hotel ${name}`
+  return `${t('dashboard.table.hotel')} ${name}`
 })
 </script>
 
@@ -83,7 +84,7 @@ const displayHotelTitle = computed(() => {
       <div class="goal-section-header">
         <div class="header-titles">
           <h3 class="goal-title">
-            Meta del Hotel — {{ formatCurrency(hotelProgreso.metaImporte) }}
+            {{ $t('dashboard.goalCard.hotelGoalAmount', { amount: formatCurrency(hotelProgreso.metaImporte) }) }}
           </h3>
           <p class="goal-subtitle">{{ fotografoSubtitle }}</p>
         </div>
@@ -97,7 +98,7 @@ const displayHotelTitle = computed(() => {
           }"
         >
           <el-icon :size="14"><component :is="getSemaforoIcon(hotelProgreso.semaforo)" /></el-icon>
-          <span class="badge-text">Meta del Hotel</span>
+          <span class="badge-text">{{ $t('dashboard.goalCard.hotelGoal') }}</span>
         </div>
       </div>
 
@@ -139,13 +140,13 @@ const displayHotelTitle = computed(() => {
       <div class="pacing-metrics-row">
         <div class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><Calendar /></el-icon>
-          <span class="pacing-label">Ritmo a hoy:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.pacingToday') }}</span>
           <span class="pacing-val">{{ formatCurrency(hotelProgreso.metaEsperadaHoy) }}</span>
         </div>
 
         <div class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><TrendCharts /></el-icon>
-          <span class="pacing-label">Desviación:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.deviation') }}</span>
           <span
             class="pacing-val font-semibold"
             :class="{
@@ -160,7 +161,7 @@ const displayHotelTitle = computed(() => {
 
         <div v-if="hotelProgreso.numVentas !== undefined" class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><Money /></el-icon>
-          <span class="pacing-label">Ventas:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.sales') }}</span>
           <span class="pacing-val">{{ hotelProgreso.numVentas }}</span>
         </div>
       </div>
@@ -179,9 +180,9 @@ const displayHotelTitle = computed(() => {
       <div class="goal-section-header">
         <div class="header-titles">
           <h3 class="goal-title">
-            Tu Meta Personal — {{ formatCurrency(personalProgreso.metaImporte) }}
+            {{ $t('dashboard.goalCard.yourPersonalGoal', { amount: formatCurrency(personalProgreso.metaImporte) }) }}
           </h3>
-          <p class="goal-subtitle">Progreso individual acumulado en {{ monthLabel }}</p>
+          <p class="goal-subtitle">{{ $t('dashboard.goalCard.individualProgress', { month: monthLabel }) }}</p>
         </div>
 
         <div
@@ -195,7 +196,7 @@ const displayHotelTitle = computed(() => {
           <el-icon :size="14"
             ><component :is="getSemaforoIcon(personalProgreso.semaforo)"
           /></el-icon>
-          <span class="badge-text">Tu Desempeño</span>
+          <span class="badge-text">{{ $t('dashboard.goalCard.yourPerformance') }}</span>
         </div>
       </div>
 
@@ -240,13 +241,13 @@ const displayHotelTitle = computed(() => {
       <div class="pacing-metrics-row">
         <div class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><Calendar /></el-icon>
-          <span class="pacing-label">Ritmo a hoy:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.pacingToday') }}</span>
           <span class="pacing-val">{{ formatCurrency(personalProgreso.metaEsperadaHoy) }}</span>
         </div>
 
         <div class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><TrendCharts /></el-icon>
-          <span class="pacing-label">Desviación:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.deviation') }}</span>
           <span
             class="pacing-val font-semibold"
             :class="{
@@ -261,7 +262,7 @@ const displayHotelTitle = computed(() => {
 
         <div v-if="personalProgreso.numVentas !== undefined" class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><Money /></el-icon>
-          <span class="pacing-label">Ventas:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.sales') }}</span>
           <span class="pacing-val">{{ personalProgreso.numVentas }}</span>
         </div>
       </div>

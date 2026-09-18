@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useDashboard } from '@/features/home/composables/useDashboard'
 import type { HotelItem } from '@/features/countries/domain/country.model'
 import type { SemaforoEstado } from '@/features/goals/domain/goal.model'
@@ -10,6 +11,7 @@ import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-ava
 import { Money, Wallet, Tickets, Location } from '@element-plus/icons-vue'
 import { Building2, RotateCcw } from '@lucide/vue'
 
+const { t } = useI18n()
 const activeTab = ref<'estadisticas' | 'comisiones'>('estadisticas')
 
 const {
@@ -275,11 +277,11 @@ function getComisionesSummaries(param: SummaryMethodProps): string[] {
 
   columns.forEach((column, index) => {
     if (index === 0) {
-      sums[index] = 'Total'
+      sums[index] = t('dashboard.table.total') || 'Total'
       return
     }
 
-    if (column.property === 'importeComisionUsd' || column.label === 'Importe Comisión') {
+    if (column.property === 'importeComisionUsd' || column.label === t('dashboard.table.commissionAmount')) {
       const total = data.reduce((sum, item) => sum + (item.importeComisionUsd || 0), 0)
       sums[index] = formatCurrency(total)
       return
@@ -305,15 +307,15 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
     <!-- Barra Superior con Pestañas y Filtros -->
     <div class="tabs-header-container">
       <el-tabs v-model="activeTab" type="card" class="contable-tabs">
-        <el-tab-pane label="Estadísticas" name="estadisticas" />
-        <el-tab-pane label="Liquidación y Control de Comisiones" name="comisiones" />
+        <el-tab-pane :label="$t('dashboard.statsTab')" name="estadisticas" />
+        <el-tab-pane :label="$t('dashboard.commissionsTab')" name="comisiones" />
       </el-tabs>
 
       <div class="header-controls">
         <div class="controls-bar">
           <el-select
             v-model="selectedHotelFilters"
-            placeholder="Todos tus Hoteles"
+            :placeholder="$t('dashboard.allYourHotels')"
             multiple
             collapse-tags
             collapse-tags-tooltip
@@ -362,7 +364,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
           <el-date-picker
             v-model="selectedMonths"
             type="months"
-            placeholder="Seleccionar meses"
+            :placeholder="$t('dashboard.selectMonths')"
             format="YYYY-MM"
             value-format="YYYY-MM"
             size="default"
@@ -381,10 +383,15 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
           v-if="!currentHotelProgreso"
           :titulo="
             selectedHotelFilters.length > 1
-              ? 'Objetivo comercial hoteles seleccionados'
-              : 'Objetivo comercial'
+              ? $t('dashboard.commercialGoalSelected')
+              : $t('dashboard.commercialGoal')
           "
-          :subtitulo="`${selectedMonthsLabel} — Ventas de ${globalProgresoTotals.numHoteles} ${globalProgresoTotals.numHoteles === 1 ? 'hotel' : 'hoteles'}${selectedHotelFilters.length > 1 ? ` (${selectedHotelsSummary})` : ''}`"
+          :subtitulo="$t('dashboard.commercialSubtitle', {
+            monthsLabel: selectedMonthsLabel,
+            count: globalProgresoTotals.numHoteles,
+            hotelsLabel: globalProgresoTotals.numHoteles === 1 ? $t('dashboard.hotelSingle') : $t('dashboard.hotelPlural'),
+            summary: selectedHotelFilters.length > 1 ? ` (${selectedHotelsSummary})` : ''
+          })"
           :meta-importe="globalProgresoTotals.metaTotal"
           :ventas-reales-usd="globalProgresoTotals.ventasTotal"
           :porcentaje-cumplimiento="globalProgresoTotals.porcentaje"
@@ -394,8 +401,8 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
         />
         <GoalProgressCard
           v-else
-          :titulo="`Objetivo comercial ${currentHotelProgreso.hotelNombre}`"
-          :subtitulo="`${currentHotelProgreso.areaNombre} — ${selectedMonthsLabel}`"
+          :titulo="$t('dashboard.commercialGoalHotel', { hotel: currentHotelProgreso.hotelNombre })"
+          :subtitulo="$t('dashboard.hotelSubtitleMonths', { area: currentHotelProgreso.areaNombre, monthsLabel: selectedMonthsLabel })"
           :meta-importe="currentHotelProgreso.metaImporte"
           :ventas-reales-usd="currentHotelProgreso.ventasRealesUsd"
           :porcentaje-cumplimiento="currentHotelProgreso.porcentajeCumplimiento"
@@ -413,13 +420,13 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
       />
 
       <!-- 3. Rendimiento de Hoteles -->
-      <el-card class="dashboard-card mb-4" header="Rendimiento económico por Hotel" shadow="hover">
+      <el-card class="dashboard-card mb-4" :header="$t('dashboard.hotelEconomicPerformance')" shadow="hover">
         <el-table :data="filteredProgresoHoteles" style="width: 100%" size="small" stripe>
-          <el-table-column prop="hotelNombre" label="Hotel" min-width="160" sortable />
-          <el-table-column prop="areaNombre" label="Área" min-width="120" sortable />
+          <el-table-column prop="hotelNombre" :label="$t('dashboard.table.hotel')" min-width="160" sortable />
+          <el-table-column prop="areaNombre" :label="$t('dashboard.table.area')" min-width="120" sortable />
           <el-table-column
             prop="metaImporte"
-            label="Meta Mensual"
+            :label="$t('dashboard.table.monthlyGoal')"
             width="140"
             align="right"
             sortable
@@ -430,7 +437,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
           </el-table-column>
           <el-table-column
             prop="ventasRealesUsd"
-            label="Ventas Reales"
+            :label="$t('dashboard.table.realSales')"
             width="140"
             align="right"
             sortable
@@ -439,7 +446,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
               <span class="font-bold text-primary">{{ formatCurrency(row.ventasRealesUsd) }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="porcentajeCumplimiento" label="Avance" min-width="170" sortable>
+          <el-table-column prop="porcentajeCumplimiento" :label="$t('dashboard.table.progress')" min-width="170" sortable>
             <template #default="{ row }">
               <el-progress
                 :percentage="Math.min(100, Math.max(0, row.porcentajeCumplimiento))"
@@ -450,7 +457,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
           </el-table-column>
           <el-table-column
             prop="semaforo"
-            label="Semáforo"
+            :label="$t('dashboard.table.trafficLight')"
             width="140"
             align="center"
             sortable
@@ -472,14 +479,14 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
       <!-- 4. Rendimiento económico por Empleado -->
       <el-card
         class="dashboard-card mb-4"
-        header="Rendimiento económico por Empleado"
+        :header="$t('dashboard.employeeEconomicPerformance')"
         shadow="hover"
       >
         <div v-if="empleadosRendimiento.length === 0" class="empty-hint p-4 text-center">
-          No hay empleados con capacidad de venta en los hoteles seleccionados.
+          {{ $t('dashboard.noSellingEmployees') }}
         </div>
         <el-table v-else :data="empleadosRendimiento" style="width: 100%" size="small" stripe>
-          <el-table-column prop="nombreCompleto" label="Empleado" min-width="190" sortable>
+          <el-table-column prop="nombreCompleto" :label="$t('dashboard.table.employee')" min-width="190" sortable>
             <template #default="{ row }">
               <div style="display: flex; align-items: center; gap: 8px">
                 <el-avatar
@@ -503,20 +510,20 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="rolCodigo" label="Rol" width="120" align="center" sortable>
+          <el-table-column prop="rolCodigo" :label="$t('dashboard.table.role')" width="120" align="center" sortable>
             <template #default="{ row }">
               <el-tag
                 size="small"
                 :type="row.rolCodigo === 'FOTOGRAFO' ? 'success' : 'primary'"
                 effect="light"
               >
-                {{ row.rolCodigo === 'FOTOGRAFO' ? 'Fotógrafo' : 'Vendedor' }}
+                {{ row.rolCodigo === 'FOTOGRAFO' ? $t('dashboard.table.photographerRole') : $t('dashboard.table.seller') }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="hotelNombre" label="Hotel" min-width="150" sortable>
+          <el-table-column prop="hotelNombre" :label="$t('dashboard.table.hotel')" min-width="150" sortable>
             <template #default="{ row }">
-              <span style="font-weight: 500">{{ row.hotelNombre || 'Sin asignar' }}</span>
+              <span style="font-weight: 500">{{ row.hotelNombre || $t('dashboard.table.unassigned') }}</span>
               <span
                 v-if="row.areaNombre"
                 style="display: block; font-size: 0.75rem; color: var(--el-text-color-secondary)"
@@ -527,7 +534,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
           </el-table-column>
           <el-table-column
             prop="metaImporte"
-            label="Meta Mensual"
+            :label="$t('dashboard.table.monthlyGoal')"
             width="140"
             align="right"
             sortable
@@ -538,7 +545,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
           </el-table-column>
           <el-table-column
             prop="ventasRealesUsd"
-            label="Ventas Reales"
+            :label="$t('dashboard.table.realSales')"
             width="140"
             align="right"
             sortable
@@ -547,7 +554,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
               <span class="font-bold text-primary">{{ formatCurrency(row.ventasRealesUsd) }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="porcentajeCumplimiento" label="Avance" min-width="170" sortable>
+          <el-table-column prop="porcentajeCumplimiento" :label="$t('dashboard.table.progress')" min-width="170" sortable>
             <template #default="{ row }">
               <el-progress
                 :percentage="Math.min(100, Math.max(0, row.porcentajeCumplimiento))"
@@ -558,7 +565,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
           </el-table-column>
           <el-table-column
             prop="semaforo"
-            label="Semáforo"
+            :label="$t('dashboard.table.trafficLight')"
             width="140"
             align="center"
             sortable
@@ -588,7 +595,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
               <el-icon><Wallet /></el-icon>
             </div>
             <div class="stat-content">
-              <span class="stat-label">Ventas completadas</span>
+              <span class="stat-label">{{ $t('dashboard.completedSales') }}</span>
               <span class="stat-value">
                 {{ formatCurrency(commissionStore.resumen?.totalVentasUsd || 0) }}
               </span>
@@ -602,9 +609,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
             </div>
             <div class="stat-content">
               <span class="stat-label">
-                Comisiones a Liquidar ({{
-                  selectedMonths.length > 1 ? `${selectedMonths.length} meses` : 'Mes'
-                }})
+                {{ $t('dashboard.commissionsToSettle', { period: selectedMonths.length > 1 ? `${selectedMonths.length} meses` : 'Mes' }) }}
               </span>
               <span class="stat-value text-success">
                 {{ formatCurrency(globalMonthlyCommissions) }}
@@ -618,7 +623,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
               <el-icon><Tickets /></el-icon>
             </div>
             <div class="stat-content">
-              <span class="stat-label">Comisiones Pendientes</span>
+              <span class="stat-label">{{ $t('dashboard.pendingCommissions') }}</span>
               <span class="stat-value text-warning">
                 {{ commissionStore.comisiones.filter((c) => c.estado === 'PENDIENTE').length }}
               </span>
@@ -631,11 +636,11 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
       <el-card class="dashboard-card mb-4" shadow="hover">
         <template #header>
           <div class="comisiones-card-header">
-            <span class="card-header-title">Listado de Comisiones por Venta y Usuario</span>
+            <span class="card-header-title">{{ $t('dashboard.commissionsListTitle') }}</span>
             <div class="comisiones-filters">
               <el-select
                 v-model="comisionUsuarioFilter"
-                placeholder="Todos los usuarios"
+                :placeholder="$t('dashboard.allUsers')"
                 clearable
                 filterable
                 size="default"
@@ -660,7 +665,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
         </template>
 
         <div v-if="filteredComisiones.length === 0" class="empty-hint p-4 text-center">
-          No hay registros de comisiones para el usuario o período seleccionado.
+          {{ $t('dashboard.noCommissionRecords') }}
         </div>
         <el-table
           v-else
@@ -670,13 +675,13 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
           :summary-method="getComisionesSummaries"
           style="width: 100%"
         >
-          <el-table-column prop="fechaVenta" label="Fecha" width="110" />
-          <el-table-column label="Beneficiario" min-width="170">
+          <el-table-column prop="fechaVenta" :label="$t('dashboard.table.date')" width="110" />
+          <el-table-column :label="$t('dashboard.table.beneficiary')" min-width="170">
             <template #default="{ row }">
               <strong>{{ row.usuarioNombre }} {{ row.usuarioApellidos }}</strong>
             </template>
           </el-table-column>
-          <el-table-column label="Rol / Contrato" width="180">
+          <el-table-column :label="$t('dashboard.table.roleContract')" width="180">
             <template #default="{ row }">
               <div style="display: flex; gap: 4px; align-items: center">
                 <el-tag size="small">{{ row.rolEnVenta }}</el-tag>
@@ -684,25 +689,25 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
                   size="small"
                   :type="row.tipoContrato === 'SIN_SALARIO' ? 'primary' : 'success'"
                 >
-                  {{ row.tipoContrato === 'SIN_SALARIO' ? 'Sin Salario' : 'Asalariado' }}
+                  {{ row.tipoContrato === 'SIN_SALARIO' ? $t('dashboard.table.withoutSalary') : $t('dashboard.table.salaried') }}
                 </el-tag>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="hotelNombre" label="Hotel" min-width="150" />
-          <el-table-column prop="baseCalculoUsd" label="Base Neta (tras imp.)" width="165" align="right">
+          <el-table-column prop="hotelNombre" :label="$t('dashboard.table.hotel')" min-width="150" />
+          <el-table-column prop="baseCalculoUsd" :label="$t('dashboard.table.netBase')" width="165" align="right">
             <template #default="{ row }">
               <span>{{ formatCurrency(row.baseCalculoUsd) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Tasa" width="90" align="center">
+          <el-table-column :label="$t('dashboard.table.rate')" width="90" align="center">
             <template #default="{ row }">
               <span>{{ row.porcentajeAplicado }}%</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="importeComisionUsd"
-            label="Importe Comisión"
+            :label="$t('dashboard.table.commissionAmount')"
             width="140"
             align="right"
           >
@@ -710,7 +715,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
               <strong class="text-success">{{ formatCurrency(row.importeComisionUsd) }}</strong>
             </template>
           </el-table-column>
-          <el-table-column label="Estado" width="120" align="center">
+          <el-table-column :label="$t('dashboard.table.status')" width="120" align="center">
             <template #default="{ row }">
               <el-tag
                 size="small"
@@ -726,7 +731,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="Acciones" width="190" align="center" fixed="right">
+          <el-table-column :label="$t('dashboard.table.actions')" width="190" align="center" fixed="right">
             <template #default="{ row }">
               <div style="display: flex; gap: 6px; justify-content: center; align-items: center">
                 <!-- Estado PENDIENTE: Aprobar y Pagar -->
@@ -736,14 +741,14 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
                     size="small"
                     @click="handleUpdateCommissionStatus(row.id, 'APROBADA')"
                   >
-                    Aprobar
+                    {{ $t('dashboard.approve') }}
                   </el-button>
                   <el-button
                     type="success"
                     size="small"
                     @click="handleUpdateCommissionStatus(row.id, 'PAGADA')"
                   >
-                    Pagar
+                    {{ $t('dashboard.pay') }}
                   </el-button>
                 </template>
 
@@ -754,12 +759,12 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
                     size="small"
                     @click="handleUpdateCommissionStatus(row.id, 'PAGADA')"
                   >
-                    Pagar
+                    {{ $t('dashboard.pay') }}
                   </el-button>
                   <el-popconfirm
-                    title="¿Restablecer comisión a estado Pendiente?"
-                    confirm-button-text="Restablecer"
-                    cancel-button-text="Cancelar"
+                    :title="$t('dashboard.restorePendingConfirm')"
+                    :confirm-button-text="$t('dashboard.restore')"
+                    :cancel-button-text="$t('common.cancel')"
                     confirm-button-type="warning"
                     :width="230"
                     @confirm="handleUpdateCommissionStatus(row.id, 'PENDIENTE')"
@@ -770,9 +775,9 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
                         plain
                         size="small"
                         :icon="RotateCcw"
-                        title="Deshacer aprobación"
+                        :title="$t('dashboard.undoApproval')"
                       >
-                        Deshacer
+                        {{ $t('dashboard.undo') }}
                       </el-button>
                     </template>
                   </el-popconfirm>
@@ -780,11 +785,11 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
 
                 <!-- Estado PAGADA: Liquidada y Deshacer -->
                 <template v-else-if="row.estado === 'PAGADA'">
-                  <span class="text-xs text-muted" style="margin-right: 4px">Liquidada</span>
+                  <span class="text-xs text-muted" style="margin-right: 4px">{{ $t('dashboard.settled') }}</span>
                   <el-popconfirm
-                    title="¿Restablecer comisión a estado Pendiente?"
-                    confirm-button-text="Restablecer"
-                    cancel-button-text="Cancelar"
+                    :title="$t('dashboard.restorePendingConfirm')"
+                    :confirm-button-text="$t('dashboard.restore')"
+                    :cancel-button-text="$t('common.cancel')"
                     confirm-button-type="warning"
                     :width="230"
                     @confirm="handleUpdateCommissionStatus(row.id, 'PENDIENTE')"
@@ -795,9 +800,9 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
                         plain
                         size="small"
                         :icon="RotateCcw"
-                        title="Deshacer pago"
+                        :title="$t('dashboard.undoPayment')"
                       >
-                        Deshacer
+                        {{ $t('dashboard.undo') }}
                       </el-button>
                     </template>
                   </el-popconfirm>

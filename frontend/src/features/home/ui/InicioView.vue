@@ -19,9 +19,9 @@ const userRole = computed(() => currentUser.value?.roleCode?.toUpperCase() || ''
     <div class="welcome-banner">
       <div class="banner-overlay"></div>
       <div class="welcome-text">
-        <h1 class="welcome-title">¡Hola, {{ currentUser?.nombre }}!</h1>
+        <h1 class="welcome-title">{{ $t('dashboard.welcome', { name: currentUser?.nombre }) }}</h1>
         <p class="welcome-subtitle">
-          Bienvenido a tu panel de control personalizado de <strong>JJ Studio</strong>. Perfil:
+          {{ $t('dashboard.welcomeSubtitle', { app: 'JJ Studio' }) }}
           <el-tag effect="dark" type="primary" size="large" class="role-badge">
             {{ currentUser?.roleName }}
           </el-tag>

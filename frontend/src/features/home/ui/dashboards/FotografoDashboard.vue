@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDashboard, monthsOptions } from '@/features/home/composables/useDashboard'
+import { useDashboard } from '@/features/home/composables/useDashboard'
 import PhotographerHotelGoalCard from '@/features/goals/ui/PhotographerHotelGoalCard.vue'
 import { Camera, Calendar, Money } from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
@@ -7,6 +7,8 @@ import { Building2 } from '@lucide/vue'
 const {
   commissionStore,
   selectedMes,
+  selectedMonthDate,
+  selectedMonthLabel,
   photographerHotels,
   photographerPersonalGoals,
   getTodaySessionsForHotel,
@@ -23,16 +25,26 @@ const {
 <template>
   <div class="dashboard-section">
     <div class="section-header-row photographer-header-row">
-      <h2 class="section-title">Tu Rendimiento y Comisiones</h2>
+      <h2 class="section-title">{{ $t('dashboard.performanceAndCommissions') }}</h2>
       <div class="controls-bar photographer-controls">
+        <el-date-picker
+          v-model="selectedMonthDate"
+          type="month"
+          :placeholder="$t('dashboard.selectMonth')"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          size="default"
+          style="width: 140px"
+          :clearable="false"
+        />
         <el-button
           type="primary"
           :icon="Calendar"
-          size="large"
+          size="default"
           class="btn-agenda-hotel"
           @click="goToAgenda"
         >
-          Ir a la Agenda del Hotel
+          {{ $t('dashboard.goToHotelSchedule') }}
         </el-button>
       </div>
     </div>
@@ -45,7 +57,7 @@ const {
             <el-icon><Money /></el-icon>
           </div>
           <div>
-            <div class="comm-card-title">Tus Comisiones Acumuladas del Mes</div>
+            <div class="comm-card-title">{{ $t('dashboard.yourAccumulatedCommissionsMonth') }}</div>
             <div class="comm-card-amount text-success">
               {{ formatCurrency(myMonthlyCommissions) }}
             </div>
@@ -61,7 +73,7 @@ const {
             </el-tag>
           </el-tooltip>
           <div class="stat-pill">
-            <span class="pill-label">Ventas con Comisión:</span>
+            <span class="pill-label">{{ $t('dashboard.salesWithCommission') }}:</span>
             <span class="pill-val">{{ commissionStore.comisiones.length }}</span>
           </div>
         </div>
@@ -78,29 +90,28 @@ const {
             margin-bottom: 6px;
           "
         >
-          Desglose de tus comisiones en
-          {{ monthsOptions.find((m) => m.value === selectedMes)?.label }}:
+          {{ $t('dashboard.commissionsBreakdown', { month: selectedMonthLabel }) }}
         </div>
         <el-table :data="commissionStore.comisiones" size="small" stripe style="width: 100%">
-          <el-table-column prop="fechaVenta" label="Fecha" width="110" />
-          <el-table-column prop="clienteNombre" label="Cliente" min-width="140" />
-          <el-table-column prop="hotelNombre" label="Hotel" min-width="140" />
-          <el-table-column label="Base Neta (tras imp.)" width="165" align="right">
+          <el-table-column prop="fechaVenta" :label="$t('dashboard.table.date')" width="110" />
+          <el-table-column prop="clienteNombre" :label="$t('dashboard.table.client')" min-width="140" />
+          <el-table-column prop="hotelNombre" :label="$t('dashboard.table.hotel')" min-width="140" />
+          <el-table-column :label="$t('dashboard.table.netBase')" width="165" align="right">
             <template #default="{ row }">
               <span>{{ formatCurrency(row.baseCalculoUsd) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Tasa" width="90" align="center">
+          <el-table-column :label="$t('dashboard.table.rate')" width="90" align="center">
             <template #default="{ row }">
               <el-tag size="small" type="info">{{ row.porcentajeAplicado }}%</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="Tu Comisión" width="120" align="right">
+          <el-table-column :label="$t('dashboard.table.yourCommission')" width="120" align="right">
             <template #default="{ row }">
               <strong class="text-success">{{ formatCurrency(row.importeComisionUsd) }}</strong>
             </template>
           </el-table-column>
-          <el-table-column prop="estado" label="Estado" width="110" align="center">
+          <el-table-column prop="estado" :label="$t('dashboard.table.status')" width="110" align="center">
             <template #default="{ row }">
               <el-tag
                 size="small"
@@ -124,7 +135,7 @@ const {
     <div v-if="photographerPersonalGoals.length === 0" class="mb-4">
       <el-card class="dashboard-card" shadow="hover">
         <el-empty
-          description="Aún no tienes metas registradas para este mes en tus hoteles asignados."
+          :description="$t('dashboard.noGoalsThisMonth')"
         />
       </el-card>
     </div>
@@ -136,14 +147,14 @@ const {
             :hotel-nombre="g.hotelNombre"
             :hotel-progreso="g.hotel"
             :personal-progreso="g.personal"
-            :month-label="monthsOptions.find((m) => m.value === selectedMes)?.label || ''"
+            :month-label="selectedMonthLabel"
           />
         </el-col>
       </el-row>
     </div>
 
     <!-- Trabajo de hoy por hotel e instrucciones -->
-    <h3 class="subsection-title mt-4">Tu trabajo para hoy</h3>
+    <h3 class="subsection-title mt-4">{{ $t('dashboard.yourWorkToday') }}</h3>
     <el-row :gutter="20" class="photographer-grid">
       <el-col :xs="24" :md="12">
         <div class="hotels-cards-container">
@@ -171,7 +182,7 @@ const {
                 <div class="work-block-header">
                   <el-icon class="work-icon text-primary"><Camera /></el-icon>
                   <span class="work-block-title font-semibold">
-                    Sesiones Fotográficas de Hoy ({{ getTodaySessionsForHotel(hotel.id).length }})
+                    {{ $t('dashboard.todayPhotoSessions', { count: getTodaySessionsForHotel(hotel.id).length }) }}
                   </span>
                 </div>
 
@@ -187,7 +198,7 @@ const {
                     </div>
                     <div class="client-name font-semibold">{{ s.clienteNombre }}</div>
                     <div v-if="s.numeroHabitacion" class="room-tag">
-                      Hab: {{ s.numeroHabitacion }}
+                      {{ $t('dashboard.table.room', { room: s.numeroHabitacion }) }}
                     </div>
                     <el-tag size="small" :type="s.estado === 'COMPLETADA' ? 'success' : 'primary'">
                       {{ s.estado }}
@@ -195,7 +206,7 @@ const {
                   </div>
                 </div>
                 <div v-else class="work-empty-hint mt-1">
-                  <span class="text-muted">Sin sesiones fotográficas agendadas para hoy.</span>
+                  <span class="text-muted">{{ $t('dashboard.noSessionsToday') }}</span>
                 </div>
               </div>
 
@@ -207,7 +218,7 @@ const {
                 <div class="work-block-header">
                   <el-icon class="work-icon text-success"><Money /></el-icon>
                   <span class="work-block-title font-semibold">
-                    Citas de Venta de Hoy ({{ getTodaySalesForHotel(hotel.id).length }})
+                    {{ $t('dashboard.todaySalesAppointments', { count: getTodaySalesForHotel(hotel.id).length }) }}
                   </span>
                 </div>
 
@@ -222,10 +233,10 @@ const {
                       <span>{{ formatTime(c.fechaHoraCita) }}</span>
                     </div>
                     <div class="client-name font-semibold">
-                      {{ c.clienteNombre || 'Cliente' }}
+                      {{ c.clienteNombre || $t('dashboard.table.client') }}
                     </div>
                     <div v-if="c.numeroHabitacion" class="room-tag">
-                      Hab: {{ c.numeroHabitacion }}
+                      {{ $t('dashboard.table.room', { room: c.numeroHabitacion }) }}
                     </div>
                     <el-tag size="small" :type="c.estado === 'COMPLETADA' ? 'success' : 'warning'">
                       {{ c.estado }}
@@ -233,7 +244,7 @@ const {
                   </div>
                 </div>
                 <div v-else class="work-empty-hint mt-1">
-                  <span class="text-muted">Sin citas de venta agendadas para hoy.</span>
+                  <span class="text-muted">{{ $t('dashboard.noSalesToday') }}</span>
                 </div>
               </div>
             </div>
@@ -241,7 +252,7 @@ const {
 
           <el-empty
             v-if="photographerHotels.length === 0"
-            description="No tienes ningún hotel asignado actualmente."
+            :description="$t('dashboard.noHotelsAssigned')"
           />
         </div>
 
@@ -254,7 +265,7 @@ const {
             class="btn-agenda-hotel"
             @click="goToAgenda"
           >
-            Ir a la Agenda del Hotel
+            {{ $t('dashboard.goToHotelSchedule') }}
           </el-button>
         </div>
       </el-col>
@@ -266,16 +277,16 @@ const {
             <div class="instructions-header">
               <div class="instructions-title-area">
                 <el-icon class="instructions-icon"><Camera /></el-icon>
-                <span class="instructions-name font-bold">Instrucciones del Fotógrafo</span>
+                <span class="instructions-name font-bold">{{ $t('dashboard.photographerInstructionsTitle') }}</span>
               </div>
             </div>
           </template>
           <div class="instructions-body">
             <ol class="instructions-list">
-              <li>Acude al hotel asignado en las horas de mayor afluencia.</li>
-              <li>Mantén tu equipo de fotografía calibrado y limpio.</li>
-              <li>Reporta cualquier incidencia al supervisor de la zona.</li>
-              <li>Sigue estrictamente las políticas de privacidad de los huéspedes.</li>
+              <li>{{ $t('dashboard.instructionsPhotographer.step1') }}</li>
+              <li>{{ $t('dashboard.instructionsPhotographer.step2') }}</li>
+              <li>{{ $t('dashboard.instructionsPhotographer.step3') }}</li>
+              <li>{{ $t('dashboard.instructionsPhotographer.step4') }}</li>
             </ol>
           </div>
         </el-card>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { formatCurrency } from '@/shared/formatters'
 import type { HotelProgresoResumen, SemaforoEstado } from '../domain/goal.model'
 import {
@@ -13,6 +14,8 @@ import {
   User,
 } from '@element-plus/icons-vue'
 import { Users } from '@lucide/vue'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   hotelProgreso: HotelProgresoResumen
@@ -39,10 +42,10 @@ function getSemaforoBg(estado?: SemaforoEstado, metaImporte?: number): string {
 }
 
 function getSemaforoLabel(estado?: SemaforoEstado, metaImporte?: number): string {
-  if (isSinMeta(estado, metaImporte)) return 'Meta no definida'
-  if (estado === 'VERDE') return 'En tiempo / Adelantado'
-  if (estado === 'AMARILLO') return 'Alerta leve'
-  return 'Por detrás'
+  if (isSinMeta(estado, metaImporte)) return t('dashboard.trafficLightLabels.noGoal')
+  if (estado === 'VERDE') return t('dashboard.trafficLightLabels.onTrackAhead')
+  if (estado === 'AMARILLO') return t('dashboard.trafficLightLabels.slightWarning')
+  return t('dashboard.trafficLightLabels.behind')
 }
 
 function getSemaforoIcon(estado?: SemaforoEstado, metaImporte?: number) {
@@ -63,10 +66,10 @@ function getSemaforoTagType(
 }
 
 function getSemaforoText(estado?: SemaforoEstado, metaImporte?: number): string {
-  if (isSinMeta(estado, metaImporte)) return 'Meta no definida'
-  if (estado === 'VERDE') return 'En tiempo'
-  if (estado === 'AMARILLO') return 'Alerta'
-  return 'Atrasado'
+  if (isSinMeta(estado, metaImporte)) return t('dashboard.trafficLightLabels.noGoal')
+  if (estado === 'VERDE') return t('dashboard.trafficLightLabels.onTrack')
+  if (estado === 'AMARILLO') return t('dashboard.trafficLightLabels.warning')
+  return t('dashboard.trafficLightLabels.delayed')
 }
 
 function getProgressColor(estado?: SemaforoEstado, metaImporte?: number): string {
@@ -77,8 +80,6 @@ function getCappedPercentage(val?: number): number {
   if (val === undefined || isNaN(val)) return 0
   return Math.min(Math.max(0, val), 100)
 }
-
-
 
 const numFotografos = computed(() => {
   return props.hotelProgreso.fotografos?.length || 0
@@ -94,7 +95,7 @@ const numFotografos = computed(() => {
       <!-- Header -->
       <div class="goal-card-header">
         <div class="header-titles">
-          <h3 class="goal-title">Meta del Hotel: {{ hotelProgreso.hotelNombre }}</h3>
+          <h3 class="goal-title">{{ $t('dashboard.goalCard.hotelGoal') }}: {{ hotelProgreso.hotelNombre }}</h3>
           <p class="goal-subtitle">
             {{ hotelProgreso.areaNombre }} — {{ monthLabel }} {{ selectedAnio }}
           </p>
@@ -158,13 +159,13 @@ const numFotografos = computed(() => {
       <div class="pacing-metrics-row">
         <div class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><Calendar /></el-icon>
-          <span class="pacing-label">Ritmo a hoy:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.pacingToday') }}</span>
           <span class="pacing-val">{{ formatCurrency(hotelProgreso.metaEsperadaHoy) }}</span>
         </div>
 
         <div class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><TrendCharts /></el-icon>
-          <span class="pacing-label">Desviación:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.deviation') }}</span>
           <span
             class="pacing-val font-semibold"
             :class="{
@@ -179,13 +180,13 @@ const numFotografos = computed(() => {
 
         <div v-if="hotelProgreso.numVentas !== undefined" class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><Money /></el-icon>
-          <span class="pacing-label">Ventas:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.sales') }}</span>
           <span class="pacing-val">{{ hotelProgreso.numVentas }}</span>
         </div>
 
         <div v-if="hotelProgreso.numSesiones !== undefined" class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><Calendar /></el-icon>
-          <span class="pacing-label">Sesiones:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.sessions') }}</span>
           <span class="pacing-val">{{ hotelProgreso.numSesiones }}</span>
         </div>
       </div>
@@ -204,21 +205,21 @@ const numFotografos = computed(() => {
         <div class="header-left">
           <el-icon class="section-icon"><Users :size="18" /></el-icon>
           <h4 class="section-title">
-            Rendimiento Individual de Fotógrafos — {{ hotelProgreso.hotelNombre }}
+            {{ $t('dashboard.goalCard.individualPhotographers', { hotel: hotelProgreso.hotelNombre }) }}
           </h4>
         </div>
         <el-tag size="small" effect="plain" type="info" class="fotografos-count-tag">
-          {{ numFotografos }} {{ numFotografos === 1 ? 'fotógrafo' : 'fotógrafos' }}
+          {{ numFotografos }} {{ numFotografos === 1 ? $t('dashboard.goalCard.photographerSingle') : $t('dashboard.goalCard.photographerPlural', { count: numFotografos }) }}
         </el-tag>
       </div>
 
       <div v-if="hotelProgreso.fotografos.length === 0" class="empty-photographers-hint">
-        <span class="text-muted">No hay fotógrafos asignados a este hotel.</span>
+        <span class="text-muted">{{ $t('dashboard.goalCard.noPhotographersAssigned') }}</span>
       </div>
 
       <div v-else class="photographers-table-wrapper">
         <el-table :data="hotelProgreso.fotografos" style="width: 100%" size="small" stripe>
-          <el-table-column prop="nombreCompleto" label="Fotógrafo" min-width="160">
+          <el-table-column prop="nombreCompleto" :label="$t('dashboard.table.photographer')" min-width="160">
             <template #default="{ row }">
               <div class="photographer-name-cell">
                 <el-icon class="photographer-icon"><User /></el-icon>
@@ -226,22 +227,22 @@ const numFotografos = computed(() => {
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="Meta Asignada" width="130" align="right">
+          <el-table-column :label="$t('dashboard.table.assignedGoal')" width="130" align="right">
             <template #default="{ row }">
               <span class="font-semibold">{{ formatCurrency(row.metaImporte) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Ventas Reales" width="130" align="right">
+          <el-table-column :label="$t('dashboard.table.realSales')" width="130" align="right">
             <template #default="{ row }">
               <span class="font-bold text-primary">{{ formatCurrency(row.ventasRealesUsd) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Ritmo a Hoy" width="120" align="right">
+          <el-table-column :label="$t('dashboard.table.pacingToday')" width="120" align="right">
             <template #default="{ row }">
               <span>{{ formatCurrency(row.metaEsperadaHoy) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Avance" min-width="170">
+          <el-table-column :label="$t('dashboard.table.progress')" min-width="170">
             <template #default="{ row }">
               <el-progress
                 :percentage="Math.min(100, Math.max(0, row.porcentajeCumplimiento))"
@@ -250,7 +251,7 @@ const numFotografos = computed(() => {
               />
             </template>
           </el-table-column>
-          <el-table-column label="Semáforo" width="130" align="center">
+          <el-table-column :label="$t('dashboard.table.trafficLight')" width="130" align="center">
             <template #default="{ row }">
               <el-tag
                 size="small"

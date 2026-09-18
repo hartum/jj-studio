@@ -9,6 +9,7 @@ import { useGoalStore } from '@/features/goals/stores/goal.store'
 import { useSessionStore } from '@/features/photo-sessions/stores/session.store'
 import { useSaleStore } from '@/features/sales/stores/sale.store'
 import { useCommissionStore } from '@/features/commissions/stores/commission.store'
+import { useLocale } from '@/i18n/useLocale'
 import type { FotografoProgreso, HotelProgresoResumen } from '@/features/goals/domain/goal.model'
 import type { Comision, ResumenComisiones } from '@/features/commissions/domain/commission.model'
 import { ElMessage } from 'element-plus'
@@ -27,23 +28,24 @@ export interface PhotographerHotelData {
   direccion?: string
 }
 
-export const monthsOptions = [
-  { value: 1, label: 'Enero' },
-  { value: 2, label: 'Febrero' },
-  { value: 3, label: 'Marzo' },
-  { value: 4, label: 'Abril' },
-  { value: 5, label: 'Mayo' },
-  { value: 6, label: 'Junio' },
-  { value: 7, label: 'Julio' },
-  { value: 8, label: 'Agosto' },
-  { value: 9, label: 'Septiembre' },
-  { value: 10, label: 'Octubre' },
-  { value: 11, label: 'Noviembre' },
-  { value: 12, label: 'Diciembre' },
+const MONTH_KEYS = [
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december',
 ] as const
 
 export function useDashboard() {
   const router = useRouter()
+  const { t } = useLocale()
   const authStore = useAuthStore()
   const userStore = useUserStore()
   const countryStore = useCountryStore()
@@ -53,6 +55,13 @@ export function useDashboard() {
   const sessionStore = useSessionStore()
   const saleStore = useSaleStore()
   const commissionStore = useCommissionStore()
+
+  const localizedMonthsOptions = computed(() =>
+    MONTH_KEYS.map((key, idx) => ({
+      value: idx + 1,
+      label: t(`dashboard.months.${key}`),
+    })),
+  )
 
   const currentUser = computed(() => authStore.user)
   const userRole = computed(() => currentUser.value?.roleCode?.toUpperCase() || '')
@@ -83,18 +92,22 @@ export function useDashboard() {
   const selectedMonthsLabel = computed<string>(() => {
     const list = parsedMonths.value
     if (list.length === 0) {
-      return `Mes de ${monthsOptions.find((m) => m.value === selectedMes.value)?.label || ''} ${selectedAnio.value}`
+      const mName =
+        localizedMonthsOptions.value.find((m) => m.value === selectedMes.value)?.label || ''
+      return t('dashboard.months.monthOf', { month: mName, year: selectedAnio.value })
     }
     if (list.length === 1) {
       const item = list[0]!
-      const mName = monthsOptions.find((m) => m.value === item.mes)?.label || String(item.mes)
-      return `Mes de ${mName} ${item.anio}`
+      const mName =
+        localizedMonthsOptions.value.find((m) => m.value === item.mes)?.label || String(item.mes)
+      return t('dashboard.months.monthOf', { month: mName, year: item.anio })
     }
     const formatted = list.map((item) => {
-      const mName = monthsOptions.find((m) => m.value === item.mes)?.label || String(item.mes)
+      const mName =
+        localizedMonthsOptions.value.find((m) => m.value === item.mes)?.label || String(item.mes)
       return `${mName.slice(0, 3)} ${item.anio}`
     })
-    return `${formatted.join(', ')} (${list.length} meses)`
+    return t('dashboard.months.monthsCount', { list: formatted.join(', '), count: list.length })
   })
 
   const selectedHotelFilter = computed<number | null>({
@@ -102,6 +115,23 @@ export function useDashboard() {
     set: (val) => {
       selectedHotelFilters.value = val !== null && val !== undefined ? [val] : []
     },
+  })
+
+  const selectedMonthDate = computed<string>({
+    get: () => `${selectedAnio.value}-${String(selectedMes.value).padStart(2, '0')}`,
+    set: (val: string) => {
+      if (!val) return
+      const parts = val.split('-').map(Number)
+      if (parts[0] && parts[1]) {
+        selectedAnio.value = parts[0]
+        selectedMes.value = parts[1]
+      }
+    },
+  })
+
+  const selectedMonthLabel = computed<string>(() => {
+    const m = localizedMonthsOptions.value.find((item) => item.value === selectedMes.value)
+    return m?.label || ''
   })
 
   const yearsOptions = computed(() => {
@@ -560,10 +590,10 @@ export function useDashboard() {
   }
 
   function getSemaforoText(semaforo: string, metaImporte: number): string {
-    if (metaImporte <= 0 || semaforo === 'SIN_META') return 'Meta no definida'
-    if (semaforo === 'VERDE') return 'En tiempo'
-    if (semaforo === 'AMARILLO') return 'Alerta'
-    return 'Atrasado'
+    if (metaImporte <= 0 || semaforo === 'SIN_META') return t('dashboard.trafficLightLabels.noGoal')
+    if (semaforo === 'VERDE') return t('dashboard.trafficLightLabels.onTrack')
+    if (semaforo === 'AMARILLO') return t('dashboard.trafficLightLabels.warning')
+    return t('dashboard.trafficLightLabels.delayed')
   }
 
   function getProgressColor(semaforo: string, metaImporte: number): string {
@@ -739,7 +769,9 @@ export function useDashboard() {
   // --- Comisiones ---
   const myContractBadge = computed(() => {
     const c = currentUser.value?.tipoContrato
-    return c === 'SIN_SALARIO' ? '🔵 Sin Salario / Freelance' : '🟢 Asalariado'
+    return c === 'SIN_SALARIO'
+      ? t('dashboard.commissions.contractFreelance')
+      : t('dashboard.commissions.contractSalaried')
   })
 
   const currentUserSpecialConfig = computed(() => {
@@ -772,44 +804,47 @@ export function useDashboard() {
       const pct = currentUserSpecialConfig.value.porcentajeComision
       const tax = currentUserSpecialConfig.value.impuestoPct
       if (code === 'GERENTE') {
-        return `${pct}% × (Ventas − ${tax}% impuestos)`
+        return t('dashboard.commissions.formulaGerente', { pct, tax })
       }
       if (code === 'SUPERVISOR') {
-        return `${pct}% × (Ventas del hotel − ${tax}% impuestos)`
+        return t('dashboard.commissions.formulaSupervisor', { pct, tax })
       }
-      return `${pct}% × (Venta − ${tax}% impuestos)`
+      return t('dashboard.commissions.formulaGeneral', { pct, tax })
     }
 
     const tax = config?.impuestoPct !== undefined ? config.impuestoPct : 16
 
     if (code === 'GERENTE') {
       const pct = config?.gerentePct ?? 2
-      return `${pct}% × (Ventas − ${tax}% impuestos)`
+      return t('dashboard.commissions.formulaGerente', { pct, tax })
     }
     if (code === 'SUPERVISOR') {
       const pct = config?.supervisorPct ?? 2
-      return `${pct}% × (Ventas del hotel − ${tax}% impuestos)`
+      return t('dashboard.commissions.formulaSupervisor', { pct, tax })
     }
     if (code === 'FOTOGRAFO') {
       const pct =
         contrato === 'SIN_SALARIO'
           ? (config?.fotografoSinSalarioPct ?? 20)
           : (config?.fotografoAsalariadoPct ?? 14)
-      return `${pct}% × (Venta − ${tax}% impuestos)`
+      return t('dashboard.commissions.formulaGeneral', { pct, tax })
     }
     if (code === 'AGENDADOR') {
       const pct =
         contrato === 'SIN_SALARIO'
           ? (config?.vendedorSinSalarioPct ?? 8)
           : (config?.vendedorAsalariadoPct ?? 6)
-      return `${pct}% × (Venta − ${tax}% impuestos)`
+      return t('dashboard.commissions.formulaGeneral', { pct, tax })
     }
     return ''
   })
 
   const myCommissionTooltip = computed(() => {
     const tax = currentImpuestoPct.value
-    return `La comisión se calcula sobre la base neta tras deducir el ${tax}% de retención de impuestos: ${myCommissionFormula.value}`
+    return t('dashboard.commissions.tooltip', {
+      tax,
+      formula: myCommissionFormula.value,
+    })
   })
 
   const myMonthlyCommissions = computed(() => commissionStore.resumen?.totalComisionesUsd || 0)
@@ -842,13 +877,13 @@ export function useDashboard() {
     try {
       await commissionStore.updateEstadoComision(id, nuevoEstado)
       if (nuevoEstado === 'PENDIENTE') {
-        ElMessage.success('Comisión restablecida a estado Pendiente')
+        ElMessage.success(t('dashboard.commissionRestoredSuccess'))
       } else {
-        ElMessage.success(`Comisión marcada como ${nuevoEstado}`)
+        ElMessage.success(t('dashboard.commissionStatusUpdatedSuccess', { status: nuevoEstado }))
       }
       await loadGoalsData()
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Error al actualizar estado'
+      const message = err instanceof Error ? err.message : t('dashboard.commissionUpdateError')
       ElMessage.error(message)
     }
   }
@@ -866,12 +901,15 @@ export function useDashboard() {
     // Filtros
     selectedAnio,
     selectedMes,
+    selectedMonthDate,
+    selectedMonthLabel,
     selectedMonths,
     selectedMonthsLabel,
     parsedMonths,
     selectedHotelFilter,
     selectedHotelFilters,
     yearsOptions,
+    monthsOptions: localizedMonthsOptions,
     // KPIs
     totalUsers,
     activeUsers,

@@ -9,12 +9,14 @@ import { useAuthStore } from '@/features/auth/stores/auth.store'
 import { useProfileStore } from '@/features/users/stores/profile.store'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 import { formatCurrency } from '@/shared/formatters'
+import { useLocale } from '@/i18n/useLocale'
 import { ElMessage } from 'element-plus'
 import { Location, User, Check, Share } from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
 import type { Hotel } from '@/features/hotels/domain/hotel.model'
 
 const route = useRoute()
+const { t } = useLocale()
 const authStore = useAuthStore()
 const countryStore = useCountryStore()
 const hotelStore = useHotelStore()
@@ -34,29 +36,37 @@ const defaultHotelTarget = ref<number | null>(null)
 // Personal goals per photographer edit map: userId -> custom amount
 const customPhotographerGoals = ref<Record<string, number>>({})
 
-// Selector dinámico de años: 5 hacia atrás y 2 hacia adelante
-const yearsOptions = computed(() => {
-  const currentYear = now.getFullYear()
-  const years: number[] = []
-  for (let y = currentYear - 5; y <= currentYear + 2; y++) {
-    years.push(y)
-  }
-  return years
+const selectedMonthDate = computed<string>({
+  get: () => `${selectedAnio.value}-${String(selectedMes.value).padStart(2, '0')}`,
+  set: (val: string) => {
+    if (!val) return
+    const parts = val.split('-').map(Number)
+    if (parts[0] && parts[1]) {
+      selectedAnio.value = parts[0]
+      selectedMes.value = parts[1]
+    }
+  },
 })
-const monthsOptions = [
-  { value: 1, label: 'Enero' },
-  { value: 2, label: 'Febrero' },
-  { value: 3, label: 'Marzo' },
-  { value: 4, label: 'Abril' },
-  { value: 5, label: 'Mayo' },
-  { value: 6, label: 'Junio' },
-  { value: 7, label: 'Julio' },
-  { value: 8, label: 'Agosto' },
-  { value: 9, label: 'Septiembre' },
-  { value: 10, label: 'Octubre' },
-  { value: 11, label: 'Noviembre' },
-  { value: 12, label: 'Diciembre' },
-]
+
+const MONTH_KEYS = [
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december',
+] as const
+
+const selectedMonthLabel = computed<string>(() => {
+  const key = MONTH_KEYS[selectedMes.value - 1]
+  return key ? t(`dashboard.months.${key}`) : ''
+})
 
 // Hoteles permitidos según el rol
 const availableHotels = computed(() => {
@@ -367,16 +377,16 @@ watch(
         </el-select>
       </div>
 
-      <div class="filter-field year-field">
-        <el-select v-model="selectedAnio" size="large" class="full-width">
-          <el-option v-for="y in yearsOptions" :key="y" :label="String(y)" :value="y" />
-        </el-select>
-      </div>
-
       <div class="filter-field month-field">
-        <el-select v-model="selectedMes" size="large" class="full-width">
-          <el-option v-for="m in monthsOptions" :key="m.value" :label="m.label" :value="m.value" />
-        </el-select>
+        <el-date-picker
+          v-model="selectedMonthDate"
+          type="month"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          size="large"
+          class="full-width"
+          :clearable="false"
+        />
       </div>
     </div>
 
@@ -396,7 +406,7 @@ watch(
               <span>Meta Mensual del Hotel: {{ currentHotel.nombre }}</span>
             </div>
             <el-tag type="primary" size="large">
-              {{ monthsOptions.find((m) => m.value === selectedMes)?.label }} {{ selectedAnio }}
+              {{ selectedMonthLabel }} {{ selectedAnio }}
             </el-tag>
           </div>
         </template>

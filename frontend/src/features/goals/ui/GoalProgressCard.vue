@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { SemaforoEstado } from '../domain/goal.model'
 import {
   SuccessFilled,
@@ -11,6 +12,8 @@ import {
   Calendar,
   Flag,
 } from '@element-plus/icons-vue'
+
+const { t } = useI18n()
 
 const props = withDefaults(
   defineProps<{
@@ -57,10 +60,10 @@ const semaforoBgLight = computed(() => {
 })
 
 const semaforoLabel = computed(() => {
-  if (isSinMeta.value) return 'Meta no definida'
-  if (props.semaforo === 'VERDE') return 'En tiempo / Adelantado'
-  if (props.semaforo === 'AMARILLO') return 'Alerta leve'
-  return 'Por detrás'
+  if (isSinMeta.value) return t('dashboard.trafficLightLabels.noGoal')
+  if (props.semaforo === 'VERDE') return t('dashboard.trafficLightLabels.onTrackAhead')
+  if (props.semaforo === 'AMARILLO') return t('dashboard.trafficLightLabels.slightWarning')
+  return t('dashboard.trafficLightLabels.behind')
 })
 
 const semaforoIcon = computed(() => {
@@ -144,13 +147,13 @@ function formatCurrency(val: number): string {
       <div class="pacing-metrics-left">
         <div class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><Calendar /></el-icon>
-          <span class="pacing-label">Ritmo a hoy:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.pacingToday') }}</span>
           <span class="pacing-val">{{ formatCurrency(metaEsperadaHoy) }}</span>
         </div>
 
         <div class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><TrendCharts /></el-icon>
-          <span class="pacing-label">Desviación:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.deviation') }}</span>
           <span
             class="pacing-val font-semibold"
             :class="{
@@ -164,13 +167,13 @@ function formatCurrency(val: number): string {
 
         <div v-if="numVentas !== undefined" class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><Money /></el-icon>
-          <span class="pacing-label">Ventas:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.sales') }}</span>
           <span class="pacing-val">{{ numVentas }}</span>
         </div>
 
         <div v-if="numSesiones !== undefined" class="pacing-item">
           <el-icon :size="14" class="pacing-icon"><Calendar /></el-icon>
-          <span class="pacing-label">Sesiones:</span>
+          <span class="pacing-label">{{ $t('dashboard.goalCard.sessions') }}</span>
           <span class="pacing-val">{{ numSesiones }}</span>
         </div>
       </div>

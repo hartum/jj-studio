@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { formatCurrency } from '@/shared/formatters'
 import type { HotelProgresoResumen, SemaforoEstado } from '../domain/goal.model'
 import {
@@ -12,6 +13,8 @@ import {
   Calendar,
 } from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   hotelNombre: string
@@ -39,10 +42,10 @@ function getSemaforoBg(estado?: SemaforoEstado, metaImporte?: number): string {
 }
 
 function getSemaforoLabel(estado?: SemaforoEstado, metaImporte?: number): string {
-  if (isSinMeta(estado, metaImporte)) return 'Meta no definida'
-  if (estado === 'VERDE') return 'En tiempo'
-  if (estado === 'AMARILLO') return 'Alerta'
-  return 'Atrasado'
+  if (isSinMeta(estado, metaImporte)) return t('dashboard.trafficLightLabels.noGoal')
+  if (estado === 'VERDE') return t('dashboard.trafficLightLabels.onTrack')
+  if (estado === 'AMARILLO') return t('dashboard.trafficLightLabels.warning')
+  return t('dashboard.trafficLightLabels.delayed')
 }
 
 function getSemaforoIcon(estado?: SemaforoEstado, metaImporte?: number) {
@@ -62,7 +65,7 @@ const displayHotelTitle = computed(() => {
   if (name.toLowerCase().startsWith('hotel')) {
     return name
   }
-  return `Hotel ${name}`
+  return `${t('dashboard.table.hotel')} ${name}`
 })
 </script>
 
@@ -136,13 +139,13 @@ const displayHotelTitle = computed(() => {
     <div class="pacing-metrics-row">
       <div class="pacing-item">
         <el-icon :size="14" class="pacing-icon"><Calendar /></el-icon>
-        <span class="pacing-label">Ritmo a hoy:</span>
+        <span class="pacing-label">{{ $t('dashboard.goalCard.pacingToday') }}</span>
         <span class="pacing-val">{{ formatCurrency(hotelProgreso.metaEsperadaHoy) }}</span>
       </div>
 
       <div class="pacing-item">
         <el-icon :size="14" class="pacing-icon"><TrendCharts /></el-icon>
-        <span class="pacing-label">Desviación:</span>
+        <span class="pacing-label">{{ $t('dashboard.goalCard.deviation') }}</span>
         <span
           class="pacing-val font-semibold"
           :class="{
@@ -156,13 +159,13 @@ const displayHotelTitle = computed(() => {
 
       <div class="pacing-item">
         <el-icon :size="14" class="pacing-icon"><Money /></el-icon>
-        <span class="pacing-label">Ventas:</span>
+        <span class="pacing-label">{{ $t('dashboard.goalCard.sales') }}</span>
         <span class="pacing-val">{{ hotelProgreso.numVentas }}</span>
       </div>
 
       <div class="pacing-item">
         <el-icon :size="14" class="pacing-icon"><Calendar /></el-icon>
-        <span class="pacing-label">Sesiones:</span>
+        <span class="pacing-label">{{ $t('dashboard.goalCard.sessions') }}</span>
         <span class="pacing-val">{{ hotelProgreso.numSesiones }}</span>
       </div>
     </div>

@@ -154,11 +154,10 @@ const hoveredPoint = computed(() => {
       <div class="header-left">
         <div class="chart-title-row">
           <el-icon :size="20" class="header-icon"><Activity /></el-icon>
-          <h3 class="chart-title">Evolución y Progresión de Ventas</h3>
+          <h3 class="chart-title">{{ $t('dashboard.evolution.title') }}</h3>
         </div>
         <span class="chart-subtitle">
-          {{ hotelName ? `Hotel: ${hotelName}` : 'Consolidado general' }} — Año
-          {{ data?.anio || 2026 }}
+          {{ hotelName ? $t('dashboard.evolution.hotelPrefix', { name: hotelName }) : $t('dashboard.evolution.generalConsolidated') }} — {{ $t('dashboard.evolution.subtitle', { hotel: '', year: data?.anio || 2026 }).replace(/^\s*—\s*/, '') }}
         </span>
       </div>
 
@@ -167,11 +166,11 @@ const hoveredPoint = computed(() => {
         <el-radio-group v-model="activeTab" class="tab-radio-group">
           <el-radio-button value="mes">
             <el-icon :size="14"><Calendar /></el-icon>
-            <span class="tab-label">Mensual</span>
+            <span class="tab-label">{{ $t('dashboard.evolution.monthly') }}</span>
           </el-radio-button>
           <el-radio-button value="anio">
             <el-icon :size="14"><CalendarDays /></el-icon>
-            <span class="tab-label">Anual</span>
+            <span class="tab-label">{{ $t('dashboard.evolution.annual') }}</span>
           </el-radio-button>
         </el-radio-group>
       </div>
@@ -181,11 +180,11 @@ const hoveredPoint = computed(() => {
     <div class="chart-legend">
       <div class="legend-item">
         <span class="legend-dot dot-real"></span>
-        <span class="legend-text">Ventas Reales Acumuladas</span>
+        <span class="legend-text">{{ $t('dashboard.evolution.realSalesAccumulated') }}</span>
       </div>
       <div class="legend-item">
         <span class="legend-line dot-objetivo"></span>
-        <span class="legend-text">Ritmo / Meta Objetivo</span>
+        <span class="legend-text">{{ $t('dashboard.evolution.targetPacing') }}</span>
       </div>
     </div>
 
@@ -193,7 +192,7 @@ const hoveredPoint = computed(() => {
     <div class="chart-body" v-loading="loading">
       <div v-if="!data || (!mesPoints.length && !anioPoints.length)" class="empty-state">
         <el-empty
-          description="Sin datos de progresión disponibles para este período"
+          :description="$t('dashboard.evolution.noData')"
           :image-size="80"
         />
       </div>
@@ -267,7 +266,7 @@ const hoveredPoint = computed(() => {
                 class="axis-text axis-x-text"
                 text-anchor="middle"
               >
-                Día {{ (pt.data as any).dia }}
+                {{ $t('dashboard.evolution.day', { day: (pt.data as any).dia }) }}
               </text>
             </template>
 
@@ -340,26 +339,26 @@ const hoveredPoint = computed(() => {
           >
             <div class="tooltip-title">
               <span v-if="activeTab === 'mes'"
-                >Día {{ (hoveredPoint.data as any).dia }} del mes</span
+                >{{ $t('dashboard.evolution.dayOfMonth', { day: (hoveredPoint.data as any).dia }) }}</span
               >
-              <span v-else>Mes de {{ (hoveredPoint.data as any).mesNombre }}</span>
+              <span v-else>{{ $t('dashboard.evolution.monthOf', { month: (hoveredPoint.data as any).mesNombre }) }}</span>
             </div>
             <div class="tooltip-row">
               <span class="tooltip-dot dot-real"></span>
-              <span class="tooltip-lbl">Ventas Acumuladas:</span>
+              <span class="tooltip-lbl">{{ $t('dashboard.evolution.accumulatedSales') }}</span>
               <span class="tooltip-val font-semibold text-primary">
                 {{ formatCurrency(hoveredPoint.data.realAcumulado) }}
               </span>
             </div>
             <div class="tooltip-row">
               <span class="tooltip-dot dot-objetivo"></span>
-              <span class="tooltip-lbl">Ritmo Objetivo:</span>
+              <span class="tooltip-lbl">{{ $t('dashboard.evolution.targetPacingLbl') }}</span>
               <span class="tooltip-val">
                 {{ formatCurrency(hoveredPoint.data.objetivoAcumulado) }}
               </span>
             </div>
             <div class="tooltip-row tooltip-footer">
-              <span class="tooltip-lbl">Diferencia:</span>
+              <span class="tooltip-lbl">{{ $t('dashboard.evolution.difference') }}</span>
               <span
                 class="tooltip-val font-bold"
                 :class="

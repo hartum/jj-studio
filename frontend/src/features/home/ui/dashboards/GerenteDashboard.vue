@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useDashboard, monthsOptions } from '@/features/home/composables/useDashboard'
+import { useDashboard } from '@/features/home/composables/useDashboard'
 import GoalProgressCard from '@/features/goals/ui/GoalProgressCard.vue'
 import GoalEvolutionChart from '@/features/goals/ui/GoalEvolutionChart.vue'
 import {
@@ -17,8 +17,9 @@ const {
   commissionStore,
   selectedAnio,
   selectedMes,
+  selectedMonthDate,
+  selectedMonthLabel,
   selectedHotelFilters,
-  yearsOptions,
   currentHotelProgreso,
   filteredProgresoHoteles,
   globalProgresoTotals,
@@ -76,11 +77,11 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
 <template>
   <div class="dashboard-section">
     <div class="section-header-row">
-      <h2 class="section-title">Control de Áreas, Metas y Comisiones</h2>
+      <h2 class="section-title">{{ $t('dashboard.areaControlTitle') }}</h2>
       <div class="controls-bar">
         <el-select
           v-model="selectedHotelFilters"
-          placeholder="Todos tus Hoteles"
+          :placeholder="$t('dashboard.allYourHotels')"
           multiple
           collapse-tags
           collapse-tags-tooltip
@@ -126,17 +127,16 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
             </template>
           </el-option-group>
         </el-select>
-        <el-select v-model="selectedMes" size="default" style="width: 130px">
-          <el-option
-            v-for="m in monthsOptions"
-            :key="m.value"
-            :label="m.label"
-            :value="m.value"
-          />
-        </el-select>
-        <el-select v-model="selectedAnio" size="default" style="width: 95px">
-          <el-option v-for="y in yearsOptions" :key="y" :label="String(y)" :value="y" />
-        </el-select>
+        <el-date-picker
+          v-model="selectedMonthDate"
+          type="month"
+          :placeholder="$t('dashboard.selectMonth')"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          size="default"
+          style="width: 140px"
+          :clearable="false"
+        />
       </div>
     </div>
 
@@ -148,8 +148,8 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
             <el-icon style="vertical-align: middle; margin-right: 6px; color: #2563eb"
               ><Money
             /></el-icon>
-            Tus Comisiones —
-            {{ monthsOptions.find((m) => m.value === selectedMes)?.label }} {{ selectedAnio }}
+            {{ $t('dashboard.yourCommissions') }} —
+            {{ selectedMonthLabel }} {{ selectedAnio }}
           </span>
           <el-tooltip
             :content="myCommissionTooltip"
@@ -172,7 +172,7 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
       >
         <div>
           <div style="font-size: 0.85rem; color: var(--el-text-color-secondary)">
-            Tu comisión acumulada:
+            {{ $t('dashboard.accumulatedCommission') }}
           </div>
           <div style="font-size: 1.8rem; font-weight: 800; color: #2563eb">
             {{ formatCurrency(gerenteMonthlyCommissions) }}
@@ -187,7 +187,7 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
                 margin-bottom: 4px;
               "
             >
-              Ventas en tus áreas:
+              {{ $t('dashboard.salesInYourAreas') }}
             </div>
             <div style="font-size: 1.3rem; font-weight: 700; color: #0f172a">
               {{ formatCurrency(commissionStore.resumen?.totalVentasUsd || 0) }}
@@ -201,7 +201,7 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
                 margin-bottom: 4px;
               "
             >
-              Total comisiones en tus hoteles:
+              {{ $t('dashboard.totalCommissionsInHotels') }}
             </div>
             <div style="font-size: 1.3rem; font-weight: 700; color: #0f172a">
               {{ formatCurrency(commissionStore.resumen?.totalComisionesUsd || 0) }}
@@ -215,8 +215,14 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
     <div class="goals-summary-block">
       <GoalProgressCard
         v-if="!currentHotelProgreso"
-        :titulo="selectedHotelFilters.length > 1 ? 'Objetivo Consolidado de tus Áreas' : 'Objetivo Comercial de tus Áreas'"
-        :subtitulo="`Mes de ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio} — Consolidado de ${globalProgresoTotals.numHoteles} ${globalProgresoTotals.numHoteles === 1 ? 'hotel' : 'hoteles'}${selectedHotelFilters.length > 1 ? ` (${selectedHotelsSummary})` : ''}`"
+        :titulo="selectedHotelFilters.length > 1 ? $t('dashboard.consolidatedGoalAreas') : $t('dashboard.commercialGoalAreas')"
+        :subtitulo="$t('dashboard.consolidatedSubtitle', {
+          month: selectedMonthLabel,
+          year: selectedAnio,
+          count: globalProgresoTotals.numHoteles,
+          hotelsLabel: globalProgresoTotals.numHoteles === 1 ? $t('dashboard.hotelSingle') : $t('dashboard.hotelPlural'),
+          summary: selectedHotelFilters.length > 1 ? ` (${selectedHotelsSummary})` : ''
+        })"
         :meta-importe="globalProgresoTotals.metaTotal"
         :ventas-reales-usd="globalProgresoTotals.ventasTotal"
         :porcentaje-cumplimiento="globalProgresoTotals.porcentaje"
@@ -231,14 +237,18 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
             size="default"
             @click="handleNavigateToGoalForm(selectedHotelFilters[0] || null)"
           >
-            Configurar Metas
+            {{ $t('dashboard.configureGoals') }}
           </el-button>
         </template>
       </GoalProgressCard>
       <GoalProgressCard
         v-else
-        :titulo="`Meta Mensual: ${currentHotelProgreso.hotelNombre}`"
-        :subtitulo="`${currentHotelProgreso.areaNombre} — ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio}`"
+        :titulo="$t('dashboard.monthlyGoalHotel', { hotel: currentHotelProgreso.hotelNombre })"
+        :subtitulo="$t('dashboard.hotelSubtitleSingle', {
+          area: currentHotelProgreso.areaNombre,
+          month: selectedMonthLabel,
+          year: selectedAnio
+        })"
         :meta-importe="currentHotelProgreso.metaImporte"
         :ventas-reales-usd="currentHotelProgreso.ventasRealesUsd"
         :porcentaje-cumplimiento="currentHotelProgreso.porcentajeCumplimiento"
@@ -253,7 +263,7 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
             size="default"
             @click="handleNavigateToGoalForm(currentHotelProgreso.hotelId)"
           >
-            Configurar Metas
+            {{ $t('dashboard.configureGoals') }}
           </el-button>
         </template>
       </GoalProgressCard>
@@ -269,23 +279,23 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
     <!-- Tabla de Hoteles en tus Áreas con Semáforos -->
     <el-card
       class="dashboard-card mb-4"
-      header="Rendimiento de Hoteles en tus Áreas"
+      :header="$t('dashboard.hotelsPerformanceTitle')"
       shadow="hover"
     >
       <el-table :data="filteredProgresoHoteles" style="width: 100%" size="small" stripe>
-        <el-table-column prop="hotelNombre" label="Hotel" min-width="160" />
-        <el-table-column prop="areaNombre" label="Área" min-width="120" />
-        <el-table-column label="Meta Mensual" width="130" align="right">
+        <el-table-column prop="hotelNombre" :label="$t('dashboard.table.hotel')" min-width="160" />
+        <el-table-column prop="areaNombre" :label="$t('dashboard.table.area')" min-width="120" />
+        <el-table-column :label="$t('dashboard.table.monthlyGoal')" width="130" align="right">
           <template #default="{ row }">
             <span class="font-semibold">{{ formatCurrency(row.metaImporte) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="Ventas Reales" width="130" align="right">
+        <el-table-column :label="$t('dashboard.table.realSales')" width="130" align="right">
           <template #default="{ row }">
             <span class="font-bold text-primary">{{ formatCurrency(row.ventasRealesUsd) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="Avance" min-width="170">
+        <el-table-column :label="$t('dashboard.table.progress')" min-width="170">
           <template #default="{ row }">
             <el-progress
               :percentage="Math.min(100, Math.max(0, row.porcentajeCumplimiento))"
@@ -294,7 +304,7 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
             />
           </template>
         </el-table-column>
-        <el-table-column label="Semáforo" width="130" align="center">
+        <el-table-column :label="$t('dashboard.table.trafficLight')" width="130" align="center">
           <template #default="{ row }">
             <el-tag
               size="small"
@@ -305,7 +315,7 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="Acción" width="140" align="center">
+        <el-table-column :label="$t('dashboard.table.action')" width="140" align="center">
           <template #default="{ row }">
             <el-button
               size="small"
@@ -314,7 +324,7 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
               :icon="Setting"
               @click="handleNavigateToGoalForm(row.hotelId)"
             >
-              Configurar Meta
+              {{ $t('dashboard.configureGoal') }}
             </el-button>
           </template>
         </el-table-column>
@@ -329,7 +339,7 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
             <el-icon><Location /></el-icon>
           </div>
           <div class="stat-content">
-            <span class="stat-label">Tus Áreas</span>
+            <span class="stat-label">{{ $t('dashboard.yourAreas') }}</span>
             <span class="stat-value">{{ managerAreas.length }}</span>
           </div>
         </el-card>
@@ -340,7 +350,7 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
             <el-icon><Building2 :size="24" /></el-icon>
           </div>
           <div class="stat-content">
-            <span class="stat-label">Hoteles Asociados</span>
+            <span class="stat-label">{{ $t('dashboard.associatedHotels') }}</span>
             <span class="stat-value">{{ managerHotels.length }}</span>
           </div>
         </el-card>
@@ -351,7 +361,7 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
             <el-icon><User /></el-icon>
           </div>
           <div class="stat-content">
-            <span class="stat-label">Personal a tu Cargo</span>
+            <span class="stat-label">{{ $t('dashboard.teamUnderYou') }}</span>
             <span class="stat-value">{{ managerTeam.length }}</span>
           </div>
         </el-card>

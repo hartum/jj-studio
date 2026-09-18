@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useDashboard, monthsOptions } from '@/features/home/composables/useDashboard'
+import { useDashboard } from '@/features/home/composables/useDashboard'
 import GoalProgressCard from '@/features/goals/ui/GoalProgressCard.vue'
 import GoalEvolutionChart from '@/features/goals/ui/GoalEvolutionChart.vue'
 import { User, Location, Setting, Money } from '@element-plus/icons-vue'
@@ -15,8 +15,9 @@ const {
   commissionStore,
   selectedAnio,
   selectedMes,
+  selectedMonthDate,
+  selectedMonthLabel,
   selectedHotelFilters,
-  yearsOptions,
   totalUsers,
   activeUsers,
   totalCountries,
@@ -106,11 +107,11 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
   <div class="dashboard-section">
     <!-- Filtro y Controles de Metas -->
     <div class="section-header-row">
-      <h2 class="section-title">Panel Ejecutivo y Metas Globales</h2>
+      <h2 class="section-title">{{ $t('dashboard.executivePanel') }}</h2>
       <div class="controls-bar">
         <el-select
           v-model="selectedHotelFilters"
-          placeholder="Todos los Hoteles"
+          :placeholder="$t('dashboard.allHotels')"
           multiple
           collapse-tags
           collapse-tags-tooltip
@@ -156,12 +157,16 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
             </template>
           </el-option-group>
         </el-select>
-        <el-select v-model="selectedMes" size="default" style="width: 130px">
-          <el-option v-for="m in monthsOptions" :key="m.value" :label="m.label" :value="m.value" />
-        </el-select>
-        <el-select v-model="selectedAnio" size="default" style="width: 95px">
-          <el-option v-for="y in yearsOptions" :key="y" :label="String(y)" :value="y" />
-        </el-select>
+        <el-date-picker
+          v-model="selectedMonthDate"
+          type="month"
+          :placeholder="$t('dashboard.selectMonth')"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          size="default"
+          style="width: 140px"
+          :clearable="false"
+        />
       </div>
     </div>
 
@@ -171,8 +176,14 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
         <div class="goals-summary-block">
           <GoalProgressCard
             v-if="!currentHotelProgreso"
-            :titulo="selectedHotelFilters.length > 1 ? 'Objetivo Consolidado' : 'Objetivo Global'"
-            :subtitulo="`Mes de ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio} — Consolidado de ${globalProgresoTotals.numHoteles} ${globalProgresoTotals.numHoteles === 1 ? 'hotel' : 'hoteles'}${selectedHotelFilters.length > 1 ? ` (${selectedHotelsSummary})` : ''}`"
+            :titulo="selectedHotelFilters.length > 1 ? $t('dashboard.consolidatedGoal') : $t('dashboard.globalGoal')"
+            :subtitulo="$t('dashboard.consolidatedSubtitle', {
+              month: selectedMonthLabel,
+              year: selectedAnio,
+              count: globalProgresoTotals.numHoteles,
+              hotelsLabel: globalProgresoTotals.numHoteles === 1 ? $t('dashboard.hotelSingle') : $t('dashboard.hotelPlural'),
+              summary: selectedHotelFilters.length > 1 ? ` (${selectedHotelsSummary})` : ''
+            })"
             :meta-importe="globalProgresoTotals.metaTotal"
             :ventas-reales-usd="globalProgresoTotals.ventasTotal"
             :porcentaje-cumplimiento="globalProgresoTotals.porcentaje"
@@ -187,15 +198,20 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
                 size="default"
                 @click="handleNavigateToGoalForm(selectedHotelFilters[0] || null)"
               >
-                Configurar Metas
+                {{ $t('dashboard.configureGoals') }}
               </el-button>
             </template>
           </GoalProgressCard>
 
           <GoalProgressCard
             v-else
-            :titulo="`Meta Mensual: ${currentHotelProgreso.hotelNombre}`"
-            :subtitulo="`${currentHotelProgreso.areaNombre} (${currentHotelProgreso.paisNombre}) — ${monthsOptions.find((m) => m.value === selectedMes)?.label} ${selectedAnio}`"
+            :titulo="$t('dashboard.monthlyGoalHotel', { hotel: currentHotelProgreso.hotelNombre })"
+            :subtitulo="$t('dashboard.hotelSubtitleArea', {
+              area: currentHotelProgreso.areaNombre,
+              country: currentHotelProgreso.paisNombre,
+              month: selectedMonthLabel,
+              year: selectedAnio
+            })"
             :meta-importe="currentHotelProgreso.metaImporte"
             :ventas-reales-usd="currentHotelProgreso.ventasRealesUsd"
             :porcentaje-cumplimiento="currentHotelProgreso.porcentajeCumplimiento"
@@ -212,7 +228,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
                 size="default"
                 @click="handleNavigateToGoalForm(currentHotelProgreso.hotelId)"
               >
-                Configurar Metas
+                {{ $t('dashboard.configureGoals') }}
               </el-button>
             </template>
           </GoalProgressCard>
@@ -228,15 +244,15 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
                 <el-icon style="vertical-align: middle; margin-right: 6px; color: #10b981"
                   ><Money
                 /></el-icon>
-                Resumen Financiero de Comisiones —
-                {{ monthsOptions.find((m) => m.value === selectedMes)?.label }} {{ selectedAnio }}
+                {{ $t('dashboard.commissionsSummary') }} —
+                {{ selectedMonthLabel }} {{ selectedAnio }}
               </span>
             </div>
           </template>
           <el-row :gutter="12" class="comm-stats-row">
             <el-col :xs="24" :sm="8">
               <div class="stat-box-comm">
-                <span class="stat-box-label">Total Comisiones</span>
+                <span class="stat-box-label">{{ $t('dashboard.totalCommissions') }}</span>
                 <span class="stat-box-val text-success">{{
                   formatCurrency(globalMonthlyCommissions)
                 }}</span>
@@ -244,7 +260,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
             </el-col>
             <el-col :xs="24" :sm="8">
               <div class="stat-box-comm">
-                <span class="stat-box-label">Ventas con Comisión</span>
+                <span class="stat-box-label">{{ $t('dashboard.salesWithCommission') }}</span>
                 <span class="stat-box-val">{{
                   formatCurrency(commissionStore.resumen?.totalVentasUsd || 0)
                 }}</span>
@@ -252,17 +268,16 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
             </el-col>
             <el-col :xs="24" :sm="8">
               <div class="stat-box-comm">
-                <span class="stat-box-label">Comisiones Pendientes</span>
+                <span class="stat-box-label">{{ $t('dashboard.pendingCommissions') }}</span>
                 <span class="stat-box-val text-warning">
-                  {{ commissionStore.comisiones.filter((c) => c.estado === 'PENDIENTE').length }}
-                  pendientes
+                  {{ $t('dashboard.pendingCount', { count: commissionStore.comisiones.filter((c) => c.estado === 'PENDIENTE').length }) }}
                 </span>
               </div>
             </el-col>
           </el-row>
           <div class="comm-card-footer">
             <el-button type="primary" :icon="Setting" size="default" @click="goToConfig('comisiones')">
-              Configurar Comisiones
+              {{ $t('dashboard.configureCommissions') }}
             </el-button>
           </div>
         </el-card>
@@ -279,7 +294,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
     <!-- Tabla Comparativa de Hoteles con Semáforos -->
     <el-card
       class="dashboard-card mb-4"
-      header="Desglose y Estado de Metas por Hotel"
+      :header="$t('dashboard.hotelBreakdownTitle')"
       shadow="hover"
     >
       <el-table
@@ -289,16 +304,16 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
         size="small"
         stripe
       >
-        <el-table-column prop="hotelNombre" label="Hotel" min-width="160" sortable />
-        <el-table-column prop="areaNombre" label="Área" min-width="120" sortable />
-        <el-table-column prop="metaImporte" label="Meta Mensual" width="140" align="right" sortable>
+        <el-table-column prop="hotelNombre" :label="$t('dashboard.table.hotel')" min-width="160" sortable />
+        <el-table-column prop="areaNombre" :label="$t('dashboard.table.area')" min-width="120" sortable />
+        <el-table-column prop="metaImporte" :label="$t('dashboard.table.monthlyGoal')" width="140" align="right" sortable>
           <template #default="{ row }">
             <span class="font-semibold">{{ formatCurrency(row.metaImporte) }}</span>
           </template>
         </el-table-column>
         <el-table-column
           prop="ventasRealesUsd"
-          label="Ventas Reales"
+          :label="$t('dashboard.table.realSales')"
           width="140"
           align="right"
           sortable
@@ -309,7 +324,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
         </el-table-column>
         <el-table-column
           prop="metaEsperadaHoy"
-          label="Ritmo a Hoy"
+          :label="$t('dashboard.table.pacingToday')"
           width="130"
           align="right"
           sortable
@@ -318,7 +333,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
             <span>{{ formatCurrency(row.metaEsperadaHoy) }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="porcentajeCumplimiento" label="Avance" min-width="170" sortable>
+        <el-table-column prop="porcentajeCumplimiento" :label="$t('dashboard.table.progress')" min-width="170" sortable>
           <template #default="{ row }">
             <el-progress
               :percentage="Math.min(100, Math.max(0, row.porcentajeCumplimiento))"
@@ -329,7 +344,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
         </el-table-column>
         <el-table-column
           prop="semaforo"
-          label="Semáforo"
+          :label="$t('dashboard.table.trafficLight')"
           width="140"
           align="center"
           sortable
@@ -349,7 +364,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
     </el-card>
 
     <!-- Tarjetas de Estadísticas Rápidas de la Plataforma -->
-    <h3 class="subsection-title">Estructura y Personal</h3>
+    <h3 class="subsection-title">{{ $t('dashboard.structureAndStaff') }}</h3>
     <el-row :gutter="20" class="stats-row">
       <el-col :xs="24" :sm="12" :md="6">
         <el-card class="dashboard-card stat-card" shadow="hover">
@@ -357,7 +372,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
             <el-icon><User /></el-icon>
           </div>
           <div class="stat-content">
-            <span class="stat-label">Usuarios Activos</span>
+            <span class="stat-label">{{ $t('dashboard.activeUsers') }}</span>
             <span class="stat-value"
               >{{ activeUsers }} <small>/ {{ totalUsers }}</small></span
             >
@@ -370,9 +385,9 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
             <el-icon><Location /></el-icon>
           </div>
           <div class="stat-content">
-            <span class="stat-label">Países y Áreas</span>
+            <span class="stat-label">{{ $t('dashboard.countriesAndAreas') }}</span>
             <span class="stat-value"
-              >{{ totalCountries }} <small>p / {{ totalAreas }} á</small></span
+              >{{ totalCountries }} <small>{{ $t('dashboard.countriesCountSummary', { countries: '', areas: '' }).trim() || `p / ${totalAreas} á` }}</small></span
             >
           </div>
         </el-card>
@@ -383,7 +398,7 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
             <el-icon><Building2 :size="24" /></el-icon>
           </div>
           <div class="stat-content">
-            <span class="stat-label">Hoteles</span>
+            <span class="stat-label">{{ $t('dashboard.hotels') }}</span>
             <span class="stat-value">{{ totalHotels }}</span>
           </div>
         </el-card>
@@ -394,12 +409,12 @@ function semaforoSortMethod(a: HotelProgresoResumen, b: HotelProgresoResumen): n
             <el-icon><Setting /></el-icon>
           </div>
           <div class="stat-content">
-            <span class="stat-label">Enlaces Rápidos</span>
+            <span class="stat-label">{{ $t('dashboard.quickLinks') }}</span>
             <div class="quick-actions">
               <el-button size="small" type="primary" link @click="goToConfig()"
-                >Configuración</el-button
+                >{{ $t('nav.settings') }}</el-button
               >
-              <el-button size="small" type="primary" link @click="goToUsers">Usuarios</el-button>
+              <el-button size="small" type="primary" link @click="goToUsers">{{ $t('nav.users') }}</el-button>
             </div>
           </div>
         </el-card>
