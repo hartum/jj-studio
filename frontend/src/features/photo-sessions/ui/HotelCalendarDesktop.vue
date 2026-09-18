@@ -193,13 +193,16 @@ function navigateToNewSaleForm() {
   router.push({ path: '/ventas/nueva', query })
 }
 
+// 10. Configuración de FullCalendar
+const { fullCalendarLocale, t } = useLocale()
+
 function handleDateSelect(selectInfo: { startStr: string }) {
   if (!canCreateEvents.value) return
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   const selectedDate = new Date(selectInfo.startStr)
   if (selectedDate < today) {
-    ElMessage.warning('No se pueden crear eventos en fechas anteriores al día actual')
+    ElMessage.warning(t('calendar.cannotCreatePastEvent'))
     return
   }
   const startIso = selectInfo.startStr.slice(0, 16)
@@ -221,9 +224,6 @@ function handleEventClick(clickInfo: EventClickArg) {
     router.push(`/agenda/${props.rawSession.id}/editar`)
   }
 }
-
-// 10. Configuración de FullCalendar
-const { fullCalendarLocale } = useLocale()
 
 const calendarOptions = computed<CalendarOptions>(() => ({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],

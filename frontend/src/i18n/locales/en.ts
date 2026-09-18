@@ -88,6 +88,8 @@ export default {
     newSaleAppointment: 'New Sales Appointment',
     previousPeriod: 'Previous period',
     nextPeriod: 'Next period',
+    cannotCreatePastEvent: 'Cannot create events on dates prior to the current day',
+    openCreationOptions: 'Open creation options',
     scheduledTooltip: '{sessions} photo sessions and {sales} sales appointments scheduled',
     sessionAppointmentSingle: 'Session / Appointment',
     sessionAppointmentPlural: 'Sessions / Appointments',

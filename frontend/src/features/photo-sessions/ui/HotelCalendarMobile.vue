@@ -209,7 +209,7 @@ function handleDateSelect(selectInfo: { startStr: string }) {
   today.setHours(0, 0, 0, 0)
   const selectedDate = new Date(selectInfo.startStr)
   if (selectedDate < today) {
-    ElMessage.warning('No se pueden crear eventos en fechas anteriores al día actual')
+    ElMessage.warning(t('calendar.cannotCreatePastEvent'))
     return
   }
   const startIso = selectInfo.startStr.slice(0, 16)
@@ -233,7 +233,7 @@ function handleEventClick(clickInfo: EventClickArg) {
 }
 
 // 9. Configuración de FullCalendar Móvil
-const { fullCalendarLocale } = useLocale()
+const { fullCalendarLocale, t } = useLocale()
 
 const calendarOptions = computed<CalendarOptions>(() => ({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
@@ -333,8 +333,8 @@ onUnmounted(() => {
         class="mobile-view-segmented"
         @change="handleMobileViewChange"
       >
-        <el-radio-button value="timeGridDay">Día</el-radio-button>
-        <el-radio-button value="listWeek">Semana</el-radio-button>
+        <el-radio-button value="timeGridDay">{{ $t('calendar.day') }}</el-radio-button>
+        <el-radio-button value="listWeek">{{ $t('calendar.week') }}</el-radio-button>
       </el-radio-group>
     </div>
 
@@ -408,25 +408,25 @@ onUnmounted(() => {
       <div class="speed-dial-actions">
         <!-- Opción 1: Nueva Sesión Fotográfica -->
         <div class="speed-dial-item item-session" @click="handleNewSessionClick">
-          <span class="speed-dial-label">Nueva Sesión</span>
+          <span class="speed-dial-label">{{ $t('calendar.newSession') }}</span>
           <button
             type="button"
             class="speed-dial-btn btn-session"
-            aria-label="Nueva Sesión Fotográfica"
+            :aria-label="$t('calendar.newSession')"
           >
-            <img :src="iconoCamara" alt="Cámara" class="speed-dial-icon icon-camara" />
+            <img :src="iconoCamara" :alt="$t('calendar.camera')" class="speed-dial-icon icon-camara" />
           </button>
         </div>
 
         <!-- Opción 2: Nueva Cita de Venta -->
         <div class="speed-dial-item item-sale" @click="handleNewSaleClick">
-          <span class="speed-dial-label">Nueva Cita de Venta</span>
+          <span class="speed-dial-label">{{ $t('calendar.newSaleAppointment') }}</span>
           <button
             type="button"
             class="speed-dial-btn btn-sale"
-            aria-label="Nueva Cita de Venta"
+            :aria-label="$t('calendar.newSaleAppointment')"
           >
-            <img :src="iconoCita" alt="Cita de Venta" class="speed-dial-icon icon-cita" />
+            <img :src="iconoCita" :alt="$t('calendar.appointment')" class="speed-dial-icon icon-cita" />
           </button>
         </div>
       </div>
@@ -436,7 +436,7 @@ onUnmounted(() => {
         type="button"
         class="speed-dial-trigger"
         :class="{ 'is-active': fabMenuOpen }"
-        aria-label="Abrir opciones de creación"
+        :aria-label="$t('calendar.openCreationOptions')"
         @click="toggleFabMenu"
       >
         <el-icon :size="24" class="trigger-icon"><Plus /></el-icon>

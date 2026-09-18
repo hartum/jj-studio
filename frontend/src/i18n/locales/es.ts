@@ -88,6 +88,8 @@ export default {
     newSaleAppointment: 'Nueva Cita de Venta',
     previousPeriod: 'Periodo anterior',
     nextPeriod: 'Periodo siguiente',
+    cannotCreatePastEvent: 'No se pueden crear eventos en fechas anteriores al día actual',
+    openCreationOptions: 'Abrir opciones de creación',
     scheduledTooltip: '{sessions} sesiones fotográficas y {sales} citas de venta programadas',
     sessionAppointmentSingle: 'Sesión / Cita',
     sessionAppointmentPlural: 'Sesiones / Citas',
