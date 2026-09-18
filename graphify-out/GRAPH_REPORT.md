@@ -1,7 +1,7 @@
 # Graph Report - JJ Studio  (2026-09-18)
 
 ## Corpus Check
-- 145 files · ~239,426 words
+- 145 files · ~239,434 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `81d42b06`
+- Built from commit: `acb92582`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -453,7 +453,7 @@ Cohesion: 0.17
 Nodes (7): AuthUser, useAuthStore, isMobile, EP_LOCALES, FC_LOCALES, SupportedLocale, vue
 
 ## Knowledge Gaps
-- **643 isolated node(s):** `DeletableCalendarEvent`, `Props`, `router`, `activeAlertPanels`, `totalAlertsCount` (+638 more)
+- **643 isolated node(s):** `router`, `hotelStore`, `userStore`, `profileStore`, `sessionStore` (+638 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -461,12 +461,12 @@ Nodes (7): AuthUser, useAuthStore, isMobile, EP_LOCALES, FC_LOCALES, SupportedLo
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `usePhotoSessionForm.ts`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `useSaleAppointmentForm.ts`, `SupervisorHotelGoalCard.vue`, `ContableDashboard.vue`, `ConfiguracionView.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `GoalProgressCard.vue`, `AgendadorHotelGoalCard.vue`, `LoginView.vue`, `SaleAppointmentFormView.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `CalendarHeader.vue`, `CalendarAlertsPanel.vue`, `PhotoSessionFormView.vue`, `useDashboard.ts`?**
-  _High betweenness centrality (0.278) - this node is a cross-community bridge._
+  _High betweenness centrality (0.292) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **Why does `decryptUser()` connect `encryption.ts` to `goal.routes.ts`, `reminder.service.ts`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **What connects `DeletableCalendarEvent`, `Props`, `router` to the rest of the system?**
+- **What connects `router`, `hotelStore`, `userStore` to the rest of the system?**
   _643 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `encryption.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.051389535786368574 - nodes in this community are weakly interconnected._

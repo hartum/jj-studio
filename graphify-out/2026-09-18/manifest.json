@@ -445,9 +445,9 @@
     "semantic_hash": "0a8effa46ab27f211f151abd4237cd0b"
   },
   "frontend/src/features/photo-sessions/composables/useCalendarDelete.ts": {
-    "mtime": 1787593483.402004,
-    "ast_hash": "bdcd2be5ad734cedab8397ca7cf8c43f",
-    "semantic_hash": "bdcd2be5ad734cedab8397ca7cf8c43f"
+    "mtime": 1789716339.4869425,
+    "ast_hash": "e9ca7506b1ce0b6af90fb569342b2a9b",
+    "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts": {
     "mtime": 1789676106.8479302,
@@ -455,8 +455,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarScope.ts": {
-    "mtime": 1789657163.9248738,
-    "ast_hash": "777deb620a781ed2a2a8d4bbc4fb2512",
+    "mtime": 1789716364.7736056,
+    "ast_hash": "ba89110c00b94ab13ccc2fe70795f8e6",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/usePhotoSessionForm.ts": {
@@ -505,34 +505,34 @@
     "semantic_hash": "c9e142bd3c95a2e3f162f7dfd1f5feb6"
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarAlertsPanel.vue": {
-    "mtime": 1787850829.4573674,
-    "ast_hash": "593362c9427197286e80a3c4971b2a58",
-    "semantic_hash": "593362c9427197286e80a3c4971b2a58"
+    "mtime": 1789715945.5947123,
+    "ast_hash": "b15103a1f40861c6a346455f93179e61",
+    "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarDeleteConfirmPopover.vue": {
-    "mtime": 1787592477.9385235,
-    "ast_hash": "e8e608175df48134f554892395e53111",
-    "semantic_hash": "e8e608175df48134f554892395e53111"
+    "mtime": 1789715972.3820078,
+    "ast_hash": "76a46639eb45d358c7c8e3e4863548cf",
+    "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarDesktopToolbar.vue": {
-    "mtime": 1787592426.0745258,
-    "ast_hash": "96c165a35ae63e34d28a0d77d1152d69",
-    "semantic_hash": "96c165a35ae63e34d28a0d77d1152d69"
+    "mtime": 1789715934.073035,
+    "ast_hash": "12328dee905917f2dccd5127bb77c090",
+    "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarEventCard.vue": {
-    "mtime": 1789676139.8190143,
-    "ast_hash": "0fa005c8974680965c4819c8e2a72cd9",
+    "mtime": 1789715962.5006013,
+    "ast_hash": "da76f27e520c59871a3bd5fdf9fed355",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarHeader.vue": {
-    "mtime": 1789675524.0316951,
-    "ast_hash": "f39f3c9943848899119f7c7832845fa1",
+    "mtime": 1789715922.412996,
+    "ast_hash": "4020df21b656b9481d5764b258be3d29",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarMobileDateNavigator.vue": {
-    "mtime": 1787850829.4580524,
-    "ast_hash": "5608858cb8fbdac910c8cdacc160ae70",
-    "semantic_hash": "5608858cb8fbdac910c8cdacc160ae70"
+    "mtime": 1789716014.5709074,
+    "ast_hash": "a9b06b6a7047e3eea1237a02ea77cda3",
+    "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarMobileHeader.vue": {
     "mtime": 1787850829.458314,
@@ -1015,13 +1015,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.ts": {
-    "mtime": 1789715113.446362,
-    "ast_hash": "80cfec5c34a66753c622f891ba415963",
+    "mtime": 1789716323.8667297,
+    "ast_hash": "a75de1cf1e65868ab76416f29b213f94",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.ts": {
-    "mtime": 1789715105.3496764,
-    "ast_hash": "8cd1ee2b4ba647860ebb11be38f02a9e",
+    "mtime": 1789716313.47482,
+    "ast_hash": "0a4e62976d646a52da4798f56f28a698",
     "semantic_hash": ""
   },
   "frontend/src/i18n/useLocale.ts": {
