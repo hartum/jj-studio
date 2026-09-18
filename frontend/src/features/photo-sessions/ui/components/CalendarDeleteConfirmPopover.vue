@@ -35,7 +35,7 @@ const emit = defineEmits<{
         <el-icon class="delete-warning-icon" :size="16" color="#e6a23c">
           <WarningFilled />
         </el-icon>
-        <span class="delete-popconfirm-title">¿Eliminar este evento?</span>
+        <span class="delete-popconfirm-title">{{ $t('calendar.deleteModal.title') }}</span>
       </div>
 
       <!-- Checkbox para evento asociado -->
@@ -51,7 +51,7 @@ const emit = defineEmits<{
 
       <div class="delete-popconfirm-actions">
         <el-button size="small" plain @click="emit('update:visible', false)">
-          Cancelar
+          {{ $t('calendar.deleteModal.cancel') }}
         </el-button>
         <el-button
           size="small"
@@ -59,7 +59,7 @@ const emit = defineEmits<{
           :loading="isDeleting"
           @click="emit('confirm')"
         >
-          Sí, eliminar
+          {{ $t('calendar.deleteModal.confirm') }}
         </el-button>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
+import { useLocale } from '@/i18n/useLocale'
 
 const STORAGE_KEY = 'jj_selected_hotel_ids'
 const LEGACY_STORAGE_KEY = 'jj_selected_hotel_id'
@@ -10,6 +11,7 @@ export function useCalendarScope() {
   const route = useRoute()
   const authStore = useAuthStore()
   const hotelStore = useHotelStore()
+  const { t } = useLocale()
 
   const selectedHotelIds = ref<number[]>([])
 
@@ -45,16 +47,16 @@ export function useCalendarScope() {
     }
 
     if (selectedHotelIds.value.length === 0) {
-      return 'Todos los Hoteles'
+      return t('calendar.allHotels')
     }
 
     if (selectedHotelIds.value.length === 1) {
       const target = userHotels.value.find((h) => h.id === selectedHotelIds.value[0])
-      return target ? target.nombre : 'Todos los Hoteles'
+      return target ? target.nombre : t('calendar.allHotels')
     }
 
     if (selectedHotelIds.value.length === userHotels.value.length) {
-      return 'Todos los Hoteles'
+      return t('calendar.allHotels')
     }
 
     const selectedNames = userHotels.value
@@ -65,7 +67,7 @@ export function useCalendarScope() {
       return selectedNames.join(', ')
     }
 
-    return `${selectedNames.length} hoteles seleccionados`
+    return t('calendar.hotelsSelected', { count: selectedNames.length })
   })
 
   function initSelectedHotel() {

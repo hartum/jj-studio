@@ -3,6 +3,7 @@ import { ElMessage } from 'element-plus'
 import type { EventApi } from '@fullcalendar/core'
 import { useSessionStore } from '../stores/session.store'
 import { useSaleStore } from '@/features/sales/stores/sale.store'
+import { useLocale } from '@/i18n/useLocale'
 import type { ExtendedEventProps, EventTooltipInfo } from './useCalendarEvents'
 
 export type DeletableCalendarEvent = EventApi | EventTooltipInfo | ExtendedEventProps
@@ -11,6 +12,7 @@ export function useCalendarDelete(
   _selectedHotelIds?: Ref<number[]>,
   onSuccess?: () => void,
 ) {
+  const { t } = useLocale()
   const sessionStore = useSessionStore()
   const saleStore = useSaleStore()
 
@@ -53,10 +55,10 @@ export function useCalendarDelete(
     const type = extendedProps?.type
 
     if (type === 'session') {
-      return 'Tb Borrar cita de ventas'
+      return t('calendar.deleteModal.alsoDeleteSale')
     }
     if (type === 'sale') {
-      return 'Tb borrar sesión asociada'
+      return t('calendar.deleteModal.alsoDeleteSession')
     }
     return ''
   })
@@ -86,15 +88,15 @@ export function useCalendarDelete(
         await saleStore.deleteCitaVenta(Number(rawSale.id), shouldDeleteAssociated)
         ElMessage.success(
           shouldDeleteAssociated
-            ? 'Cita de venta y sesión asociada eliminadas correctamente'
-            : 'Cita de venta eliminada correctamente',
+            ? t('calendar.deleteModal.saleAndSessionDeleted')
+            : t('calendar.deleteModal.saleDeleted'),
         )
       } else if (rawSession?.id) {
         await sessionStore.deleteSession(Number(rawSession.id), shouldDeleteAssociated)
         ElMessage.success(
           shouldDeleteAssociated
-            ? 'Sesión de fotos y cita de ventas asociadas eliminadas correctamente'
-            : 'Sesión fotográfica eliminada correctamente',
+            ? t('calendar.deleteModal.sessionAndSaleDeleted')
+            : t('calendar.deleteModal.sessionDeleted'),
         )
       }
 
@@ -108,7 +110,7 @@ export function useCalendarDelete(
         saleStore.fetchCitasVenta(),
       ])
     } catch (err: unknown) {
-      ElMessage.error(err instanceof Error ? err.message : 'Error al eliminar el evento')
+      ElMessage.error(err instanceof Error ? err.message : t('calendar.deleteModal.deleteError'))
     } finally {
       isDeleting.value = false
       pendingDeleteEvent.value = null

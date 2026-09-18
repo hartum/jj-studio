@@ -32,7 +32,7 @@ function formatDateTime(dateStr?: string | null): string {
         <template #title>
           <div class="alerts-panel-header">
             <el-icon class="alerts-header-icon"><Bell /></el-icon>
-            <span class="alerts-header-title">Alertas Pendientes</span>
+            <span class="alerts-header-title">{{ $t('calendar.alerts.pendingAlerts') }}</span>
             <el-tag type="danger" effect="dark" round size="small" class="alerts-count-badge">
               {{ totalAlertsCount }}
             </el-tag>
@@ -42,18 +42,18 @@ function formatDateTime(dateStr?: string | null): string {
         <div class="alerts-sections-grid">
           <!-- 1. Sesiones Vencidas -->
           <div v-if="overdueSessions.length > 0" class="alert-section section-overdue">
-            <h4 class="section-title">Sesiones Vencidas ({{ overdueSessions.length }})</h4>
+            <h4 class="section-title">{{ $t('calendar.alerts.overdueSessions', { count: overdueSessions.length }) }}</h4>
             <div class="section-cards">
               <div v-for="s in overdueSessions" :key="s.id" class="alert-item-card">
                 <div class="item-details">
                   <span class="item-name">{{ s.clienteNombre }}</span>
                   <span class="item-sub">
                     {{ formatDateTime(s.fechaHoraInicio)
-                    }}{{ s.numeroHabitacion ? ` | Hab ${s.numeroHabitacion}` : '' }}
+                    }}{{ s.numeroHabitacion ? ` | ${$t('calendar.room', { room: s.numeroHabitacion })}` : '' }}
                   </span>
                 </div>
                 <el-button type="warning" @click="router.push(`/agenda/${s.id}/editar`)">
-                  Cambiar Estado
+                  {{ $t('calendar.alerts.changeStatus') }}
                 </el-button>
               </div>
             </div>
@@ -62,7 +62,7 @@ function formatDateTime(dateStr?: string | null): string {
           <!-- 2. Sesiones Sin Cita de Venta -->
           <div v-if="missingSaleSessions.length > 0" class="alert-section section-missing">
             <h4 class="section-title">
-              Sesiones Sin Cita de Venta ({{ missingSaleSessions.length }})
+              {{ $t('calendar.alerts.missingSaleSessions', { count: missingSaleSessions.length }) }}
             </h4>
             <div class="section-cards">
               <div v-for="s in missingSaleSessions" :key="s.id" class="alert-item-card">
@@ -70,11 +70,11 @@ function formatDateTime(dateStr?: string | null): string {
                   <span class="item-name">{{ s.clienteNombre }}</span>
                   <span class="item-sub">
                     {{ formatDateTime(s.fechaHoraInicio)
-                    }}{{ s.numeroHabitacion ? ` | Hab ${s.numeroHabitacion}` : '' }}
+                    }}{{ s.numeroHabitacion ? ` | ${$t('calendar.room', { room: s.numeroHabitacion })}` : '' }}
                   </span>
                 </div>
                 <el-button type="primary" @click="router.push(`/ventas/nueva?sesionId=${s.id}`)">
-                  Agendar Venta
+                  {{ $t('calendar.alerts.scheduleSale') }}
                 </el-button>
               </div>
             </div>
@@ -82,18 +82,18 @@ function formatDateTime(dateStr?: string | null): string {
 
           <!-- 3. Citas de Venta Vencidas -->
           <div v-if="overdueSales.length > 0" class="alert-section section-noshow">
-            <h4 class="section-title">Citas venta vencidas ({{ overdueSales.length }})</h4>
+            <h4 class="section-title">{{ $t('calendar.alerts.overdueSales', { count: overdueSales.length }) }}</h4>
             <div class="section-cards">
               <div v-for="s in overdueSales" :key="s.id" class="alert-item-card">
                 <div class="item-details">
                   <span class="item-name">{{ s.clienteNombre }}</span>
                   <span class="item-sub">
                     {{ formatDateTime(s.citaVenta?.fechaHoraCita)
-                    }}{{ s.numeroHabitacion ? ` | Hab ${s.numeroHabitacion}` : '' }}
+                    }}{{ s.numeroHabitacion ? ` | ${$t('calendar.room', { room: s.numeroHabitacion })}` : '' }}
                   </span>
                 </div>
                 <el-button type="warning" @click="router.push(`/ventas/${s.citaVenta?.id}/editar`)">
-                  Cambiar Estado
+                  {{ $t('calendar.alerts.changeStatus') }}
                 </el-button>
               </div>
             </div>

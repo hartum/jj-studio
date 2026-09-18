@@ -83,7 +83,7 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
     <div class="header-top-row">
       <div class="header-info">
         <h1 class="page-title">
-          <span>Agenda</span>
+          <span>{{ $t('calendar.title') }}</span>
           <span v-if="selectedHotelName" class="page-title-separator">|</span>
           <span v-if="selectedHotelName" class="page-title-hotel">{{ selectedHotelName }}</span>
         </h1>
@@ -107,7 +107,7 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
       <el-select
         v-if="hotels.length > 1"
         :model-value="hotelIds"
-        placeholder="Filtrar por Hotel"
+        :placeholder="$t('calendar.filterByHotel')"
         size="large"
         class="hotel-selector"
         multiple
@@ -164,8 +164,8 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
           class="header-action-btn"
           @click="emit('newSession')"
         >
-          <img :src="iconoCamara" alt="Cámara" class="btn-action-icon btn-icon-camara" />
-          <span class="btn-action-label">Nueva Sesión</span>
+          <img :src="iconoCamara" :alt="$t('calendar.camera')" class="btn-action-icon btn-icon-camara" />
+          <span class="btn-action-label">{{ $t('calendar.newSession') }}</span>
         </el-button>
 
         <!-- Botón Nueva Cita de Venta -->
@@ -176,8 +176,8 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
           class="header-action-btn"
           @click="emit('newSale')"
         >
-          <img :src="iconoCita" alt="Cita" class="btn-action-icon btn-icon-calendar" />
-          <span class="btn-action-label">Nueva Cita de Venta</span>
+          <img :src="iconoCita" :alt="$t('calendar.appointment')" class="btn-action-icon btn-icon-calendar" />
+          <span class="btn-action-label">{{ $t('calendar.newSaleAppointment') }}</span>
         </el-button>
       </div>
     </div>

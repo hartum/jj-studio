@@ -31,14 +31,14 @@ const emit = defineEmits<{
           :icon="ArrowLeft"
           class="toolbar-btn nav-btn"
           @click="emit('nav', 'prev')"
-          title="Periodo anterior"
+          :title="$t('calendar.previousPeriod')"
         />
         <el-button
           type="primary"
           :icon="ArrowRight"
           class="toolbar-btn nav-btn"
           @click="emit('nav', 'next')"
-          title="Periodo siguiente"
+          :title="$t('calendar.nextPeriod')"
         />
       </el-button-group>
       <el-button
@@ -46,7 +46,7 @@ const emit = defineEmits<{
         class="toolbar-btn today-btn"
         @click="emit('nav', 'today')"
       >
-        Hoy
+        {{ $t('calendar.today') }}
       </el-button>
     </div>
 
@@ -56,12 +56,12 @@ const emit = defineEmits<{
       <el-tooltip
         effect="dark"
         placement="bottom"
-        :content="`${stats.sessions} sesiones fotográficas y ${stats.sales} citas de venta programadas`"
+        :content="$t('calendar.scheduledTooltip', { sessions: stats.sessions, sales: stats.sales })"
       >
         <el-tag type="success" effect="light" round size="large" class="calendar-period-badge">
           <span class="badge-count">{{ stats.total }}</span>
           <span class="badge-label">
-            {{ stats.total === 1 ? 'Sesión / Cita' : 'Sesiones / Citas' }}
+            {{ stats.total === 1 ? $t('calendar.sessionAppointmentSingle') : $t('calendar.sessionAppointmentPlural') }}
           </span>
         </el-tag>
       </el-tooltip>
@@ -76,7 +76,7 @@ const emit = defineEmits<{
           class="toolbar-btn view-btn"
           @click="emit('changeView', 'dayGridMonth')"
         >
-          Mes
+          {{ $t('calendar.month') }}
         </el-button>
         <el-button
           :type="currentView === 'timeGridWeek' ? 'primary' : 'default'"
@@ -84,7 +84,7 @@ const emit = defineEmits<{
           class="toolbar-btn view-btn"
           @click="emit('changeView', 'timeGridWeek')"
         >
-          Semana
+          {{ $t('calendar.week') }}
         </el-button>
         <el-button
           :type="currentView === 'timeGridDay' ? 'primary' : 'default'"
@@ -92,7 +92,7 @@ const emit = defineEmits<{
           class="toolbar-btn view-btn"
           @click="emit('changeView', 'timeGridDay')"
         >
-          Día
+          {{ $t('calendar.day') }}
         </el-button>
         <el-button
           :type="currentView === 'listWeek' ? 'primary' : 'default'"
@@ -100,7 +100,7 @@ const emit = defineEmits<{
           class="toolbar-btn view-btn"
           @click="emit('changeView', 'listWeek')"
         >
-          Agenda
+          {{ $t('calendar.agenda') }}
         </el-button>
       </el-button-group>
     </div>

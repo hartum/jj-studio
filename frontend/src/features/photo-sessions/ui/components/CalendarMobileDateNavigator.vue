@@ -87,8 +87,8 @@ const totalEventsCount = computed(() => {
     <button
       type="button"
       class="nav-arrow-btn"
-      :aria-label="isWeekMode ? 'Semana anterior' : 'Día anterior'"
-      :title="isWeekMode ? 'Semana anterior' : 'Día anterior'"
+      :aria-label="isWeekMode ? $t('calendar.mobileNav.prevWeek') : $t('calendar.mobileNav.prevDay')"
+      :title="isWeekMode ? $t('calendar.mobileNav.prevWeek') : $t('calendar.mobileNav.prevDay')"
       @click="emit('prev')"
     >
       <ChevronLeft :size="20" :stroke-width="2.2" />
@@ -107,9 +107,9 @@ const totalEventsCount = computed(() => {
         :class="{ 'is-week': isWeekMode }"
         role="button"
         tabindex="0"
-        title="Ir a hoy"
+        :title="$t('calendar.mobileNav.goToToday')"
         :aria-label="
-          isWeekMode ? 'Semana actual. Clic para ir a hoy' : 'Día actual. Clic para ir a hoy'
+          isWeekMode ? $t('calendar.mobileNav.currentWeekClickToday') : $t('calendar.mobileNav.currentDayClickToday')
         "
         @click="emit('today')"
         @keydown.enter="emit('today')"
@@ -126,10 +126,10 @@ const totalEventsCount = computed(() => {
           <template v-if="isWeekMode">
             <div class="date-leaf-week-range">
               <span class="range-num">{{ startDayNumber }}</span>
-              <span class="range-separator">al</span>
+              <span class="range-separator">{{ $t('calendar.mobileNav.to') }}</span>
               <span class="range-num">{{ endDayNumber }}</span>
             </div>
-            <span class="date-leaf-subtext">{{ weekOfMonth }}ª Semana</span>
+            <span class="date-leaf-subtext">{{ $t('calendar.mobileNav.weekN', { n: weekOfMonth }) }}</span>
           </template>
 
           <!-- Modo Día: 27 / Jueves -->
@@ -145,8 +145,8 @@ const totalEventsCount = computed(() => {
     <button
       type="button"
       class="nav-arrow-btn"
-      :aria-label="isWeekMode ? 'Semana siguiente' : 'Día siguiente'"
-      :title="isWeekMode ? 'Semana siguiente' : 'Día siguiente'"
+      :aria-label="isWeekMode ? $t('calendar.mobileNav.nextWeek') : $t('calendar.mobileNav.nextDay')"
+      :title="isWeekMode ? $t('calendar.mobileNav.nextWeek') : $t('calendar.mobileNav.nextDay')"
       @click="emit('next')"
     >
       <ChevronRight :size="20" :stroke-width="2.2" />

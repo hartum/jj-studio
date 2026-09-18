@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { EventContentArg } from '@fullcalendar/core'
 import { User, Delete } from '@element-plus/icons-vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const { t } = useI18n()
 
 const emit = defineEmits<{
   (e: 'delete', event: MouseEvent): void
@@ -31,13 +33,6 @@ interface StatusConfig {
   color: string
 }
 
-const STATUS_MAP: Record<string, StatusConfig> = {
-  PROGRAMADA: { label: 'Programada', color: '#409eff' },
-  COMPLETADA: { label: 'Completada', color: '#67c23a' },
-  CANCELADA: { label: 'Cancelada', color: '#f56c6c' },
-  NO_SHOW: { label: 'No vino', color: '#e6a23c' },
-}
-
 const eventStatus = computed<StatusConfig>(() => {
   const ext = props.arg.event.extendedProps
   const rawStatus = (
@@ -47,14 +42,22 @@ const eventStatus = computed<StatusConfig>(() => {
     'PROGRAMADA'
   ) as string
   const normalized = String(rawStatus).toUpperCase()
-  const baseConfig = STATUS_MAP[normalized] || { label: rawStatus, color: '#409eff' }
+
+  const statusMap: Record<string, StatusConfig> = {
+    PROGRAMADA: { label: t('calendar.statusScheduled'), color: '#409eff' },
+    COMPLETADA: { label: t('calendar.statusCompleted'), color: '#67c23a' },
+    CANCELADA: { label: t('calendar.statusCancelled'), color: '#f56c6c' },
+    NO_SHOW: { label: t('calendar.statusNoShow'), color: '#e6a23c' },
+  }
+
+  const baseConfig = statusMap[normalized] || { label: rawStatus, color: '#409eff' }
 
   if (ext.type === 'sale' && normalized === 'COMPLETADA') {
     const rawTotal = ext.totalVentaUsd ?? ext.rawSale?.totalVentaUsd
     if (rawTotal !== undefined && rawTotal !== null && !isNaN(Number(rawTotal))) {
       const amount = Math.round(Number(rawTotal))
       return {
-        label: `Completada - ${amount}$`,
+        label: t('calendar.completedWithAmount', { amount }),
         color: baseConfig.color,
       }
     }
@@ -70,14 +73,14 @@ const eventStatus = computed<StatusConfig>(() => {
     <img
       v-if="arg.event.extendedProps.type !== 'sale'"
       :src="iconoCamara"
-      alt="Sesión Fotográfica"
+      :alt="$t('calendar.photoSession')"
       class="jj-event-type-badge jj-badge-camara"
     />
     <!-- Icono de Cita para Citas de Venta -->
     <img
       v-else
       :src="iconoCita"
-      alt="Cita de Venta"
+      :alt="$t('calendar.salesAppointment')"
       class="jj-event-type-badge jj-badge-cita"
     />
 
@@ -135,7 +138,7 @@ const eventStatus = computed<StatusConfig>(() => {
           >
             {{ arg.event.extendedProps.fotografoPrimerNombre }}
           </span>
-          <span v-else class="jj-event-photographer jj-event-unassigned">Sin asignar</span>
+          <span v-else class="jj-event-photographer jj-event-unassigned">{{ $t('calendar.unassigned') }}</span>
         </div>
       </div>
 
@@ -144,7 +147,7 @@ const eventStatus = computed<StatusConfig>(() => {
         <button
           type="button"
           class="jj-event-trash-btn"
-          title="Eliminar evento"
+          :title="$t('calendar.deleteEvent')"
           @click.stop="emit('delete', $event)"
         >
           <el-icon :size="12"><Delete /></el-icon>
