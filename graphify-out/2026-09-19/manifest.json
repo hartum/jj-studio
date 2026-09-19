@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.vue": {
-    "mtime": 1789813763.4043043,
-    "ast_hash": "8a701d752c66a83158bdd58496e533f9",
+    "mtime": 1789712321.0152268,
+    "ast_hash": "69687e4fbb285fd7468ee1191c948704",
     "semantic_hash": ""
   },
   "frontend/src/main.ts": {
@@ -1005,8 +1005,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/LanguageSelector.vue": {
-    "mtime": 1789813730.6647317,
-    "ast_hash": "4969669a270fb405a930ac7735326bb4",
+    "mtime": 1789712288.412305,
+    "ast_hash": "2a0611c5dffc8f6e9b3d98fc8c73955d",
     "semantic_hash": ""
   },
   "frontend/src/i18n/index.ts": {
