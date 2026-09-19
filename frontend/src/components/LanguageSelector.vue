@@ -1,11 +1,25 @@
 <script setup lang="ts">
 import { useLocale } from '@/i18n/useLocale'
 
+withDefaults(
+  defineProps<{
+    fullWidth?: boolean
+  }>(),
+  {
+    fullWidth: false,
+  },
+)
+
 const { locale, setLocale } = useLocale()
 </script>
 
 <template>
-  <div class="lang-selector-group" role="group" aria-label="Seleccionar idioma">
+  <div
+    class="lang-selector-group"
+    :class="{ 'full-width': fullWidth }"
+    role="group"
+    aria-label="Seleccionar idioma"
+  >
     <button
       type="button"
       class="lang-pill-btn"
@@ -41,6 +55,17 @@ const { locale, setLocale } = useLocale()
   padding: 2px;
   gap: 2px;
   user-select: none;
+}
+
+.lang-selector-group.full-width {
+  display: flex;
+  width: 100%;
+}
+
+.lang-selector-group.full-width .lang-pill-btn {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 0.8rem;
 }
 
 .lang-pill-btn {

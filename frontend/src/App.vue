@@ -122,6 +122,10 @@ onMounted(async () => {
           </div>
         </div>
 
+        <div class="sidebar-lang-wrapper">
+          <LanguageSelector full-width />
+        </div>
+
         <SidebarNav
           :can-see-agenda="canSeeAgenda"
           :can-see-config="canSeeConfig"
@@ -152,6 +156,10 @@ onMounted(async () => {
               @click="closeMobileDrawer"
               :aria-label="t('nav.closeMenu')"
             />
+          </div>
+
+          <div class="sidebar-lang-wrapper">
+            <LanguageSelector full-width />
           </div>
 
           <SidebarNav
@@ -191,9 +199,6 @@ onMounted(async () => {
             </div>
 
             <div class="toolbar-right">
-              <!-- Selector de idioma -->
-              <LanguageSelector />
-
               <!-- Usuario autenticado -->
               <div v-if="authStore.user" class="user-badge">
                 <el-avatar
@@ -276,11 +281,16 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 0.5rem 1.5rem 0.5rem;
+  padding: 0 0.5rem 1.25rem 0.5rem;
   border-bottom: 1px solid var(--sidebar-border, #e2e8f0);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   transition: border-color 0.2s ease;
   min-height: 40px;
+}
+
+.sidebar-lang-wrapper {
+  margin-bottom: 1.25rem;
+  width: 100%;
 }
 
 .brand-info {
