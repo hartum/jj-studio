@@ -116,12 +116,12 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const targetDateTime = parseLocalDateTime(fecha)
       const excludeId = excludeCitaId ? Number(excludeCitaId) : undefined
 
-      // Vendedores activos asignados al hotel (Agendadores y Fotógrafos)
+      // Vendedores activos asignados al hotel (Agendadores, Fotógrafos y Supervisores)
       const sellers = await prisma.usuario.findMany({
         where: {
           activo: true,
           deletedAt: null,
-          role: { codigo: { in: ['AGENDADOR', 'FOTOGRAFO'] } },
+          role: { codigo: { in: ['AGENDADOR', 'FOTOGRAFO', 'SUPERVISOR'] } },
           hotelesAsignados: { some: { hotelId } },
         },
         include: {

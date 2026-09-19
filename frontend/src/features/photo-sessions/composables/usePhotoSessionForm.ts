@@ -413,7 +413,7 @@ export function usePhotoSessionForm() {
     { immediate: true },
   )
 
-  // Photographers list for assignment (filtered by selected hotel)
+  // Photographers list for assignment (filtered by selected hotel, including SUPERVISOR)
   const photographers = computed(() => {
     const selectedHotelId = Number(formData.value.hotelId)
     if (!selectedHotelId) return []
@@ -422,8 +422,8 @@ export function usePhotoSessionForm() {
       const perfilCode =
         u.perfil?.code?.toUpperCase() ||
         profileStore.getProfileById(u.profileId)?.code?.toUpperCase()
-      const isFotografo = perfilCode === 'FOTOGRAFO'
-      if (!isFotografo) return false
+      const isFotografoOrSupervisor = perfilCode === 'FOTOGRAFO' || perfilCode === 'SUPERVISOR'
+      if (!isFotografoOrSupervisor) return false
       const assignedHotelIds = u.hotelIds || []
       return assignedHotelIds.some((hId) => Number(hId) === selectedHotelId)
     })

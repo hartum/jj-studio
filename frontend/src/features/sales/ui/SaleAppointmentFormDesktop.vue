@@ -718,9 +718,13 @@ const formattedSelectedSaleDateTime = computed(() => {
                         <el-tag
                           size="small"
                           :type="
-                            seller.perfilNombre.toUpperCase().includes('AGENDADOR')
-                              ? 'primary'
-                              : 'success'
+                            seller.roleCode === 'SUPERVISOR' ||
+                            seller.perfilNombre.toUpperCase().includes('SUPERVISOR')
+                              ? 'warning'
+                              : seller.roleCode === 'AGENDADOR' ||
+                                  seller.perfilNombre.toUpperCase().includes('AGENDADOR')
+                                ? 'primary'
+                                : 'success'
                           "
                           effect="light"
                           class="seller-role-tag"

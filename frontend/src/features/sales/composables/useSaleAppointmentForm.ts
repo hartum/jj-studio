@@ -173,7 +173,7 @@ export function useSaleAppointmentForm() {
     return user ? `${user.nombre} ${user.apellidos}` : t('sales.summary.unknown')
   })
 
-  // Sellers list for assignment (filtered by hotel: only Agendador and Fotógrafo)
+  // Sellers list for assignment (filtered by hotel: Agendador, Fotógrafo, and Supervisor)
   const sellers = computed(() => {
     const selectedHotelId = Number(formData.value.hotelId)
     if (!selectedHotelId) return []
@@ -184,7 +184,7 @@ export function useSaleAppointmentForm() {
         const perfilCode =
           u.perfil?.code?.toUpperCase() ||
           profileStore.getProfileById(u.profileId)?.code?.toUpperCase()
-        const allowedRoles = ['AGENDADOR', 'FOTOGRAFO']
+        const allowedRoles = ['AGENDADOR', 'FOTOGRAFO', 'SUPERVISOR']
         if (!allowedRoles.includes(perfilCode || '')) return false
         const assignedHotelIds = u.hotelIds || []
         return assignedHotelIds.some((hId) => Number(hId) === selectedHotelId)
@@ -568,9 +568,10 @@ export function useSaleAppointmentForm() {
           hotelNombre: hotelStore.hotels.find((h) => h.id === session.hotelId)?.nombre || '',
         }
         if (!isEditing.value && !formData.value.vendedorId && currentUser.value) {
-          const isAgendador = currentUser.value.roleCode?.toUpperCase() === 'AGENDADOR'
+          const role = currentUser.value.roleCode?.toUpperCase() || ''
+          const isSellerRole = ['AGENDADOR', 'SUPERVISOR'].includes(role)
           if (
-            isAgendador &&
+            isSellerRole &&
             currentUser.value.hotelIds?.some((hId) => Number(hId) === Number(session.hotelId))
           ) {
             formData.value.vendedorId = currentUser.value.id

@@ -50,12 +50,12 @@ async function getHotelAvailability(
   const dateStr = fechaHoraInicio.toISOString().slice(0, 10)
   const targetDateOnly = parseDateOnly(dateStr)
 
-  // Fotógrafos activos asignados al hotel
+  // Fotógrafos y supervisores activos asignados al hotel
   const fotografoUsers = await prisma.usuario.findMany({
     where: {
       activo: true,
       deletedAt: null,
-      role: { codigo: 'FOTOGRAFO' },
+      role: { codigo: { in: ['FOTOGRAFO', 'SUPERVISOR'] } },
       hotelesAsignados: { some: { hotelId } },
     },
     include: {
