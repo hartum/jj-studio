@@ -127,13 +127,16 @@ function selectSeller(sellerId: string | null) {
 
 const isSellerPhotographer = computed(() => {
   if (!selectedSeller.value) return false
+  if (selectedSeller.value.color) return true
   const pName = (selectedSeller.value.perfilNombre || '').toUpperCase()
   const rCode = (selectedSeller.value.roleCode || '').toUpperCase()
   return (
     selectedSeller.value.isFotografo ||
     rCode === 'FOTOGRAFO' ||
+    rCode === 'SUPERVISOR' ||
     pName.includes('FOTÓGRAFO') ||
-    pName.includes('FOTOGRAFO')
+    pName.includes('FOTOGRAFO') ||
+    pName.includes('SUPERVISOR')
   )
 })
 

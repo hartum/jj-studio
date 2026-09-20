@@ -111,6 +111,9 @@ const selectedRoleCode = computed(() => {
 })
 
 const isFotografo = computed(() => selectedRoleCode.value === 'FOTOGRAFO')
+const hasAssignedColor = computed(
+  () => selectedRoleCode.value === 'FOTOGRAFO' || selectedRoleCode.value === 'SUPERVISOR',
+)
 const isGerente = computed(() => selectedRoleCode.value === 'GERENTE')
 const isContable = computed(() => selectedRoleCode.value === 'CONTABLE')
 const isAreaRole = computed(() => isGerente.value || isContable.value)
@@ -389,7 +392,7 @@ async function handleSave() {
       tipoContrato: formData.value.tipoContrato || 'ASALARIADO',
       fechaContratacion: formData.value.fechaContratacion || null,
       imagen: formData.value.imagen,
-      color: isFotografo.value ? formData.value.color : null,
+      color: hasAssignedColor.value ? formData.value.color : null,
       areaIds: isAreaRole.value ? formData.value.areaIds : [],
       hotelIds: isSupervisorOrFotografo.value ? formData.value.hotelIds : [],
       ...(formData.value.password ? { password: formData.value.password } : {}),
@@ -449,7 +452,7 @@ async function handleSave() {
             shape="circle"
             :size="90"
             :style="{
-              backgroundColor: getUserBgColor(isFotografo ? formData.color : null),
+              backgroundColor: getUserBgColor(hasAssignedColor ? formData.color : null),
               color: '#ffffff',
               fontWeight: '700',
               fontSize: '2rem',
@@ -590,7 +593,7 @@ async function handleSave() {
               </el-select>
             </el-form-item>
 
-            <el-form-item v-if="isFotografo" :label="$t('users.form.assignedColor')">
+            <el-form-item v-if="hasAssignedColor" :label="$t('users.form.assignedColor')">
               <div style="display: flex; align-items: center; gap: 12px">
                 <el-color-picker v-model="formData.color" />
                 <span

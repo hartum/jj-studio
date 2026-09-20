@@ -259,7 +259,7 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
         <el-table-column :label="$t('users.table.color')" width="75" align="center">
           <template #default="{ row }">
             <div
-              v-if="row.perfil?.code?.toUpperCase() === 'FOTOGRAFO'"
+              v-if="['FOTOGRAFO', 'SUPERVISOR'].includes(row.perfil?.code?.toUpperCase() || '')"
               style="display: flex; align-items: center; justify-content: center; gap: 6px"
             >
               <span
