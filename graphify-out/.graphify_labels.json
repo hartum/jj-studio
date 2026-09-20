@@ -17,7 +17,7 @@
   "15": "ComisionesConfig.vue",
   "16": "App.vue",
   "17": "1. Requisitos Funcionales",
-  "18": "vue",
+  "18": "usePhotoSessionForm.ts",
   "19": "PhotoSessionFormDesktop.vue",
   "20": "CalendarioLaboral.vue",
   "21": "compilerOptions",
@@ -59,7 +59,7 @@
   "57": "PhotoSessionFormView.vue",
   "58": "scripts",
   "59": "commission.service.ts",
-  "60": "ForgotPasswordView.vue",
+  "60": "vue",
   "61": "CalendarHeader.vue",
   "62": "handleAccordionChange",
   "63": ".prettierrc.json",
@@ -92,8 +92,12 @@
   "90": "LanguageSelector.vue",
   "91": "useLocale.ts",
   "92": "CalendarEventCard.vue",
-  "93": "auth.store.ts",
-  "94": "useDashboard.ts",
+  "93": "src/index.ts",
+  "94": "google-calendar.service.ts",
   "95": "CalendarDeleteConfirmPopover.vue",
-  "96": "HotelCalendarView.vue"
+  "96": "user.routes.ts",
+  "97": "sale.routes.ts",
+  "98": "session.routes.ts",
+  "99": "CalendarAlertsPanel.vue",
+  "100": "calendario-laboral.routes.ts"
 }

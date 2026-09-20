@@ -85,8 +85,8 @@
     "semantic_hash": "cf8cd866d45ae3dfd5e008bbbeef80d5"
   },
   "backend/src/features/commissions/application/commission.service.ts": {
-    "mtime": 1789399901.5421193,
-    "ast_hash": "09f81d818f9f5df66f892fded51b7dd4",
+    "mtime": 1789890248.3462152,
+    "ast_hash": "4adf321a5b11d0e5a39513d7ff9fb069",
     "semantic_hash": ""
   },
   "backend/src/features/commissions/domain/commission.model.ts": {
@@ -150,8 +150,8 @@
     "semantic_hash": "0fc2164ef77bcca3697dea2ff7126a08"
   },
   "backend/src/features/photo-sessions/infrastructure/session.routes.ts": {
-    "mtime": 1789844681.0357401,
-    "ast_hash": "db9a88f157a0a84ab891f6cb9b59e044",
+    "mtime": 1789890275.6776087,
+    "ast_hash": "6c90a847a497b8d4e0d84d494e8c3550",
     "semantic_hash": ""
   },
   "backend/src/features/project-management/application/ports/project.repository.ts": {
@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1789715124.1363893,
-    "ast_hash": "79d812826004766a25c0a6271ed474c9",
+    "mtime": 1789891822.4974842,
+    "ast_hash": "e7795e93875635d383abd7e65c748c1b",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/InicioView.vue": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1789722984.6552858,
-    "ast_hash": "b902d02b45317a57aa373cbbc456ef8e",
+    "mtime": 1789891811.5122843,
+    "ast_hash": "a3ba4468161e690d0ca8095a3b4fec2e",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1789722984.6544425,
-    "ast_hash": "75ab775edbb400b6464d3fc4a72213e1",
+    "mtime": 1789891805.584165,
+    "ast_hash": "fddbfb0a44b32ea2abf88283d2c55ed5",
     "semantic_hash": ""
   }
 }

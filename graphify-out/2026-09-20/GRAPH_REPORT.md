@@ -1,16 +1,16 @@
-# Graph Report - JJ Studio  (2026-09-19)
+# Graph Report - JJ Studio  (2026-09-20)
 
 ## Corpus Check
-- 145 files · ~244,658 words
+- 145 files · ~244,693 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1271 nodes · 1737 edges · 93 communities (73 shown, 20 thin omitted)
+- 1272 nodes · 1738 edges · 97 communities (74 shown, 23 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 18 edges (avg confidence: 0.77)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `63a4cbfd`
+- Built from commit: `57cc732b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -33,7 +33,7 @@
 - ComisionesConfig.vue
 - App.vue
 - 1. Requisitos Funcionales
-- usePhotoSessionForm.ts
+- vue
 - PhotoSessionFormDesktop.vue
 - CalendarioLaboral.vue
 - compilerOptions
@@ -72,7 +72,7 @@
 - SidebarNav.vue
 - user-avatar.ts
 - SaleAppointmentFormView.vue
-- CalendarAlertsPanel.vue
+- PhotoSessionFormView.vue
 - scripts
 - commission.service.ts
 - ForgotPasswordView.vue
@@ -98,8 +98,12 @@
 - vue-ios-style-datepicker
 - vue-router
 - LanguageSelector.vue
-- vue
+- useLocale.ts
+- CalendarEventCard.vue
+- auth.store.ts
 - useDashboard.ts
+- CalendarDeleteConfirmPopover.vue
+- HotelCalendarView.vue
 
 ## God Nodes (most connected - your core abstractions)
 1. `vue` - 59 edges
@@ -128,7 +132,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (93 total, 20 thin omitted)
+## Communities (97 total, 23 thin omitted)
 
 ### Community 0 - "encryption.ts"
 Cohesion: 0.06
@@ -140,7 +144,7 @@ Nodes (13): element-plus, dependencies, element-plus, @fullcalendar/daygrid, @fu
 
 ### Community 2 - "UsuarioFormView.vue"
 Cohesion: 0.04
-Nodes (38): activeTab, assignableProfiles, assignedAreaIdsByOtherRoleUsers, assignedAreaNames, assignedHotelIdsByOtherSupervisores, assignedHotelNames, assignedNames, authStore (+30 more)
+Nodes (39): activeTab, assignableProfiles, assignedAreaIdsByOtherRoleUsers, assignedAreaNames, assignedHotelIdsByOtherSupervisores, assignedHotelNames, assignedNames, authStore (+31 more)
 
 ### Community 3 - "devDependencies"
 Cohesion: 0.05
@@ -168,11 +172,11 @@ Nodes (28): AreaGroup, assignedPhotographers, authStore, availableHotels, Countr
 
 ### Community 8 - "HotelCalendarDesktop.vue"
 Cohesion: 0.06
-Nodes (27): useCalendarScope(), emit, Props, {
+Nodes (25): useCalendarScope(), {
   calendarEvents,
   highlightEventAndAssociated,
   clearEventHighlights,
-}, calendarOptions, calendarRef, canCreateEvents, canDeleteEvents (+19 more)
+}, calendarOptions, calendarRef, canCreateEvents, canDeleteEvents, canEditEvents, currentCalendarTitle (+17 more)
 
 ### Community 9 - "EmailTemplatesView.vue"
 Cohesion: 0.08
@@ -210,9 +214,9 @@ Nodes (17): authStore, canSeeAgenda, canSeeConfig, canSeeUsers, closeMobileDrawe
 Cohesion: 0.11
 Nodes (18): 1. Requisitos Funcionales, 2. Requisitos Técnicos y de Arquitectura, 3. Diseño de Base de Datos (Propuesta de Entidades), 4. Flujos de Usuario Detallados, 5. Plan de Trabajo por Fases, 6. Consideraciones Especiales de Negocio, A. Gestión de Estructura Organizativa, Análisis de Requisitos y Plan de Trabajo - Proyecto JJ Studio (+10 more)
 
-### Community 18 - "usePhotoSessionForm.ts"
+### Community 18 - "vue"
 Cohesion: 0.14
-Nodes (15): useCalendarAlerts(), DeletableCalendarEvent, useCalendarDelete(), EventTooltipInfo, ExtendedEventProps, useCalendarEvents(), HotelDisponibilidad, usePhotoSessionForm() (+7 more)
+Nodes (17): useCalendarAlerts(), DeletableCalendarEvent, useCalendarDelete(), EventTooltipInfo, ExtendedEventProps, useCalendarEvents(), HotelDisponibilidad, CreateSesionPayload (+9 more)
 
 ### Community 19 - "PhotoSessionFormDesktop.vue"
 Cohesion: 0.10
@@ -397,9 +401,9 @@ Nodes (6): AreaNode, CountryNode, emit, handleHotelClick(), handleNavClick(), Ho
 Cohesion: 0.40
 Nodes (3): useSaleAppointmentForm(), form, isMobile
 
-### Community 57 - "CalendarAlertsPanel.vue"
-Cohesion: 0.33
-Nodes (4): activeAlertPanels, Props, router, totalAlertsCount
+### Community 57 - "PhotoSessionFormView.vue"
+Cohesion: 0.40
+Nodes (3): usePhotoSessionForm(), form, isMobile
 
 ### Community 58 - "scripts"
 Cohesion: 0.33
@@ -437,28 +441,32 @@ Nodes (3): devDependencies, @types/node, @types/node
 Cohesion: 0.29
 Nodes (6): engines, node, name, private, type, version
 
-### Community 92 - "vue"
-Cohesion: 0.11
-Nodes (12): AuthUser, useAuthStore, emit, eventStatus, Props, StatusConfig, { t }, isMobile (+4 more)
+### Community 91 - "useLocale.ts"
+Cohesion: 0.40
+Nodes (3): EP_LOCALES, FC_LOCALES, SupportedLocale
+
+### Community 92 - "CalendarEventCard.vue"
+Cohesion: 0.29
+Nodes (5): emit, eventStatus, Props, StatusConfig, { t }
 
 ## Knowledge Gaps
-- **659 isolated node(s):** `HotelDisponibilidad`, `SaleAppointmentFormData`, `SessionContextInfo`, `VendedorDisponibilidadItem`, `VendedoresDisponibilidadResponse` (+654 more)
+- **660 isolated node(s):** `props`, `router`, `{ t, locale }`, `showSessionsList`, `showSellersList` (+655 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `usePhotoSessionForm.ts`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `useSaleAppointmentForm.ts`, `SupervisorHotelGoalCard.vue`, `ContableDashboard.vue`, `ConfiguracionView.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `GoalProgressCard.vue`, `AgendadorHotelGoalCard.vue`, `LoginView.vue`, `SaleAppointmentFormView.vue`, `CalendarAlertsPanel.vue`, `ForgotPasswordView.vue`, `CalendarHeader.vue`, `useDashboard.ts`?**
-  _High betweenness centrality (0.335) - this node is a cross-community bridge._
+- **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `useSaleAppointmentForm.ts`, `SupervisorHotelGoalCard.vue`, `ContableDashboard.vue`, `ConfiguracionView.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `GoalProgressCard.vue`, `AgendadorHotelGoalCard.vue`, `LoginView.vue`, `SaleAppointmentFormView.vue`, `PhotoSessionFormView.vue`, `ForgotPasswordView.vue`, `CalendarHeader.vue`, `useLocale.ts`, `CalendarEventCard.vue`, `auth.store.ts`, `useDashboard.ts`, `HotelCalendarView.vue`?**
+  _High betweenness centrality (0.340) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
-  _High betweenness centrality (0.011) - this node is a cross-community bridge._
-- **What connects `HotelDisponibilidad`, `SaleAppointmentFormData`, `SessionContextInfo` to the rest of the system?**
-  _659 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
+- **What connects `props`, `router`, `{ t, locale }` to the rest of the system?**
+  _660 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `encryption.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.06101409636019356 - nodes in this community are weakly interconnected._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
-  _Cohesion score 0.04 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0392156862745098 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
 - **Should `HotelCalendarMobile.vue` be split into smaller, more focused modules?**
