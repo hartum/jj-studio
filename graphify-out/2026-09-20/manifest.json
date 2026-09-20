@@ -555,13 +555,13 @@
     "semantic_hash": "5bc8472b67677845c528e85e91cbc45f"
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue": {
-    "mtime": 1789845851.5655074,
-    "ast_hash": "b0c4f3cfc2ec224c20021daf5a1b433f",
+    "mtime": 1789845063.7532725,
+    "ast_hash": "8d71a1f682b5424e95903c53cbd30579",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue": {
-    "mtime": 1789845857.2390785,
-    "ast_hash": "1c1ac88f4643e9b0c14f8ee57b1ef9c0",
+    "mtime": 1789845067.8873417,
+    "ast_hash": "f4fcedb8c5a4415907236ba158099a02",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormView.vue": {
@@ -610,13 +610,13 @@
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuarioFormView.vue": {
-    "mtime": 1789845416.4654803,
-    "ast_hash": "273a894bcb8fed36c9d08eb72df4de3f",
+    "mtime": 1789718002.5707462,
+    "ast_hash": "4b2f9a08260a2ba46495cd13a9d868d7",
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuariosView.vue": {
-    "mtime": 1789845422.3894439,
-    "ast_hash": "fec9f472331317be6d0a66c6d4197a56",
+    "mtime": 1789717951.9346402,
+    "ast_hash": "689b88ddce7735549a52b530707ffb58",
     "semantic_hash": ""
   },
   "frontend/src/features/users/utils/user-avatar.ts": {

@@ -17,7 +17,7 @@
   "15": "ComisionesConfig.vue",
   "16": "App.vue",
   "17": "1. Requisitos Funcionales",
-  "18": "vue",
+  "18": "usePhotoSessionForm.ts",
   "19": "PhotoSessionFormDesktop.vue",
   "20": "CalendarioLaboral.vue",
   "21": "compilerOptions",
@@ -56,7 +56,7 @@
   "54": "SidebarNav.vue",
   "55": "user-avatar.ts",
   "56": "SaleAppointmentFormView.vue",
-  "57": "PhotoSessionFormView.vue",
+  "57": "CalendarAlertsPanel.vue",
   "58": "scripts",
   "59": "commission.service.ts",
   "60": "ForgotPasswordView.vue",
@@ -90,10 +90,6 @@
   "88": "vue-ios-style-datepicker",
   "89": "vue-router",
   "90": "LanguageSelector.vue",
-  "91": "useLocale.ts",
-  "92": "CalendarEventCard.vue",
-  "93": "auth.store.ts",
-  "94": "useDashboard.ts",
-  "95": "CalendarDeleteConfirmPopover.vue",
-  "96": "HotelCalendarView.vue"
+  "92": "vue",
+  "94": "useDashboard.ts"
 }
