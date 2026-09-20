@@ -398,6 +398,15 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
       const { pct, baseCalculoUsd: userBaseCalculoUsd, importe } =
         await calculateUserCommission(fotografo.id, defaultPct, baseCalculoUsd, totalVentaUsd)
 
+      // Clean any other user previously marked as FOTOGRAFO for this sale
+      await prisma.comision.deleteMany({
+        where: {
+          citaVentaId: cita.id,
+          rolEnVenta: 'FOTOGRAFO',
+          usuarioId: { not: fotografo.id },
+        },
+      })
+
       await prisma.comision.upsert({
         where: {
           citaVentaId_usuarioId_rolEnVenta: {
@@ -428,6 +437,13 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
         },
       })
     }
+  } else {
+    await prisma.comision.deleteMany({
+      where: {
+        citaVentaId: cita.id,
+        rolEnVenta: 'FOTOGRAFO',
+      },
+    })
   }
 
   // 2. Vendedor / Agendador Commission (asignado a la cita o creador de la sesión)
@@ -506,6 +522,16 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
     include: { usuario: true },
   })
 
+  // Clean any supervisor commission for users no longer assigned as supervisor to this hotel
+  const currentSupervisorIds = hotelSupervisores.map((h) => h.usuario.id)
+  await prisma.comision.deleteMany({
+    where: {
+      citaVentaId: cita.id,
+      rolEnVenta: 'SUPERVISOR',
+      usuarioId: { notIn: currentSupervisorIds },
+    },
+  })
+
   for (const item of hotelSupervisores) {
     const supervisor = item.usuario
     const { pct, baseCalculoUsd: userBaseCalculoUsd, importe } =
@@ -552,6 +578,16 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
       },
     },
     include: { usuario: true },
+  })
+
+  // Clean any manager commission for users no longer assigned as manager to this area
+  const currentGerenteIds = areaGerentes.map((a) => a.usuario.id)
+  await prisma.comision.deleteMany({
+    where: {
+      citaVentaId: cita.id,
+      rolEnVenta: 'GERENTE',
+      usuarioId: { notIn: currentGerenteIds },
+    },
   })
 
   for (const item of areaGerentes) {
@@ -619,10 +655,25 @@ export async function recalculateCommissionsForUser(usuarioId: string): Promise<
     select: { id: true },
   })
 
+  const userHotels = await prisma.usuarioHotel.findMany({
+    where: { usuarioId },
+    select: { hotelId: true },
+  })
+  const hotelIds = userHotels.map((uh) => uh.hotelId)
+
+  const salesAsSupervisor = await prisma.citaVenta.findMany({
+    where: {
+      estado: 'COMPLETADA',
+      hotelId: { in: hotelIds },
+    },
+    select: { id: true },
+  })
+
   const allCitaIds = new Set<number>([
     ...userCommissions.map((c) => c.citaVentaId),
     ...salesAsFotografo.map((s) => s.id),
     ...salesAsVendedor.map((s) => s.id),
+    ...salesAsSupervisor.map((s) => s.id),
   ])
 
   for (const citaId of allCitaIds) {

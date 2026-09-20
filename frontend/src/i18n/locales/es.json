@@ -225,9 +225,10 @@
     "commissionUpdateError": "Error al actualizar estado",
     "commissions": {
       "formulaGerente": "{pct}% × (Ventas − {tax}% impuestos)",
-      "formulaSupervisor": "{pct}% × (Ventas del hotel − {tax}% impuestos)",
+      "formulaSupervisor": "{pct}% hotel + {fotoPct}% fotos + {ventaPct}% ventas",
       "formulaGeneral": "{pct}% × (Venta − {tax}% impuestos)",
       "tooltip": "La comisión se calcula sobre la base neta tras deducir el {tax}% de retención de impuestos: {formula}",
+      "tooltipSupervisor": "Comisiones acumulativas: {pct}% por supervisión del hotel + {fotoPct}% por sesiones de fotos realizadas + {ventaPct}% por ventas realizadas (sobre base neta tras {tax}% impuestos).",
       "contractFreelance": "🔵 Sin Salario / Freelance",
       "contractSalaried": "🟢 Asalariado"
     },

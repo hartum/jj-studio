@@ -225,9 +225,10 @@
     "commissionUpdateError": "Error updating status",
     "commissions": {
       "formulaGerente": "{pct}% × (Sales − {tax}% tax)",
-      "formulaSupervisor": "{pct}% × (Hotel sales − {tax}% tax)",
+      "formulaSupervisor": "{pct}% hotel + {fotoPct}% photos + {ventaPct}% sales",
       "formulaGeneral": "{pct}% × (Sale − {tax}% tax)",
       "tooltip": "The commission is calculated on the net base after deducting {tax}% tax withholding: {formula}",
+      "tooltipSupervisor": "Cumulative commissions: {pct}% hotel supervision + {fotoPct}% photos taken + {ventaPct}% sales closed (on net base after {tax}% tax).",
       "contractFreelance": "🔵 Freelance / Commission-only",
       "contractSalaried": "🟢 Salaried"
     },

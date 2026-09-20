@@ -820,7 +820,15 @@ export function useDashboard() {
     }
     if (code === 'SUPERVISOR') {
       const pct = config?.supervisorPct ?? 2
-      return t('dashboard.commissions.formulaSupervisor', { pct, tax })
+      const fotoPct =
+        contrato === 'SIN_SALARIO'
+          ? (config?.fotografoSinSalarioPct ?? 20)
+          : (config?.fotografoAsalariadoPct ?? 14)
+      const ventaPct =
+        contrato === 'SIN_SALARIO'
+          ? (config?.vendedorSinSalarioPct ?? 8)
+          : (config?.vendedorAsalariadoPct ?? 6)
+      return t('dashboard.commissions.formulaSupervisor', { pct, fotoPct, ventaPct, tax })
     }
     if (code === 'FOTOGRAFO') {
       const pct =
@@ -841,6 +849,24 @@ export function useDashboard() {
 
   const myCommissionTooltip = computed(() => {
     const tax = currentImpuestoPct.value
+    const code = currentUser.value?.roleCode?.toUpperCase()
+    const contrato = currentUser.value?.tipoContrato
+    const config = commissionStore.effectiveConfig
+    const fotoPct =
+      contrato === 'SIN_SALARIO'
+        ? (config?.fotografoSinSalarioPct ?? 20)
+        : (config?.fotografoAsalariadoPct ?? 14)
+    const ventaPct =
+      contrato === 'SIN_SALARIO'
+        ? (config?.vendedorSinSalarioPct ?? 8)
+        : (config?.vendedorAsalariadoPct ?? 6)
+
+    if (code === 'SUPERVISOR') {
+      const pct = currentUserSpecialConfig.value
+        ? currentUserSpecialConfig.value.porcentajeComision
+        : (config?.supervisorPct ?? 2)
+      return t('dashboard.commissions.tooltipSupervisor', { pct, fotoPct, ventaPct, tax })
+    }
     return t('dashboard.commissions.tooltip', {
       tax,
       formula: myCommissionFormula.value,

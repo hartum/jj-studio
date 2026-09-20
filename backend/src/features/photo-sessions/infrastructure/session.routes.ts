@@ -7,6 +7,7 @@ import {
   deleteCitaVentaFromGoogle,
 } from '../../integrations/google-calendar/google-calendar.service.js'
 import { registrarAudit, formatCreadorOriginal } from '../../audit-log/application/audit-log.service.js'
+import { calculateAndSaveCommissionsForSale } from '../../commissions/application/commission.service.js'
 
 function parseLocalDateTime(dateStr: string): Date {
   if (!dateStr) return new Date()
@@ -706,6 +707,18 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         googleEventId = await syncSesionToGoogle(actualizada.id)
       } catch (gErr) {
         fastify.log.error(gErr, 'Error al actualizar sesión en Google Calendar')
+      }
+
+      // Si la sesión tiene una cita de venta asociada y cambió el fotógrafo o el hotel, recalcular comisiones
+      if (existing.fotografoId !== actualizada.fotografoId || existing.hotelId !== actualizada.hotelId) {
+        const citaAsociada = await prisma.citaVenta.findUnique({
+          where: { sesionId: actualizada.id },
+        })
+        if (citaAsociada && citaAsociada.estado === 'COMPLETADA') {
+          await calculateAndSaveCommissionsForSale(citaAsociada.id).catch((cErr) => {
+            fastify.log.error(cErr, 'Error al recalcular comisiones de la venta tras cambio de sesión')
+          })
+        }
       }
 
       const decActualizada = decryptSesion(actualizada)!
