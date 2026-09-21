@@ -11,16 +11,9 @@ import {
   getRoleSvg,
   getRoleTagType,
 } from '@/features/users/utils/user-avatar'
-import {
-  ArrowLeft,
-  Check,
-  Close,
-  Upload,
-  Delete,
-  Location,
-} from '@element-plus/icons-vue'
+import { ArrowLeft, Check, Close, Upload, Delete, Location } from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, type ColorPickerInstance } from 'element-plus'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
 import { getRolePermissions, canEditUser, type RoleCode } from '@/shared/permissions'
 import { useLocale } from '@/i18n/useLocale'
@@ -47,6 +40,34 @@ const activeTab = ref<'datos' | 'calendario'>('datos')
 const fileInput = ref<HTMLInputElement | null>(null)
 const cropperDialogVisible = ref(false)
 const imageToCrop = ref<string | null>(null)
+const colorPickerRef = ref<ColorPickerInstance | null>(null)
+
+function onColorActiveChange(val: string | null) {
+  if (val) {
+    formData.value.color = val
+  }
+}
+
+function onColorPickerShow() {
+  setTimeout(() => {
+    const poppers = document.querySelectorAll('.user-color-dropdown-popper')
+    poppers.forEach((popper) => {
+      if (!popper.querySelector('.color-picker-close-btn')) {
+        const btn = document.createElement('button')
+        btn.className = 'color-picker-close-btn'
+        btn.type = 'button'
+        btn.innerHTML = '&times;'
+        btn.setAttribute('aria-label', 'Cerrar')
+        btn.onclick = (e) => {
+          e.stopPropagation()
+          e.preventDefault()
+          colorPickerRef.value?.hide()
+        }
+        popper.appendChild(btn)
+      }
+    })
+  }, 0)
+}
 
 const formData = ref({
   nombre: '',
@@ -104,7 +125,6 @@ const selectedRoleCode = computed(() => {
   return selectedProfile.value?.code?.toUpperCase() || ''
 })
 
-const isFotografo = computed(() => selectedRoleCode.value === 'FOTOGRAFO')
 const hasAssignedColor = computed(
   () => selectedRoleCode.value === 'FOTOGRAFO' || selectedRoleCode.value === 'SUPERVISOR',
 )
@@ -118,9 +138,7 @@ const isSupervisorOrFotografo = computed(
     selectedRoleCode.value === 'AGENDADOR',
 )
 const isGlobalAccess = computed(
-  () =>
-    selectedRoleCode.value === 'SUPERUSUARIO' ||
-    selectedRoleCode.value === 'ADMIN',
+  () => selectedRoleCode.value === 'SUPERUSUARIO' || selectedRoleCode.value === 'ADMIN',
 )
 
 const isStatusDisabled = computed(() => {
@@ -409,11 +427,7 @@ async function handleSave() {
             {{ isEditing ? $t('users.form.titleEdit') : $t('users.form.titleNew') }}
           </h1>
           <p class="page-subtitle">
-            {{
-              isEditing
-                ? $t('users.form.subtitleEdit')
-                : $t('users.form.subtitleNew')
-            }}
+            {{ isEditing ? $t('users.form.subtitleEdit') : $t('users.form.subtitleNew') }}
           </p>
         </div>
       </div>
@@ -482,19 +496,32 @@ async function handleSave() {
         <el-tab-pane :label="$t('users.form.userDataTab')" name="datos">
           <div class="tab-pane-content">
             <el-form-item :label="$t('users.form.firstName')" required>
-              <el-input v-model="formData.nombre" :placeholder="$t('users.form.firstNamePlaceholder')" />
+              <el-input
+                v-model="formData.nombre"
+                :placeholder="$t('users.form.firstNamePlaceholder')"
+              />
             </el-form-item>
 
             <el-form-item :label="$t('users.form.lastName')" required>
-              <el-input v-model="formData.apellidos" :placeholder="$t('users.form.lastNamePlaceholder')" />
+              <el-input
+                v-model="formData.apellidos"
+                :placeholder="$t('users.form.lastNamePlaceholder')"
+              />
             </el-form-item>
 
-            <el-form-item :label="isEditing ? $t('users.form.password') : $t('users.form.passwordRequired')" :required="!isEditing">
+            <el-form-item
+              :label="isEditing ? $t('users.form.password') : $t('users.form.passwordRequired')"
+              :required="!isEditing"
+            >
               <el-input
                 v-model="formData.password"
                 type="password"
                 show-password
-                :placeholder="isEditing ? $t('users.form.passwordEditPlaceholder') : $t('users.form.passwordNewPlaceholder')"
+                :placeholder="
+                  isEditing
+                    ? $t('users.form.passwordEditPlaceholder')
+                    : $t('users.form.passwordNewPlaceholder')
+                "
               />
             </el-form-item>
 
@@ -503,7 +530,10 @@ async function handleSave() {
             </el-form-item>
 
             <el-form-item :label="$t('users.form.phone')">
-              <el-input v-model="formData.telefono" :placeholder="$t('users.form.phonePlaceholder')" />
+              <el-input
+                v-model="formData.telefono"
+                :placeholder="$t('users.form.phonePlaceholder')"
+              />
             </el-form-item>
 
             <el-form-item :label="$t('users.form.hireDate')">
@@ -577,15 +607,18 @@ async function handleSave() {
             </el-form-item>
 
             <el-form-item v-if="hasAssignedColor" :label="$t('users.form.assignedColor')">
-              <div style="display: flex; align-items: center; gap: 12px">
-                <el-color-picker v-model="formData.color" />
-                <span
-                  v-if="formData.color"
-                  style="font-size: 0.9rem; font-weight: 500; font-family: monospace"
-                >
+              <div class="color-picker-container" @click="onColorPickerShow">
+                <el-color-picker
+                  ref="colorPickerRef"
+                  v-model="formData.color"
+                  popper-class="user-color-dropdown-popper"
+                  @active-change="onColorActiveChange"
+                  @focus="onColorPickerShow"
+                />
+                <span v-if="formData.color" class="color-hex-label">
                   {{ formData.color }}
                 </span>
-                <span v-else style="font-size: 0.85rem; color: var(--el-text-color-secondary)">
+                <span v-else class="no-color-label">
                   {{ $t('users.form.noColorAssigned') }}
                 </span>
               </div>
@@ -609,14 +642,14 @@ async function handleSave() {
                     effect="light"
                     size="large"
                   >
-                    <el-icon style="margin-right: 4px; vertical-align: middle"
-                      ><Location
-                    /></el-icon>
+                    <el-icon style="margin-right: 4px; vertical-align: middle">
+                      <Location />
+                    </el-icon>
                     <span>{{ area.nombre }} ({{ area.paisNombre }})</span>
                   </el-tag>
-                  <span v-if="assignedAreaNames.length === 0" class="empty-hint"
-                    >{{ $t('users.form.noAssignedAreas') }}</span
-                  >
+                  <span v-if="assignedAreaNames.length === 0" class="empty-hint">
+                    {{ $t('users.form.noAssignedAreas') }}
+                  </span>
                 </div>
                 <el-select
                   v-else
@@ -646,7 +679,11 @@ async function handleSave() {
                           v-if="assignedAreaIdsByOtherRoleUsers.has(area.id)"
                           class="disabled-label"
                         >
-                          {{ isGerente ? $t('users.form.assignedToOtherManager') : $t('users.form.assignedToOtherAccountant') }}
+                          {{
+                            isGerente
+                              ? $t('users.form.assignedToOtherManager')
+                              : $t('users.form.assignedToOtherAccountant')
+                          }}
                         </small>
                       </div>
                     </el-option>
@@ -660,7 +697,10 @@ async function handleSave() {
                 <small class="assignment-hint">
                   {{
                     $t('users.form.assignedHotelsHint', {
-                      role: selectedRoleCode === 'SUPERVISOR' ? $t('users.form.roleSupervisor') : $t('users.form.rolePhotographer')
+                      role:
+                        selectedRoleCode === 'SUPERVISOR'
+                          ? $t('users.form.roleSupervisor')
+                          : $t('users.form.rolePhotographer'),
                     })
                   }}
                 </small>
@@ -675,16 +715,16 @@ async function handleSave() {
                     effect="light"
                     size="large"
                   >
-                    <el-icon style="margin-right: 4px; vertical-align: middle"
-                      ><Building2 :size="16"
-                    /></el-icon>
-                    <span
-                      >{{ hotel.nombre }} ({{ hotel.paisNombre }} — {{ hotel.areaNombre }})</span
-                    >
+                    <el-icon style="margin-right: 4px; vertical-align: middle">
+                      <Building2 :size="16" />
+                    </el-icon>
+                    <span>
+                      {{ hotel.nombre }} ({{ hotel.paisNombre }} — {{ hotel.areaNombre }})
+                    </span>
                   </el-tag>
-                  <span v-if="assignedHotelNames.length === 0" class="empty-hint"
-                    >{{ $t('users.form.noAssignedHotels') }}</span
-                  >
+                  <span v-if="assignedHotelNames.length === 0" class="empty-hint">
+                    {{ $t('users.form.noAssignedHotels') }}
+                  </span>
                 </div>
 
                 <el-select
@@ -760,36 +800,41 @@ async function handleSave() {
             </template>
 
             <el-form-item :label="$t('users.form.contractType')">
-              <el-switch
-                v-model="formData.tipoContrato"
-                active-value="ASALARIADO"
-                inactive-value="SIN_SALARIO"
-                :active-text="$t('users.form.salaried')"
-                :inactive-text="$t('users.form.freelance')"
-              />
-              <small class="assignment-hint"> &nbsp; {{ $t('users.form.contractTypeHint') }} </small>
+              <div class="contract-type-container">
+                <el-radio-group v-model="formData.tipoContrato">
+                  <el-radio-button value="ASALARIADO" :label="'ASALARIADO'">
+                    {{ $t('users.form.salaried') }}
+                  </el-radio-button>
+                  <el-radio-button value="SIN_SALARIO" :label="'SIN_SALARIO'">
+                    {{ $t('users.form.freelance') }}
+                  </el-radio-button>
+                </el-radio-group>
+                <small class="assignment-hint">{{ $t('users.form.contractTypeHint') }}</small>
+              </div>
             </el-form-item>
 
             <el-form-item v-if="!isStatusDisabled" :label="$t('users.form.status')">
-              <el-switch v-model="isActivo" :active-text="$t('users.form.active')" :inactive-text="$t('users.form.inactive')" />
+              <el-switch
+                v-model="isActivo"
+                :active-text="$t('users.form.active')"
+                :inactive-text="$t('users.form.inactive')"
+              />
             </el-form-item>
 
             <el-form-item class="form-actions-item">
               <el-button type="primary" :icon="Check" :loading="isSaving" @click="handleSave">
                 {{ isEditing ? $t('users.form.saveChanges') : $t('users.form.createUser') }}
               </el-button>
-              <el-button :icon="Close" @click="handleCancel">{{ $t('users.form.cancel') }}</el-button>
+              <el-button :icon="Close" @click="handleCancel">
+                {{ $t('users.form.cancel') }}
+              </el-button>
             </el-form-item>
           </div>
         </el-tab-pane>
 
         <el-tab-pane :label="$t('users.form.calendarTab')" name="calendario" :disabled="!isEditing">
           <template #label>
-            <span
-              :title="
-                !isEditing ? $t('users.form.saveUserFirstForCalendar') : ''
-              "
-            >
+            <span :title="!isEditing ? $t('users.form.saveUserFirstForCalendar') : ''">
               {{ $t('users.form.calendarTab') }}
             </span>
           </template>
@@ -915,6 +960,35 @@ async function handleSave() {
 
 .profile-option-desc {
   font-size: 0.75rem;
+  color: var(--nav-link-color, #64748b);
+}
+
+.contract-type-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.contract-type-container .assignment-hint {
+  margin: 0;
+}
+
+.color-picker-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.color-hex-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: monospace;
+  color: var(--heading-color, #0f172a);
+}
+
+.no-color-label {
+  font-size: 0.85rem;
   color: var(--nav-link-color, #64748b);
 }
 
@@ -1113,5 +1187,62 @@ async function handleSave() {
 .profile-select-popper .role-tag {
   font-weight: 700 !important;
   text-transform: uppercase;
+}
+
+/* Estilos para el popup del selector de color de usuario */
+div[id^='el-popper-container'] {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+}
+
+.user-color-dropdown-popper {
+  z-index: 2050 !important;
+}
+
+.user-color-dropdown-popper .el-color-dropdown__btns,
+.user-color-dropdown-popper .el-color-picker-panel__footer {
+  display: flex !important;
+  justify-content: flex-start !important;
+  padding: 8px 0 0 0 !important;
+  margin-top: 6px !important;
+}
+
+.user-color-dropdown-popper .el-color-dropdown__btns .el-button,
+.user-color-dropdown-popper .el-color-picker-panel__footer .el-button {
+  display: none !important;
+}
+
+.user-color-dropdown-popper .el-color-dropdown__btns .el-input,
+.user-color-dropdown-popper .el-color-picker-panel__footer .el-input {
+  width: 100% !important;
+}
+
+.user-color-dropdown-popper .color-picker-close-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 100;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.user-color-dropdown-popper .color-picker-close-btn:hover {
+  background: rgba(0, 0, 0, 0.75);
+  transform: scale(1.1);
 }
 </style>
