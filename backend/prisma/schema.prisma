@@ -201,8 +201,21 @@ model CitaVenta {
   hotel      Hotel             @relation(fields: [hotelId], references: [id])
   vendedor   Usuario?          @relation("VendedorCitas", fields: [vendedorId], references: [id])
   comisiones Comision[]
+  pagos      PagoCitaVenta[]
 
   @@map("citas_venta")
+}
+
+model PagoCitaVenta {
+  id          Int       @id @default(autoincrement())
+  citaVentaId Int       @map("cita_venta_id")
+  metodoPago  String    @map("metodo_pago")
+  importeUsd  Float     @map("importe_usd")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  citaVenta CitaVenta @relation(fields: [citaVentaId], references: [id], onDelete: Cascade)
+
+  @@map("pagos_cita_venta")
 }
 
 model Meta {

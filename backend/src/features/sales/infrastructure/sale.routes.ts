@@ -48,6 +48,17 @@ function parseDateOnly(dateStr: string): Date {
   return new Date(dateStr)
 }
 
+interface PagoInput {
+  metodoPago: string
+  importeUsd: number
+}
+
+function deriveModoCobro(pagos?: Array<{ metodoPago: string; importeUsd: number }> | null): string | null {
+  if (!pagos || pagos.length === 0) return null
+  if (pagos.length === 1) return pagos[0].metodoPago
+  return 'mixto'
+}
+
 async function findConflicts(hotelId: number, fechaHoraCita: Date, excludeId?: number) {
   const rangeStart = new Date(fechaHoraCita.getTime() - SALES_APPOINTMENT_DURATION_MS)
   const rangeEnd = new Date(fechaHoraCita.getTime() + SALES_APPOINTMENT_DURATION_MS)
@@ -251,6 +262,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           sesion: true,
           hotel: true,
           vendedor: true,
+          pagos: true,
         },
         orderBy: { fechaHoraCita: 'asc' },
       })
@@ -268,7 +280,12 @@ export async function saleRoutes(fastify: FastifyInstance) {
           estado: c.estado,
           numFotosVendidas: c.numFotosVendidas,
           totalVentaUsd: c.totalVentaUsd,
-          modoCobro: c.modoCobro || null,
+          modoCobro: deriveModoCobro(c.pagos) || c.modoCobro || null,
+          pagos: (c.pagos || []).map((p) => ({
+            id: p.id,
+            metodoPago: p.metodoPago,
+            importeUsd: p.importeUsd,
+          })),
           notas: c.notas || '',
           clienteNombre: decrypt(c.sesion.clienteNombre) || '',
           clienteEmail: decrypt(c.sesion.clienteEmail) || '',
@@ -329,7 +346,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const cita = await prisma.citaVenta.findUnique({
         where: { id },
-        include: { sesion: true, hotel: true, vendedor: true },
+        include: { sesion: true, hotel: true, vendedor: true, pagos: true },
       })
 
       if (!cita || cita.deletedAt) {
@@ -347,7 +364,12 @@ export async function saleRoutes(fastify: FastifyInstance) {
         estado: cita.estado,
         numFotosVendidas: cita.numFotosVendidas,
         totalVentaUsd: cita.totalVentaUsd,
-        modoCobro: cita.modoCobro || null,
+        modoCobro: deriveModoCobro(cita.pagos) || cita.modoCobro || null,
+        pagos: (cita.pagos || []).map((p) => ({
+          id: p.id,
+          metodoPago: p.metodoPago,
+          importeUsd: p.importeUsd,
+        })),
         notas: cita.notas || '',
         clienteNombre: decrypt(cita.sesion.clienteNombre) || '',
         clienteEmail: decrypt(cita.sesion.clienteEmail) || '',
@@ -382,6 +404,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas?: number | null
         totalVentaUsd?: number | null
         modoCobro?: string | null
+        pagos?: Array<{ metodoPago: string; importeUsd: number }>
         notas?: string
       }
 
@@ -424,6 +447,22 @@ export async function saleRoutes(fastify: FastifyInstance) {
         })
       }
 
+      const incomingPagos: PagoInput[] = Array.isArray(body.pagos)
+        ? body.pagos.map((p) => ({
+            metodoPago: String(p.metodoPago || '').trim(),
+            importeUsd: Number(p.importeUsd) || 0,
+          }))
+        : (body.modoCobro
+            ? [{
+                metodoPago: body.modoCobro.trim(),
+                importeUsd: Number(body.totalVentaUsd) || 0,
+              }]
+            : [])
+
+      if (incomingPagos.length > 4) {
+        return reply.status(400).send({ error: 'No se permiten más de 4 métodos de pago' })
+      }
+
       // Validate sales fields when creating as COMPLETADA
       const targetEstado = (body.estado as any) || 'PROGRAMADA'
       if (targetEstado === 'COMPLETADA') {
@@ -437,22 +476,39 @@ export async function saleRoutes(fastify: FastifyInstance) {
             .status(400)
             .send({ error: 'Para completar la cita, debes seleccionar un vendedor' })
         }
-        if (body.numFotosVendidas == null || body.totalVentaUsd == null) {
+        if (body.numFotosVendidas == null) {
           return reply
             .status(400)
-            .send({ error: 'Para completar la cita, debes indicar el nº de fotos vendidas y el total en USD' })
+            .send({ error: 'Para completar la cita, debes indicar el nº de fotos vendidas' })
         }
-        if (!body.modoCobro) {
+        if (incomingPagos.length === 0) {
           return reply
             .status(400)
-            .send({ error: 'Para completar la cita, debes seleccionar un modo de cobro' })
+            .send({ error: 'Para completar la cita, debes registrar al menos un método de pago' })
+        }
+        for (const p of incomingPagos) {
+          if (!p.metodoPago) {
+            return reply
+              .status(400)
+              .send({ error: 'Cada método de pago debe tener seleccionado un tipo de cobro' })
+          }
+          if (p.importeUsd <= 0) {
+            return reply
+              .status(400)
+              .send({ error: 'El importe de cada método de pago debe ser mayor a 0' })
+          }
         }
       }
+
+      // Auto-calculate total from payments
+      const totalCalculado = incomingPagos.reduce((sum, p) => sum + p.importeUsd, 0)
+      const calculatedTotalUsd = incomingPagos.length > 0 ? Math.round(totalCalculado * 100) / 100 : (body.totalVentaUsd ?? null)
+      const derivedModoCobro = deriveModoCobro(incomingPagos) || (body.modoCobro ? body.modoCobro.trim() : null)
 
       // Check conflicts using session's hotelId
       const conflicts = await findConflicts(sesion.hotelId, fechaCita)
 
-      let nueva
+      let nueva: any
       if (sesion.citaVenta) {
         nueva = await prisma.citaVenta.update({
           where: { id: sesion.citaVenta.id },
@@ -462,13 +518,23 @@ export async function saleRoutes(fastify: FastifyInstance) {
             fechaHoraCita: fechaCita,
             estado: targetEstado,
             numFotosVendidas: body.numFotosVendidas ?? null,
-            totalVentaUsd: body.totalVentaUsd ?? null,
-            modoCobro: body.modoCobro ? body.modoCobro.trim() : null,
+            totalVentaUsd: calculatedTotalUsd,
+            modoCobro: derivedModoCobro,
             notas: body.notas ? body.notas.trim() : null,
             deletedAt: null,
           },
-          include: { sesion: true, vendedor: true },
+          include: { sesion: true, vendedor: true, pagos: true },
         })
+        await prisma.pagoCitaVenta.deleteMany({ where: { citaVentaId: nueva.id } })
+        if (incomingPagos.length > 0) {
+          await prisma.pagoCitaVenta.createMany({
+            data: incomingPagos.map((p) => ({
+              citaVentaId: nueva.id,
+              metodoPago: p.metodoPago,
+              importeUsd: p.importeUsd,
+            })),
+          })
+        }
       } else {
         nueva = await prisma.citaVenta.create({
           data: {
@@ -478,13 +544,27 @@ export async function saleRoutes(fastify: FastifyInstance) {
             fechaHoraCita: fechaCita,
             estado: targetEstado,
             numFotosVendidas: body.numFotosVendidas ?? null,
-            totalVentaUsd: body.totalVentaUsd ?? null,
-            modoCobro: body.modoCobro ? body.modoCobro.trim() : null,
+            totalVentaUsd: calculatedTotalUsd,
+            modoCobro: derivedModoCobro,
             notas: body.notas ? body.notas.trim() : null,
+            ...(incomingPagos.length > 0
+              ? {
+                  pagos: {
+                    create: incomingPagos.map((p) => ({
+                      metodoPago: p.metodoPago,
+                      importeUsd: p.importeUsd,
+                    })),
+                  },
+                }
+              : {}),
           },
-          include: { sesion: true, vendedor: true },
+          include: { sesion: true, vendedor: true, pagos: true },
         })
       }
+
+      const pagosRegistrados = await prisma.pagoCitaVenta.findMany({
+        where: { citaVentaId: nueva.id },
+      })
 
       // Recalcular comisiones y sincronizar estado de sesión si se crea directamente como COMPLETADA
       if (nueva.estado === 'COMPLETADA') {
@@ -537,7 +617,8 @@ export async function saleRoutes(fastify: FastifyInstance) {
           estado: nueva.estado,
           numFotosVendidas: nueva.numFotosVendidas,
           totalVentaUsd: nueva.totalVentaUsd,
-          modoCobro: nueva.modoCobro,
+          modoCobro: derivedModoCobro,
+          desglosePagos: incomingPagos.map((p) => `${p.metodoPago}: $${p.importeUsd}`).join(', '),
         },
       })
 
@@ -551,7 +632,12 @@ export async function saleRoutes(fastify: FastifyInstance) {
         estado: nueva.estado,
         numFotosVendidas: nueva.numFotosVendidas,
         totalVentaUsd: nueva.totalVentaUsd,
-        modoCobro: nueva.modoCobro || null,
+        modoCobro: derivedModoCobro,
+        pagos: pagosRegistrados.map((p) => ({
+          id: p.id,
+          metodoPago: p.metodoPago,
+          importeUsd: p.importeUsd,
+        })),
         notas: nueva.notas || '',
         clienteNombre: decrypt(nueva.sesion.clienteNombre) || '',
         googleCalendarEventId: googleEventId || null,
@@ -586,6 +672,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas?: number | null
         totalVentaUsd?: number | null
         modoCobro?: string | null
+        pagos?: Array<{ metodoPago: string; importeUsd: number }>
         notas?: string
       }
 
@@ -612,8 +699,25 @@ export async function saleRoutes(fastify: FastifyInstance) {
         }
       }
 
+      let incomingPagos: PagoInput[] | undefined = undefined
+      if (Array.isArray(body.pagos)) {
+        incomingPagos = body.pagos.map((p) => ({
+          metodoPago: String(p.metodoPago || '').trim(),
+          importeUsd: Number(p.importeUsd) || 0,
+        }))
+      } else if (body.modoCobro !== undefined && body.totalVentaUsd !== undefined) {
+        incomingPagos = body.modoCobro
+          ? [{ metodoPago: body.modoCobro.trim(), importeUsd: Number(body.totalVentaUsd) || 0 }]
+          : []
+      }
+
+      if (incomingPagos !== undefined && incomingPagos.length > 4) {
+        return reply.status(400).send({ error: 'No se permiten más de 4 métodos de pago' })
+      }
+
       // Validate sales fields when transitioning to COMPLETADA
-      if (body.estado === 'COMPLETADA') {
+      const targetPutEstado = body.estado || existing.estado
+      if (targetPutEstado === 'COMPLETADA') {
         const sesionId = existing.sesionId
         const vendedorId = body.vendedorId !== undefined ? body.vendedorId : existing.vendedorId
         if (!sesionId) {
@@ -626,18 +730,38 @@ export async function saleRoutes(fastify: FastifyInstance) {
             .status(400)
             .send({ error: 'Para completar la cita, debes seleccionar un vendedor' })
         }
-        const fotosVendidas = body.numFotosVendidas ?? existing.numFotosVendidas
-        const totalVenta = body.totalVentaUsd ?? existing.totalVentaUsd
-        if (fotosVendidas == null || totalVenta == null) {
+        const fotosVendidas = body.numFotosVendidas !== undefined ? body.numFotosVendidas : existing.numFotosVendidas
+        if (fotosVendidas == null) {
           return reply
             .status(400)
-            .send({ error: 'Para completar la cita, debes indicar el nº de fotos vendidas y el total en USD' })
+            .send({ error: 'Para completar la cita, debes indicar el nº de fotos vendidas' })
         }
-        const modoCobro = body.modoCobro !== undefined ? body.modoCobro : existing.modoCobro
-        if (!modoCobro) {
-          return reply
-            .status(400)
-            .send({ error: 'Para completar la cita, debes seleccionar un modo de cobro' })
+
+        if (incomingPagos !== undefined) {
+          if (incomingPagos.length === 0) {
+            return reply
+              .status(400)
+              .send({ error: 'Para completar la cita, debes registrar al menos un método de pago' })
+          }
+          for (const p of incomingPagos) {
+            if (!p.metodoPago) {
+              return reply
+                .status(400)
+                .send({ error: 'Cada método de pago debe tener seleccionado un tipo de cobro' })
+            }
+            if (p.importeUsd <= 0) {
+              return reply
+                .status(400)
+                .send({ error: 'El importe de cada método de pago debe ser mayor a 0' })
+            }
+          }
+        } else {
+          const currentCount = await prisma.pagoCitaVenta.count({ where: { citaVentaId: id } })
+          if (currentCount === 0 && !existing.modoCobro) {
+            return reply
+              .status(400)
+              .send({ error: 'Para completar la cita, debes registrar al menos un método de pago' })
+          }
         }
       }
 
@@ -648,14 +772,38 @@ export async function saleRoutes(fastify: FastifyInstance) {
       }
       if (body.estado !== undefined) data.estado = body.estado
       if (body.numFotosVendidas !== undefined) data.numFotosVendidas = body.numFotosVendidas
-      if (body.totalVentaUsd !== undefined) data.totalVentaUsd = body.totalVentaUsd
-      if (body.modoCobro !== undefined) data.modoCobro = body.modoCobro ? body.modoCobro.trim() : null
       if (body.notas !== undefined) data.notas = body.notas ? body.notas.trim() : null
+
+      if (incomingPagos !== undefined) {
+        const totalCalculado = incomingPagos.reduce((sum, p) => sum + p.importeUsd, 0)
+        data.totalVentaUsd = incomingPagos.length > 0 ? Math.round(totalCalculado * 100) / 100 : null
+        data.modoCobro = deriveModoCobro(incomingPagos)
+      } else {
+        if (body.totalVentaUsd !== undefined) data.totalVentaUsd = body.totalVentaUsd
+        if (body.modoCobro !== undefined) data.modoCobro = body.modoCobro ? body.modoCobro.trim() : null
+      }
 
       const actualizada = await prisma.citaVenta.update({
         where: { id },
         data,
-        include: { sesion: true, vendedor: true },
+        include: { sesion: true, vendedor: true, pagos: true },
+      })
+
+      if (incomingPagos !== undefined) {
+        await prisma.pagoCitaVenta.deleteMany({ where: { citaVentaId: id } })
+        if (incomingPagos.length > 0) {
+          await prisma.pagoCitaVenta.createMany({
+            data: incomingPagos.map((p) => ({
+              citaVentaId: id,
+              metodoPago: p.metodoPago,
+              importeUsd: p.importeUsd,
+            })),
+          })
+        }
+      }
+
+      const pagosActuales = await prisma.pagoCitaVenta.findMany({
+        where: { citaVentaId: id },
       })
 
       // Recalcular comisiones y sincronizar estado de sesión automáticamente
@@ -741,6 +889,10 @@ export async function saleRoutes(fastify: FastifyInstance) {
         metadatos.modoCobroNuevo = actualizada.modoCobro || ''
       }
 
+      if (incomingPagos !== undefined) {
+        metadatos.desglosePagos = incomingPagos.map((p) => `${p.metodoPago}: $${p.importeUsd}`).join(', ')
+      }
+
       registrarAudit({
         accion: 'MODIFICAR',
         entidad: 'CITA_VENTA',
@@ -766,7 +918,12 @@ export async function saleRoutes(fastify: FastifyInstance) {
         estado: actualizada.estado,
         numFotosVendidas: actualizada.numFotosVendidas,
         totalVentaUsd: actualizada.totalVentaUsd,
-        modoCobro: actualizada.modoCobro || null,
+        modoCobro: deriveModoCobro(pagosActuales) || actualizada.modoCobro || null,
+        pagos: pagosActuales.map((p) => ({
+          id: p.id,
+          metodoPago: p.metodoPago,
+          importeUsd: p.importeUsd,
+        })),
         notas: actualizada.notas || '',
         clienteNombre: decrypt(actualizada.sesion.clienteNombre) || '',
         googleCalendarEventId: googleEventId || null,

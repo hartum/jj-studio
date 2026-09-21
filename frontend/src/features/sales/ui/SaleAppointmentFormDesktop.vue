@@ -12,6 +12,8 @@ import {
   Money,
   WarnTriangleFilled,
   User,
+  Plus,
+  Delete,
 } from '@element-plus/icons-vue'
 import { ChevronDown } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
@@ -39,6 +41,11 @@ const {
   getSellerStatus,
   estadoOptions,
   modoCobroOptions,
+  totalCalculado,
+  MAX_PAGOS,
+  canAddPago,
+  addPago,
+  removePago,
   isSubmitDisabled,
   selectedDateOnly,
   selectedTimeOnly,
@@ -370,7 +377,7 @@ const formattedSelectedSaleDateTime = computed(() => {
                   </div>
                 </div>
 
-                <!-- Inputs de Fotos Vendidas y Total USD (Debajo de las horas) -->
+                <!-- Input de Fotos Vendidas (Misma posición y tamaño) -->
                 <div class="sales-inputs-row">
                   <el-form-item :label="$t('sales.form.photosSoldRequired')" required>
                     <el-input-number
@@ -381,21 +388,88 @@ const formattedSelectedSaleDateTime = computed(() => {
                       placeholder="0"
                     />
                   </el-form-item>
+                </div>
 
-                  <el-form-item :label="$t('sales.form.totalUsdRequired')" required>
-                    <el-input-number
-                      v-model="formData.totalVentaUsd"
-                      :min="0"
-                      :step="0.01"
-                      :precision="2"
-                      style="width: 100%"
-                      placeholder="0.00"
+                <!-- Desglose de Métodos de Pago en el Cuerpo Principal (Sin tarjeta gris) -->
+                <div class="main-payment-breakdown-section">
+                  <div class="main-payment-breakdown-header">
+                    <span class="main-payment-breakdown-title">
+                      {{ $t('sales.steps.paymentBreakdown') }}
+                    </span>
+                  </div>
+
+                  <div class="payment-lines-list">
+                    <div
+                      v-for="(pago, index) in formData.pagos"
+                      :key="index"
+                      class="payment-line-row"
                     >
-                      <template #suffix>
-                        <span>$ (USD)</span>
-                      </template>
-                    </el-input-number>
-                  </el-form-item>
+                      <el-select
+                        v-model="pago.metodoPago"
+                        :placeholder="$t('sales.form.paymentMethod')"
+                        style="flex: 1.15"
+                        :disabled="isReadOnly"
+                      >
+                        <el-option
+                          v-for="opt in modoCobroOptions"
+                          :key="opt.value"
+                          :label="opt.label"
+                          :value="opt.value"
+                        />
+                      </el-select>
+
+                      <el-input-number
+                        v-model="pago.importeUsd"
+                        :min="0"
+                        :step="1"
+                        :precision="2"
+                        :placeholder="$t('sales.form.paymentAmount')"
+                        style="flex: 1"
+                        :disabled="isReadOnly"
+                      >
+                        <template #suffix>
+                          <span>$</span>
+                        </template>
+                      </el-input-number>
+
+                      <el-button
+                        v-if="formData.pagos.length > 1 && !isReadOnly"
+                        type="danger"
+                        link
+                        :icon="Delete"
+                        :title="$t('sales.form.removePayment')"
+                        class="remove-pago-btn"
+                        @click="removePago(index)"
+                      />
+                    </div>
+                    <div class="payment-actions-col">
+                      <el-button
+                        v-if="canAddPago && !isReadOnly"
+                        type="primary"
+                        link
+                        :icon="Plus"
+                        class="add-pago-btn"
+                        @click="addPago"
+                      >
+                        {{ $t('sales.form.addPaymentMethod') }}
+                      </el-button>
+                      <span v-else-if="!canAddPago && !isReadOnly" class="max-pagos-hint">
+                        {{ $t('sales.form.maxPaymentMethodsReached') }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="payment-bottom-row">
+                    <div class="payment-total-col">
+                      <el-form-item :label="$t('sales.form.totalUsdCalculated')" required>
+                        <div class="calculated-total-box">
+                          <span class="currency-symbol">$</span>
+                          <span class="total-amount">{{ totalCalculado.toFixed(2) }}</span>
+                          <span class="currency-tag">USD</span>
+                        </div>
+                      </el-form-item>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -419,9 +493,15 @@ const formattedSelectedSaleDateTime = computed(() => {
                 :disabled="isSubmitDisabled"
                 @click="handleSave"
               >
-                {{ isEditing ? $t('sales.actions.saveChanges') : $t('sales.actions.scheduleAppointment') }}
+                {{
+                  isEditing
+                    ? $t('sales.actions.saveChanges')
+                    : $t('sales.actions.scheduleAppointment')
+                }}
               </el-button>
-              <el-button :icon="Close" @click="handleGoBack">{{ $t('sales.actions.cancel') }}</el-button>
+              <el-button :icon="Close" @click="handleGoBack">
+                {{ $t('sales.actions.cancel') }}
+              </el-button>
             </div>
           </el-form>
         </el-card>
@@ -445,7 +525,9 @@ const formattedSelectedSaleDateTime = computed(() => {
               <el-icon :size="22"><Camera /></el-icon>
             </div>
             <div class="session-info-box">
-              <span class="session-category-label">{{ $t('sales.sessionPicker.noSessionAssociated') }}</span>
+              <span class="session-category-label">
+                {{ $t('sales.sessionPicker.noSessionAssociated') }}
+              </span>
               <span class="session-title-label">{{ $t('sales.sessionPicker.chooseSession') }}</span>
             </div>
           </div>
@@ -474,7 +556,9 @@ const formattedSelectedSaleDateTime = computed(() => {
               </div>
 
               <div class="session-selected-titles">
-                <span class="session-selected-badge-label">{{ $t('sales.sessionPicker.assignedPhotographer') }}</span>
+                <span class="session-selected-badge-label">
+                  {{ $t('sales.sessionPicker.assignedPhotographer') }}
+                </span>
                 <span class="session-selected-name">{{ photographerName }}</span>
               </div>
 
@@ -519,7 +603,9 @@ const formattedSelectedSaleDateTime = computed(() => {
               </div>
               <div class="detail-row">
                 <span class="detail-label">{{ $t('sales.summary.reason') }}</span>
-                <span class="detail-value">{{ sessionInfo.concepto || $t('sales.summary.otherReason') }}</span>
+                <span class="detail-value">
+                  {{ sessionInfo.concepto || $t('sales.summary.otherReason') }}
+                </span>
               </div>
             </div>
           </div>
@@ -533,7 +619,11 @@ const formattedSelectedSaleDateTime = computed(() => {
             @click="toggleSessionsList"
           >
             <span class="toggle-text">
-              {{ showSessionsList ? $t('sales.sessionPicker.hideSessions') : $t('sales.sessionPicker.viewSessions') }}
+              {{
+                showSessionsList
+                  ? $t('sales.sessionPicker.hideSessions')
+                  : $t('sales.sessionPicker.viewSessions')
+              }}
             </span>
             <el-icon class="toggle-icon" :class="{ 'is-rotated': showSessionsList }">
               <ChevronDown :size="18" />
@@ -585,7 +675,9 @@ const formattedSelectedSaleDateTime = computed(() => {
                       <div class="pick-item-meta">
                         <span>{{ formatDateTime(session.fechaHoraInicio) }}</span>
                         <span v-if="session.numeroHabitacion">
-                          {{ $t('sales.sessionPicker.roomPrefix', { room: session.numeroHabitacion }) }}
+                          {{
+                            $t('sales.sessionPicker.roomPrefix', { room: session.numeroHabitacion })
+                          }}
                         </span>
                       </div>
                     </div>
@@ -597,7 +689,11 @@ const formattedSelectedSaleDateTime = computed(() => {
                       :type="session.estado === 'COMPLETADA' ? 'success' : 'primary'"
                       effect="light"
                     >
-                      {{ session.estado === 'COMPLETADA' ? $t('sales.status.completed') : $t('sales.status.scheduled') }}
+                      {{
+                        session.estado === 'COMPLETADA'
+                          ? $t('sales.status.completed')
+                          : $t('sales.status.scheduled')
+                      }}
                     </el-tag>
                   </div>
                 </div>
@@ -673,7 +769,11 @@ const formattedSelectedSaleDateTime = computed(() => {
             @click="toggleSellersList"
           >
             <span class="toggle-text">
-              {{ showSellersList ? $t('sales.sellerPicker.hideSellers') : $t('sales.sellerPicker.viewSellers') }}
+              {{
+                showSellersList
+                  ? $t('sales.sellerPicker.hideSellers')
+                  : $t('sales.sellerPicker.viewSellers')
+              }}
             </span>
             <el-icon class="toggle-icon" :class="{ 'is-rotated': showSellersList }">
               <ChevronDown :size="18" />
@@ -742,27 +842,6 @@ const formattedSelectedSaleDateTime = computed(() => {
             </div>
           </el-collapse-transition>
         </div>
-
-        <!-- Selector de Modo de Cobro (Desktop) -->
-        <el-card class="payment-method-card" shadow="never">
-          <div class="payment-method-card-header">
-            <span class="payment-method-card-title">{{ $t('sales.steps.paymentMethodUpper') }}</span>
-          </div>
-          <el-select
-            v-model="formData.modoCobro"
-            :placeholder="$t('sales.form.selectPaymentMethod')"
-            clearable
-            style="width: 100%"
-            :disabled="isReadOnly"
-          >
-            <el-option
-              v-for="opt in modoCobroOptions"
-              :key="opt.value"
-              :label="opt.label"
-              :value="opt.value"
-            />
-          </el-select>
-        </el-card>
 
         <!-- Tarjeta de Estado de la Cita -->
         <el-card class="status-card" shadow="never">
@@ -897,27 +976,106 @@ const formattedSelectedSaleDateTime = computed(() => {
   text-transform: uppercase;
 }
 
-/* Payment Method Card in Sidebar */
-.payment-method-card {
-  border-radius: 12px;
-  border: 1px solid var(--toolbar-border, #e2e8f0);
-  background: var(--toolbar-bg, #ffffff);
+/* Payment Breakdown in Main Body (Clean minimalist, no gray card) */
+.main-payment-breakdown-section {
+  margin-top: 0.75rem;
 }
 
-.payment-method-card :deep(.el-card__body) {
-  padding: 1.25rem;
+.main-payment-breakdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
 }
 
-.payment-method-card-header {
-  margin-bottom: 0.85rem;
+.main-payment-breakdown-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--el-text-color-primary, #303133);
 }
 
-.payment-method-card-title {
-  font-size: 0.75rem;
+.payment-lines-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.payment-line-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.remove-pago-btn {
+  padding: 4px;
+  font-size: 1.1rem;
+}
+
+.payment-actions-col {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  margin-top: 0.2rem;
+}
+
+.add-pago-btn {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0;
+}
+
+.max-pagos-hint {
+  font-size: 0.72rem;
+  color: var(--el-text-color-secondary, #909399);
+  font-style: italic;
+}
+
+.payment-bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.payment-total-col {
+  grid-column: 2;
+}
+
+.payment-total-col .el-form-item {
+  margin-bottom: 0;
+}
+
+.calculated-total-box {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  background-color: var(--el-fill-color-light, #f8fafc);
+  border: 1px solid var(--el-border-color, #dcdfe6);
+  border-radius: 4px;
+  color: var(--el-text-color-primary, #303133);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.calculated-total-box .currency-symbol {
+  font-size: 0.85rem;
+  color: var(--el-text-color-secondary, #909399);
+  font-weight: 600;
+}
+
+.calculated-total-box .total-amount {
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  color: var(--nav-link-color, #64748b);
-  text-transform: uppercase;
+  color: var(--el-color-primary, #409eff);
+}
+
+.calculated-total-box .currency-tag {
+  font-size: 0.7rem;
+  color: var(--el-text-color-secondary, #909399);
+  margin-left: auto;
+  font-weight: 600;
 }
 
 .status-grid {
@@ -1850,7 +2008,6 @@ html.dark .inline-calendar-picker :deep(.el-picker-panel) {
 
 html.dark .form-card,
 html.dark .status-card,
-html.dark .payment-method-card,
 html.dark .desktop-session-selector-card,
 html.dark .desktop-seller-selector-card,
 html.dark .session-toggle-bar,

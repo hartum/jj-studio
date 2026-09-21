@@ -7,6 +7,13 @@ export const MODO_COBRO_OPTIONS = [
   { value: 'efectivo', label: 'Efectivo' },
 ] as const
 
+export interface PagoCitaVenta {
+  id?: number
+  citaVentaId?: number
+  metodoPago: string
+  importeUsd: number
+}
+
 export interface CitaVenta {
   id: number
   sesionId: number
@@ -18,6 +25,7 @@ export interface CitaVenta {
   numFotosVendidas?: number | null
   totalVentaUsd?: number | null
   modoCobro?: string | null
+  pagos?: PagoCitaVenta[]
   notas?: string | null
   // Inherited from session join
   clienteNombre?: string
@@ -44,6 +52,7 @@ export interface CreateCitaVentaPayload {
   numFotosVendidas?: number | null
   totalVentaUsd?: number | null
   modoCobro?: string | null
+  pagos?: Array<{ metodoPago: string; importeUsd: number }>
   notas?: string | null
 }
 
@@ -54,6 +63,7 @@ export interface UpdateCitaVentaPayload {
   numFotosVendidas?: number | null
   totalVentaUsd?: number | null
   modoCobro?: string | null
+  pagos?: Array<{ metodoPago: string; importeUsd: number }>
   notas?: string | null
 }
 

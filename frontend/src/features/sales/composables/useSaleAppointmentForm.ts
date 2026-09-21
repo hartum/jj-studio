@@ -17,6 +17,11 @@ import { Calendar, Check, Close } from '@element-plus/icons-vue'
 import { UserX } from '@lucide/vue'
 import { ElMessage } from 'element-plus'
 
+export interface FormPagoItem {
+  metodoPago: string
+  importeUsd: number | null
+}
+
 export interface SaleAppointmentFormData {
   sesionId: number | null
   hotelId: number
@@ -26,6 +31,7 @@ export interface SaleAppointmentFormData {
   numFotosVendidas: number | null
   totalVentaUsd: number | null
   modoCobro: string | null
+  pagos: FormPagoItem[]
   notas: string
 }
 
@@ -90,6 +96,7 @@ export function useSaleAppointmentForm() {
     numFotosVendidas: null,
     totalVentaUsd: null,
     modoCobro: null,
+    pagos: [{ metodoPago: 'tarjeta', importeUsd: null }],
     notas: '',
   })
 
@@ -278,16 +285,53 @@ export function useSaleAppointmentForm() {
     },
   })
 
+  const MAX_PAGOS = 4
+
+  const totalCalculado = computed(() => {
+    const pList = formData.value.pagos || []
+    const sum = pList.reduce((acc, p) => acc + (Number(p.importeUsd) || 0), 0)
+    return Math.round(sum * 100) / 100
+  })
+
+  const canAddPago = computed(() => {
+    return (formData.value.pagos || []).length < MAX_PAGOS
+  })
+
+  function addPago() {
+    if (!canAddPago.value) return
+    const usedMethods = new Set((formData.value.pagos || []).map((p) => p.metodoPago))
+    const available = modoCobroOptions.value.find((opt) => !usedMethods.has(opt.value))
+    const metodo = available ? available.value : 'tarjeta'
+    formData.value.pagos.push({ metodoPago: metodo, importeUsd: null })
+  }
+
+  function removePago(index: number) {
+    if ((formData.value.pagos || []).length <= 1) return
+    formData.value.pagos.splice(index, 1)
+  }
+
+  const pagosValidos = computed(() => {
+    const pList = formData.value.pagos || []
+    if (pList.length === 0 || pList.length > MAX_PAGOS) return false
+    return pList.every((p) => p.metodoPago && p.importeUsd != null && Number(p.importeUsd) > 0)
+  })
+
+  watch(
+    totalCalculado,
+    (val) => {
+      formData.value.totalVentaUsd = val > 0 ? val : null
+    },
+    { immediate: true },
+  )
+
   const isSubmitDisabled = computed(() => {
     if (isReadOnly.value) return true
     if (!formData.value.sesionId) return true
     if (!selectedDateOnly.value || !selectedTimeOnly.value) return true
     if (formData.value.estado === 'COMPLETADA') {
       if (!formData.value.vendedorId) return true
-      if (formData.value.numFotosVendidas == null || formData.value.totalVentaUsd == null) {
-        return true
-      }
-      if (!formData.value.modoCobro) return true
+      if (formData.value.numFotosVendidas == null) return true
+      if (!pagosValidos.value) return true
     }
     return false
   })
@@ -601,6 +645,16 @@ export function useSaleAppointmentForm() {
           return
         }
 
+        const loadedPagos: FormPagoItem[] =
+          existing.pagos && existing.pagos.length > 0
+            ? existing.pagos.map((p) => ({
+                metodoPago: p.metodoPago,
+                importeUsd: p.importeUsd,
+              }))
+            : existing.modoCobro
+              ? [{ metodoPago: existing.modoCobro, importeUsd: existing.totalVentaUsd ?? null }]
+              : [{ metodoPago: 'tarjeta', importeUsd: null }]
+
         formData.value = {
           sesionId: existing.sesionId,
           hotelId: existing.hotelId,
@@ -610,6 +664,7 @@ export function useSaleAppointmentForm() {
           numFotosVendidas: existing.numFotosVendidas ?? null,
           totalVentaUsd: existing.totalVentaUsd ?? null,
           modoCobro: existing.modoCobro || null,
+          pagos: loadedPagos,
           notas: existing.notas || '',
         }
         if (existing.fechaHoraCita) {
@@ -673,15 +728,22 @@ export function useSaleAppointmentForm() {
         ElMessage.warning(t('sales.toasts.completeSellerRequired'))
         return
       }
-      if (formData.value.numFotosVendidas == null || formData.value.totalVentaUsd == null) {
+      if (formData.value.numFotosVendidas == null) {
         ElMessage.warning(t('sales.toasts.completeAmountsRequired'))
         return
       }
-      if (!formData.value.modoCobro) {
-        ElMessage.warning(t('sales.toasts.completePaymentMethodRequired'))
+      if (!pagosValidos.value) {
+        ElMessage.warning(t('sales.form.paymentValidationFailed'))
         return
       }
     }
+
+    const cleanPagos = (formData.value.pagos || [])
+      .filter((p) => p.metodoPago && p.importeUsd != null && Number(p.importeUsd) > 0)
+      .map((p) => ({
+        metodoPago: p.metodoPago,
+        importeUsd: Number(p.importeUsd),
+      }))
 
     isSaving.value = true
     try {
@@ -691,8 +753,8 @@ export function useSaleAppointmentForm() {
           fechaHoraCita: formData.value.fechaHoraCita,
           estado: formData.value.estado,
           numFotosVendidas: formData.value.numFotosVendidas,
-          totalVentaUsd: formData.value.totalVentaUsd,
-          modoCobro: formData.value.modoCobro || null,
+          totalVentaUsd: totalCalculado.value > 0 ? totalCalculado.value : null,
+          pagos: cleanPagos,
           notas: formData.value.notas ? formData.value.notas.trim() : null,
         }
         const result = await saleStore.updateCitaVenta(citaId.value, payload)
@@ -711,8 +773,8 @@ export function useSaleAppointmentForm() {
           fechaHoraCita: formData.value.fechaHoraCita,
           estado: formData.value.estado,
           numFotosVendidas: formData.value.numFotosVendidas,
-          totalVentaUsd: formData.value.totalVentaUsd,
-          modoCobro: formData.value.modoCobro || null,
+          totalVentaUsd: totalCalculado.value > 0 ? totalCalculado.value : null,
+          pagos: cleanPagos,
           notas: formData.value.notas ? formData.value.notas.trim() : null,
         })
         if (result.conflictos && result.conflictos.length > 0) {
@@ -757,6 +819,12 @@ export function useSaleAppointmentForm() {
     paxDisplay,
     estadoOptions,
     modoCobroOptions,
+    totalCalculado,
+    MAX_PAGOS,
+    canAddPago,
+    addPago,
+    removePago,
+    pagosValidos,
     isSubmitDisabled,
     selectedDateOnly,
     selectedTimeOnly,

@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLocale } from '@/i18n/useLocale'
 import type { SaleAppointmentFormContext } from '../composables/useSaleAppointmentForm'
-import { ArrowLeft, Check, Close, Camera, WarnTriangleFilled, User } from '@element-plus/icons-vue'
+import { ArrowLeft, Check, Close, Camera, WarnTriangleFilled, User, Plus, Delete } from '@element-plus/icons-vue'
 import { ChevronDown } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 
@@ -30,6 +30,11 @@ const {
   getSellerStatus,
   estadoOptions,
   modoCobroOptions,
+  totalCalculado,
+  MAX_PAGOS,
+  canAddPago,
+  addPago,
+  removePago,
   isSubmitDisabled,
   selectedDateOnly,
   selectedTimeOnly,
@@ -671,12 +676,12 @@ const isSellerPhotographer = computed(() => {
         class="sale-form"
         :disabled="isReadOnly"
       >
-        <!-- Fotos Vendidas y Total USD en 2 columnas (50% cada una) -->
+        <!-- Fotos Vendidas (Móvil) -->
         <div class="mobile-card-section-label">
           <span class="step-badge-num">5</span>
           {{ $t('sales.steps.sale') }}
         </div>
-        <div class="mobile-form-row-2 spinner-containers">
+        <div class="mobile-sales-input-container">
           <el-form-item :label="$t('sales.form.photosSold')">
             <el-input-number
               v-model="formData.numFotosVendidas"
@@ -687,43 +692,89 @@ const isSellerPhotographer = computed(() => {
               size="large"
             />
           </el-form-item>
-
-          <el-form-item :label="$t('sales.form.totalUsd')">
-            <el-input-number
-              v-model="formData.totalVentaUsd"
-              :min="0"
-              :step="5"
-              style="width: 100%"
-              placeholder="0"
-              size="large"
-            >
-              <template #suffix>
-                <span>$</span>
-              </template>
-            </el-input-number>
-          </el-form-item>
         </div>
 
         <div class="mobile-payment-method-row">
           <div class="mobile-card-section-label">
             <span class="step-badge-num">6</span>
-            {{ $t('sales.steps.paymentMethod') }}
+            {{ $t('sales.steps.paymentBreakdown') }}
           </div>
 
-          <el-select
-            v-model="formData.modoCobro"
-            :placeholder="$t('sales.form.selectPaymentMethod')"
-            clearable
-            style="width: 100%"
-            size="large"
-          >
-            <el-option
-              v-for="opt in modoCobroOptions"
-              :key="opt.value"
-              :label="opt.label"
-              :value="opt.value"
-            />
-          </el-select>
+          <div class="mobile-payment-lines-list">
+            <div
+              v-for="(pago, index) in formData.pagos"
+              :key="index"
+              class="mobile-payment-line-item"
+            >
+              <div class="mobile-payment-line-inputs">
+                <el-select
+                  v-model="pago.metodoPago"
+                  :placeholder="$t('sales.form.paymentMethod')"
+                  style="flex: 1.15"
+                  size="large"
+                  :disabled="isReadOnly"
+                >
+                  <el-option
+                    v-for="opt in modoCobroOptions"
+                    :key="opt.value"
+                    :label="opt.label"
+                    :value="opt.value"
+                  />
+                </el-select>
+
+                <el-input-number
+                  v-model="pago.importeUsd"
+                  :min="0"
+                  :step="1"
+                  :precision="2"
+                  :placeholder="$t('sales.form.paymentAmount')"
+                  style="flex: 1"
+                  size="large"
+                  :disabled="isReadOnly"
+                >
+                  <template #suffix>
+                    <span>$</span>
+                  </template>
+                </el-input-number>
+
+                <el-button
+                  v-if="formData.pagos.length > 1 && !isReadOnly"
+                  type="danger"
+                  link
+                  :icon="Delete"
+                  :title="$t('sales.form.removePayment')"
+                  class="mobile-remove-pago-btn"
+                  @click="removePago(index)"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="mobile-payment-actions-row">
+            <el-button
+              v-if="canAddPago && !isReadOnly"
+              type="primary"
+              link
+              :icon="Plus"
+              class="mobile-add-pago-btn"
+              @click="addPago"
+            >
+              {{ $t('sales.form.addPaymentMethod') }}
+            </el-button>
+            <span v-else-if="!canAddPago && !isReadOnly" class="mobile-max-pagos-hint">
+              {{ $t('sales.form.maxPaymentMethodsReached') }}
+            </span>
+          </div>
+
+          <div class="mobile-payment-total-container">
+            <el-form-item :label="$t('sales.form.totalUsdCalculated')" required>
+              <div class="mobile-calculated-total-box">
+                <span class="currency-symbol">$</span>
+                <span class="total-amount">{{ totalCalculado.toFixed(2) }}</span>
+                <span class="currency-tag">USD</span>
+              </div>
+            </el-form-item>
+          </div>
         </div>
 
         <!-- Notas -->
@@ -1480,27 +1531,103 @@ const isSellerPhotographer = computed(() => {
   margin-bottom: 1.25rem;
 }
 
-.mobile-form-row-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+.mobile-sales-input-container {
   width: 100%;
+  margin-bottom: 0.85rem;
 }
 
-.mobile-form-row-2 :deep(.el-form-item) {
+.mobile-sales-input-container :deep(.el-form-item) {
   margin-bottom: 0 !important;
 }
 
-.mobile-form-row-2 :deep(.el-input-number) {
+.mobile-sales-input-container :deep(.el-input-number) {
   width: 100% !important;
-}
-.spinner-containers {
-  margin-bottom: 0.85rem;
 }
 
 .mobile-payment-method-row {
   width: 100%;
   margin-bottom: 1.25rem;
+}
+
+.mobile-calculated-total-box {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 12px;
+  background-color: var(--el-fill-color-light, #f8fafc);
+  border: 1px solid var(--el-border-color, #dcdfe6);
+  border-radius: 4px;
+  color: var(--el-text-color-primary, #303133);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mobile-calculated-total-box .currency-symbol {
+  font-size: 0.95rem;
+  color: var(--el-text-color-secondary, #909399);
+  font-weight: 600;
+}
+
+.mobile-calculated-total-box .total-amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--el-color-primary, #409eff);
+}
+
+.mobile-calculated-total-box .currency-tag {
+  font-size: 0.75rem;
+  color: var(--el-text-color-secondary, #909399);
+  margin-left: auto;
+  font-weight: 600;
+}
+
+.mobile-payment-lines-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.mobile-payment-line-item {
+  width: 100%;
+}
+
+.mobile-payment-line-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.mobile-remove-pago-btn {
+  padding: 4px;
+  font-size: 1.2rem;
+}
+
+.mobile-payment-actions-row {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-add-pago-btn {
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0;
+}
+
+.mobile-max-pagos-hint {
+  font-size: 0.75rem;
+  color: var(--el-text-color-secondary, #909399);
+  font-style: italic;
+}
+
+.mobile-payment-total-container {
+  margin-top: 1rem;
+}
+
+.mobile-payment-total-container :deep(.el-form-item) {
+  margin-bottom: 0 !important;
 }
 
 .form-card {
