@@ -610,8 +610,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuarioFormView.vue": {
-    "mtime": 1790007515.7501736,
-    "ast_hash": "e5af0e54d11734d4a715f1b720926da8",
+    "mtime": 1790010196.0536494,
+    "ast_hash": "1e3686ade9c84318c1d0e550bc25ef58",
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuariosView.vue": {
