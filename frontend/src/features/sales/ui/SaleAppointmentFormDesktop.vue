@@ -42,7 +42,6 @@ const {
   estadoOptions,
   modoCobroOptions,
   totalCalculado,
-  MAX_PAGOS,
   canAddPago,
   addPago,
   removePago,

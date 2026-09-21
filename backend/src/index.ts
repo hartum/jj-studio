@@ -14,6 +14,7 @@ import { googleCalendarRoutes } from './features/integrations/google-calendar/go
 import { templateRoutes } from './features/notifications/infrastructure/template.routes.js'
 import { startReminderCron } from './features/notifications/infrastructure/reminder.cron.js'
 import { auditLogRoutes } from './features/audit-log/infrastructure/audit-log.routes.js'
+import { migrateLegacyPayments } from './features/sales/infrastructure/sale.migration.js'
 
 const fastify = Fastify({
   logger: true,
@@ -55,6 +56,7 @@ const start = async () => {
     const port = Number(process.env.PORT) || 3000
     await fastify.listen({ port, host: '0.0.0.0' })
     console.log(`JJ Studio Backend running on http://localhost:${port}`)
+    await migrateLegacyPayments()
     startReminderCron()
   } catch (err) {
     fastify.log.error(err)
