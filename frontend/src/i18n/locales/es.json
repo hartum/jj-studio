@@ -29,7 +29,13 @@
     "logoutTitle": "Cerrar sesión",
     "openMenu": "Abrir menú de navegación",
     "closeMenu": "Cerrar menú de navegación",
-    "viewHotelSchedule": "Ver agenda del hotel"
+    "viewHotelSchedule": "Ver agenda del hotel",
+    "changeAvatar": "Cambiar foto de perfil",
+    "uploadAvatar": "Subir foto de perfil",
+    "removeAvatar": "Eliminar foto",
+    "avatarTooltip": "Haz clic para cambiar tu foto de perfil",
+    "avatarUpdated": "Foto de perfil actualizada correctamente",
+    "avatarRemoved": "Foto de perfil eliminada"
   },
   "auth": {
     "email": "Correo electrónico",

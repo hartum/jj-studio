@@ -29,7 +29,13 @@
     "logoutTitle": "Sign out",
     "openMenu": "Open navigation menu",
     "closeMenu": "Close navigation menu",
-    "viewHotelSchedule": "View hotel schedule"
+    "viewHotelSchedule": "View hotel schedule",
+    "changeAvatar": "Change profile photo",
+    "uploadAvatar": "Upload profile photo",
+    "removeAvatar": "Remove photo",
+    "avatarTooltip": "Click to change your profile photo",
+    "avatarUpdated": "Profile photo updated successfully",
+    "avatarRemoved": "Profile photo removed"
   },
   "auth": {
     "email": "Email",

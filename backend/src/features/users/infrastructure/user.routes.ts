@@ -889,6 +889,56 @@ export async function userRoutes(fastify: FastifyInstance) {
     }
   })
 
+  // PUT /api/usuarios/:id/avatar
+  fastify.put('/api/usuarios/:id/avatar', async (request, reply) => {
+    try {
+      const { id } = request.params as { id: string }
+      const { imagen } = request.body as { imagen?: string | null }
+
+      const executor = await getAuthUser(request)
+      if (!executor) {
+        return reply.status(401).send({ error: 'No autorizado' })
+      }
+
+      const roleCode = executor.role.codigo.toUpperCase()
+      const isSelf = executor.id === id
+      const isAllowedRole = ['SUPERUSUARIO', 'ADMIN', 'GERENTE', 'SUPERVISOR'].includes(roleCode)
+
+      if (!isSelf && !isAllowedRole) {
+        return reply
+          .status(403)
+          .send({ error: 'No tienes permisos para cambiar la foto de este usuario' })
+      }
+
+      const updated = await prisma.usuario.update({
+        where: { id },
+        data: { imagen: imagen ?? null },
+      })
+
+      if (executor) {
+        registrarAudit({
+          accion: 'MODIFICAR',
+          entidad: 'USUARIO',
+          entidadId: id,
+          usuarioId: executor.id,
+          usuarioNombre: `${executor.nombre} ${executor.apellidos}`.trim(),
+          usuarioRol: executor.role.nombre,
+          descripcion: imagen
+            ? 'actualizó la foto de perfil del usuario'
+            : 'eliminó la foto de perfil del usuario',
+          ipAddress: request.ip,
+        })
+      }
+
+      return reply.send({ success: true, id, imagen: updated.imagen })
+    } catch (err: any) {
+      fastify.log.error(err)
+      return reply
+        .status(500)
+        .send({ error: err.message || 'Error al actualizar la foto del usuario' })
+    }
+  })
+
   // DELETE /api/usuarios/:id (Soft delete)
   fastify.delete('/api/usuarios/:id', async (request, reply) => {
     try {

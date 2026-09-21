@@ -17,10 +17,6 @@ import {
   Close,
   Upload,
   Delete,
-  ZoomIn,
-  ZoomOut,
-  RefreshLeft,
-  RefreshRight,
   Location,
 } from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
@@ -28,8 +24,7 @@ import { ElMessage } from 'element-plus'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
 import { getRolePermissions, canEditUser, type RoleCode } from '@/shared/permissions'
 import { useLocale } from '@/i18n/useLocale'
-import { Cropper, CircleStencil } from 'vue-advanced-cropper'
-import 'vue-advanced-cropper/dist/style.css'
+import AvatarCropperDialog from './AvatarCropperDialog.vue'
 import CalendarioLaboral from './CalendarioLaboral.vue'
 
 const route = useRoute()
@@ -52,7 +47,6 @@ const activeTab = ref<'datos' | 'calendario'>('datos')
 const fileInput = ref<HTMLInputElement | null>(null)
 const cropperDialogVisible = ref(false)
 const imageToCrop = ref<string | null>(null)
-const cropperRef = ref<InstanceType<typeof Cropper> | null>(null)
 
 const formData = ref({
   nombre: '',
@@ -333,14 +327,11 @@ function onFileSelected(event: Event) {
   target.value = ''
 }
 
-function applyCrop() {
-  if (!cropperRef.value) return
-  const { canvas } = cropperRef.value.getResult()
-  if (canvas) {
-    formData.value.imagen = canvas.toDataURL('image/png')
-    cropperDialogVisible.value = false
-    ElMessage.success(t('users.toasts.imageCroppedSuccess'))
-  }
+function applyCrop(base64: string) {
+  formData.value.imagen = base64
+  cropperDialogVisible.value = false
+  imageToCrop.value = null
+  ElMessage.success(t('users.toasts.imageCroppedSuccess'))
 }
 
 function removeAvatar() {
@@ -348,14 +339,6 @@ function removeAvatar() {
   imageToCrop.value = null
   cropperDialogVisible.value = false
   ElMessage.info(t('users.toasts.imageRemovedSuccess'))
-}
-
-function zoom(factor: number) {
-  cropperRef.value?.zoom(factor)
-}
-
-function rotate(angle: number) {
-  cropperRef.value?.rotate(angle)
 }
 
 function handleCancel() {
@@ -821,37 +804,12 @@ async function handleSave() {
     </el-form>
 
     <!-- Diálogo para Recorte de Imagen -->
-    <el-dialog
-      v-model="cropperDialogVisible"
-      :title="$t('users.form.cropperTitle')"
-      width="550px"
-      :close-on-click-modal="false"
-      destroy-on-close
-    >
-      <div class="cropper-container" v-if="imageToCrop">
-        <cropper
-          ref="cropperRef"
-          class="cropper"
-          :src="imageToCrop"
-          :stencil-component="CircleStencil"
-          :stencil-props="{
-            aspectRatio: 1,
-          }"
-        />
-        <div class="cropper-controls">
-          <el-button-group>
-            <el-button :icon="ZoomIn" @click="zoom(1.2)">{{ $t('users.form.zoomIn') }}</el-button>
-            <el-button :icon="ZoomOut" @click="zoom(0.8)">{{ $t('users.form.zoomOut') }}</el-button>
-            <el-button :icon="RefreshLeft" @click="rotate(-90)">{{ $t('users.form.rotateLeft') }}</el-button>
-            <el-button :icon="RefreshRight" @click="rotate(90)">{{ $t('users.form.rotateRight') }}</el-button>
-          </el-button-group>
-        </div>
-      </div>
-      <template #footer>
-        <el-button @click="cropperDialogVisible = false">{{ $t('users.form.cropperCancel') }}</el-button>
-        <el-button type="primary" :icon="Check" @click="applyCrop"> {{ $t('users.form.saveCrop') }} </el-button>
-      </template>
-    </el-dialog>
+    <AvatarCropperDialog
+      v-model:visible="cropperDialogVisible"
+      :image-src="imageToCrop"
+      @crop="applyCrop"
+      @cancel="imageToCrop = null"
+    />
   </div>
 </template>
 
@@ -958,26 +916,6 @@ async function handleSave() {
 .profile-option-desc {
   font-size: 0.75rem;
   color: var(--nav-link-color, #64748b);
-}
-
-.cropper-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.cropper {
-  height: 320px;
-  width: 100%;
-  background: #1e293b;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.cropper-controls {
-  display: flex;
-  justify-content: center;
 }
 
 .option-item-content {
@@ -1125,10 +1063,6 @@ async function handleSave() {
 
   :deep(.el-dialog) {
     width: 95% !important;
-  }
-
-  .cropper {
-    height: 240px;
   }
 }
 </style>

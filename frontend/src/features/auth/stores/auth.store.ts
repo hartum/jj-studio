@@ -65,11 +65,37 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('user')
   }
 
+  async function updateAvatar(imagen: string | null) {
+    if (!user.value || !token.value) return
+    const res = await fetch(`${API_URL}/usuarios/${user.value.id}/avatar`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token.value}`,
+      },
+      body: JSON.stringify({ imagen }),
+    })
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}))
+      throw new Error(errorData.error || 'Error al actualizar la foto de perfil')
+    }
+
+    const data = await res.json()
+    user.value = {
+      ...user.value,
+      imagen: data.imagen ?? null,
+    }
+    localStorage.setItem('user', JSON.stringify(user.value))
+    return data
+  }
+
   return {
     token,
     user,
     isAuthenticated,
     login,
     logout,
+    updateAvatar,
   }
 })

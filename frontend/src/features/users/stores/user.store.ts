@@ -138,6 +138,34 @@ export const useUserStore = defineStore('users', () => {
     }
   }
 
+  async function updateUserAvatar(id: string, imagen: string | null) {
+    try {
+      const token = localStorage.getItem('token')
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+      const res = await fetch(`${API_URL}/usuarios/${id}/avatar`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({ imagen }),
+      })
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}))
+        throw new Error(errorData.error || `HTTP ${res.status}: Error al actualizar la foto`)
+      }
+      const data = await res.json()
+      const user = users.value.find((u) => u.id === id)
+      if (user) {
+        user.imagen = data.imagen ?? null
+      }
+      return data
+    } catch (err) {
+      console.error('Error updating user avatar:', err)
+      throw err
+    }
+  }
+
   return {
     users,
     usersWithProfile,
@@ -146,6 +174,7 @@ export const useUserStore = defineStore('users', () => {
     addUser,
     updateUser,
     updateUserColor,
+    updateUserAvatar,
     deleteUser,
   }
 })

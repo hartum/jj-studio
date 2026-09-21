@@ -3,13 +3,16 @@ import { ref, computed, onMounted } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
 import { useCountryStore } from '@/features/countries/stores/country.store'
+import { useUserStore } from '@/features/users/stores/user.store'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 import { canAccessRoute, getRolePermissions } from '@/shared/permissions'
 import SidebarNav from '@/components/SidebarNav.vue'
 import LanguageSelector from '@/components/LanguageSelector.vue'
+import AvatarCropperDialog from '@/features/users/ui/AvatarCropperDialog.vue'
 import logoJJ from '@/assets/logoJJ.png'
 import { useLocale } from '@/i18n/useLocale'
-import { Sunny, Moon, SwitchButton, Menu, Close } from '@element-plus/icons-vue'
+import { Sunny, Moon, SwitchButton, Menu, Close, Camera, Upload, Delete } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 
 const { elementPlusLocale, t } = useLocale()
 
@@ -17,12 +20,78 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const countryStore = useCountryStore()
+const userStore = useUserStore()
 
 const isFullScreenAuthPage = computed(
   () => Boolean(route.meta.guestOnly) || ['/login', '/forgot-password', '/reset-password'].includes(route.path),
 )
 const isDark = ref(false)
 const isMobileDrawerOpen = ref(false)
+
+// Estados para cambio de foto de perfil
+const avatarFileInput = ref<HTMLInputElement | null>(null)
+const cropperDialogVisible = ref(false)
+const imageToCrop = ref<string | null>(null)
+const isUpdatingAvatar = ref(false)
+
+function triggerAvatarUpload() {
+  avatarFileInput.value?.click()
+}
+
+function onAvatarFileSelected(event: Event) {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  if (!file.type.startsWith('image/')) {
+    ElMessage.error(t('users.toasts.validImageRequired'))
+    return
+  }
+
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    imageToCrop.value = e.target?.result as string
+    cropperDialogVisible.value = true
+  }
+  reader.readAsDataURL(file)
+  target.value = ''
+}
+
+async function handleCropSave(base64: string) {
+  isUpdatingAvatar.value = true
+  try {
+    await authStore.updateAvatar(base64)
+    if (userStore.users.length > 0 && authStore.user?.id) {
+      const u = userStore.users.find((x) => x.id === authStore.user!.id)
+      if (u) u.imagen = base64
+    }
+    cropperDialogVisible.value = false
+    imageToCrop.value = null
+    ElMessage.success(t('nav.avatarUpdated'))
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : t('users.toasts.dbError')
+    ElMessage.error(msg)
+  } finally {
+    isUpdatingAvatar.value = false
+  }
+}
+
+async function handleRemoveAvatar() {
+  isUpdatingAvatar.value = true
+  try {
+    await authStore.updateAvatar(null)
+    if (userStore.users.length > 0 && authStore.user?.id) {
+      const u = userStore.users.find((x) => x.id === authStore.user!.id)
+      if (u) u.imagen = null
+    }
+    ElMessage.info(t('nav.avatarRemoved'))
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : t('users.toasts.dbError')
+    ElMessage.error(msg)
+  } finally {
+    isUpdatingAvatar.value = false
+  }
+}
 
 const canSeeAgenda = computed(() => canAccessRoute(authStore.user?.roleCode, '/agenda'))
 const canSeeConfig = computed(() => canAccessRoute(authStore.user?.roleCode, '/configuracion'))
@@ -106,6 +175,24 @@ onMounted(async () => {
 
 <template>
   <el-config-provider :locale="elementPlusLocale">
+    <!-- Input oculto para subir avatar -->
+    <input
+      ref="avatarFileInput"
+      type="file"
+      accept="image/*"
+      style="display: none"
+      @change="onAvatarFileSelected"
+    />
+
+    <!-- Diálogo reutilizable de recorte de imagen de perfil -->
+    <AvatarCropperDialog
+      v-model:visible="cropperDialogVisible"
+      :image-src="imageToCrop"
+      :loading="isUpdatingAvatar"
+      @crop="handleCropSave"
+      @cancel="imageToCrop = null"
+    />
+
     <!-- Vistas de Autenticación a pantalla completa sin Sidebar/Toolbar -->
     <div v-if="isFullScreenAuthPage" class="full-screen-wrapper">
       <RouterView />
@@ -199,21 +286,46 @@ onMounted(async () => {
             </div>
 
             <div class="toolbar-right">
-              <!-- Usuario autenticado -->
+              <!-- Usuario autenticado con avatar interactivo -->
               <div v-if="authStore.user" class="user-badge">
-                <el-avatar
-                  :src="authStore.user.imagen || undefined"
-                  shape="circle"
-                  :size="36"
-                  :style="{
-                    backgroundColor: getUserBgColor(authStore.user.color),
-                    color: '#ffffff',
-                    fontWeight: '600',
-                  }"
-                  class="topbar-avatar"
-                >
-                  {{ getUserInitials(authStore.user.nombre, authStore.user.apellidos) }}
-                </el-avatar>
+                <el-dropdown trigger="click" popper-class="avatar-menu-popper">
+                  <div class="topbar-avatar-wrapper" :title="t('nav.avatarTooltip')">
+                    <el-avatar
+                      :src="authStore.user.imagen || undefined"
+                      shape="circle"
+                      :size="36"
+                      :style="{
+                        backgroundColor: getUserBgColor(authStore.user.color),
+                        color: '#ffffff',
+                        fontWeight: '600',
+                      }"
+                      class="topbar-avatar"
+                    >
+                      {{ getUserInitials(authStore.user.nombre, authStore.user.apellidos) }}
+                    </el-avatar>
+                    <div class="avatar-hover-overlay">
+                      <el-icon :size="14"><Camera /></el-icon>
+                    </div>
+                  </div>
+
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item :icon="Upload" @click="triggerAvatarUpload">
+                        {{ authStore.user.imagen ? t('nav.changeAvatar') : t('nav.uploadAvatar') }}
+                      </el-dropdown-item>
+                      <el-dropdown-item
+                        v-if="authStore.user.imagen"
+                        :icon="Delete"
+                        divided
+                        class="dropdown-item-danger"
+                        @click="handleRemoveAvatar"
+                      >
+                        {{ t('nav.removeAvatar') }}
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+
                 <div class="user-info">
                   <span class="user-name"
                     >{{ authStore.user.nombre }} {{ authStore.user.apellidos }}</span
@@ -299,22 +411,22 @@ onMounted(async () => {
   gap: 0.75rem;
 }
 
-.close-drawer-btn {
-  font-size: 1.1rem;
-}
-
 .brand-logo {
-  width: 42px;
-  height: 42px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
 }
 
 .brand-title {
   font-weight: 700;
-  font-size: 1.2rem;
-  background: linear-gradient(135deg, #409eff 0%, #a0cfff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  color: var(--heading-color, #0f172a);
+}
+
+.close-drawer-btn {
+  border: none;
+  background-color: transparent;
 }
 
 /* Main Wrapper Styling */
@@ -353,6 +465,43 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+}
+
+.topbar-avatar-wrapper {
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+  outline: none;
+}
+
+.topbar-avatar-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.avatar-hover-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.topbar-avatar-wrapper:hover .avatar-hover-overlay {
+  opacity: 1;
+}
+
+:deep(.dropdown-item-danger) {
+  color: var(--el-color-danger, #f56c6c) !important;
 }
 
 .user-info {
