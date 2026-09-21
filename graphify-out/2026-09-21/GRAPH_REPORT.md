@@ -1,16 +1,16 @@
 # Graph Report - JJ Studio  (2026-09-21)
 
 ## Corpus Check
-- 146 files · ~246,602 words
+- 145 files · ~246,413 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1278 nodes · 1748 edges · 103 communities (83 shown, 20 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.6)
+- 1276 nodes · 1743 edges · 95 communities (75 shown, 20 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 14 edges (avg confidence: 0.76)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `7ee250d2`
+- Built from commit: `6102d84e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -100,20 +100,12 @@
 - LanguageSelector.vue
 - useLocale.ts
 - CalendarEventCard.vue
-- src/index.ts
-- google-calendar.service.ts
 - CalendarDeleteConfirmPopover.vue
-- sale.routes.ts
-- user.routes.ts
-- ForgotPasswordView.vue
 - CalendarAlertsPanel.vue
-- session.routes.ts
-- email.service.ts
-- calendario-laboral.routes.ts
 
 ## God Nodes (most connected - your core abstractions)
 1. `vue` - 59 edges
-2. `prisma` - 24 edges
+2. `prisma` - 23 edges
 3. `decryptUser()` - 23 edges
 4. `decrypt()` - 19 edges
 5. `encrypt()` - 18 edges
@@ -128,21 +120,21 @@
   backend/src/features/photo-sessions/infrastructure/session.routes.ts → backend/src/features/commissions/application/commission.service.ts
 - `getComisionesSummaries()` --calls--> `formatCurrency()`  [INFERRED]
   frontend/src/features/home/ui/dashboards/ContableDashboard.vue → frontend/src/features/goals/ui/GoalProgressCard.vue
-- `registrarAudit()` --calls--> `decrypt()`  [EXTRACTED]
-  backend/src/features/audit-log/application/audit-log.service.ts → backend/src/shared/encryption.ts
-- `registrarAudit()` --calls--> `decryptUser()`  [EXTRACTED]
-  backend/src/features/audit-log/application/audit-log.service.ts → backend/src/shared/encryption.ts
-- `syncSesionToGoogle()` --calls--> `decrypt()`  [EXTRACTED]
-  backend/src/features/integrations/google-calendar/google-calendar.service.ts → backend/src/shared/encryption.ts
+- `processSessionReminders()` --calls--> `decryptSesion()`  [EXTRACTED]
+  backend/src/features/notifications/application/reminder.service.ts → backend/src/shared/encryption.ts
+- `processSaleAppointmentReminders()` --calls--> `decryptSesion()`  [EXTRACTED]
+  backend/src/features/notifications/application/reminder.service.ts → backend/src/shared/encryption.ts
+- `processSaleAppointmentReminders()` --calls--> `decryptUser()`  [EXTRACTED]
+  backend/src/features/notifications/application/reminder.service.ts → backend/src/shared/encryption.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (103 total, 20 thin omitted)
+## Communities (95 total, 20 thin omitted)
 
 ### Community 0 - "encryption.ts"
-Cohesion: 0.22
-Nodes (18): main(), prisma, seedUser(), migrateAll(), migrateSessions(), migrateUsers(), testCrypto(), testPasswordResetFlow() (+10 more)
+Cohesion: 0.06
+Nodes (77): main(), prisma, seedUser(), AuditParams, DIAS_SEMANA, formatAuditDateTime(), formatCreadorOriginal(), MESES (+69 more)
 
 ### Community 1 - "dependencies"
 Cohesion: 0.15
@@ -189,8 +181,8 @@ Cohesion: 0.08
 Nodes (22): EmailTemplate, PreviewResult, useEmailTemplates(), VariableInfo, activeTab, authStore, categorizedVariables, currentTemplate (+14 more)
 
 ### Community 10 - "reminder.service.ts"
-Cohesion: 0.21
-Nodes (20): formatDateDisplay(), formatTimeDisplay(), getMailTransporter(), getTemplate(), isValidEmail(), processAllReminders(), processSaleAppointmentReminders(), processSessionReminders() (+12 more)
+Cohesion: 0.20
+Nodes (21): formatDateDisplay(), formatTimeDisplay(), getMailTransporter(), getTemplate(), isValidEmail(), processAllReminders(), processSaleAppointmentReminders(), processSessionReminders() (+13 more)
 
 ### Community 11 - "PaisesConfig.vue"
 Cohesion: 0.10
@@ -388,8 +380,8 @@ Cohesion: 0.25
 Nodes (7): 1. Importación y Uso Básico, 2. Integración con Element Plus, 💡 Buenas Prácticas, 🎨 Formas de Uso, Guía de Uso de Iconos Lucide (`@lucide/vue`), 📦 Paquete Instalado, ⚙️ Propiedades Principales de los Iconos
 
 ### Community 50 - "LoginView.vue"
-Cohesion: 0.22
-Nodes (7): authStore, email, isLoading, password, rememberMe, router, { t }
+Cohesion: 0.12
+Nodes (12): email, isLoading, isSubmitted, router, { t }, authStore, email, isLoading (+4 more)
 
 ### Community 51 - "frontend/src/shared/permissions.ts"
 Cohesion: 0.32
@@ -455,61 +447,29 @@ Nodes (3): EP_LOCALES, FC_LOCALES, SupportedLocale
 Cohesion: 0.29
 Nodes (5): emit, eventStatus, Props, StatusConfig, { t }
 
-### Community 93 - "src/index.ts"
-Cohesion: 0.20
-Nodes (15): AuditParams, DIAS_SEMANA, formatAuditDateTime(), formatCreadorOriginal(), MESES, registrarAudit(), auditLogRoutes(), getAuthTokenInfo() (+7 more)
-
-### Community 94 - "google-calendar.service.ts"
-Cohesion: 0.27
-Nodes (16): googleCalendarRoutes(), deleteCitaVentaFromGoogle(), deleteSesionFromGoogle(), formatDateLongSpanish(), formatEmailHtml(), formatPaxDisplay(), formatPhoneHtml(), formatRoomDisplay() (+8 more)
-
-### Community 96 - "sale.routes.ts"
-Cohesion: 0.36
-Nodes (9): deriveModoCobro(), findConflicts(), getAllowedHotelIds(), getAuthUserId(), getUserRole(), PagoInput, parseDateOnly(), parseLocalDateTime() (+1 more)
-
-### Community 97 - "user.routes.ts"
-Cohesion: 0.40
-Nodes (8): getAuthUser(), userRoutes(), canDeleteUser(), canEditUser(), getRolePermissions(), PERMISSION_MATRIX, RoleCode, RoleConfig
-
-### Community 98 - "ForgotPasswordView.vue"
-Cohesion: 0.29
-Nodes (5): email, isLoading, isSubmitted, router, { t }
-
 ### Community 99 - "CalendarAlertsPanel.vue"
 Cohesion: 0.33
 Nodes (4): activeAlertPanels, Props, router, totalAlertsCount
 
-### Community 100 - "session.routes.ts"
-Cohesion: 0.67
-Nodes (5): getAuthUserId(), getHotelAvailability(), parseDateOnly(), parseLocalDateTime(), sessionRoutes()
-
-### Community 101 - "email.service.ts"
-Cohesion: 0.53
-Nodes (5): escapeHtml(), getAppBaseUrl(), getMailTransporter(), sendPasswordResetEmail(), SendPasswordResetParams
-
-### Community 102 - "calendario-laboral.routes.ts"
-Cohesion: 0.83
-Nodes (3): calendarioLaboralRoutes(), formatDateToIsoString(), parseDateOnly()
-
 ## Knowledge Gaps
-- **662 isolated node(s):** `fastify`, `props`, `router`, `{ t, locale }`, `showSessionsList` (+657 more)
+- **662 isolated node(s):** `PagoInput`, `FormPagoItem`, `SessionContextInfo`, `VendedorDisponibilidadItem`, `VendedoresDisponibilidadResponse` (+657 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `usePhotoSessionForm.ts`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `useSaleAppointmentForm.ts`, `SupervisorHotelGoalCard.vue`, `ContableDashboard.vue`, `ConfiguracionView.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `GoalProgressCard.vue`, `AgendadorHotelGoalCard.vue`, `LoginView.vue`, `SaleAppointmentFormView.vue`, `PhotoSessionFormView.vue`, `CalendarHeader.vue`, `useLocale.ts`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `CalendarAlertsPanel.vue`?**
-  _High betweenness centrality (0.360) - this node is a cross-community bridge._
+- **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `usePhotoSessionForm.ts`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `useSaleAppointmentForm.ts`, `SupervisorHotelGoalCard.vue`, `ContableDashboard.vue`, `ConfiguracionView.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `GoalProgressCard.vue`, `AgendadorHotelGoalCard.vue`, `LoginView.vue`, `SaleAppointmentFormView.vue`, `PhotoSessionFormView.vue`, `CalendarHeader.vue`, `useLocale.ts`, `CalendarEventCard.vue`, `CalendarAlertsPanel.vue`?**
+  _High betweenness centrality (0.363) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
-  _High betweenness centrality (0.011) - this node is a cross-community bridge._
-- **What connects `fastify`, `props`, `router` to the rest of the system?**
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
+- **What connects `PagoInput`, `FormPagoItem`, `SessionContextInfo` to the rest of the system?**
   _662 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `encryption.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.05919191919191919 - nodes in this community are weakly interconnected._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.0392156862745098 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
 - **Should `HotelCalendarMobile.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.06031746031746032 - nodes in this community are weakly interconnected._
-- **Should `PhotoSessionFormMobile.vue` be split into smaller, more focused modules?**
-  _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._

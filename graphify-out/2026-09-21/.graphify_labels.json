@@ -92,14 +92,6 @@
   "90": "LanguageSelector.vue",
   "91": "useLocale.ts",
   "92": "CalendarEventCard.vue",
-  "93": "src/index.ts",
-  "94": "google-calendar.service.ts",
   "95": "CalendarDeleteConfirmPopover.vue",
-  "96": "sale.routes.ts",
-  "97": "user.routes.ts",
-  "98": "ForgotPasswordView.vue",
-  "99": "CalendarAlertsPanel.vue",
-  "100": "session.routes.ts",
-  "101": "email.service.ts",
-  "102": "calendario-laboral.routes.ts"
+  "99": "CalendarAlertsPanel.vue"
 }

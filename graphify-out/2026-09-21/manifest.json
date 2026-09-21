@@ -185,9 +185,9 @@
     "semantic_hash": ""
   },
   "backend/src/index.ts": {
-    "mtime": 1790005017.587958,
-    "ast_hash": "b9669b06a79372bf3b28e8410bd9c139",
-    "semantic_hash": ""
+    "mtime": 1788450308.5917034,
+    "ast_hash": "7c7542d8e9ceea51f9f42b46b0f8c7e5",
+    "semantic_hash": "7c7542d8e9ceea51f9f42b46b0f8c7e5"
   },
   "backend/src/scripts/migrate-encrypt-all.ts": {
     "mtime": 1787505845.060615,
@@ -555,8 +555,8 @@
     "semantic_hash": "5bc8472b67677845c528e85e91cbc45f"
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue": {
-    "mtime": 1790004748.8179898,
-    "ast_hash": "d9c34e03df5423f5833b6e0997ba2ff7",
+    "mtime": 1789922384.2927692,
+    "ast_hash": "dd61fe4a95faac8e7a9f384ea8f3d9f5",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue": {
@@ -1027,11 +1027,6 @@
   "frontend/src/i18n/locales/es.json": {
     "mtime": 1789922367.3430986,
     "ast_hash": "ce62a6d089d8054cfe87947a2f901c81",
-    "semantic_hash": ""
-  },
-  "backend/src/features/sales/infrastructure/sale.migration.ts": {
-    "mtime": 1790005033.5000095,
-    "ast_hash": "1c4b596ea2777544c749a433186a7c9d",
     "semantic_hash": ""
   }
 }
