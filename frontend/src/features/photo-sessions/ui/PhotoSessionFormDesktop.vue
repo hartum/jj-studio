@@ -43,6 +43,7 @@ const {
   activeScheduleAccordion,
   alertOverdue,
   isReadOnly,
+  isLockedByPhotographer,
   alertNoSaleAppointment,
   alertSaleNoShow,
   isSaving,
@@ -322,7 +323,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 
     <!-- Read-only lock banner -->
     <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-      {{ $t('sessions.readOnlyNotice') }}
+      {{ isLockedByPhotographer ? $t('sessions.readOnlyAssignedNotice') : $t('sessions.readOnlyNotice') }}
     </el-alert>
 
     <!-- Layout de 2 Columnas -->

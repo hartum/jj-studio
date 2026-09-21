@@ -21,6 +21,7 @@ export interface SesionFotografica {
   googleCalendarEventId?: string | null
   citaVenta?: {
     id: number
+    vendedorId?: string | null
     fechaHoraCita: string
     estado: string
     numFotosVendidas?: number | null

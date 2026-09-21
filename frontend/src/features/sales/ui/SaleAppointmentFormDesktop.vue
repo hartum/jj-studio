@@ -31,6 +31,7 @@ const {
   isEditing,
   isSaving,
   isReadOnly,
+  isLockedByPhotographer,
   conflicts,
   availableSessions,
   excludedSessionsCount,
@@ -259,7 +260,7 @@ const formattedSelectedSaleDateTime = computed(() => {
       <div class="form-main-col">
         <!-- Read-only lock banner -->
         <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-          {{ $t('sales.readOnlyNotice') }}
+          {{ isLockedByPhotographer ? $t('sales.readOnlyAssignedNotice') : $t('sales.readOnlyNotice') }}
         </el-alert>
 
         <!-- Conflict banner -->

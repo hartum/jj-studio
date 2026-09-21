@@ -135,12 +135,45 @@ export function useSaleAppointmentForm() {
     return hotelStore.hotels.filter((h) => userHotelIds.has(h.id))
   })
 
-  // Role-based edit lock (only locks if the appointment was already saved in DB with status other than PROGRAMADA)
+  // Lock due to assigned photographer/seller:
+  // Once a session/appointment has an assigned photographer or seller, only the
+  // assigned photographer, assigned seller, supervisor, gerente, admin, and superusuario can edit it.
+  const isLockedByPhotographer = computed(() => {
+    if (!isEditing.value || !loadedCita.value) return false
+    if (loadedCita.value.estado !== 'PROGRAMADA') return false
+    const fotografoId = loadedCita.value.fotografoId || sessionInfo.value.fotografoId
+    const vendedorId = loadedCita.value.vendedorId || formData.value.vendedorId
+    if (!fotografoId && !vendedorId) return false
+    const role = currentUser.value?.roleCode?.toUpperCase() || ''
+    const currentUserId = currentUser.value?.id
+    const isAssignedFotografo = Boolean(
+      fotografoId && String(fotografoId) === String(currentUserId),
+    )
+    const isAssignedVendedor = Boolean(
+      vendedorId && String(vendedorId) === String(currentUserId),
+    )
+    const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+    return !isAssignedFotografo && !isAssignedVendedor && !isPrivileged
+  })
+
+  // Role-based edit lock
   const isReadOnly = computed(() => {
     if (!isEditing.value || !loadedCita.value) return false
-    if (loadedCita.value.estado === 'PROGRAMADA') return false
     const role = currentUser.value?.roleCode?.toUpperCase() || ''
-    return !['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+
+    // 1. If state is not PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW): only GERENTE, ADMIN, SUPERUSUARIO
+    if (loadedCita.value.estado !== 'PROGRAMADA') {
+      return !['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+    }
+
+    // 2. If state is PROGRAMADA and associated session has an assigned photographer:
+    if (isLockedByPhotographer.value) {
+      return true
+    }
+
+    if (role === 'CONTABLE') return true
+
+    return false
   })
 
   // Available completed sessions without a sales appointment (for session selector)
@@ -148,10 +181,19 @@ export function useSaleAppointmentForm() {
 
   const availableSessions = computed(() => {
     const allowedHotelIds = new Set(userHotels.value.map((h) => Number(h.id)))
+    const role = currentUser.value?.roleCode?.toUpperCase() || ''
+    const currentUserId = currentUser.value?.id
+
     return sessionStore.sessions.filter((s) => {
       if (!allowedHotelIds.has(Number(s.hotelId))) return false
       if ((ESTADOS_NO_PERMITIDOS as readonly string[]).includes(s.estado)) return false
       if (s.citaVenta && s.citaVenta.id) return false
+      // Si el usuario es FOTOGRAFO, solo puede ver y seleccionar sus propias sesiones
+      if (role === 'FOTOGRAFO') {
+        if (!s.fotografoId || String(s.fotografoId) !== String(currentUserId)) {
+          return false
+        }
+      }
       return true
     })
   })
@@ -159,9 +201,18 @@ export function useSaleAppointmentForm() {
   // Count of sessions in allowed hotels without sales appointment that do not meet all criteria
   const excludedSessionsCount = computed(() => {
     const allowedHotelIds = new Set(userHotels.value.map((h) => Number(h.id)))
+    const role = currentUser.value?.roleCode?.toUpperCase() || ''
+    const currentUserId = currentUser.value?.id
+
     return sessionStore.sessions.filter((s) => {
       if (!allowedHotelIds.has(Number(s.hotelId))) return false
       if (s.citaVenta && s.citaVenta.id) return false
+      if (
+        role === 'FOTOGRAFO' &&
+        (!s.fotografoId || String(s.fotografoId) !== String(currentUserId))
+      ) {
+        return false
+      }
       return (ESTADOS_NO_PERMITIDOS as readonly string[]).includes(s.estado)
     }).length
   })
@@ -693,7 +744,18 @@ export function useSaleAppointmentForm() {
       // Creating new: check for sesionId query param
       const querySesionId = route.query.sesionId ? Number(route.query.sesionId) : null
       if (querySesionId) {
-        formData.value.sesionId = querySesionId
+        const targetSession = sessionStore.sessions.find((s) => s.id === querySesionId)
+        const role = currentUser.value?.roleCode?.toUpperCase() || ''
+        const currentUserId = currentUser.value?.id
+        if (
+          role === 'FOTOGRAFO' &&
+          targetSession &&
+          (!targetSession.fotografoId || String(targetSession.fotografoId) !== String(currentUserId))
+        ) {
+          ElMessage.error(t('sales.toasts.photographerOwnSessionsOnly'))
+        } else {
+          formData.value.sesionId = querySesionId
+        }
       }
     }
   })
@@ -703,9 +765,26 @@ export function useSaleAppointmentForm() {
   }
 
   async function handleSave() {
+    if (isReadOnly.value) return
+
     if (!formData.value.sesionId) {
       ElMessage.warning(t('sales.toasts.sessionRequired'))
       return
+    }
+
+    if (!isEditing.value) {
+      const role = currentUser.value?.roleCode?.toUpperCase() || ''
+      const currentUserId = currentUser.value?.id
+      if (role === 'FOTOGRAFO') {
+        const targetSession = sessionStore.sessions.find((s) => s.id === Number(formData.value.sesionId))
+        if (
+          targetSession &&
+          (!targetSession.fotografoId || String(targetSession.fotografoId) !== String(currentUserId))
+        ) {
+          ElMessage.error(t('sales.toasts.photographerOwnSessionsOnly'))
+          return
+        }
+      }
     }
     if (!formData.value.fechaHoraCita) {
       ElMessage.warning(t('sales.toasts.dateTimeRequired'))
@@ -800,6 +879,7 @@ export function useSaleAppointmentForm() {
     isEditing,
     isSaving,
     isReadOnly,
+    isLockedByPhotographer,
     conflicts,
     loadedCita,
     formData,

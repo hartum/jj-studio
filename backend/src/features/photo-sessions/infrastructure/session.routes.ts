@@ -534,23 +534,45 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         return reply.status(404).send({ error: 'Sesión fotográfica no encontrada' })
       }
 
-      // Role check: if session in DB was NOT PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW), only GERENTE/ADMIN/SUPERUSUARIO can edit
-      if (existing.estado !== 'PROGRAMADA') {
-        const userId = getAuthUserId(request)
-        if (!userId) {
-          return reply.status(403).send({ error: 'No autorizado para editar sesiones cerradas' })
-        }
+      // Role check:
+      // 1. If session in DB was NOT PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW), only GERENTE/ADMIN/SUPERUSUARIO can edit
+      const userId = getAuthUserId(request)
+      let userRole: string | null = null
+      if (userId) {
         const user = await prisma.usuario.findUnique({
           where: { id: userId },
           include: { role: true },
         })
-        const role = user?.role?.codigo?.toUpperCase()
-        const canEdit = ['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role || '')
+        userRole = user?.role?.codigo?.toUpperCase() || null
+      }
+
+      if (existing.estado !== 'PROGRAMADA') {
+        if (!userId) {
+          return reply.status(403).send({ error: 'No autorizado para editar sesiones cerradas' })
+        }
+        const canEdit = ['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(userRole || '')
         if (!canEdit) {
           return reply.status(403).send({
             error:
               'Solo gerentes, administradores y superusuarios pueden editar sesiones cerradas',
           })
+        }
+      } else {
+        // 2. If session in DB is PROGRAMADA and already has an assigned photographer:
+        // Only assigned photographer, supervisor, gerente, admin, and superusuario can edit.
+        // Other photographers, agendadores, and unauthorized profiles cannot edit.
+        if (existing.fotografoId) {
+          if (!userId) {
+            return reply.status(403).send({ error: 'No autorizado para editar esta sesión' })
+          }
+          const isAssignedFotografo = userId === existing.fotografoId
+          const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(userRole || '')
+          if (!isAssignedFotografo && !isPrivileged) {
+            return reply.status(403).send({
+              error:
+                'Esta sesión ya tiene un fotógrafo asignado. Solo el fotógrafo asignado, supervisores, gerentes o administradores pueden editarla.',
+            })
+          }
         }
       }
 

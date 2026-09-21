@@ -437,6 +437,17 @@ export async function saleRoutes(fastify: FastifyInstance) {
           .send({ error: 'Esta sesión ya tiene una cita de venta asociada' })
       }
 
+      const userId = getAuthUserId(request)
+      const role = userId ? await getUserRole(userId) : null
+
+      if (role === 'FOTOGRAFO') {
+        if (!sesion.fotografoId || sesion.fotografoId !== userId) {
+          return reply.status(403).send({
+            error: 'Los fotógrafos solo pueden crear citas de venta de sus propias sesiones de fotos',
+          })
+        }
+      }
+
       const fechaCita = parseLocalDateTime(body.fechaHoraCita)
 
       const todayBeginning = new Date()
@@ -684,18 +695,39 @@ export async function saleRoutes(fastify: FastifyInstance) {
         return reply.status(404).send({ error: 'Cita de venta no encontrada' })
       }
 
-      // Role check: if cita was NOT PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW), only GERENTE/ADMIN/SUPERUSUARIO can edit
+      const userId = getAuthUserId(request)
+      const role = userId ? await getUserRole(userId) : null
+
+      // Role check:
+      // 1. If cita was NOT PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW), only GERENTE/ADMIN/SUPERUSUARIO can edit
       if (existing.estado !== 'PROGRAMADA') {
-        const userId = getAuthUserId(request)
         if (!userId) {
           return reply.status(403).send({ error: 'No autorizado para editar citas cerradas' })
         }
-        const role = await getUserRole(userId)
         const canEdit = ['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role || '')
         if (!canEdit) {
           return reply
             .status(403)
             .send({ error: 'Solo gerentes, administradores y superusuarios pueden editar citas cerradas' })
+        }
+      } else {
+        // 2. If cita is PROGRAMADA and the associated session has an assigned photographer or the cita has an assigned seller:
+        // Only assigned photographer, assigned seller, supervisor, gerente, admin, and superusuario can edit.
+        const fotografoId = existing.sesion?.fotografoId
+        const vendedorId = existing.vendedorId
+        if (fotografoId || vendedorId) {
+          if (!userId) {
+            return reply.status(403).send({ error: 'No autorizado para editar esta cita de venta' })
+          }
+          const isAssignedFotografo = Boolean(fotografoId && userId === fotografoId)
+          const isAssignedVendedor = Boolean(vendedorId && userId === vendedorId)
+          const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role || '')
+          if (!isAssignedFotografo && !isAssignedVendedor && !isPrivileged) {
+            return reply.status(403).send({
+              error:
+                'Esta cita ya tiene un fotógrafo o vendedor asignado. Solo el fotógrafo asignado, vendedor asignado, supervisores, gerentes o administradores pueden editarla.',
+            })
+          }
         }
       }
 

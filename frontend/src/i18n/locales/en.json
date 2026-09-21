@@ -348,6 +348,7 @@
     "titleMobileEdit": "Edit Session",
     "back": "Back",
     "readOnlyNotice": "This session is not in scheduled status. To edit it, please contact your area manager or administrator.",
+    "readOnlyAssignedNotice": "This session already has an assigned photographer. Only the assigned photographer, supervisors, managers, or administrators can edit it.",
     "alerts": {
       "overdueTitle": "Overdue Session — This session was scheduled for a past date. Please update its status.",
       "noSaleTitle": "No Sales Appointment — This session is completed but does not have a scheduled sales appointment yet.",
@@ -512,7 +513,8 @@
     "titleEdit": "Edit Sales Appointment",
     "back": "Back",
     "readOnlyNotice": "To edit this appointment, please contact your area manager or administrator.",
-    "photoSaleAppointment": "Photo sales appointment",
+    "readOnlyAssignedNotice": "This appointment already has an assigned photographer or seller. Only the assigned photographer, assigned seller, supervisors, managers, or administrators can edit it.",
+    "photoSaleAppointment": "Photo Sales Appointment",
     "conflicts": {
       "desktopTitle": "There are {count} sales appointment(s) in the same time slot (±1h)",
       "mobileTitle": "There are {count} sales appointment(s) in the same hotel within the 1-hour slot (±1h)",
@@ -619,6 +621,7 @@
       "appointmentUpdated": "Sales appointment updated successfully",
       "appointmentCreatedWithConflicts": "Appointment created, but there are {count} overlapping appointment(s) in the same hotel",
       "appointmentCreated": "Sales appointment scheduled successfully",
+      "photographerOwnSessionsOnly": "Photographers can only create sales appointments for their own photo sessions",
       "saveError": "Error saving sales appointment"
     }
   },

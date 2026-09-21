@@ -59,6 +59,7 @@ const {
   calendarEvents,
   highlightEventAndAssociated,
   clearEventHighlights,
+  canEditCalendarEvent,
 } = useCalendarEvents(userHotels, selectedHotelIds, getCalendarEl)
 
 // 5. Composable: Borrado de Eventos
@@ -214,6 +215,8 @@ function handleEventClick(clickInfo: EventClickArg) {
   if (!canEditEvents.value) return
   const props = clickInfo.event.extendedProps as ExtendedEventProps
   if (!props) return
+  // Si el usuario no tiene permiso para editar la sesión/cita, no ocurre nada
+  if (!canEditCalendarEvent(props)) return
 
   if (props.type === 'sale' && props.rawSale?.id) {
     router.push(`/ventas/${props.rawSale.id}/editar`)
@@ -262,6 +265,10 @@ const calendarOptions = computed<CalendarOptions>(() => ({
   eventClick: handleEventClick,
   eventDidMount: (info) => {
     info.el.setAttribute('data-fc-event-id', info.event.id)
+    const props = info.event.extendedProps as ExtendedEventProps
+    if (!canEditCalendarEvent(props)) {
+      info.el.style.cursor = 'default'
+    }
   },
   eventMouseEnter: (info) => {
     highlightEventAndAssociated(info.event)

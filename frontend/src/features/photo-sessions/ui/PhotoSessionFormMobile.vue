@@ -32,6 +32,7 @@ const {
   isEditing,
   isSaving,
   isReadOnly,
+  isLockedByPhotographer,
   selectedDateOnly,
   selectedTimeOnly,
   disabledPastDates,
@@ -483,7 +484,7 @@ function handleSave() {
     <div class="mobile-step-body">
       <!-- Read-only lock banner -->
       <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-        {{ $t('sessions.readOnlyNotice') }}
+        {{ isLockedByPhotographer ? $t('sessions.readOnlyAssignedNotice') : $t('sessions.readOnlyNotice') }}
       </el-alert>
 
       <!-- 1 Datos del cliente -->

@@ -278,12 +278,40 @@ export function usePhotoSessionForm() {
 
   const currentUser = computed(() => authStore.user)
 
-  // Role-based edit lock (only locks if session was already saved in DB with status other than PROGRAMADA)
+  // Lock due to assigned photographer:
+  // Once a session has an assigned photographer, only the assigned photographer,
+  // supervisor, gerente, admin, and superusuario can edit it.
+  const isLockedByPhotographer = computed(() => {
+    if (!isEditing.value || !loadedSession.value) return false
+    if (loadedSession.value.estado !== 'PROGRAMADA') return false
+    if (!loadedSession.value.fotografoId) return false
+    const role = currentUser.value?.roleCode?.toUpperCase() || ''
+    const currentUserId = currentUser.value?.id
+    const isAssignedFotografo = String(loadedSession.value.fotografoId) === String(currentUserId)
+    const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+    return !isAssignedFotografo && !isPrivileged
+  })
+
+  // Role-based edit lock
   const isReadOnly = computed(() => {
     if (!isEditing.value || !loadedSession.value) return false
-    if (loadedSession.value.estado === 'PROGRAMADA') return false
     const role = currentUser.value?.roleCode?.toUpperCase() || ''
-    return !['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+
+    // 1. If session in DB is not PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW):
+    // Only GERENTE, ADMIN, SUPERUSUARIO can edit
+    if (loadedSession.value.estado !== 'PROGRAMADA') {
+      return !['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+    }
+
+    // 2. If session in DB is PROGRAMADA and already has an assigned photographer:
+    // Only assigned photographer, supervisor, gerente, admin, superusuario can edit
+    if (isLockedByPhotographer.value) {
+      return true
+    }
+
+    if (role === 'CONTABLE') return true
+
+    return false
   })
 
   const alertNoSaleAppointment = computed(() => {
@@ -881,6 +909,8 @@ export function usePhotoSessionForm() {
   }
 
   async function handleSaveSession() {
+    if (isReadOnly.value) return
+
     if (!formData.value.clienteNombre.trim()) {
       ElMessage.warning(t('sessions.toasts.clientNameRequired'))
       return
@@ -1022,6 +1052,7 @@ export function usePhotoSessionForm() {
     alertOverdue,
     currentUser,
     isReadOnly,
+    isLockedByPhotographer,
     alertNoSaleAppointment,
     alertSaleNoShow,
     isSaving,

@@ -5,6 +5,7 @@ import { useSessionStore } from '../stores/session.store'
 import { useSaleStore } from '@/features/sales/stores/sale.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { useUserStore } from '@/features/users/stores/user.store'
+import { useAuthStore } from '@/features/auth/stores/auth.store'
 import type { SesionFotografica } from '../domain/session.model'
 import type { CitaVenta } from '@/features/sales/domain/sale.model'
 import type { Hotel } from '@/features/hotels/domain/hotel.model'
@@ -58,6 +59,7 @@ export function useCalendarEvents(
   const saleStore = useSaleStore()
   const hotelStore = useHotelStore()
   const userStore = useUserStore()
+  const authStore = useAuthStore()
 
   // Filtered events for FullCalendar (Photo Sessions + Sales Appointments)
   const calendarEvents = computed(() => {
@@ -124,6 +126,7 @@ export function useCalendarEvents(
         id: number
         sesionId: number
         hotelId: number
+        vendedorId?: string | null
         fotografoId?: string | null
         fechaHoraCita: string
         estado: string
@@ -144,6 +147,7 @@ export function useCalendarEvents(
         id: c.id,
         sesionId: c.sesionId,
         hotelId: effectiveHotelId,
+        vendedorId: c.vendedorId || parentSession?.citaVenta?.vendedorId || null,
         fotografoId: c.fotografoId || parentSession?.fotografoId || null,
         fechaHoraCita: c.fechaHoraCita,
         estado: c.estado,
@@ -163,6 +167,7 @@ export function useCalendarEvents(
             id: s.citaVenta.id,
             sesionId: s.id,
             hotelId: Number(s.hotelId),
+            vendedorId: s.citaVenta.vendedorId || null,
             fotografoId: s.fotografoId || null,
             fechaHoraCita: s.citaVenta.fechaHoraCita,
             estado: s.citaVenta.estado,
@@ -488,6 +493,55 @@ export function useCalendarEvents(
     }
   }
 
+  function canEditCalendarEvent(props: ExtendedEventProps | undefined): boolean {
+    if (!props) return false
+    const currentUser = authStore.user
+    if (!currentUser) return false
+    const role = currentUser.roleCode?.toUpperCase() || ''
+    if (role === 'CONTABLE') return false
+
+    // Estado del evento
+    const estado =
+      (props.type === 'sale' ? props.rawSale?.estado : props.rawSession?.estado) || props.estado
+    // Si no está PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW), solo GERENTE, ADMIN, SUPERUSUARIO pueden editar
+    if (estado && estado !== 'PROGRAMADA') {
+      return ['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+    }
+
+    // Si es un evento de Cita de Venta:
+    if (props.type === 'sale') {
+      const fotografoId = props.rawSale?.fotografoId || null
+      const vendedorId = (props.rawSale as any)?.vendedorId || null
+
+      const isAssignedFotografo = Boolean(
+        fotografoId && String(fotografoId) === String(currentUser.id),
+      )
+      const isAssignedVendedor = Boolean(
+        vendedorId && String(vendedorId) === String(currentUser.id),
+      )
+      const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+
+      if (fotografoId || vendedorId) {
+        if (!isAssignedFotografo && !isAssignedVendedor && !isPrivileged) {
+          return false
+        }
+      }
+      return true
+    }
+
+    // Si es un evento de Sesión de Fotos:
+    const fotografoId = props.rawSession?.fotografoId || null
+    if (fotografoId) {
+      const isAssignedFotografo = String(fotografoId) === String(currentUser.id)
+      const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+      if (!isAssignedFotografo && !isPrivileged) {
+        return false
+      }
+    }
+
+    return true
+  }
+
   return {
     calendarEvents,
     eventsCountByDate,
@@ -500,5 +554,6 @@ export function useCalendarEvents(
     formatDateStr,
     formatDateTimeStr,
     buildTooltipInfo,
+    canEditCalendarEvent,
   }
 }

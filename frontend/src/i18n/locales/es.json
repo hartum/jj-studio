@@ -348,6 +348,7 @@
     "titleMobileEdit": "Editar Sesión",
     "back": "Volver",
     "readOnlyNotice": "Esta sesión no está en estado programada. Para editarla contacta con tu gerente de área o administrador.",
+    "readOnlyAssignedNotice": "Esta sesión ya tiene un fotógrafo asignado. Solo el fotógrafo asignado, supervisores, gerentes o administradores pueden editarla.",
     "alerts": {
       "overdueTitle": "Sesión Vencida — Esta sesión estaba programada para la fecha elegida y ya ha pasado. Por favor actualiza su estado.",
       "noSaleTitle": "Sin Cita de Venta — Esta sesión está completada pero aún no tiene una cita de venta programada.",
@@ -512,6 +513,7 @@
     "titleEdit": "Editar Cita de Venta",
     "back": "Volver",
     "readOnlyNotice": "Para editar esta cita contacta con tu gerente de área o administrador.",
+    "readOnlyAssignedNotice": "Esta cita ya tiene fotógrafo o vendedor asignado. Solo el fotógrafo asignado, el vendedor asignado, supervisores, gerentes o administradores pueden editarla.",
     "photoSaleAppointment": "Cita venta fotos",
     "conflicts": {
       "desktopTitle": "Hay {count} cita(s) de venta en la misma franja horaria (±1h)",
@@ -619,6 +621,7 @@
       "appointmentUpdated": "Cita de venta actualizada correctamente",
       "appointmentCreatedWithConflicts": "Cita creada, pero hay {count} cita(s) solapada(s) en el mismo hotel",
       "appointmentCreated": "Cita de venta agendada correctamente",
+      "photographerOwnSessionsOnly": "Los fotógrafos solo pueden crear citas de venta de sus propias sesiones de fotos",
       "saveError": "Error al guardar la cita de venta"
     }
   },
