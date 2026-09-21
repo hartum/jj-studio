@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.vue": {
-    "mtime": 1789813763.4043043,
-    "ast_hash": "8a701d752c66a83158bdd58496e533f9",
+    "mtime": 1790007469.5744267,
+    "ast_hash": "1668149a5aebf6a7844c40a3bef58ce4",
     "semantic_hash": ""
   },
   "frontend/src/main.ts": {
@@ -180,8 +180,8 @@
     "semantic_hash": "98f1082b51cd0cbe84ef491c7a8e7c78"
   },
   "backend/src/features/users/infrastructure/user.routes.ts": {
-    "mtime": 1789657009.7294228,
-    "ast_hash": "c35a63c0af711d0faaa67d498f9d499b",
+    "mtime": 1790007329.5371106,
+    "ast_hash": "00879229edb3ace12a378ffc1e02be99",
     "semantic_hash": ""
   },
   "backend/src/index.ts": {
@@ -270,9 +270,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/auth/stores/auth.store.ts": {
-    "mtime": 1788450442.976233,
-    "ast_hash": "2f00ee913daca8c05b410ba2fee91d6b",
-    "semantic_hash": "2f00ee913daca8c05b410ba2fee91d6b"
+    "mtime": 1790007347.2982614,
+    "ast_hash": "79a0de340853a07d07555a1165d931bf",
+    "semantic_hash": ""
   },
   "frontend/src/features/auth/ui/ForgotPasswordView.vue": {
     "mtime": 1789712374.3505878,
@@ -600,9 +600,9 @@
     "semantic_hash": "253d5d7804371b820b8f9a99e6e7f69c"
   },
   "frontend/src/features/users/stores/user.store.ts": {
-    "mtime": 1786901868.3846672,
-    "ast_hash": "3090a9dd5a7020e3abf7d40213837802",
-    "semantic_hash": "3090a9dd5a7020e3abf7d40213837802"
+    "mtime": 1790007354.2661548,
+    "ast_hash": "d0b2f539366629a9e90773986d2b8017",
+    "semantic_hash": ""
   },
   "frontend/src/features/users/ui/CalendarioLaboral.vue": {
     "mtime": 1789718021.651561,
@@ -610,8 +610,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuarioFormView.vue": {
-    "mtime": 1789845416.4654803,
-    "ast_hash": "273a894bcb8fed36c9d08eb72df4de3f",
+    "mtime": 1790007515.7501736,
+    "ast_hash": "e5af0e54d11734d4a715f1b720926da8",
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuariosView.vue": {
@@ -1020,18 +1020,23 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1789922371.389633,
-    "ast_hash": "9e89c5d25074478ca520191baecabbdb",
+    "mtime": 1790007378.613577,
+    "ast_hash": "ad4b60235d06b7fe1965fd24c55b591b",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1789922367.3430986,
-    "ast_hash": "ce62a6d089d8054cfe87947a2f901c81",
+    "mtime": 1790007373.0469677,
+    "ast_hash": "054fa9fad73951e3bd166effc7dc05be",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
     "mtime": 1790005033.5000095,
     "ast_hash": "1c4b596ea2777544c749a433186a7c9d",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/users/ui/AvatarCropperDialog.vue": {
+    "mtime": 1790007972.6607606,
+    "ast_hash": "8bc1db0dbf649baddcc0b0e33a56692f",
     "semantic_hash": ""
   }
 }

@@ -4,290 +4,59 @@
   "graph": {},
   "nodes": [
     {
-      "label": "sale.routes.ts",
+      "label": "sale.migration.ts",
       "file_type": "code",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_file": "backend/src/features/sales/infrastructure/sale.migration.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "backend_src_features_sales_infrastructure_sale_routes",
-      "community": 0,
-      "community_name": "encryption.ts",
-      "norm_label": "sale.routes.ts"
+      "id": "backend_src_features_sales_infrastructure_sale_migration",
+      "community": 93,
+      "community_name": "src/index.ts",
+      "norm_label": "sale.migration.ts"
     },
     {
-      "label": "getAuthUserId()",
+      "label": "migrateLegacyPayments()",
       "file_type": "code",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L15",
+      "source_file": "backend/src/features/sales/infrastructure/sale.migration.ts",
+      "source_location": "L9",
       "_origin": "ast",
-      "id": "backend_src_features_sales_infrastructure_sale_routes_getauthuserid",
-      "community": 0,
-      "community_name": "encryption.ts",
-      "norm_label": "getauthuserid()"
+      "id": "backend_src_features_sales_infrastructure_sale_migration_migratelegacypayments",
+      "community": 93,
+      "community_name": "src/index.ts",
+      "norm_label": "migratelegacypayments()"
     },
     {
-      "label": "getUserRole()",
+      "label": "src/index.ts",
       "file_type": "code",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L27",
-      "_origin": "ast",
-      "id": "backend_src_features_sales_infrastructure_sale_routes_getuserrole",
-      "community": 0,
-      "community_name": "encryption.ts",
-      "norm_label": "getuserrole()"
-    },
-    {
-      "label": "parseLocalDateTime()",
-      "file_type": "code",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L35",
-      "_origin": "ast",
-      "id": "backend_src_features_sales_infrastructure_sale_routes_parselocaldatetime",
-      "community": 0,
-      "community_name": "encryption.ts",
-      "norm_label": "parselocaldatetime()"
-    },
-    {
-      "label": "parseDateOnly()",
-      "file_type": "code",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L43",
-      "_origin": "ast",
-      "id": "backend_src_features_sales_infrastructure_sale_routes_parsedateonly",
-      "community": 0,
-      "community_name": "encryption.ts",
-      "norm_label": "parsedateonly()"
-    },
-    {
-      "label": "PagoInput",
-      "file_type": "code",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L51",
-      "_origin": "ast",
-      "id": "backend_src_features_sales_infrastructure_sale_routes_pagoinput",
-      "community": 0,
-      "community_name": "encryption.ts",
-      "norm_label": "pagoinput"
-    },
-    {
-      "label": "deriveModoCobro()",
-      "file_type": "code",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L56",
-      "_origin": "ast",
-      "id": "backend_src_features_sales_infrastructure_sale_routes_derivemodocobro",
-      "community": 0,
-      "community_name": "encryption.ts",
-      "norm_label": "derivemodocobro()"
-    },
-    {
-      "label": "findConflicts()",
-      "file_type": "code",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L62",
-      "_origin": "ast",
-      "id": "backend_src_features_sales_infrastructure_sale_routes_findconflicts",
-      "community": 0,
-      "community_name": "encryption.ts",
-      "norm_label": "findconflicts()"
-    },
-    {
-      "label": "getAllowedHotelIds()",
-      "file_type": "code",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L85",
-      "_origin": "ast",
-      "id": "backend_src_features_sales_infrastructure_sale_routes_getallowedhotelids",
-      "community": 0,
-      "community_name": "encryption.ts",
-      "norm_label": "getallowedhotelids()"
-    },
-    {
-      "label": "saleRoutes()",
-      "file_type": "code",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L111",
-      "_origin": "ast",
-      "id": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
-      "community": 0,
-      "community_name": "encryption.ts",
-      "norm_label": "saleroutes()"
-    },
-    {
-      "label": "useSaleAppointmentForm.ts",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_file": "backend/src/index.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "usesaleappointmentform.ts"
+      "id": "backend_src_index",
+      "community": 93,
+      "community_name": "src/index.ts",
+      "norm_label": "src/index.ts"
     },
     {
-      "label": "FormPagoItem",
+      "label": "fastify",
       "file_type": "code",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L20",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L19",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_formpagoitem",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "formpagoitem"
+      "id": "backend_src_index_fastify",
+      "community": 93,
+      "community_name": "src/index.ts",
+      "norm_label": "fastify"
     },
     {
-      "label": "SaleAppointmentFormData",
+      "label": "start()",
       "file_type": "code",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L25",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L54",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformdata",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "saleappointmentformdata"
-    },
-    {
-      "label": "SessionContextInfo",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L38",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_sessioncontextinfo",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "sessioncontextinfo"
-    },
-    {
-      "label": "VendedorDisponibilidadItem",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L51",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_vendedordisponibilidaditem",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "vendedordisponibilidaditem"
-    },
-    {
-      "label": "VendedoresDisponibilidadResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L62",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_vendedoresdisponibilidadresponse",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "vendedoresdisponibilidadresponse"
-    },
-    {
-      "label": "useSaleAppointmentForm()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L72",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_usesaleappointmentform",
-      "community": 56,
-      "community_name": "SaleAppointmentFormView.vue",
-      "norm_label": "usesaleappointmentform()"
-    },
-    {
-      "label": "SaleAppointmentFormContext",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L850",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext",
-      "community": 14,
-      "community_name": "SaleAppointmentFormDesktop.vue",
-      "norm_label": "saleappointmentformcontext"
-    },
-    {
-      "label": "sale.model.ts",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_domain_sale_model",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "sale.model.ts"
-    },
-    {
-      "label": "EstadoCitaVenta",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_domain_sale_model_estadocitaventa",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "estadocitaventa"
-    },
-    {
-      "label": "MODO_COBRO_OPTIONS",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
-      "source_location": "L3",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_domain_sale_model_modo_cobro_options",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "modo_cobro_options"
-    },
-    {
-      "label": "PagoCitaVenta",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_domain_sale_model_pagocitaventa",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "pagocitaventa"
-    },
-    {
-      "label": "CitaVenta",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
-      "source_location": "L17",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_domain_sale_model_citaventa",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "citaventa"
-    },
-    {
-      "label": "CreateCitaVentaPayload",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
-      "source_location": "L46",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_domain_sale_model_createcitaventapayload",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "createcitaventapayload"
-    },
-    {
-      "label": "UpdateCitaVentaPayload",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
-      "source_location": "L59",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_domain_sale_model_updatecitaventapayload",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "updatecitaventapayload"
-    },
-    {
-      "label": "ConflictoCitaVenta",
-      "file_type": "code",
-      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
-      "source_location": "L70",
-      "_origin": "ast",
-      "id": "frontend_src_features_sales_domain_sale_model_conflictocitaventa",
-      "community": 35,
-      "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "conflictocitaventa"
+      "id": "backend_src_index_start",
+      "community": 93,
+      "community_name": "src/index.ts",
+      "norm_label": "start()"
     },
     {
       "label": "SaleAppointmentFormDesktop.vue",
@@ -337,7 +106,7 @@
       "label": "showSessionsList",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L64",
+      "source_location": "L63",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_showsessionslist",
       "community": 14,
@@ -348,7 +117,7 @@
       "label": "getPhotographer()",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L66",
+      "source_location": "L65",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_getphotographer",
       "community": 14,
@@ -359,7 +128,7 @@
       "label": "formatSessionDate()",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L71",
+      "source_location": "L70",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_formatsessiondate",
       "community": 14,
@@ -370,7 +139,7 @@
       "label": "formatSessionTime()",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L87",
+      "source_location": "L86",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_formatsessiontime",
       "community": 14,
@@ -381,7 +150,7 @@
       "label": "formatPersonas()",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L97",
+      "source_location": "L96",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_formatpersonas",
       "community": 14,
@@ -392,7 +161,7 @@
       "label": "toggleSessionsList()",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L102",
+      "source_location": "L101",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_togglesessionslist",
       "community": 14,
@@ -403,7 +172,7 @@
       "label": "selectSession()",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L107",
+      "source_location": "L106",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectsession",
       "community": 14,
@@ -414,7 +183,7 @@
       "label": "showSellersList",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L117",
+      "source_location": "L116",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_showsellerslist",
       "community": 14,
@@ -425,7 +194,7 @@
       "label": "toggleSellersList()",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L119",
+      "source_location": "L118",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_togglesellerslist",
       "community": 14,
@@ -436,7 +205,7 @@
       "label": "selectSeller()",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L124",
+      "source_location": "L123",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectseller",
       "community": 14,
@@ -447,7 +216,7 @@
       "label": "isSellerPhotographer",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L135",
+      "source_location": "L134",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_issellerphotographer",
       "community": 14,
@@ -458,7 +227,7 @@
       "label": "minuteSlots",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L150",
+      "source_location": "L149",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_minuteslots",
       "community": 14,
@@ -469,7 +238,7 @@
       "label": "selectedHourOnly",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L152",
+      "source_location": "L151",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectedhouronly",
       "community": 14,
@@ -480,7 +249,7 @@
       "label": "selectedMinuteOnly",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L157",
+      "source_location": "L156",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectedminuteonly",
       "community": 14,
@@ -491,7 +260,7 @@
       "label": "selectHour()",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L162",
+      "source_location": "L161",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_selecthour",
       "community": 14,
@@ -502,7 +271,7 @@
       "label": "selectMinute()",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L169",
+      "source_location": "L168",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectminute",
       "community": 14,
@@ -513,7 +282,7 @@
       "label": "salesCountByHour",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L176",
+      "source_location": "L175",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_salescountbyhour",
       "community": 14,
@@ -524,7 +293,7 @@
       "label": "getCitaVentaTimeSlotStatusClass()",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L210",
+      "source_location": "L209",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_getcitaventatimeslotstatusclass",
       "community": 14,
@@ -535,7 +304,7 @@
       "label": "formattedSelectedSaleDateTime",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L232",
+      "source_location": "L231",
       "_origin": "ast",
       "id": "frontend_src_features_sales_ui_saleappointmentformdesktop_formattedselectedsaledatetime",
       "community": 14,
@@ -543,15 +312,301 @@
       "norm_label": "formattedselectedsaledatetime"
     },
     {
+      "label": "sale.routes.ts",
+      "file_type": "code",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 96,
+      "community_name": "sale.routes.ts",
+      "norm_label": "sale.routes.ts",
+      "id": "backend_src_features_sales_infrastructure_sale_routes"
+    },
+    {
+      "label": "getAuthUserId()",
+      "file_type": "code",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L15",
+      "_origin": "ast",
+      "community": 96,
+      "community_name": "sale.routes.ts",
+      "norm_label": "getauthuserid()",
+      "id": "backend_src_features_sales_infrastructure_sale_routes_getauthuserid"
+    },
+    {
+      "label": "getUserRole()",
+      "file_type": "code",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L27",
+      "_origin": "ast",
+      "community": 96,
+      "community_name": "sale.routes.ts",
+      "norm_label": "getuserrole()",
+      "id": "backend_src_features_sales_infrastructure_sale_routes_getuserrole"
+    },
+    {
+      "label": "parseLocalDateTime()",
+      "file_type": "code",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L35",
+      "_origin": "ast",
+      "community": 96,
+      "community_name": "sale.routes.ts",
+      "norm_label": "parselocaldatetime()",
+      "id": "backend_src_features_sales_infrastructure_sale_routes_parselocaldatetime"
+    },
+    {
+      "label": "parseDateOnly()",
+      "file_type": "code",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L43",
+      "_origin": "ast",
+      "community": 96,
+      "community_name": "sale.routes.ts",
+      "norm_label": "parsedateonly()",
+      "id": "backend_src_features_sales_infrastructure_sale_routes_parsedateonly"
+    },
+    {
+      "label": "PagoInput",
+      "file_type": "code",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L51",
+      "_origin": "ast",
+      "community": 96,
+      "community_name": "sale.routes.ts",
+      "norm_label": "pagoinput",
+      "id": "backend_src_features_sales_infrastructure_sale_routes_pagoinput"
+    },
+    {
+      "label": "deriveModoCobro()",
+      "file_type": "code",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L56",
+      "_origin": "ast",
+      "community": 96,
+      "community_name": "sale.routes.ts",
+      "norm_label": "derivemodocobro()",
+      "id": "backend_src_features_sales_infrastructure_sale_routes_derivemodocobro"
+    },
+    {
+      "label": "findConflicts()",
+      "file_type": "code",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L62",
+      "_origin": "ast",
+      "community": 96,
+      "community_name": "sale.routes.ts",
+      "norm_label": "findconflicts()",
+      "id": "backend_src_features_sales_infrastructure_sale_routes_findconflicts"
+    },
+    {
+      "label": "getAllowedHotelIds()",
+      "file_type": "code",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L85",
+      "_origin": "ast",
+      "community": 96,
+      "community_name": "sale.routes.ts",
+      "norm_label": "getallowedhotelids()",
+      "id": "backend_src_features_sales_infrastructure_sale_routes_getallowedhotelids"
+    },
+    {
+      "label": "saleRoutes()",
+      "file_type": "code",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L111",
+      "_origin": "ast",
+      "community": 96,
+      "community_name": "sale.routes.ts",
+      "norm_label": "saleroutes()",
+      "id": "backend_src_features_sales_infrastructure_sale_routes_saleroutes"
+    },
+    {
+      "label": "useSaleAppointmentForm.ts",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "usesaleappointmentform.ts",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform"
+    },
+    {
+      "label": "FormPagoItem",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L20",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "formpagoitem",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_formpagoitem"
+    },
+    {
+      "label": "SaleAppointmentFormData",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L25",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "saleappointmentformdata",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformdata"
+    },
+    {
+      "label": "SessionContextInfo",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "sessioncontextinfo",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_sessioncontextinfo"
+    },
+    {
+      "label": "VendedorDisponibilidadItem",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L51",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "vendedordisponibilidaditem",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_vendedordisponibilidaditem"
+    },
+    {
+      "label": "VendedoresDisponibilidadResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L62",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "vendedoresdisponibilidadresponse",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_vendedoresdisponibilidadresponse"
+    },
+    {
+      "label": "useSaleAppointmentForm()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L72",
+      "_origin": "ast",
+      "community": 56,
+      "community_name": "SaleAppointmentFormView.vue",
+      "norm_label": "usesaleappointmentform()",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_usesaleappointmentform"
+    },
+    {
+      "label": "SaleAppointmentFormContext",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L850",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "SaleAppointmentFormDesktop.vue",
+      "norm_label": "saleappointmentformcontext",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext"
+    },
+    {
+      "label": "sale.model.ts",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "sale.model.ts",
+      "id": "frontend_src_features_sales_domain_sale_model"
+    },
+    {
+      "label": "EstadoCitaVenta",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "estadocitaventa",
+      "id": "frontend_src_features_sales_domain_sale_model_estadocitaventa"
+    },
+    {
+      "label": "MODO_COBRO_OPTIONS",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
+      "source_location": "L3",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "modo_cobro_options",
+      "id": "frontend_src_features_sales_domain_sale_model_modo_cobro_options"
+    },
+    {
+      "label": "PagoCitaVenta",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
+      "source_location": "L10",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "pagocitaventa",
+      "id": "frontend_src_features_sales_domain_sale_model_pagocitaventa"
+    },
+    {
+      "label": "CitaVenta",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
+      "source_location": "L17",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "citaventa",
+      "id": "frontend_src_features_sales_domain_sale_model_citaventa"
+    },
+    {
+      "label": "CreateCitaVentaPayload",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
+      "source_location": "L46",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "createcitaventapayload",
+      "id": "frontend_src_features_sales_domain_sale_model_createcitaventapayload"
+    },
+    {
+      "label": "UpdateCitaVentaPayload",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
+      "source_location": "L59",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "updatecitaventapayload",
+      "id": "frontend_src_features_sales_domain_sale_model_updatecitaventapayload"
+    },
+    {
+      "label": "ConflictoCitaVenta",
+      "file_type": "code",
+      "source_file": "frontend/src/features/sales/domain/sale.model.ts",
+      "source_location": "L70",
+      "_origin": "ast",
+      "community": 35,
+      "community_name": "useSaleAppointmentForm.ts",
+      "norm_label": "conflictocitaventa",
+      "id": "frontend_src_features_sales_domain_sale_model_conflictocitaventa"
+    },
+    {
       "label": "SaleAppointmentFormMobile.vue",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "saleappointmentformmobile.vue"
+      "norm_label": "saleappointmentformmobile.vue",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile"
     },
     {
       "label": "props",
@@ -559,10 +614,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_props",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "props"
+      "norm_label": "props",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_props"
     },
     {
       "label": "router",
@@ -570,10 +625,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_router",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "router"
+      "norm_label": "router",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_router"
     },
     {
       "label": "{ t, locale }",
@@ -581,10 +636,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_t_locale",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "{ t, locale }"
+      "norm_label": "{ t, locale }",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_t_locale"
     },
     {
       "label": "showAllTimeSlots",
@@ -592,10 +647,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L53",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_showalltimeslots",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "showalltimeslots"
+      "norm_label": "showalltimeslots",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_showalltimeslots"
     },
     {
       "label": "minuteSlots",
@@ -603,10 +658,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L55",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_minuteslots",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "minuteslots"
+      "norm_label": "minuteslots",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_minuteslots"
     },
     {
       "label": "selectedHourOnly",
@@ -614,10 +669,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L57",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selectedhouronly",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "selectedhouronly"
+      "norm_label": "selectedhouronly",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selectedhouronly"
     },
     {
       "label": "selectedMinuteOnly",
@@ -625,10 +680,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L62",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selectedminuteonly",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "selectedminuteonly"
+      "norm_label": "selectedminuteonly",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selectedminuteonly"
     },
     {
       "label": "selectHour()",
@@ -636,10 +691,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L67",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selecthour",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "selecthour()"
+      "norm_label": "selecthour()",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selecthour"
     },
     {
       "label": "selectMinute()",
@@ -647,10 +702,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L74",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selectminute",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "selectminute()"
+      "norm_label": "selectminute()",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selectminute"
     },
     {
       "label": "visibleTimeSlots",
@@ -658,10 +713,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L80",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_visibletimeslots",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "visibletimeslots"
+      "norm_label": "visibletimeslots",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_visibletimeslots"
     },
     {
       "label": "salesCountByHour",
@@ -669,10 +724,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L91",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_salescountbyhour",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "salescountbyhour"
+      "norm_label": "salescountbyhour",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_salescountbyhour"
     },
     {
       "label": "getCitaVentaTimeSlotStatusClass()",
@@ -680,10 +735,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L125",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_getcitaventatimeslotstatusclass",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "getcitaventatimeslotstatusclass()"
+      "norm_label": "getcitaventatimeslotstatusclass()",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_getcitaventatimeslotstatusclass"
     },
     {
       "label": "showSessionsList",
@@ -691,10 +746,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L147",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_showsessionslist",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "showsessionslist"
+      "norm_label": "showsessionslist",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_showsessionslist"
     },
     {
       "label": "showSellersList",
@@ -702,10 +757,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L148",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_showsellerslist",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "showsellerslist"
+      "norm_label": "showsellerslist",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_showsellerslist"
     },
     {
       "label": "getPhotographer()",
@@ -713,10 +768,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L150",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_getphotographer",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "getphotographer()"
+      "norm_label": "getphotographer()",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_getphotographer"
     },
     {
       "label": "formatSessionDate()",
@@ -724,10 +779,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L155",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_formatsessiondate",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "formatsessiondate()"
+      "norm_label": "formatsessiondate()",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_formatsessiondate"
     },
     {
       "label": "formatSessionTime()",
@@ -735,10 +790,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L171",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_formatsessiontime",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "formatsessiontime()"
+      "norm_label": "formatsessiontime()",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_formatsessiontime"
     },
     {
       "label": "formatPersonas()",
@@ -746,10 +801,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L181",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_formatpersonas",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "formatpersonas()"
+      "norm_label": "formatpersonas()",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_formatpersonas"
     },
     {
       "label": "toggleSessionsList()",
@@ -757,10 +812,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L186",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_togglesessionslist",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "togglesessionslist()"
+      "norm_label": "togglesessionslist()",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_togglesessionslist"
     },
     {
       "label": "selectSession()",
@@ -768,10 +823,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L191",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selectsession",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "selectsession()"
+      "norm_label": "selectsession()",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selectsession"
     },
     {
       "label": "toggleSellersList()",
@@ -779,10 +834,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L201",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_togglesellerslist",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "togglesellerslist()"
+      "norm_label": "togglesellerslist()",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_togglesellerslist"
     },
     {
       "label": "selectSeller()",
@@ -790,10 +845,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L206",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selectseller",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "selectseller()"
+      "norm_label": "selectseller()",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_selectseller"
     },
     {
       "label": "isSellerPhotographer",
@@ -801,10 +856,10 @@
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L217",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_issellerphotographer",
       "community": 12,
       "community_name": "SaleAppointmentFormMobile.vue",
-      "norm_label": "issellerphotographer"
+      "norm_label": "issellerphotographer",
+      "id": "frontend_src_features_sales_ui_saleappointmentformmobile_issellerphotographer"
     },
     {
       "label": "commission.service.ts",
@@ -955,8 +1010,8 @@
       "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 100,
+      "community_name": "session.routes.ts",
       "norm_label": "session.routes.ts",
       "id": "backend_src_features_photo_sessions_infrastructure_session_routes"
     },
@@ -966,8 +1021,8 @@
       "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 100,
+      "community_name": "session.routes.ts",
       "norm_label": "parselocaldatetime()",
       "id": "backend_src_features_photo_sessions_infrastructure_session_routes_parselocaldatetime"
     },
@@ -977,8 +1032,8 @@
       "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 100,
+      "community_name": "session.routes.ts",
       "norm_label": "getauthuserid()",
       "id": "backend_src_features_photo_sessions_infrastructure_session_routes_getauthuserid"
     },
@@ -988,8 +1043,8 @@
       "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 100,
+      "community_name": "session.routes.ts",
       "norm_label": "parsedateonly()",
       "id": "backend_src_features_photo_sessions_infrastructure_session_routes_parsedateonly"
     },
@@ -999,8 +1054,8 @@
       "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 100,
+      "community_name": "session.routes.ts",
       "norm_label": "gethotelavailability()",
       "id": "backend_src_features_photo_sessions_infrastructure_session_routes_gethotelavailability"
     },
@@ -1010,8 +1065,8 @@
       "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
       "source_location": "L137",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 100,
+      "community_name": "session.routes.ts",
       "norm_label": "sessionroutes()",
       "id": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes"
     },
@@ -7929,8 +7984,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 50,
-      "community_name": "LoginView.vue",
+      "community": 98,
+      "community_name": "ForgotPasswordView.vue",
       "norm_label": "forgotpasswordview.vue",
       "id": "frontend_src_features_auth_ui_forgotpasswordview"
     },
@@ -7940,8 +7995,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 50,
-      "community_name": "LoginView.vue",
+      "community": 98,
+      "community_name": "ForgotPasswordView.vue",
       "norm_label": "router",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_router"
     },
@@ -7951,8 +8006,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 50,
-      "community_name": "LoginView.vue",
+      "community": 98,
+      "community_name": "ForgotPasswordView.vue",
       "norm_label": "{ t }",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_t"
     },
@@ -7962,8 +8017,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 50,
-      "community_name": "LoginView.vue",
+      "community": 98,
+      "community_name": "ForgotPasswordView.vue",
       "norm_label": "email",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_email"
     },
@@ -7973,8 +8028,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 50,
-      "community_name": "LoginView.vue",
+      "community": 98,
+      "community_name": "ForgotPasswordView.vue",
       "norm_label": "isloading",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_isloading"
     },
@@ -7984,8 +8039,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 50,
-      "community_name": "LoginView.vue",
+      "community": 98,
+      "community_name": "ForgotPasswordView.vue",
       "norm_label": "issubmitted",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_issubmitted"
     },
@@ -7995,8 +8050,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 50,
-      "community_name": "LoginView.vue",
+      "community": 98,
+      "community_name": "ForgotPasswordView.vue",
       "norm_label": "handleforgotpassword()",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_handleforgotpassword"
     },
@@ -8523,8 +8578,8 @@
       "source_file": "backend/src/features/users/infrastructure/user.routes.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 97,
+      "community_name": "user.routes.ts",
       "norm_label": "user.routes.ts",
       "id": "backend_src_features_users_infrastructure_user_routes"
     },
@@ -8534,8 +8589,8 @@
       "source_file": "backend/src/features/users/infrastructure/user.routes.ts",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 97,
+      "community_name": "user.routes.ts",
       "norm_label": "getauthuser()",
       "id": "backend_src_features_users_infrastructure_user_routes_getauthuser"
     },
@@ -8545,8 +8600,8 @@
       "source_file": "backend/src/features/users/infrastructure/user.routes.ts",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 97,
+      "community_name": "user.routes.ts",
       "norm_label": "userroutes()",
       "id": "backend_src_features_users_infrastructure_user_routes_userroutes"
     },
@@ -8556,8 +8611,8 @@
       "source_file": "backend/src/shared/permissions.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 97,
+      "community_name": "user.routes.ts",
       "norm_label": "backend/src/shared/permissions.ts",
       "id": "backend_src_shared_permissions"
     },
@@ -8567,8 +8622,8 @@
       "source_file": "backend/src/shared/permissions.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 97,
+      "community_name": "user.routes.ts",
       "norm_label": "rolecode",
       "id": "backend_src_shared_permissions_rolecode"
     },
@@ -8578,8 +8633,8 @@
       "source_file": "backend/src/shared/permissions.ts",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 97,
+      "community_name": "user.routes.ts",
       "norm_label": "roleconfig",
       "id": "backend_src_shared_permissions_roleconfig"
     },
@@ -8589,8 +8644,8 @@
       "source_file": "backend/src/shared/permissions.ts",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 97,
+      "community_name": "user.routes.ts",
       "norm_label": "permission_matrix",
       "id": "backend_src_shared_permissions_permission_matrix"
     },
@@ -8600,8 +8655,8 @@
       "source_file": "backend/src/shared/permissions.ts",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 97,
+      "community_name": "user.routes.ts",
       "norm_label": "getrolepermissions()",
       "id": "backend_src_shared_permissions_getrolepermissions"
     },
@@ -8611,8 +8666,8 @@
       "source_file": "backend/src/shared/permissions.ts",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 97,
+      "community_name": "user.routes.ts",
       "norm_label": "canedituser()",
       "id": "backend_src_shared_permissions_canedituser"
     },
@@ -8622,8 +8677,8 @@
       "source_file": "backend/src/shared/permissions.ts",
       "source_location": "L98",
       "_origin": "ast",
-      "community": 0,
-      "community_name": "encryption.ts",
+      "community": 97,
+      "community_name": "user.routes.ts",
       "norm_label": "candeleteuser()",
       "id": "backend_src_shared_permissions_candeleteuser"
     },
@@ -9722,9 +9777,9 @@
       "source_file": "backend/src/features/audit-log/application/audit-log.service.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "audit-log.service.ts",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_audit_log_application_audit_log_service"
     },
     {
@@ -9733,9 +9788,9 @@
       "source_file": "backend/src/features/audit-log/application/audit-log.service.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "auditparams",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_audit_log_application_audit_log_service_auditparams"
     },
     {
@@ -9744,9 +9799,9 @@
       "source_file": "backend/src/features/audit-log/application/audit-log.service.ts",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "dias_semana",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_audit_log_application_audit_log_service_dias_semana"
     },
     {
@@ -9755,9 +9810,9 @@
       "source_file": "backend/src/features/audit-log/application/audit-log.service.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "meses",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_audit_log_application_audit_log_service_meses"
     },
     {
@@ -9766,9 +9821,9 @@
       "source_file": "backend/src/features/audit-log/application/audit-log.service.ts",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "formatauditdatetime()",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_audit_log_application_audit_log_service_formatauditdatetime"
     },
     {
@@ -9777,9 +9832,9 @@
       "source_file": "backend/src/features/audit-log/application/audit-log.service.ts",
       "source_location": "L57",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "formatcreadororiginal()",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_audit_log_application_audit_log_service_formatcreadororiginal"
     },
     {
@@ -9788,9 +9843,9 @@
       "source_file": "backend/src/features/audit-log/application/audit-log.service.ts",
       "source_location": "L66",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "registraraudit()",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_audit_log_application_audit_log_service_registraraudit"
     },
     {
@@ -9799,9 +9854,9 @@
       "source_file": "backend/src/features/audit-log/infrastructure/audit-log.routes.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "audit-log.routes.ts",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_audit_log_infrastructure_audit_log_routes"
     },
     {
@@ -9810,9 +9865,9 @@
       "source_file": "backend/src/features/audit-log/infrastructure/audit-log.routes.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "getauthtokeninfo()",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_audit_log_infrastructure_audit_log_routes_getauthtokeninfo"
     },
     {
@@ -9821,9 +9876,9 @@
       "source_file": "backend/src/features/audit-log/infrastructure/audit-log.routes.ts",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "auditlogroutes()",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_audit_log_infrastructure_audit_log_routes_auditlogroutes"
     },
     {
@@ -9832,9 +9887,9 @@
       "source_file": "backend/src/features/countries/infrastructure/country.routes.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "country.routes.ts",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_countries_infrastructure_country_routes"
     },
     {
@@ -9843,9 +9898,9 @@
       "source_file": "backend/src/features/countries/infrastructure/country.routes.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "getauthuserid()",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_countries_infrastructure_country_routes_getauthuserid"
     },
     {
@@ -9854,9 +9909,9 @@
       "source_file": "backend/src/features/countries/infrastructure/country.routes.ts",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "countryroutes()",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_countries_infrastructure_country_routes_countryroutes"
     },
     {
@@ -9975,9 +10030,9 @@
       "source_file": "backend/src/features/hotels/infrastructure/hotel.routes.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "hotel.routes.ts",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_hotels_infrastructure_hotel_routes"
     },
     {
@@ -9986,9 +10041,9 @@
       "source_file": "backend/src/features/hotels/infrastructure/hotel.routes.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "getauthuserid()",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_hotels_infrastructure_hotel_routes_getauthuserid"
     },
     {
@@ -9997,9 +10052,9 @@
       "source_file": "backend/src/features/hotels/infrastructure/hotel.routes.ts",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 0,
+      "community": 93,
       "norm_label": "hotelroutes()",
-      "community_name": "encryption.ts",
+      "community_name": "src/index.ts",
       "id": "backend_src_features_hotels_infrastructure_hotel_routes_hotelroutes"
     },
     {
@@ -10008,9 +10063,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.routes.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "google-calendar.routes.ts",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_routes"
     },
     {
@@ -10019,9 +10074,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.routes.ts",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "googlecalendarroutes()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_routes_googlecalendarroutes"
     },
     {
@@ -10030,9 +10085,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "google-calendar.service.ts",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service"
     },
     {
@@ -10041,9 +10096,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "googlecolor",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_googlecolor"
     },
     {
@@ -10052,9 +10107,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "google_event_colors",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_google_event_colors"
     },
     {
@@ -10063,9 +10118,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "hextorgb()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_hextorgb"
     },
     {
@@ -10074,9 +10129,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "maphextogooglecolorid()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_maphextogooglecolorid"
     },
     {
@@ -10085,9 +10140,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "getcalendarclient()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_getcalendarclient"
     },
     {
@@ -10096,9 +10151,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L118",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "formatdatelongspanish()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_formatdatelongspanish"
     },
     {
@@ -10107,9 +10162,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L145",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "formatpaxdisplay()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_formatpaxdisplay"
     },
     {
@@ -10118,9 +10173,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L154",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "formatroomdisplay()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_formatroomdisplay"
     },
     {
@@ -10129,9 +10184,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L160",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "formatphonehtml()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_formatphonehtml"
     },
     {
@@ -10140,9 +10195,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L167",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "formatemailhtml()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_formatemailhtml"
     },
     {
@@ -10151,9 +10206,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L176",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "syncsesiontogoogle()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_syncsesiontogoogle"
     },
     {
@@ -10162,9 +10217,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L329",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "deletesesionfromgoogle()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_deletesesionfromgoogle"
     },
     {
@@ -10173,9 +10228,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L356",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "synccitaventatogoogle()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_synccitaventatogoogle"
     },
     {
@@ -10184,9 +10239,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L516",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "deletecitaventafromgoogle()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_deletecitaventafromgoogle"
     },
     {
@@ -10195,9 +10250,9 @@
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
       "source_location": "L523",
       "_origin": "ast",
-      "community": 0,
+      "community": 94,
       "norm_label": "testgooglecalendarconnection()",
-      "community_name": "encryption.ts",
+      "community_name": "google-calendar.service.ts",
       "id": "backend_src_features_integrations_google_calendar_google_calendar_service_testgooglecalendarconnection"
     },
     {
@@ -10558,9 +10613,9 @@
       "source_file": "backend/src/features/users/infrastructure/calendario-laboral.routes.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 102,
       "norm_label": "calendario-laboral.routes.ts",
-      "community_name": "encryption.ts",
+      "community_name": "calendario-laboral.routes.ts",
       "id": "backend_src_features_users_infrastructure_calendario_laboral_routes"
     },
     {
@@ -10569,9 +10624,9 @@
       "source_file": "backend/src/features/users/infrastructure/calendario-laboral.routes.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 0,
+      "community": 102,
       "norm_label": "formatdatetoisostring()",
-      "community_name": "encryption.ts",
+      "community_name": "calendario-laboral.routes.ts",
       "id": "backend_src_features_users_infrastructure_calendario_laboral_routes_formatdatetoisostring"
     },
     {
@@ -10580,9 +10635,9 @@
       "source_file": "backend/src/features/users/infrastructure/calendario-laboral.routes.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 0,
+      "community": 102,
       "norm_label": "parsedateonly()",
-      "community_name": "encryption.ts",
+      "community_name": "calendario-laboral.routes.ts",
       "id": "backend_src_features_users_infrastructure_calendario_laboral_routes_parsedateonly"
     },
     {
@@ -10591,43 +10646,10 @@
       "source_file": "backend/src/features/users/infrastructure/calendario-laboral.routes.ts",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 0,
+      "community": 102,
       "norm_label": "calendariolaboralroutes()",
-      "community_name": "encryption.ts",
+      "community_name": "calendario-laboral.routes.ts",
       "id": "backend_src_features_users_infrastructure_calendario_laboral_routes_calendariolaboralroutes"
-    },
-    {
-      "label": "src/index.ts",
-      "file_type": "code",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "src/index.ts",
-      "community_name": "encryption.ts",
-      "id": "backend_src_index"
-    },
-    {
-      "label": "fastify",
-      "file_type": "code",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L18",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "fastify",
-      "community_name": "encryption.ts",
-      "id": "backend_src_index_fastify"
-    },
-    {
-      "label": "start()",
-      "file_type": "code",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L53",
-      "_origin": "ast",
-      "community": 10,
-      "norm_label": "start()",
-      "community_name": "reminder.service.ts",
-      "id": "backend_src_index_start"
     },
     {
       "label": "migrate-encrypt-all.ts",
@@ -10811,9 +10833,9 @@
       "source_file": "backend/src/shared/email.service.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
+      "community": 101,
       "norm_label": "email.service.ts",
-      "community_name": "encryption.ts",
+      "community_name": "email.service.ts",
       "id": "backend_src_shared_email_service"
     },
     {
@@ -10822,9 +10844,9 @@
       "source_file": "backend/src/shared/email.service.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 0,
+      "community": 101,
       "norm_label": "sendpasswordresetparams",
-      "community_name": "encryption.ts",
+      "community_name": "email.service.ts",
       "id": "backend_src_shared_email_service_sendpasswordresetparams"
     },
     {
@@ -10833,9 +10855,9 @@
       "source_file": "backend/src/shared/email.service.ts",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 0,
+      "community": 101,
       "norm_label": "getappbaseurl()",
-      "community_name": "encryption.ts",
+      "community_name": "email.service.ts",
       "id": "backend_src_shared_email_service_getappbaseurl"
     },
     {
@@ -10844,9 +10866,9 @@
       "source_file": "backend/src/shared/email.service.ts",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 0,
+      "community": 101,
       "norm_label": "getmailtransporter()",
-      "community_name": "encryption.ts",
+      "community_name": "email.service.ts",
       "id": "backend_src_shared_email_service_getmailtransporter"
     },
     {
@@ -10855,9 +10877,9 @@
       "source_file": "backend/src/shared/email.service.ts",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 0,
+      "community": 101,
       "norm_label": "escapehtml()",
-      "community_name": "encryption.ts",
+      "community_name": "email.service.ts",
       "id": "backend_src_shared_email_service_escapehtml"
     },
     {
@@ -10866,9 +10888,9 @@
       "source_file": "backend/src/shared/email.service.ts",
       "source_location": "L58",
       "_origin": "ast",
-      "community": 0,
+      "community": 101,
       "norm_label": "sendpasswordresetemail()",
-      "community_name": "encryption.ts",
+      "community_name": "email.service.ts",
       "id": "backend_src_shared_email_service_sendpasswordresetemail"
     },
     {
@@ -13910,233 +13932,25 @@
   ],
   "links": [
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L11",
+      "source_file": "backend/src/features/sales/infrastructure/sale.migration.ts",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_audit_log_application_audit_log_service",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_audit_log_application_audit_log_service_formatcreadororiginal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_audit_log_application_audit_log_service_registraraudit",
+      "source": "backend_src_features_sales_infrastructure_sale_migration",
+      "target": "backend_src_features_sales_infrastructure_sale_migration_migratelegacypayments",
       "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L4",
+      "source_file": "backend/src/features/sales/infrastructure/sale.migration.ts",
+      "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_commissions_application_commission_service",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_commissions_application_commission_service_calculateandsavecommissionsforsale",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_integrations_google_calendar_google_calendar_service",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_deletecitaventafromgoogle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_deletesesionfromgoogle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_synccitaventatogoogle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_syncsesiontogoogle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L56",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_derivemodocobro",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L62",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_findconflicts",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L85",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_getallowedhotelids",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L15",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_getauthuserid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L27",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_getuserrole",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L51",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_pagoinput",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L43",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_parsedateonly",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L35",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_parselocaldatetime",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L111",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "source": "backend_src_features_sales_infrastructure_sale_migration",
       "target": "backend_src_shared_db",
       "confidence_score": 1.0
     },
@@ -14144,11 +13958,11 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L2",
+      "source_file": "backend/src/features/sales/infrastructure/sale.migration.ts",
+      "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "source": "backend_src_features_sales_infrastructure_sale_migration",
       "target": "backend_src_shared_db_prisma",
       "confidence_score": 1.0
     },
@@ -14156,36 +13970,252 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L3",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_shared_encryption",
+      "source": "backend_src_index",
+      "target": "backend_src_features_sales_infrastructure_sale_migration",
       "confidence_score": 1.0
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L3",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_shared_encryption_decrypt",
+      "source": "backend_src_index",
+      "target": "backend_src_features_sales_infrastructure_sale_migration_migratelegacypayments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index_start",
+      "target": "backend_src_features_sales_infrastructure_sale_migration_migratelegacypayments",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_audit_log_infrastructure_audit_log_routes",
       "confidence_score": 1.0
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L3",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes",
-      "target": "backend_src_shared_encryption_decryptuser",
+      "source": "backend_src_index",
+      "target": "backend_src_features_audit_log_infrastructure_audit_log_routes_auditlogroutes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_commissions_infrastructure_commission_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_commissions_infrastructure_commission_routes_commissionroutes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_countries_infrastructure_country_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_countries_infrastructure_country_routes_countryroutes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_goals_infrastructure_goal_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_hotels_infrastructure_hotel_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_hotels_infrastructure_hotel_routes_hotelroutes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_integrations_google_calendar_google_calendar_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_integrations_google_calendar_google_calendar_routes_googlecalendarroutes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_notifications_infrastructure_reminder_cron",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_notifications_infrastructure_reminder_cron_startremindercron",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_notifications_infrastructure_template_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_notifications_infrastructure_template_routes_templateroutes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
       "confidence_score": 1.0
     },
     {
@@ -14196,277 +14226,90 @@
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_index",
-      "target": "backend_src_features_sales_infrastructure_sale_routes"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L239",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_getauthuserid",
+      "target": "backend_src_features_sales_infrastructure_sale_routes",
       "confidence_score": 1.0
     },
     {
-      "relation": "calls",
-      "context": "call",
+      "relation": "imports",
+      "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L693",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_getuserrole",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L127",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_parselocaldatetime",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L126",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_parsedateonly",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L283",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_derivemodocobro",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L325",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_findconflicts",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L241",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_getallowedhotelids",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
       "source_file": "backend/src/index.ts",
-      "source_location": "L37",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 0.8,
       "source": "backend_src_index",
-      "target": "backend_src_features_sales_infrastructure_sale_routes_saleroutes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_formpagoitem",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L850",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformdata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L38",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_sessioncontextinfo",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L72",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_usesaleappointmentform",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L51",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_vendedordisponibilidaditem",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L62",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_vendedoresdisponibilidadresponse",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
       "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L10",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_domain_sale_model",
+      "source": "backend_src_index",
+      "target": "backend_src_features_users_infrastructure_calendario_laboral_routes",
       "confidence_score": 1.0
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L10",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_domain_sale_model_citaventa",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_domain_sale_model_conflictocitaventa",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_domain_sale_model_estadocitaventa",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_domain_sale_model_updatecitaventapayload",
+      "source": "backend_src_index",
+      "target": "backend_src_features_users_infrastructure_calendario_laboral_routes_calendariolaboralroutes",
       "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L4",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_stores_sale_store",
+      "source": "backend_src_index",
+      "target": "backend_src_features_users_infrastructure_user_routes",
       "confidence_score": 1.0
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L4",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_stores_sale_store_usesalestore",
+      "source": "backend_src_index",
+      "target": "backend_src_features_users_infrastructure_user_routes_userroutes",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
-      "source_location": "L1",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "ref_vue",
+      "source": "backend_src_index",
+      "target": "backend_src_index_fastify",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_index",
+      "target": "backend_src_index_start",
       "confidence_score": 1.0
     },
     {
@@ -14482,6 +14325,820 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L96",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_formatpersonas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_formatsessiondate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_formatsessiontime",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L231",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_formattedselectedsaledatetime",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L209",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_getcitaventatimeslotstatusclass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_getphotographer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L134",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_issellerphotographer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L149",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_minuteslots",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_router",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L175",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_salescountbyhour",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L151",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectedhouronly",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L156",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectedminuteonly",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L161",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selecthour",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L168",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectminute",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectseller",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L106",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectsession",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L116",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_showsellerslist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_showsessionslist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_t_locale",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_togglesellerslist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L101",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_togglesessionslist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
+      "target": "ref_vue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormView.vue",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_ui_saleappointmentformview",
+      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_audit_log_application_audit_log_service"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_audit_log_application_audit_log_service_formatcreadororiginal"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_audit_log_application_audit_log_service_registraraudit"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_commissions_application_commission_service"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_commissions_application_commission_service_calculateandsavecommissionsforsale"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_integrations_google_calendar_google_calendar_service"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_deletecitaventafromgoogle"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_deletesesionfromgoogle"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_synccitaventatogoogle"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_syncsesiontogoogle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_derivemodocobro"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_findconflicts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_getallowedhotelids"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_getauthuserid"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_getuserrole"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_pagoinput"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_parsedateonly"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_parselocaldatetime"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_saleroutes"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_shared_db"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_shared_db_prisma"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_shared_encryption"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_shared_encryption_decrypt"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes",
+      "target": "backend_src_shared_encryption_decryptuser"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L239",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_getauthuserid"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L693",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_getuserrole"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L127",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_parselocaldatetime"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L126",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_parsedateonly"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L283",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_derivemodocobro"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L325",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_findconflicts"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
+      "source_location": "L241",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
+      "target": "backend_src_features_sales_infrastructure_sale_routes_getallowedhotelids"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_formpagoitem"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L850",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformdata"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_sessioncontextinfo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_usesaleappointmentform"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_vendedordisponibilidaditem"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_vendedoresdisponibilidadresponse"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_domain_sale_model"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_domain_sale_model_citaventa"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_domain_sale_model_conflictocitaventa"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_domain_sale_model_estadocitaventa"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_domain_sale_model_updatecitaventapayload"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_stores_sale_store"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "frontend_src_features_sales_stores_sale_store_usesalestore"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_sales_composables_usesaleappointmentform",
+      "target": "ref_vue"
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -14489,9 +15146,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform"
     },
     {
       "relation": "imports_from",
@@ -14513,9 +15170,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformdata",
-      "target": "frontend_src_features_sales_domain_sale_model_estadocitaventa",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_estadocitaventa"
     },
     {
       "relation": "imports",
@@ -14533,25 +15190,13 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext"
     },
     {
       "relation": "contains",
@@ -14560,9 +15205,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_domain_sale_model",
-      "target": "frontend_src_features_sales_domain_sale_model_citaventa",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_citaventa"
     },
     {
       "relation": "contains",
@@ -14571,9 +15216,9 @@
       "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_domain_sale_model",
-      "target": "frontend_src_features_sales_domain_sale_model_conflictocitaventa",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_conflictocitaventa"
     },
     {
       "relation": "contains",
@@ -14582,9 +15227,9 @@
       "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_domain_sale_model",
-      "target": "frontend_src_features_sales_domain_sale_model_createcitaventapayload",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_createcitaventapayload"
     },
     {
       "relation": "contains",
@@ -14593,9 +15238,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_domain_sale_model",
-      "target": "frontend_src_features_sales_domain_sale_model_estadocitaventa",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_estadocitaventa"
     },
     {
       "relation": "contains",
@@ -14604,9 +15249,9 @@
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_domain_sale_model",
-      "target": "frontend_src_features_sales_domain_sale_model_modo_cobro_options",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_modo_cobro_options"
     },
     {
       "relation": "contains",
@@ -14615,9 +15260,9 @@
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_domain_sale_model",
-      "target": "frontend_src_features_sales_domain_sale_model_pagocitaventa",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_pagocitaventa"
     },
     {
       "relation": "contains",
@@ -14626,9 +15271,9 @@
       "source_location": "L59",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_domain_sale_model",
-      "target": "frontend_src_features_sales_domain_sale_model_updatecitaventapayload",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_updatecitaventapayload"
     },
     {
       "relation": "imports_from",
@@ -14693,279 +15338,13 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L97",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_formatpersonas",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L71",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_formatsessiondate",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L87",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_formatsessiontime",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L232",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_formattedselectedsaledatetime",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L210",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_getcitaventatimeslotstatusclass",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L66",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_getphotographer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L135",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_issellerphotographer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L150",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_minuteslots",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L21",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_props",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_router",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L176",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_salescountbyhour",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L152",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectedhouronly",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L157",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectedminuteonly",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L162",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selecthour",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L169",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectminute",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L124",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectseller",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L107",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_selectsession",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L117",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_showsellerslist",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L64",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_showsessionslist",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L26",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_t_locale",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L119",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_togglesellerslist",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L102",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop_togglesessionslist",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_sales_ui_saleappointmentformdesktop",
-      "target": "ref_vue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormView.vue",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_sales_ui_saleappointmentformview",
-      "target": "frontend_src_features_sales_ui_saleappointmentformdesktop"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue",
       "source_location": "L181",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_formatpersonas",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_formatpersonas"
     },
     {
       "relation": "contains",
@@ -14974,9 +15353,9 @@
       "source_location": "L155",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_formatsessiondate",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_formatsessiondate"
     },
     {
       "relation": "contains",
@@ -14985,9 +15364,9 @@
       "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_formatsessiontime",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_formatsessiontime"
     },
     {
       "relation": "contains",
@@ -14996,9 +15375,9 @@
       "source_location": "L125",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_getcitaventatimeslotstatusclass",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_getcitaventatimeslotstatusclass"
     },
     {
       "relation": "contains",
@@ -15007,9 +15386,9 @@
       "source_location": "L150",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_getphotographer",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_getphotographer"
     },
     {
       "relation": "contains",
@@ -15018,9 +15397,9 @@
       "source_location": "L217",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_issellerphotographer",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_issellerphotographer"
     },
     {
       "relation": "contains",
@@ -15029,9 +15408,9 @@
       "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_minuteslots",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_minuteslots"
     },
     {
       "relation": "contains",
@@ -15040,9 +15419,9 @@
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_props",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_props"
     },
     {
       "relation": "contains",
@@ -15051,9 +15430,9 @@
       "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_router",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_router"
     },
     {
       "relation": "contains",
@@ -15062,9 +15441,9 @@
       "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_salescountbyhour",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_salescountbyhour"
     },
     {
       "relation": "contains",
@@ -15073,9 +15452,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selectedhouronly",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selectedhouronly"
     },
     {
       "relation": "contains",
@@ -15084,9 +15463,9 @@
       "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selectedminuteonly",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selectedminuteonly"
     },
     {
       "relation": "contains",
@@ -15095,9 +15474,9 @@
       "source_location": "L67",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selecthour",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selecthour"
     },
     {
       "relation": "contains",
@@ -15106,9 +15485,9 @@
       "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selectminute",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selectminute"
     },
     {
       "relation": "contains",
@@ -15117,9 +15496,9 @@
       "source_location": "L206",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selectseller",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selectseller"
     },
     {
       "relation": "contains",
@@ -15128,9 +15507,9 @@
       "source_location": "L191",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selectsession",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_selectsession"
     },
     {
       "relation": "contains",
@@ -15139,9 +15518,9 @@
       "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_showalltimeslots",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_showalltimeslots"
     },
     {
       "relation": "contains",
@@ -15150,9 +15529,9 @@
       "source_location": "L148",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_showsellerslist",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_showsellerslist"
     },
     {
       "relation": "contains",
@@ -15161,9 +15540,9 @@
       "source_location": "L147",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_showsessionslist",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_showsessionslist"
     },
     {
       "relation": "contains",
@@ -15172,9 +15551,9 @@
       "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_t_locale",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_t_locale"
     },
     {
       "relation": "contains",
@@ -15183,9 +15562,9 @@
       "source_location": "L201",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_togglesellerslist",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_togglesellerslist"
     },
     {
       "relation": "contains",
@@ -15194,9 +15573,9 @@
       "source_location": "L186",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_togglesessionslist",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_togglesessionslist"
     },
     {
       "relation": "contains",
@@ -15205,9 +15584,9 @@
       "source_location": "L80",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_visibletimeslots",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_ui_saleappointmentformmobile_visibletimeslots"
     },
     {
       "relation": "imports_from",
@@ -15217,9 +15596,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformmobile",
-      "target": "ref_vue",
-      "confidence_score": 1.0
+      "target": "ref_vue"
     },
     {
       "relation": "imports_from",
@@ -15889,18 +16268,6 @@
       "target": "backend_src_shared_encryption_encrypt"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -15959,18 +16326,6 @@
       "confidence_score": 1.0,
       "source": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
       "target": "backend_src_features_photo_sessions_infrastructure_session_routes_gethotelavailability"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L36",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 0.8,
-      "source": "backend_src_index",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes"
     },
     {
       "relation": "contains",
@@ -25117,18 +25472,6 @@
       "target": "backend_src_shared_encryption_decrypt"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_commissions_infrastructure_commission_routes"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -25151,18 +25494,6 @@
       "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes_commissionroutes",
       "target": "backend_src_features_commissions_infrastructure_commission_routes_getusercontext"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L39",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 0.8,
-      "source": "backend_src_index",
-      "target": "backend_src_features_commissions_infrastructure_commission_routes_commissionroutes"
     },
     {
       "relation": "imports_from",
@@ -25375,18 +25706,6 @@
       "target": "backend_src_shared_encryption_decryptuser"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_goals_infrastructure_goal_routes"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -25433,18 +25752,6 @@
       "confidence_score": 1.0,
       "source": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
       "target": "backend_src_features_goals_infrastructure_goal_routes_calcularsemaforo"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L38",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 0.8,
-      "source": "backend_src_index",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_goalroutes"
     },
     {
       "relation": "imports_from",
@@ -25673,18 +25980,6 @@
       "target": "backend_src_shared_permissions_rolecode"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_users_infrastructure_user_routes"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -25731,18 +26026,6 @@
       "_origin": "ast",
       "source": "backend_src_features_users_infrastructure_user_routes_userroutes",
       "target": "backend_src_shared_permissions_getrolepermissions"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L33",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 0.8,
-      "source": "backend_src_index",
-      "target": "backend_src_features_users_infrastructure_user_routes_userroutes"
     },
     {
       "relation": "contains",
@@ -27691,18 +27974,6 @@
       "target": "backend_src_shared_db_prisma"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_audit_log_infrastructure_audit_log_routes"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -27713,18 +27984,6 @@
       "confidence_score": 1.0,
       "source": "backend_src_features_audit_log_infrastructure_audit_log_routes_auditlogroutes",
       "target": "backend_src_features_audit_log_infrastructure_audit_log_routes_getauthtokeninfo"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L43",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 0.8,
-      "source": "backend_src_index",
-      "target": "backend_src_features_audit_log_infrastructure_audit_log_routes_auditlogroutes"
     },
     {
       "relation": "contains",
@@ -27773,18 +28032,6 @@
       "target": "backend_src_shared_db_prisma"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_countries_infrastructure_country_routes"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -27795,18 +28042,6 @@
       "confidence_score": 1.0,
       "source": "backend_src_features_countries_infrastructure_country_routes_countryroutes",
       "target": "backend_src_features_countries_infrastructure_country_routes_getauthuserid"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L34",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 0.8,
-      "source": "backend_src_index",
-      "target": "backend_src_features_countries_infrastructure_country_routes_countryroutes"
     },
     {
       "relation": "contains",
@@ -27954,18 +28189,6 @@
       "target": "backend_src_shared_db_prisma"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_hotels_infrastructure_hotel_routes"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -27976,18 +28199,6 @@
       "confidence_score": 1.0,
       "source": "backend_src_features_hotels_infrastructure_hotel_routes_hotelroutes",
       "target": "backend_src_features_hotels_infrastructure_hotel_routes_getauthuserid"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L35",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 0.8,
-      "source": "backend_src_index",
-      "target": "backend_src_features_hotels_infrastructure_hotel_routes_hotelroutes"
     },
     {
       "relation": "contains",
@@ -28073,18 +28284,6 @@
       "target": "backend_src_shared_db_prisma"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L13",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_integrations_google_calendar_google_calendar_routes"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -28119,18 +28318,6 @@
       "_origin": "ast",
       "source": "backend_src_features_integrations_google_calendar_google_calendar_routes_googlecalendarroutes",
       "target": "backend_src_features_integrations_google_calendar_google_calendar_service_testgooglecalendarconnection"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L41",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 0.8,
-      "source": "backend_src_index",
-      "target": "backend_src_features_integrations_google_calendar_google_calendar_routes_googlecalendarroutes"
     },
     {
       "relation": "contains",
@@ -29330,18 +29517,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L15",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_notifications_infrastructure_reminder_cron"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "backend/src/scripts/test-reminders.ts",
       "source_location": "L8",
       "weight": 1.0,
@@ -29349,30 +29524,6 @@
       "confidence_score": 1.0,
       "source": "backend_src_scripts_test_reminders",
       "target": "backend_src_features_notifications_infrastructure_reminder_cron"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L15",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_notifications_infrastructure_reminder_cron_startremindercron"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L58",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index_start",
-      "target": "backend_src_features_notifications_infrastructure_reminder_cron_startremindercron"
     },
     {
       "relation": "imports",
@@ -29515,18 +29666,6 @@
       "target": "backend_src_shared_encryption_decryptuser"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_notifications_infrastructure_template_routes"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -29561,18 +29700,6 @@
       "_origin": "ast",
       "source": "backend_src_features_notifications_infrastructure_template_routes_templateroutes",
       "target": "backend_src_features_notifications_infrastructure_template_routes_allowed_roles"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L42",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 0.8,
-      "source": "backend_src_index",
-      "target": "backend_src_features_notifications_infrastructure_template_routes_templateroutes"
     },
     {
       "relation": "contains",
@@ -29758,18 +29885,6 @@
       "target": "backend_src_shared_db_prisma"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L12",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_users_infrastructure_calendario_laboral_routes"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -29792,40 +29907,6 @@
       "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_calendario_laboral_routes_calendariolaboralroutes",
       "target": "backend_src_features_users_infrastructure_calendario_laboral_routes_parsedateonly"
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 0.8,
-      "source": "backend_src_index",
-      "target": "backend_src_features_users_infrastructure_calendario_laboral_routes_calendariolaboralroutes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_index_fastify"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L53",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_index_start"
     },
     {
       "relation": "contains",
@@ -33640,5 +33721,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6102d84e4dcc7f8ae9e4b913ec2da3f82b57a83c"
+  "built_at_commit": "7ee250d2c27f79d121324bde0e755587c3c389a1"
 }
