@@ -84,32 +84,32 @@ function handleTabChange(paneName: string | number) {
       class="config-tabs"
       @tab-change="handleTabChange"
     >
-      <el-tab-pane v-if="isSuperOrAdmin" :label="t('configuration.tabs.countriesAndAreas')" name="paises">
+      <el-tab-pane v-if="isSuperOrAdmin" :label="t('configuration.tabs.countriesAndAreas')" name="paises" lazy>
         <!-- Componente modular de la feature 'countries' -->
         <PaisesConfig />
       </el-tab-pane>
 
-      <el-tab-pane v-if="isSuperOrAdmin" :label="t('configuration.tabs.hotels')" name="hoteles">
+      <el-tab-pane v-if="isSuperOrAdmin" :label="t('configuration.tabs.hotels')" name="hoteles" lazy>
         <!-- Componente modular de la feature 'hotels' -->
         <HotelesConfig />
       </el-tab-pane>
 
-      <el-tab-pane v-if="canManageGoals" :label="t('configuration.tabs.goalsAndObjectives')" name="metas">
+      <el-tab-pane v-if="canManageGoals" :label="t('configuration.tabs.goalsAndObjectives')" name="metas" lazy>
         <!-- Componente modular de la feature 'goals' -->
         <GoalFormView />
       </el-tab-pane>
 
-      <el-tab-pane v-if="canManageCommissions" :label="t('configuration.tabs.commissions')" name="comisiones">
+      <el-tab-pane v-if="canManageCommissions" :label="t('configuration.tabs.commissions')" name="comisiones" lazy>
         <!-- Componente modular de comisiones -->
         <ComisionesConfig />
       </el-tab-pane>
 
-      <el-tab-pane v-if="canManageEmailTemplates" :label="t('configuration.tabs.emailTemplates')" name="plantillas">
+      <el-tab-pane v-if="canManageEmailTemplates" :label="t('configuration.tabs.emailTemplates')" name="plantillas" lazy>
         <!-- Componente modular de plantillas de correo de recordatorio -->
         <EmailTemplatesView embedded />
       </el-tab-pane>
 
-      <el-tab-pane v-if="isSuperOrAdmin" :label="t('configuration.tabs.activity')" name="actividad">
+      <el-tab-pane v-if="isSuperOrAdmin" :label="t('configuration.tabs.activity')" name="actividad" lazy>
         <!-- Componente modular de auditoría y registro de actividad -->
         <AuditLogTab />
       </el-tab-pane>

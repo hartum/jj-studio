@@ -15,6 +15,9 @@ export interface Hotel {
   email?: string
   telefono?: string
   metaMensualDefault?: number | null
+  gcalConfigured?: boolean
+  gcalCalendarId?: string
+  gcalServiceAccountEmail?: string
   createdAt?: string
 }
 
@@ -30,6 +33,24 @@ export interface CreateHotelPayload {
   email?: string
   telefono?: string
   metaMensualDefault?: number | null
+  gcalCalendarId?: string
+  gcalServiceAccountEmail?: string
+  serviceAccountJson?: string
 }
 
 export type UpdateHotelPayload = Partial<CreateHotelPayload>
+
+export interface GoogleCalendarConfigPayload {
+  calendarId: string
+  serviceAccountJson?: string
+  clientEmail?: string
+  privateKey?: string
+}
+
+export interface GoogleCalendarTestResult {
+  success: boolean
+  calendarId?: string
+  calendarTitle?: string
+  timeZone?: string
+  error?: string
+}

@@ -328,7 +328,6 @@ onMounted(async () => {
             <iframe
               :srcdoc="previewHtml"
               class="preview-inline-iframe"
-              sandbox="allow-same-origin"
               title="Vista previa del correo"
             />
           </div>

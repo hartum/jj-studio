@@ -7,12 +7,20 @@ import {
 } from './google-calendar.service.js'
 
 export async function googleCalendarRoutes(fastify: FastifyInstance) {
-  // GET /api/integraciones/google-calendar/test
-  fastify.get('/api/integraciones/google-calendar/test', async (_request, reply) => {
+  // GET /api/integraciones/google-calendar/test?hotelId=X
+  fastify.get('/api/integraciones/google-calendar/test', async (request, reply) => {
     try {
-      const result = await testGoogleCalendarConnection()
+      const query = request.query as { hotelId?: string }
+      const hotelId = Number(query.hotelId)
+      if (!hotelId) {
+        return reply.status(400).send({
+          success: false,
+          error: 'Parámetro hotelId requerido para verificar Google Calendar.',
+        })
+      }
+      const result = await testGoogleCalendarConnection(hotelId)
       if (!result.success) {
-        return reply.status(500).send(result)
+        return reply.status(400).send(result)
       }
       return reply.send(result)
     } catch (err: any) {
@@ -25,12 +33,16 @@ export async function googleCalendarRoutes(fastify: FastifyInstance) {
   })
 
   // POST /api/integraciones/google-calendar/sync-all (Sincroniza todas las sesiones activas)
-  fastify.post('/api/integraciones/google-calendar/sync-all', async (_request, reply) => {
+  fastify.post('/api/integraciones/google-calendar/sync-all', async (request, reply) => {
     try {
+      const body = (request.body || {}) as { hotelId?: number }
+      const hotelFilter = body.hotelId ? { hotelId: Number(body.hotelId) } : {}
+
       const sesiones = await prisma.sesionFotografica.findMany({
         where: {
           deletedAt: null,
           estado: { not: 'CANCELADA' },
+          ...hotelFilter,
         },
         select: { id: true },
       })
@@ -39,6 +51,7 @@ export async function googleCalendarRoutes(fastify: FastifyInstance) {
         where: {
           deletedAt: null,
           estado: { not: 'CANCELADA' },
+          ...hotelFilter,
         },
         select: { id: true },
       })

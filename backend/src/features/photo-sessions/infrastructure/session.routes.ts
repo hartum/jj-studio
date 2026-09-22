@@ -829,7 +829,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
 
       // Eliminar evento de Google Calendar
       if (sesion.googleCalendarEventId) {
-        deleteSesionFromGoogle(sesion.googleCalendarEventId).catch((gErr) => {
+        deleteSesionFromGoogle(sesion.googleCalendarEventId, sesion.hotelId).catch((gErr) => {
           fastify.log.error(gErr, 'Error al eliminar evento de Google Calendar')
         })
       }
@@ -844,7 +844,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
           where: { citaVentaId: sesion.citaVenta.id },
         })
         if (sesion.citaVenta.googleCalendarEventId) {
-          deleteCitaVentaFromGoogle(sesion.citaVenta.googleCalendarEventId).catch((gErr) => {
+          deleteCitaVentaFromGoogle(sesion.citaVenta.googleCalendarEventId, sesion.citaVenta.hotelId || sesion.hotelId).catch((gErr) => {
             fastify.log.error(gErr, 'Error al eliminar cita de venta de Google Calendar')
           })
         }

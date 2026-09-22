@@ -1,8 +1,12 @@
 import { google } from 'googleapis'
 import path from 'node:path'
 import fs from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { prisma } from '../../../shared/db.js'
 import { decrypt, decryptUser } from '../../../shared/encryption.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // Paleta oficial de Google Calendar para eventos (colorId 1..11)
 interface GoogleColor {
@@ -63,22 +67,94 @@ export function mapHexToGoogleColorId(hexColor?: string | null): string {
   }
 }
 
+function resolveServiceAccountKeyPath(): string | null {
+  const envPath = process.env.GOOGLE_KEY_FILE_PATH || 'google-service-account.json'
+  const candidates = [
+    path.isAbsolute(envPath) ? envPath : path.resolve(process.cwd(), envPath),
+    path.resolve(process.cwd(), 'backend', envPath),
+    path.resolve(process.cwd(), 'google-service-account.json'),
+    path.resolve(process.cwd(), 'backend', 'google-service-account.json'),
+    path.resolve(__dirname, '../../../../google-service-account.json'),
+    path.resolve(__dirname, '../../../google-service-account.json'),
+  ]
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) {
+      return candidate
+    }
+  }
+  return null
+}
+
 /**
- * Inicializa y obtiene el cliente autenticado de Google Calendar
+ * Inicializa y obtiene el cliente autenticado de Google Calendar para un hotel específico
  */
-export function getCalendarClient() {
-  const calendarId = process.env.GOOGLE_CALENDAR_ID
+export async function getCalendarClientForHotel(
+  hotelId?: number | null,
+  overrideConfig?: {
+    calendarId?: string
+    serviceAccountEmail?: string
+    serviceAccountKey?: string
+  },
+) {
+  let calendarId = overrideConfig?.calendarId?.trim() || null
+  let saEmail = overrideConfig?.serviceAccountEmail?.trim() || null
+  let saKey = overrideConfig?.serviceAccountKey || null
+
+  if (hotelId) {
+    const hotel = await prisma.hotel.findUnique({
+      where: { id: hotelId },
+      select: {
+        id: true,
+        nombre: true,
+        gcalCalendarId: true,
+        gcalServiceAccountEmail: true,
+        gcalServiceAccountKey: true,
+      },
+    })
+
+    if (hotel) {
+      if (!calendarId && hotel.gcalCalendarId) {
+        calendarId = hotel.gcalCalendarId.trim()
+      }
+      if (!saEmail && hotel.gcalServiceAccountEmail) {
+        saEmail = hotel.gcalServiceAccountEmail.trim()
+      }
+      if (!saKey && hotel.gcalServiceAccountKey) {
+        saKey = hotel.gcalServiceAccountKey
+      }
+    }
+  }
+
   if (!calendarId) {
     return null
   }
 
-  // 1. Prioridad: Archivo JSON de cuenta de servicio
-  const keyFilePath = process.env.GOOGLE_KEY_FILE_PATH || 'google-service-account.json'
-  const resolvedKeyPath = path.isAbsolute(keyFilePath)
-    ? keyFilePath
-    : path.resolve(process.cwd(), keyFilePath)
+  // 1. Prioridad: Credenciales de Service Account específicas (BD o pasadas)
+  if (saEmail && saKey) {
+    try {
+      const decryptedKey = decrypt(saKey) || saKey
+      if (decryptedKey) {
+        const auth = new google.auth.JWT({
+          email: saEmail,
+          key: decryptedKey.replace(/\\n/g, '\n'),
+          scopes: ['https://www.googleapis.com/auth/calendar'],
+        })
+        return {
+          calendar: google.calendar({ version: 'v3', auth }),
+          calendarId,
+        }
+      }
+    } catch (err) {
+      console.error(
+        `[GoogleCalendar] Error al inicializar credenciales para hotel #${hotelId}:`,
+        err,
+      )
+    }
+  }
 
-  if (fs.existsSync(resolvedKeyPath)) {
+  // 2. Fallback: Archivo JSON de Service Account compartido en el servidor (google-service-account.json)
+  const resolvedKeyPath = resolveServiceAccountKeyPath()
+  if (resolvedKeyPath) {
     try {
       const auth = new google.auth.GoogleAuth({
         keyFile: resolvedKeyPath,
@@ -89,11 +165,11 @@ export function getCalendarClient() {
         calendarId,
       }
     } catch (err) {
-      console.error('[GoogleCalendar] Error al inicializar desde archivo JSON:', err)
+      console.error('[GoogleCalendar] Error al inicializar desde archivo JSON compartido:', err)
     }
   }
 
-  // 2. Fallback: Variables de entorno directas
+  // 3. Fallback: Variables de entorno directas
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL
   const privateKey = process.env.GOOGLE_PRIVATE_KEY
   if (email && privateKey) {
@@ -174,14 +250,6 @@ function formatEmailHtml(email?: string | null): string {
  * Sincroniza una Sesión Fotográfica hacia Google Calendar (Crear o Actualizar)
  */
 export async function syncSesionToGoogle(sesionId: number): Promise<string | null> {
-  const client = getCalendarClient()
-  if (!client) {
-    console.warn(
-      '[GoogleCalendar] Cliente de Google Calendar no configurado. Se omite sincronización.',
-    )
-    return null
-  }
-
   const sesion = await prisma.sesionFotografica.findUnique({
     where: { id: sesionId },
     include: {
@@ -194,6 +262,12 @@ export async function syncSesionToGoogle(sesionId: number): Promise<string | nul
   })
 
   if (!sesion || sesion.deletedAt) {
+    return null
+  }
+
+  const client = await getCalendarClientForHotel(sesion.hotelId)
+  if (!client) {
+    // Si el hotel no tiene Google Calendar configurado, se omite silenciosamente
     return null
   }
 
@@ -275,7 +349,7 @@ export async function syncSesionToGoogle(sesionId: number): Promise<string | nul
         })
         googleEventId = res.data.id || googleEventId
         console.log(
-          `[GoogleCalendar] Sesión #${sesionId} actualizada en Google Calendar (Event ID: ${googleEventId})`,
+          `[GoogleCalendar] Sesión #${sesionId} actualizada en Google Calendar para hotel #${sesion.hotelId} (Event ID: ${googleEventId})`,
         )
       } catch (updateErr: any) {
         // Si el evento fue borrado en Google (404 / 410), lo recreamos
@@ -305,7 +379,7 @@ export async function syncSesionToGoogle(sesionId: number): Promise<string | nul
       })
       googleEventId = createRes.data.id || null
       console.log(
-        `[GoogleCalendar] Sesión #${sesionId} creada en Google Calendar (Event ID: ${googleEventId})`,
+        `[GoogleCalendar] Sesión #${sesionId} creada en Google Calendar para hotel #${sesion.hotelId} (Event ID: ${googleEventId})`,
       )
     }
 
@@ -326,9 +400,12 @@ export async function syncSesionToGoogle(sesionId: number): Promise<string | nul
 /**
  * Elimina un evento de Sesión de Google Calendar
  */
-export async function deleteSesionFromGoogle(googleEventId?: string | null): Promise<boolean> {
-  if (!googleEventId) return false
-  const client = getCalendarClient()
+export async function deleteSesionFromGoogle(
+  googleEventId?: string | null,
+  hotelId?: number | null,
+): Promise<boolean> {
+  if (!googleEventId || !hotelId) return false
+  const client = await getCalendarClientForHotel(hotelId)
   if (!client) return false
 
   try {
@@ -336,14 +413,14 @@ export async function deleteSesionFromGoogle(googleEventId?: string | null): Pro
       calendarId: client.calendarId,
       eventId: googleEventId,
     })
-    console.log(`[GoogleCalendar] Evento ${googleEventId} eliminado de Google Calendar`)
+    console.log(`[GoogleCalendar] Evento ${googleEventId} eliminado de Google Calendar (Hotel #${hotelId})`)
     return true
   } catch (err: any) {
     if (err?.status === 404 || err?.status === 410 || err?.code === 404 || err?.code === 410) {
       return true // Ya no existía
     }
     console.error(
-      `[GoogleCalendar] Error al eliminar evento ${googleEventId}:`,
+      `[GoogleCalendar] Error al eliminar evento ${googleEventId} (Hotel #${hotelId}):`,
       err?.message || err,
     )
     return false
@@ -354,14 +431,6 @@ export async function deleteSesionFromGoogle(googleEventId?: string | null): Pro
  * Sincroniza una Cita de Venta hacia Google Calendar (Crear o Actualizar)
  */
 export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string | null> {
-  const client = getCalendarClient()
-  if (!client) {
-    console.warn(
-      '[GoogleCalendar] Cliente de Google Calendar no configurado. Se omite sincronización.',
-    )
-    return null
-  }
-
   const cita = await prisma.citaVenta.findUnique({
     where: { id: citaVentaId },
     include: {
@@ -381,6 +450,11 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
   })
 
   if (!cita || cita.deletedAt) {
+    return null
+  }
+
+  const client = await getCalendarClientForHotel(cita.hotelId)
+  if (!client) {
     return null
   }
 
@@ -464,7 +538,7 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
         })
         googleEventId = res.data.id || googleEventId
         console.log(
-          `[GoogleCalendar] Cita de Venta #${citaVentaId} actualizada en Google Calendar (Event ID: ${googleEventId})`,
+          `[GoogleCalendar] Cita de Venta #${citaVentaId} actualizada en Google Calendar para hotel #${cita.hotelId} (Event ID: ${googleEventId})`,
         )
       } catch (updateErr: any) {
         if (
@@ -489,7 +563,7 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
       })
       googleEventId = createRes.data.id || null
       console.log(
-        `[GoogleCalendar] Cita de Venta #${citaVentaId} creada en Google Calendar (Event ID: ${googleEventId})`,
+        `[GoogleCalendar] Cita de Venta #${citaVentaId} creada en Google Calendar para hotel #${cita.hotelId} (Event ID: ${googleEventId})`,
       )
     }
 
@@ -513,26 +587,35 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
 /**
  * Elimina un evento de Cita de Venta de Google Calendar
  */
-export async function deleteCitaVentaFromGoogle(googleEventId?: string | null): Promise<boolean> {
-  return deleteSesionFromGoogle(googleEventId)
+export async function deleteCitaVentaFromGoogle(
+  googleEventId?: string | null,
+  hotelId?: number | null,
+): Promise<boolean> {
+  return deleteSesionFromGoogle(googleEventId, hotelId)
 }
 
 /**
- * Verifica la conectividad y permisos con Google Calendar
+ * Verifica la conectividad y permisos con Google Calendar para un hotel específico
  */
-export async function testGoogleCalendarConnection(): Promise<{
+export async function testGoogleCalendarConnection(
+  hotelId?: number | null,
+  overrideConfig?: {
+    calendarId?: string
+    serviceAccountEmail?: string
+    serviceAccountKey?: string
+  },
+): Promise<{
   success: boolean
   calendarId?: string
   calendarTitle?: string
   timeZone?: string
   error?: string
 }> {
-  const client = getCalendarClient()
+  const client = await getCalendarClientForHotel(hotelId, overrideConfig)
   if (!client) {
     return {
       success: false,
-      error:
-        'Variables de configuración de Google Calendar no encontradas en .env o archivo no existe.',
+      error: 'Google Calendar no está configurado para este hotel o faltan credenciales.',
     }
   }
 

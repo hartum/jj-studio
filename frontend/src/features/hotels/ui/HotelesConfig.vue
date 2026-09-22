@@ -6,7 +6,7 @@ import { useCountryStore } from '@/features/countries/stores/country.store'
 import type { Hotel } from '../domain/hotel.model'
 import { getFlagEmoji } from '@/shared/flagEmoji'
 import { useLocale } from '@/i18n/useLocale'
-import { Search, Plus, EditPen, Delete, Location } from '@element-plus/icons-vue'
+import { Search, Plus, EditPen, Delete, Location, Calendar } from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
 import { ElMessage } from 'element-plus'
 
@@ -165,6 +165,26 @@ async function handleDeleteHotel(hotel: Hotel) {
               <span>{{ row.personaContacto || 'N/A' }}</span>
               <small v-if="row.telefono" class="contact-phone">{{ row.telefono }}</small>
             </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column :label="t('hotelsConfig.googleCalendar.sectionTitle')" width="160" align="center">
+          <template #default="{ row }">
+            <el-tooltip
+              v-if="row.gcalConfigured"
+              :content="`ID: ${row.gcalCalendarId}`"
+              placement="top"
+            >
+              <span>
+                <el-tag type="success" size="small" effect="plain" class="gcal-status-tag">
+                  <el-icon class="mr-1"><Calendar /></el-icon>
+                  {{ t('hotelsConfig.googleCalendar.tableBadgeConnected') }}
+                </el-tag>
+              </span>
+            </el-tooltip>
+            <el-tag v-else type="info" size="small" effect="plain" class="gcal-status-tag text-muted">
+              {{ t('hotelsConfig.googleCalendar.tableBadgeNotConfigured') }}
+            </el-tag>
           </template>
         </el-table-column>
 

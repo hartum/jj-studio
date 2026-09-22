@@ -133,7 +133,7 @@ function getActionColor(accion: string): string {
   }
 }
 
-function getActionTagType(accion: string): 'success' | 'primary' | 'danger' | 'warning' | 'info' | '' {
+function getActionTagType(accion: string): 'success' | 'primary' | 'danger' | 'warning' | 'info' {
   switch (accion?.toUpperCase()) {
     case 'CREAR':
       return 'success'
@@ -144,7 +144,7 @@ function getActionTagType(accion: string): 'success' | 'primary' | 'danger' | 'w
     case 'LOGOUT':
       return 'info'
     case 'LOGIN':
-      return ''
+      return 'primary'
     default:
       return 'info'
   }

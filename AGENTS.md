@@ -50,6 +50,7 @@ Todas las pantallas del sistema deben seguir las directrices globales de [.agent
 - **[docs/requisitos_y_plan_trabajo.md](file:///Users/hartumia/workspace/JJ%20Studio/docs/requisitos_y_plan_trabajo.md)**: Documento integral de análisis de requisitos, arquitectura de base de datos (ERD), flujos de usuario detallados y plan de desarrollo en 8 fases.
 - **[docs/arquitectura_seguridad_y_cifrado.md](file:///Users/hartumia/workspace/JJ%20Studio/docs/arquitectura_seguridad_y_cifrado.md)**: Arquitectura de seguridad, cifrado AES-256-GCM de datos sensibles (usuarios y sesiones), blind indexing HMAC-SHA256 y hashing de contraseñas con bcrypt.
 - **[docs/configuracion_servicio_email_y_dominios.md](file:///Users/hartumia/workspace/JJ%20Studio/docs/configuracion_servicio_email_y_dominios.md)**: Guía paso a paso para la configuración del servicio de correo Postfix, registros DNS (A, SPF), SSL en FastPanel y migración de dominios.
+- **[docs/guia_conexion_google_calendar_hoteles.md](file:///Users/hartumia/workspace/JJ%20Studio/docs/guia_conexion_google_calendar_hoteles.md)**: Guía paso a paso para la conexión de Google Calendar individualizado por hotel, permisos de la Service Account y verificación.
 - **[Control_acceso segun roles.md](file:///Users/hartumia/workspace/JJ%20Studio/Control_acceso%20segun%20roles.md)**: Resumen de la matriz de permisos RBAC y multi-tenancy.
 
 ---
