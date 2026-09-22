@@ -115,19 +115,19 @@
     "semantic_hash": ""
   },
   "backend/src/features/hotels/infrastructure/hotel.routes.ts": {
-    "mtime": 1790082475.9570415,
-    "ast_hash": "a1f4370547d6b0447e4f49cce903c062",
-    "semantic_hash": ""
+    "mtime": 1788450398.9797714,
+    "ast_hash": "2df3121d526d12d950df786d2e629973",
+    "semantic_hash": "2df3121d526d12d950df786d2e629973"
   },
   "backend/src/features/integrations/google-calendar/google-calendar.routes.ts": {
-    "mtime": 1790068441.0870697,
-    "ast_hash": "ca3b90f32c741bbd4c0ed0ee6ff2967f",
-    "semantic_hash": ""
+    "mtime": 1787250705.2241125,
+    "ast_hash": "c2b6112ac898799ea024420c174d8fc8",
+    "semantic_hash": "c2b6112ac898799ea024420c174d8fc8"
   },
   "backend/src/features/integrations/google-calendar/google-calendar.service.ts": {
-    "mtime": 1790082628.4545102,
-    "ast_hash": "3ec560c8522405c7e3c53f163d56b0b8",
-    "semantic_hash": ""
+    "mtime": 1787505526.9251125,
+    "ast_hash": "b59a39a7a114dcbb8fc752d745e27fcd",
+    "semantic_hash": "b59a39a7a114dcbb8fc752d745e27fcd"
   },
   "backend/src/features/notifications/application/reminder.service.ts": {
     "mtime": 1788426945.0482333,
@@ -150,8 +150,8 @@
     "semantic_hash": "0fc2164ef77bcca3697dea2ff7126a08"
   },
   "backend/src/features/photo-sessions/infrastructure/session.routes.ts": {
-    "mtime": 1790068420.2026129,
-    "ast_hash": "8f248363d8d088d33f4c7d94ddb74439",
+    "mtime": 1790013376.2625196,
+    "ast_hash": "fd70a94cf54618705786f916b730422e",
     "semantic_hash": ""
   },
   "backend/src/features/project-management/application/ports/project.repository.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": "8b7fbbfd3c080a1fc2affb721c830dfc"
   },
   "backend/src/features/sales/infrastructure/sale.routes.ts": {
-    "mtime": 1790068429.3155377,
-    "ast_hash": "893f2eab5bf9f799406cb8018a5fff91",
+    "mtime": 1790015329.0486875,
+    "ast_hash": "b65f209bd463f49b0cef6ed7687920e4",
     "semantic_hash": ""
   },
   "backend/src/features/users/infrastructure/calendario-laboral.routes.ts": {
@@ -265,8 +265,8 @@
     "semantic_hash": "fa5e38919ee7a393bfc67089945aa170"
   },
   "frontend/src/features/audit-log/ui/AuditLogTab.vue": {
-    "mtime": 1790079943.6104503,
-    "ast_hash": "e76d4f062f0e0f22492c5e2a61bddef8",
+    "mtime": 1789718372.0458815,
+    "ast_hash": "dfb1040a9259295540f83d886c84f77f",
     "semantic_hash": ""
   },
   "frontend/src/features/auth/stores/auth.store.ts": {
@@ -305,8 +305,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/configuration/ui/ConfiguracionView.vue": {
-    "mtime": 1790079610.966757,
-    "ast_hash": "02df224a2d26d1416e511d253b2f7ef1",
+    "mtime": 1789718336.230893,
+    "ast_hash": "0a1623b14cdc22ea95043db40376b923",
     "semantic_hash": ""
   },
   "frontend/src/features/countries/domain/country.model.ts": {
@@ -410,23 +410,23 @@
     "semantic_hash": ""
   },
   "frontend/src/features/hotels/domain/hotel.model.ts": {
-    "mtime": 1790068514.018562,
-    "ast_hash": "62e45524891f76214b3ce8c9a3da0be8",
-    "semantic_hash": ""
+    "mtime": 1786382724.4736776,
+    "ast_hash": "02216e200beaf1af7644c0fe84d88ef8",
+    "semantic_hash": "02216e200beaf1af7644c0fe84d88ef8"
   },
   "frontend/src/features/hotels/stores/hotel.store.ts": {
-    "mtime": 1790083726.6478767,
-    "ast_hash": "c554a0ced25c95ed63c1e8f39e6df47b",
-    "semantic_hash": ""
+    "mtime": 1786290731.128684,
+    "ast_hash": "588a41e920f976c3ad809a610490f647",
+    "semantic_hash": "588a41e920f976c3ad809a610490f647"
   },
   "frontend/src/features/hotels/ui/HotelFormView.vue": {
-    "mtime": 1790082495.7576616,
-    "ast_hash": "807868ad8516d2f228a7fc08dd311a63",
+    "mtime": 1789718213.7742577,
+    "ast_hash": "f5481ba66894d63e4f85d61392ff9476",
     "semantic_hash": ""
   },
   "frontend/src/features/hotels/ui/HotelesConfig.vue": {
-    "mtime": 1790079622.2549455,
-    "ast_hash": "0b70c482bf6cf30a7b1c39851bcd1f2b",
+    "mtime": 1789718199.2209368,
+    "ast_hash": "54b44588160a411837416f45b8759812",
     "semantic_hash": ""
   },
   "frontend/src/features/notifications/composables/useEmailTemplates.ts": {
@@ -435,8 +435,8 @@
     "semantic_hash": "c50810cd7ce58ee20e9b5ae82bdeaf65"
   },
   "frontend/src/features/notifications/ui/EmailTemplatesView.vue": {
-    "mtime": 1790079949.525925,
-    "ast_hash": "5ab8868eac8a498d9efbffb75c8c33bb",
+    "mtime": 1789718407.563497,
+    "ast_hash": "9ac227e97fbb7cbdb72d99072e360e94",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarAlerts.ts": {
@@ -655,9 +655,9 @@
     "semantic_hash": "f7a9d77a1241f127b7f7f41ec3835859"
   },
   "AGENTS.md": {
-    "mtime": 1790068676.322212,
-    "ast_hash": "687ca2f29bd9519d8a10f48300c51ab2",
-    "semantic_hash": ""
+    "mtime": 1788453252.6158624,
+    "ast_hash": "3a4b37439e5164b2253c96bf6db0b327",
+    "semantic_hash": "3a4b37439e5164b2253c96bf6db0b327"
   },
   "Control_acceso segun roles.md": {
     "mtime": 1785828396.097657,
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1790079210.4831116,
-    "ast_hash": "63698e9efcbfb72ed9bcbce8b5d860eb",
+    "mtime": 1790015342.6304533,
+    "ast_hash": "1e89d6ab1cf28455993f1c905f8fb795",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1790079202.4056368,
-    "ast_hash": "7177b915703355aa69255bc06d956a0e",
+    "mtime": 1790015337.4216464,
+    "ast_hash": "4ca8abccf869924cee38a32baa69fabb",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1037,11 +1037,6 @@
   "frontend/src/features/users/ui/AvatarCropperDialog.vue": {
     "mtime": 1790007972.6607606,
     "ast_hash": "8bc1db0dbf649baddcc0b0e33a56692f",
-    "semantic_hash": ""
-  },
-  "docs/guia_conexion_google_calendar_hoteles.md": {
-    "mtime": 1790068667.5174606,
-    "ast_hash": "706088f7916b38a25f4cc7261c24eee9",
     "semantic_hash": ""
   }
 }
