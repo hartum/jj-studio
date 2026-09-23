@@ -54,6 +54,7 @@ export async function userRoutes(fastify: FastifyInstance) {
 
       const rawUser = await prisma.usuario.findFirst({
         where: {
+          deletedAt: null,
           OR: [...(searchHash ? [{ emailHash: searchHash }] : []), { email: normalizedEmail }],
         },
         include: {
@@ -452,6 +453,7 @@ export async function userRoutes(fastify: FastifyInstance) {
 
       const existingUser = await prisma.usuario.findFirst({
         where: {
+          deletedAt: null,
           OR: [...(emailHash ? [{ emailHash }] : []), { email: normalizedEmail }],
         },
       })
@@ -663,6 +665,7 @@ export async function userRoutes(fastify: FastifyInstance) {
 
         const existingUser = await prisma.usuario.findFirst({
           where: {
+            deletedAt: null,
             OR: [...(emailHash ? [{ emailHash }] : []), { email: normalizedEmail }],
           },
         })
@@ -964,12 +967,21 @@ export async function userRoutes(fastify: FastifyInstance) {
         }
       }
 
+      const targetDecrypted = targetUser ? decryptUser(targetUser) : null
+      const originalEmail = targetDecrypted?.email || ''
+      const freedEmail = originalEmail
+        ? `deleted_${Date.now()}_${originalEmail}`
+        : `deleted_${Date.now()}_${id}`
+
       await prisma.usuario.update({
         where: { id },
-        data: { deletedAt: new Date() },
+        data: {
+          deletedAt: new Date(),
+          activo: false,
+          emailHash: null,
+          email: encrypt(freedEmail) || freedEmail,
+        },
       })
-
-      const targetDecrypted = targetUser ? decryptUser(targetUser) : null
       if (executor && targetDecrypted) {
         registrarAudit({
           accion: 'ELIMINAR',
