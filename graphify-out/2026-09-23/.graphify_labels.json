@@ -1,5 +1,5 @@
 {
-  "0": "encryption.ts",
+  "0": "src/index.ts",
   "1": "dependencies",
   "2": "UsuarioFormView.vue",
   "3": "devDependencies",
@@ -90,11 +90,11 @@
   "88": "vue-ios-style-datepicker",
   "89": "vue-router",
   "90": "LanguageSelector.vue",
-  "91": "CalendarAlertsPanel.vue",
   "92": "CalendarEventCard.vue",
   "93": "handleSave",
   "94": "handleAccordionChange",
   "95": "CalendarDeleteConfirmPopover.vue",
+  "98": "ForgotPasswordView.vue",
   "99": "vue",
   "101": "email.service.ts"
 }

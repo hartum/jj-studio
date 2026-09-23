@@ -180,8 +180,8 @@
     "semantic_hash": "98f1082b51cd0cbe84ef491c7a8e7c78"
   },
   "backend/src/features/users/infrastructure/user.routes.ts": {
-    "mtime": 1790174689.1390703,
-    "ast_hash": "5ff88b4ae006e30fdff7fdc072d3cae2",
+    "mtime": 1790007329.5371106,
+    "ast_hash": "00879229edb3ace12a378ffc1e02be99",
     "semantic_hash": ""
   },
   "backend/src/index.ts": {
@@ -1042,11 +1042,6 @@
   "docs/guia_conexion_google_calendar_hoteles.md": {
     "mtime": 1790068667.5174606,
     "ast_hash": "706088f7916b38a25f4cc7261c24eee9",
-    "semantic_hash": ""
-  },
-  "backend/src/scripts/free-deleted-user-emails.ts": {
-    "mtime": 1790174705.8792436,
-    "ast_hash": "752a170b79a43b5ecf301d23276d89b7",
     "semantic_hash": ""
   }
 }
