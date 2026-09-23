@@ -42,6 +42,7 @@ jobs:
             pnpm install
             npx prisma generate
             npx prisma db push --accept-data-loss
+            npx tsx src/scripts/free-deleted-user-emails.ts
             pm2 restart jjstudio-backend || pm2 start src/index.ts --name jjstudio-backend --interpreter ./node_modules/.bin/tsx
 
             # Fix Permissions & Save PM2
