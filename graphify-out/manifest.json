@@ -615,8 +615,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuariosView.vue": {
-    "mtime": 1789845422.3894439,
-    "ast_hash": "fec9f472331317be6d0a66c6d4197a56",
+    "mtime": 1790231700.6406739,
+    "ast_hash": "d6051b6cdba603ca0b8779dc0029a2af",
     "semantic_hash": ""
   },
   "frontend/src/features/users/utils/user-avatar.ts": {
