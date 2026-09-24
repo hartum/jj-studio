@@ -58,7 +58,7 @@
   "56": "SaleAppointmentFormView.vue",
   "57": "PhotoSessionFormView.vue",
   "58": "scripts",
-  "59": "ForgotPasswordView.vue",
+  "59": "useLocale.ts",
   "60": "CalendarHeader.vue",
   "61": "commission.service.ts",
   "62": "reminder.service.ts",

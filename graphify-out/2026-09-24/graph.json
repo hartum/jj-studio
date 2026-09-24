@@ -4,576 +4,15 @@
   "graph": {},
   "nodes": [
     {
-      "label": "UsuarioFormView.vue",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "usuarioformview.vue"
-    },
-    {
-      "label": "route",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_route",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "route"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_router",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "router"
-    },
-    {
-      "label": "{ t }",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L25",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_t",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "{ t }"
-    },
-    {
-      "label": "userStore",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L26",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_userstore",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "userstore"
-    },
-    {
-      "label": "profileStore",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L27",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_profilestore",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "profilestore"
-    },
-    {
-      "label": "countryStore",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_countrystore",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "countrystore"
-    },
-    {
-      "label": "authStore",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L29",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_authstore",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "authstore"
-    },
-    {
-      "label": "currentUser",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_currentuser",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "currentuser"
-    },
-    {
-      "label": "userId",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L32",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_userid",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "userid"
-    },
-    {
-      "label": "isEditing",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L33",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_isediting",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "isediting"
-    },
-    {
-      "label": "isSelfEditing",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L34",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_isselfediting",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "isselfediting"
-    },
-    {
-      "label": "isSaving",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L36",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_issaving",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "issaving"
-    },
-    {
-      "label": "activeTab",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_activetab",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "activetab"
-    },
-    {
-      "label": "fileInput",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_fileinput",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "fileinput"
-    },
-    {
-      "label": "cropperDialogVisible",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L41",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_cropperdialogvisible",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "cropperdialogvisible"
-    },
-    {
-      "label": "imageToCrop",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L42",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_imagetocrop",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "imagetocrop"
-    },
-    {
-      "label": "colorPickerRef",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L43",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_colorpickerref",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "colorpickerref"
-    },
-    {
-      "label": "onColorActiveChange()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_oncoloractivechange",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "oncoloractivechange()"
-    },
-    {
-      "label": "onColorPickerShow()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L51",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_oncolorpickershow",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "oncolorpickershow()"
-    },
-    {
-      "label": "formData",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L72",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_formdata",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "formdata"
-    },
-    {
-      "label": "ROLE_DISPLAY_ORDER",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L88",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_role_display_order",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "role_display_order"
-    },
-    {
-      "label": "assignableProfiles",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L98",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_assignableprofiles",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "assignableprofiles"
-    },
-    {
-      "label": "selectedProfile",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L119",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_selectedprofile",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "selectedprofile"
-    },
-    {
-      "label": "selectedRoleCode",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L124",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_selectedrolecode",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "selectedrolecode"
-    },
-    {
-      "label": "hasAssignedColor",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L128",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_hasassignedcolor",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "hasassignedcolor"
-    },
-    {
-      "label": "isGerente",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L131",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_isgerente",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "isgerente"
-    },
-    {
-      "label": "isContable",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L132",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_iscontable",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "iscontable"
-    },
-    {
-      "label": "isAreaRole",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L133",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_isarearole",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "isarearole"
-    },
-    {
-      "label": "isSupervisorOrFotografo",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L134",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_issupervisororfotografo",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "issupervisororfotografo"
-    },
-    {
-      "label": "isGlobalAccess",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L140",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_isglobalaccess",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "isglobalaccess"
-    },
-    {
-      "label": "isStatusDisabled",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L144",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_isstatusdisabled",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "isstatusdisabled"
-    },
-    {
-      "label": "isSelfEditingProfileReadonly",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L150",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_isselfeditingprofilereadonly",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "isselfeditingprofilereadonly"
-    },
-    {
-      "label": "canManageContractType",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L156",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_canmanagecontracttype",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "canmanagecontracttype"
-    },
-    {
-      "label": "getAssignedIdsByOtherUsers()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L164",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_getassignedidsbyotherusers",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "getassignedidsbyotherusers()"
-    },
-    {
-      "label": "filterCountriesByAreas()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L177",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_filtercountriesbyareas",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "filtercountriesbyareas()"
-    },
-    {
-      "label": "filterCountriesByHotels()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L187",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_filtercountriesbyhotels",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "filtercountriesbyhotels()"
-    },
-    {
-      "label": "assignedAreaIdsByOtherRoleUsers",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L203",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_assignedareaidsbyotherroleusers",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "assignedareaidsbyotherroleusers"
-    },
-    {
-      "label": "assignedHotelIdsByOtherSupervisores",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L213",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_assignedhotelidsbyothersupervisores",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "assignedhotelidsbyothersupervisores"
-    },
-    {
-      "label": "availableCountriesForAreaSelect",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L219",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_availablecountriesforareaselect",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "availablecountriesforareaselect"
-    },
-    {
-      "label": "availableCountriesForHotelSelect",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L229",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_availablecountriesforhotelselect",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "availablecountriesforhotelselect"
-    },
-    {
-      "label": "assignedNames",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L242",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_assignednames",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "assignednames"
-    },
-    {
-      "label": "assignedAreaNames",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L268",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_assignedareanames",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "assignedareanames"
-    },
-    {
-      "label": "assignedHotelNames",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L269",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_assignedhotelnames",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "assignedhotelnames"
-    },
-    {
-      "label": "isActivo",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L271",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_isactivo",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "isactivo"
-    },
-    {
-      "label": "triggerFileInput()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L329",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_triggerfileinput",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "triggerfileinput()"
-    },
-    {
-      "label": "onFileSelected()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L333",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_onfileselected",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "onfileselected()"
-    },
-    {
-      "label": "applyCrop()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L353",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_applycrop",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "applycrop()"
-    },
-    {
-      "label": "removeAvatar()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L360",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_removeavatar",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "removeavatar()"
-    },
-    {
-      "label": "handleCancel()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L367",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_handlecancel",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "handlecancel()"
-    },
-    {
-      "label": "handleSave()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L371",
-      "_origin": "ast",
-      "id": "frontend_src_features_users_ui_usuarioformview_handlesave",
-      "community": 2,
-      "community_name": "UsuarioFormView.vue",
-      "norm_label": "handlesave()"
-    },
-    {
       "label": "user.routes.ts",
       "file_type": "code",
       "source_file": "backend/src/features/users/infrastructure/user.routes.ts",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "backend_src_features_users_infrastructure_user_routes",
       "community": 0,
       "community_name": "encryption.ts",
-      "norm_label": "user.routes.ts",
-      "id": "backend_src_features_users_infrastructure_user_routes"
+      "norm_label": "user.routes.ts"
     },
     {
       "label": "getAuthUser()",
@@ -581,10 +20,10 @@
       "source_file": "backend/src/features/users/infrastructure/user.routes.ts",
       "source_location": "L18",
       "_origin": "ast",
+      "id": "backend_src_features_users_infrastructure_user_routes_getauthuser",
       "community": 0,
       "community_name": "encryption.ts",
-      "norm_label": "getauthuser()",
-      "id": "backend_src_features_users_infrastructure_user_routes_getauthuser"
+      "norm_label": "getauthuser()"
     },
     {
       "label": "userRoutes()",
@@ -592,10 +31,10 @@
       "source_file": "backend/src/features/users/infrastructure/user.routes.ts",
       "source_location": "L42",
       "_origin": "ast",
+      "id": "backend_src_features_users_infrastructure_user_routes_userroutes",
       "community": 0,
       "community_name": "encryption.ts",
-      "norm_label": "userroutes()",
-      "id": "backend_src_features_users_infrastructure_user_routes_userroutes"
+      "norm_label": "userroutes()"
     },
     {
       "label": "free-deleted-user-emails.ts",
@@ -603,10 +42,10 @@
       "source_file": "backend/src/scripts/free-deleted-user-emails.ts",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "backend_src_scripts_free_deleted_user_emails",
       "community": 0,
       "community_name": "encryption.ts",
-      "norm_label": "free-deleted-user-emails.ts",
-      "id": "backend_src_scripts_free_deleted_user_emails"
+      "norm_label": "free-deleted-user-emails.ts"
     },
     {
       "label": "main()",
@@ -614,10 +53,10 @@
       "source_file": "backend/src/scripts/free-deleted-user-emails.ts",
       "source_location": "L5",
       "_origin": "ast",
+      "id": "backend_src_scripts_free_deleted_user_emails_main",
       "community": 0,
       "community_name": "encryption.ts",
-      "norm_label": "main()",
-      "id": "backend_src_scripts_free_deleted_user_emails_main"
+      "norm_label": "main()"
     },
     {
       "label": "hotel.routes.ts",
@@ -4369,6 +3808,556 @@
       "community_name": "SaleAppointmentFormMobile.vue",
       "norm_label": "issellerphotographer",
       "id": "frontend_src_features_sales_ui_saleappointmentformmobile_issellerphotographer"
+    },
+    {
+      "label": "UsuarioFormView.vue",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "usuarioformview.vue",
+      "id": "frontend_src_features_users_ui_usuarioformview"
+    },
+    {
+      "label": "route",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "route",
+      "id": "frontend_src_features_users_ui_usuarioformview_route"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L24",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "router",
+      "id": "frontend_src_features_users_ui_usuarioformview_router"
+    },
+    {
+      "label": "{ t }",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L25",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "{ t }",
+      "id": "frontend_src_features_users_ui_usuarioformview_t"
+    },
+    {
+      "label": "userStore",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L26",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "userstore",
+      "id": "frontend_src_features_users_ui_usuarioformview_userstore"
+    },
+    {
+      "label": "profileStore",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L27",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "profilestore",
+      "id": "frontend_src_features_users_ui_usuarioformview_profilestore"
+    },
+    {
+      "label": "countryStore",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L28",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "countrystore",
+      "id": "frontend_src_features_users_ui_usuarioformview_countrystore"
+    },
+    {
+      "label": "authStore",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L29",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "authstore",
+      "id": "frontend_src_features_users_ui_usuarioformview_authstore"
+    },
+    {
+      "label": "currentUser",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "currentuser",
+      "id": "frontend_src_features_users_ui_usuarioformview_currentuser"
+    },
+    {
+      "label": "userId",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L32",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "userid",
+      "id": "frontend_src_features_users_ui_usuarioformview_userid"
+    },
+    {
+      "label": "isEditing",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L33",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "isediting",
+      "id": "frontend_src_features_users_ui_usuarioformview_isediting"
+    },
+    {
+      "label": "isSelfEditing",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L34",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "isselfediting",
+      "id": "frontend_src_features_users_ui_usuarioformview_isselfediting"
+    },
+    {
+      "label": "isSaving",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L36",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "issaving",
+      "id": "frontend_src_features_users_ui_usuarioformview_issaving"
+    },
+    {
+      "label": "activeTab",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L37",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "activetab",
+      "id": "frontend_src_features_users_ui_usuarioformview_activetab"
+    },
+    {
+      "label": "fileInput",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L40",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "fileinput",
+      "id": "frontend_src_features_users_ui_usuarioformview_fileinput"
+    },
+    {
+      "label": "cropperDialogVisible",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L41",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "cropperdialogvisible",
+      "id": "frontend_src_features_users_ui_usuarioformview_cropperdialogvisible"
+    },
+    {
+      "label": "imageToCrop",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L42",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "imagetocrop",
+      "id": "frontend_src_features_users_ui_usuarioformview_imagetocrop"
+    },
+    {
+      "label": "colorPickerRef",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L43",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "colorpickerref",
+      "id": "frontend_src_features_users_ui_usuarioformview_colorpickerref"
+    },
+    {
+      "label": "onColorActiveChange()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L45",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "oncoloractivechange()",
+      "id": "frontend_src_features_users_ui_usuarioformview_oncoloractivechange"
+    },
+    {
+      "label": "onColorPickerShow()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L51",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "oncolorpickershow()",
+      "id": "frontend_src_features_users_ui_usuarioformview_oncolorpickershow"
+    },
+    {
+      "label": "formData",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L72",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "formdata",
+      "id": "frontend_src_features_users_ui_usuarioformview_formdata"
+    },
+    {
+      "label": "ROLE_DISPLAY_ORDER",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L88",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "role_display_order",
+      "id": "frontend_src_features_users_ui_usuarioformview_role_display_order"
+    },
+    {
+      "label": "assignableProfiles",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L98",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "assignableprofiles",
+      "id": "frontend_src_features_users_ui_usuarioformview_assignableprofiles"
+    },
+    {
+      "label": "selectedProfile",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L119",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "selectedprofile",
+      "id": "frontend_src_features_users_ui_usuarioformview_selectedprofile"
+    },
+    {
+      "label": "selectedRoleCode",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L124",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "selectedrolecode",
+      "id": "frontend_src_features_users_ui_usuarioformview_selectedrolecode"
+    },
+    {
+      "label": "hasAssignedColor",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L128",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "hasassignedcolor",
+      "id": "frontend_src_features_users_ui_usuarioformview_hasassignedcolor"
+    },
+    {
+      "label": "isGerente",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L131",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "isgerente",
+      "id": "frontend_src_features_users_ui_usuarioformview_isgerente"
+    },
+    {
+      "label": "isContable",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L132",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "iscontable",
+      "id": "frontend_src_features_users_ui_usuarioformview_iscontable"
+    },
+    {
+      "label": "isAreaRole",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L133",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "isarearole",
+      "id": "frontend_src_features_users_ui_usuarioformview_isarearole"
+    },
+    {
+      "label": "isSupervisorOrFotografo",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L134",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "issupervisororfotografo",
+      "id": "frontend_src_features_users_ui_usuarioformview_issupervisororfotografo"
+    },
+    {
+      "label": "isGlobalAccess",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L140",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "isglobalaccess",
+      "id": "frontend_src_features_users_ui_usuarioformview_isglobalaccess"
+    },
+    {
+      "label": "isStatusDisabled",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L144",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "isstatusdisabled",
+      "id": "frontend_src_features_users_ui_usuarioformview_isstatusdisabled"
+    },
+    {
+      "label": "isSelfEditingProfileReadonly",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L150",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "isselfeditingprofilereadonly",
+      "id": "frontend_src_features_users_ui_usuarioformview_isselfeditingprofilereadonly"
+    },
+    {
+      "label": "getAssignedIdsByOtherUsers()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L159",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "getassignedidsbyotherusers()",
+      "id": "frontend_src_features_users_ui_usuarioformview_getassignedidsbyotherusers"
+    },
+    {
+      "label": "filterCountriesByAreas()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L172",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "filtercountriesbyareas()",
+      "id": "frontend_src_features_users_ui_usuarioformview_filtercountriesbyareas"
+    },
+    {
+      "label": "filterCountriesByHotels()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L182",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "filtercountriesbyhotels()",
+      "id": "frontend_src_features_users_ui_usuarioformview_filtercountriesbyhotels"
+    },
+    {
+      "label": "assignedAreaIdsByOtherRoleUsers",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L198",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "assignedareaidsbyotherroleusers",
+      "id": "frontend_src_features_users_ui_usuarioformview_assignedareaidsbyotherroleusers"
+    },
+    {
+      "label": "assignedHotelIdsByOtherSupervisores",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L208",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "assignedhotelidsbyothersupervisores",
+      "id": "frontend_src_features_users_ui_usuarioformview_assignedhotelidsbyothersupervisores"
+    },
+    {
+      "label": "availableCountriesForAreaSelect",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L214",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "availablecountriesforareaselect",
+      "id": "frontend_src_features_users_ui_usuarioformview_availablecountriesforareaselect"
+    },
+    {
+      "label": "availableCountriesForHotelSelect",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L224",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "availablecountriesforhotelselect",
+      "id": "frontend_src_features_users_ui_usuarioformview_availablecountriesforhotelselect"
+    },
+    {
+      "label": "assignedNames",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L237",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "assignednames",
+      "id": "frontend_src_features_users_ui_usuarioformview_assignednames"
+    },
+    {
+      "label": "assignedAreaNames",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L263",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "assignedareanames",
+      "id": "frontend_src_features_users_ui_usuarioformview_assignedareanames"
+    },
+    {
+      "label": "assignedHotelNames",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L264",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "assignedhotelnames",
+      "id": "frontend_src_features_users_ui_usuarioformview_assignedhotelnames"
+    },
+    {
+      "label": "isActivo",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L266",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "isactivo",
+      "id": "frontend_src_features_users_ui_usuarioformview_isactivo"
+    },
+    {
+      "label": "triggerFileInput()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L324",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "triggerfileinput()",
+      "id": "frontend_src_features_users_ui_usuarioformview_triggerfileinput"
+    },
+    {
+      "label": "onFileSelected()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L328",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "onfileselected()",
+      "id": "frontend_src_features_users_ui_usuarioformview_onfileselected"
+    },
+    {
+      "label": "applyCrop()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L348",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "applycrop()",
+      "id": "frontend_src_features_users_ui_usuarioformview_applycrop"
+    },
+    {
+      "label": "removeAvatar()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L355",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "removeavatar()",
+      "id": "frontend_src_features_users_ui_usuarioformview_removeavatar"
+    },
+    {
+      "label": "handleCancel()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L362",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "handlecancel()",
+      "id": "frontend_src_features_users_ui_usuarioformview_handlecancel"
+    },
+    {
+      "label": "handleSave()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L366",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "UsuarioFormView.vue",
+      "norm_label": "handlesave()",
+      "id": "frontend_src_features_users_ui_usuarioformview_handlesave"
     },
     {
       "label": "App.vue",
@@ -8963,8 +8952,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 59,
-      "community_name": "ForgotPasswordView.vue",
+      "community": 99,
+      "community_name": "vue",
       "norm_label": "forgotpasswordview.vue",
       "id": "frontend_src_features_auth_ui_forgotpasswordview"
     },
@@ -8974,8 +8963,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 59,
-      "community_name": "ForgotPasswordView.vue",
+      "community": 99,
+      "community_name": "vue",
       "norm_label": "router",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_router"
     },
@@ -8985,8 +8974,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 59,
-      "community_name": "ForgotPasswordView.vue",
+      "community": 99,
+      "community_name": "vue",
       "norm_label": "{ t }",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_t"
     },
@@ -8996,8 +8985,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 59,
-      "community_name": "ForgotPasswordView.vue",
+      "community": 99,
+      "community_name": "vue",
       "norm_label": "email",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_email"
     },
@@ -9007,8 +8996,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 59,
-      "community_name": "ForgotPasswordView.vue",
+      "community": 99,
+      "community_name": "vue",
       "norm_label": "isloading",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_isloading"
     },
@@ -9018,8 +9007,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 59,
-      "community_name": "ForgotPasswordView.vue",
+      "community": 99,
+      "community_name": "vue",
       "norm_label": "issubmitted",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_issubmitted"
     },
@@ -9029,8 +9018,8 @@
       "source_file": "frontend/src/features/auth/ui/ForgotPasswordView.vue",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 59,
-      "community_name": "ForgotPasswordView.vue",
+      "community": 99,
+      "community_name": "vue",
       "norm_label": "handleforgotpassword()",
       "id": "frontend_src_features_auth_ui_forgotpasswordview_handleforgotpassword"
     },
@@ -9304,8 +9293,8 @@
       "source_file": "frontend/src/i18n/useLocale.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 99,
-      "community_name": "vue",
+      "community": 59,
+      "community_name": "useLocale.ts",
       "norm_label": "uselocale.ts",
       "id": "frontend_src_i18n_uselocale"
     },
@@ -9315,8 +9304,8 @@
       "source_file": "frontend/src/i18n/useLocale.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 99,
-      "community_name": "vue",
+      "community": 59,
+      "community_name": "useLocale.ts",
       "norm_label": "supportedlocale",
       "id": "frontend_src_i18n_uselocale_supportedlocale"
     },
@@ -9326,8 +9315,8 @@
       "source_file": "frontend/src/i18n/useLocale.ts",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 99,
-      "community_name": "vue",
+      "community": 59,
+      "community_name": "useLocale.ts",
       "norm_label": "ep_locales",
       "id": "frontend_src_i18n_uselocale_ep_locales"
     },
@@ -9337,8 +9326,8 @@
       "source_file": "frontend/src/i18n/useLocale.ts",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 99,
-      "community_name": "vue",
+      "community": 59,
+      "community_name": "useLocale.ts",
       "norm_label": "fc_locales",
       "id": "frontend_src_i18n_uselocale_fc_locales"
     },
@@ -9348,8 +9337,8 @@
       "source_file": "frontend/src/i18n/useLocale.ts",
       "source_location": "L52",
       "_origin": "ast",
-      "community": 99,
-      "community_name": "vue",
+      "community": 59,
+      "community_name": "useLocale.ts",
       "norm_label": "uselocale()",
       "id": "frontend_src_i18n_uselocale_uselocale"
     },
@@ -14430,599 +14419,13 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_avatarcropperdialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L21",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_calendariolaboral",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_activetab",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L353",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_applycrop",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L98",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_assignableprofiles",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L203",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_assignedareaidsbyotherroleusers",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L268",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_assignedareanames",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L213",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_assignedhotelidsbyothersupervisores",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L269",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_assignedhotelnames",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L242",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_assignednames",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_authstore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L219",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_availablecountriesforareaselect",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L229",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_availablecountriesforhotelselect",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L156",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_canmanagecontracttype",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L43",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_colorpickerref",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L28",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_countrystore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L41",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_cropperdialogvisible",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L31",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_currentuser",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_fileinput",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L177",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_filtercountriesbyareas",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L187",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_filtercountriesbyhotels",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L72",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_formdata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L164",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_getassignedidsbyotherusers",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L367",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_handlecancel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L371",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_handlesave",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L128",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_hasassignedcolor",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L42",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_imagetocrop",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L271",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_isactivo",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L133",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_isarearole",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L132",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_iscontable",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L33",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_isediting",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L131",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_isgerente",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L140",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_isglobalaccess",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L36",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_issaving",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L34",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_isselfediting",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L150",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_isselfeditingprofilereadonly",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L144",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_isstatusdisabled",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L134",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_issupervisororfotografo",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L45",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_oncoloractivechange",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L51",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_oncolorpickershow",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L333",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_onfileselected",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L27",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_profilestore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L360",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_removeavatar",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L88",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_role_display_order",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L23",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_route",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L24",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_router",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L119",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_selectedprofile",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L124",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_selectedrolecode",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_t",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L329",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_triggerfileinput",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L32",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_userid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L26",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "frontend_src_features_users_ui_usuarioformview_userstore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_users_ui_usuarioformview",
-      "target": "ref_vue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "backend/src/features/users/infrastructure/user.routes.ts",
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_features_audit_log_application_audit_log_service"
+      "target": "backend_src_features_audit_log_application_audit_log_service",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15032,9 +14435,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_features_audit_log_application_audit_log_service_formatauditdatetime"
+      "target": "backend_src_features_audit_log_application_audit_log_service_formatauditdatetime",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15044,9 +14447,9 @@
       "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_features_audit_log_application_audit_log_service_registraraudit"
+      "target": "backend_src_features_audit_log_application_audit_log_service_registraraudit",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -15055,9 +14458,9 @@
       "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_features_users_infrastructure_user_routes_getauthuser"
+      "target": "backend_src_features_users_infrastructure_user_routes_getauthuser",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -15066,9 +14469,9 @@
       "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_features_users_infrastructure_user_routes_userroutes"
+      "target": "backend_src_features_users_infrastructure_user_routes_userroutes",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -15078,9 +14481,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_db"
+      "target": "backend_src_shared_db",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15090,9 +14493,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_db_prisma"
+      "target": "backend_src_shared_db_prisma",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -15102,9 +14505,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_email_service"
+      "target": "backend_src_shared_email_service",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15114,9 +14517,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_email_service_sendpasswordresetemail"
+      "target": "backend_src_shared_email_service_sendpasswordresetemail",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -15126,9 +14529,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_encryption"
+      "target": "backend_src_shared_encryption",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15138,9 +14541,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_encryption_blindindex"
+      "target": "backend_src_shared_encryption_blindindex",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15150,9 +14553,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_encryption_decryptuser"
+      "target": "backend_src_shared_encryption_decryptuser",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15162,9 +14565,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_encryption_decryptusers"
+      "target": "backend_src_shared_encryption_decryptusers",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15174,9 +14577,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_encryption_encrypt"
+      "target": "backend_src_shared_encryption_encrypt",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -15186,9 +14589,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_permissions"
+      "target": "backend_src_shared_permissions",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15198,9 +14601,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_permissions_candeleteuser"
+      "target": "backend_src_shared_permissions_candeleteuser",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15210,9 +14613,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_permissions_canedituser"
+      "target": "backend_src_shared_permissions_canedituser",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15222,9 +14625,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_permissions_getrolepermissions"
+      "target": "backend_src_shared_permissions_getrolepermissions",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15234,9 +14637,9 @@
       "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes",
-      "target": "backend_src_shared_permissions_rolecode"
+      "target": "backend_src_shared_permissions_rolecode",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -15258,9 +14661,9 @@
       "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_features_users_infrastructure_user_routes_userroutes",
-      "target": "backend_src_features_users_infrastructure_user_routes_getauthuser"
+      "target": "backend_src_features_users_infrastructure_user_routes_getauthuser",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15281,9 +14684,9 @@
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_scripts_free_deleted_user_emails",
-      "target": "backend_src_scripts_free_deleted_user_emails_main"
+      "target": "backend_src_scripts_free_deleted_user_emails_main",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -15293,9 +14696,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_scripts_free_deleted_user_emails",
-      "target": "backend_src_shared_db"
+      "target": "backend_src_shared_db",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15305,9 +14708,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_scripts_free_deleted_user_emails",
-      "target": "backend_src_shared_db_prisma"
+      "target": "backend_src_shared_db_prisma",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -15317,9 +14720,9 @@
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_scripts_free_deleted_user_emails",
-      "target": "backend_src_shared_encryption"
+      "target": "backend_src_shared_encryption",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15329,9 +14732,9 @@
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_scripts_free_deleted_user_emails",
-      "target": "backend_src_shared_encryption_decrypt"
+      "target": "backend_src_shared_encryption_decrypt",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -15341,9 +14744,9 @@
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
-      "confidence_score": 1.0,
       "source": "backend_src_scripts_free_deleted_user_emails",
-      "target": "backend_src_shared_encryption_encrypt"
+      "target": "backend_src_shared_encryption_encrypt",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -21556,6 +20959,581 @@
       "confidence_score": 1.0,
       "source": "frontend_src_features_sales_ui_saleappointmentformview",
       "target": "frontend_src_features_sales_ui_saleappointmentformmobile"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_avatarcropperdialog"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_calendariolaboral"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_activetab"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L348",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_applycrop"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_assignableprofiles"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L198",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_assignedareaidsbyotherroleusers"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L263",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_assignedareanames"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L208",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_assignedhotelidsbyothersupervisores"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L264",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_assignedhotelnames"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L237",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_assignednames"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_authstore"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L214",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_availablecountriesforareaselect"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L224",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_availablecountriesforhotelselect"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_colorpickerref"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_countrystore"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_cropperdialogvisible"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_currentuser"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_fileinput"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L172",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_filtercountriesbyareas"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L182",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_filtercountriesbyhotels"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_formdata"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L159",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_getassignedidsbyotherusers"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L362",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_handlecancel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L366",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_handlesave"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L128",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_hasassignedcolor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_imagetocrop"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L266",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_isactivo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L133",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_isarearole"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L132",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_iscontable"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_isediting"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L131",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_isgerente"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L140",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_isglobalaccess"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_issaving"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_isselfediting"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L150",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_isselfeditingprofilereadonly"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L144",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_isstatusdisabled"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L134",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_issupervisororfotografo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_oncoloractivechange"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_oncolorpickershow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L328",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_onfileselected"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_profilestore"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L355",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_removeavatar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_role_display_order"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_route"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_router"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L119",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_selectedprofile"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L124",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_selectedrolecode"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_t"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L324",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_triggerfileinput"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_userid"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "frontend_src_features_users_ui_usuarioformview_userstore"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/users/ui/UsuarioFormView.vue",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_users_ui_usuarioformview",
+      "target": "ref_vue"
     },
     {
       "relation": "contains",
@@ -34894,5 +34872,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "59b438f134d02350ebbe263c3fb0aad8936b2fb0"
+  "built_at_commit": "58461725e5076ed2cd5aea64883c4d0dc4549c9f"
 }

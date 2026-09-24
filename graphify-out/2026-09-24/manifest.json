@@ -610,8 +610,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuarioFormView.vue": {
-    "mtime": 1790230886.3497338,
-    "ast_hash": "c8d14db522df72c6f5713b0dc06de8fc",
+    "mtime": 1790010196.0536494,
+    "ast_hash": "1e3686ade9c84318c1d0e550bc25ef58",
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuariosView.vue": {
@@ -695,8 +695,8 @@
     "semantic_hash": "92ed2ca9c0697afb6a6ac6eff65c5e49"
   },
   ".github/workflows/deploy.yml": {
-    "mtime": 1790175332.8217413,
-    "ast_hash": "6a7fa25bed7c7bb8df5be11a7ab2dfa3",
+    "mtime": 1787506366.38316,
+    "ast_hash": "6672fb4ebd998bda5b3fb5bfe4fd10db",
     "semantic_hash": ""
   },
   "backend/pnpm-workspace.yaml": {
