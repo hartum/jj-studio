@@ -167,7 +167,9 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
         class="search-input"
       />
 
-      <el-tag type="info" v-html="$t('users.totalUsers', { count: filteredUsers.length })" />
+      <el-tag type="info">
+        <span v-html="$t('users.totalUsers', { count: filteredUsers.length })" />
+      </el-tag>
     </div>
 
     <!-- Tabla de Usuarios con Element Plus -->
@@ -176,6 +178,7 @@ function tableRowClassName({ row }: { row: UserWithProfile }) {
         v-loading="userStore.isLoading || profileStore.isLoading"
         :data="filteredUsers"
         :row-class-name="tableRowClassName"
+        max-height="530"
         stripe
         style="width: 100%"
       >
