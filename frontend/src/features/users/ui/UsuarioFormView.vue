@@ -153,6 +153,11 @@ const isSelfEditingProfileReadonly = computed(() => {
   return role === 'GERENTE' || role === 'SUPERVISOR' || role === 'CONTABLE'
 })
 
+const canManageContractType = computed(() => {
+  const role = currentUser.value?.roleCode?.toUpperCase()
+  return role === 'SUPERUSUARIO' || role === 'ADMIN' || role === 'GERENTE'
+})
+
 // --- Helpers reutilizables ---
 
 /** IDs asignados a otros usuarios con un rol determinado, excluyendo al usuario en edición */
@@ -799,7 +804,7 @@ async function handleSave() {
               </el-form-item>
             </template>
 
-            <el-form-item :label="$t('users.form.contractType')">
+            <el-form-item v-if="canManageContractType" :label="$t('users.form.contractType')">
               <div class="contract-type-container">
                 <el-radio-group v-model="formData.tipoContrato">
                   <el-radio-button value="ASALARIADO" :label="'ASALARIADO'">
