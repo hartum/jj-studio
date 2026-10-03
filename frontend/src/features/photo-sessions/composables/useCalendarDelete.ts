@@ -84,7 +84,7 @@ export function useCalendarDelete(
     const shouldDeleteAssociated = deleteAssociated.value
 
     try {
-      if (type === 'sale' && rawSale?.id) {
+      if ((type === 'sale' || type === 'direct-sale') && rawSale?.id) {
         await saleStore.deleteCitaVenta(Number(rawSale.id), shouldDeleteAssociated)
         ElMessage.success(
           shouldDeleteAssociated

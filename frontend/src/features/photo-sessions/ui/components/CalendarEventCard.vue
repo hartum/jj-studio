@@ -6,6 +6,7 @@ import { User, Delete } from '@element-plus/icons-vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 import iconoCamara from '@/assets/icono_camara.png'
 import iconoCita from '@/assets/icono_cita.png'
+import iconoVentaDirecta from '@/assets/icono_venta_directa.png'
 
 interface Props {
   arg: EventContentArg
@@ -52,7 +53,7 @@ const eventStatus = computed<StatusConfig>(() => {
 
   const baseConfig = statusMap[normalized] || { label: rawStatus, color: '#409eff' }
 
-  if (ext.type === 'sale' && normalized === 'COMPLETADA') {
+  if ((ext.type === 'sale' || ext.type === 'direct-sale') && normalized === 'COMPLETADA') {
     const rawTotal = ext.totalVentaUsd ?? ext.rawSale?.totalVentaUsd
     if (rawTotal !== undefined && rawTotal !== null && !isNaN(Number(rawTotal))) {
       const amount = Math.round(Number(rawTotal))
@@ -71,10 +72,17 @@ const eventStatus = computed<StatusConfig>(() => {
   <div class="jj-event-card-content" :data-event-id="arg.event.id">
     <!-- Icono de Cámara para Sesiones -->
     <img
-      v-if="arg.event.extendedProps.type !== 'sale'"
+      v-if="arg.event.extendedProps.type === 'session'"
       :src="iconoCamara"
       :alt="$t('calendar.photoSession')"
       class="jj-event-type-badge jj-badge-camara"
+    />
+    <!-- Icono de Venta Directa -->
+    <img
+      v-else-if="arg.event.extendedProps.type === 'direct-sale'"
+      :src="iconoVentaDirecta"
+      :alt="$t('calendar.directSale', 'Venta Directa')"
+      class="jj-event-type-badge jj-badge-direct-sale"
     />
     <!-- Icono de Cita para Citas de Venta -->
     <img
@@ -215,6 +223,14 @@ const eventStatus = computed<StatusConfig>(() => {
 
 /* Offset y dimensiones para el icono de Cita (Ventas) */
 .jj-badge-cita {
+  top: -22px;
+  right: -16px;
+  width: 42px;
+  height: 42px;
+}
+
+/* Offset y dimensiones para el icono de Venta Directa */
+.jj-badge-direct-sale {
   top: -22px;
   right: -16px;
   width: 42px;

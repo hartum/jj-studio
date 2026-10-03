@@ -1,4 +1,5 @@
 export type EstadoCitaVenta = 'PROGRAMADA' | 'COMPLETADA' | 'NO_SHOW' | 'CANCELADA'
+export type TipoCitaVenta = 'CITA_VENTA' | 'VENTA_DIRECTA'
 
 export const MODO_COBRO_OPTIONS = [
   { value: 'tarjeta', label: 'Tarjeta' },
@@ -16,7 +17,8 @@ export interface PagoCitaVenta {
 
 export interface CitaVenta {
   id: number
-  sesionId: number
+  tipo?: TipoCitaVenta
+  sesionId?: number | null
   hotelId: number
   vendedorId?: string | null
   vendedorNombre?: string | null
@@ -53,6 +55,16 @@ export interface CreateCitaVentaPayload {
   totalVentaUsd?: number | null
   modoCobro?: string | null
   pagos?: Array<{ metodoPago: string; importeUsd: number }>
+  notas?: string | null
+}
+
+export interface CreateVentaDirectaPayload {
+  hotelId: number
+  vendedorId: string
+  numFotosVendidas: number
+  totalVentaUsd?: number | null
+  modoCobro?: string | null
+  pagos: Array<{ metodoPago: string; importeUsd: number }>
   notas?: string | null
 }
 

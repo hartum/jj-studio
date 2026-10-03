@@ -15,8 +15,9 @@ import {
   Plus,
   Delete,
 } from '@element-plus/icons-vue'
-import { ChevronDown } from '@lucide/vue'
+import { ChevronDown, Zap } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
+import iconoCita from '@/assets/icono_cita.png'
 
 const props = defineProps<{
   form: SaleAppointmentFormContext
@@ -32,6 +33,7 @@ const {
   isSaving,
   isReadOnly,
   isLockedByPhotographer,
+  isDirectSale,
   conflicts,
   availableSessions,
   excludedSessionsCount,
@@ -246,7 +248,8 @@ const formattedSelectedSaleDateTime = computed(() => {
     <div class="page-header">
       <div class="header-left">
         <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleGoBack" />
-        <div>
+        <div class="title-with-icon">
+          <img :src="iconoCita" alt="Cita de Venta" class="header-type-icon" />
           <h1 class="page-title">
             {{ isEditing ? $t('sales.titleEdit') : $t('sales.titleNew') }}
           </h1>
@@ -446,28 +449,33 @@ const formattedSelectedSaleDateTime = computed(() => {
                       <el-button
                         v-if="canAddPago && !isReadOnly"
                         type="primary"
-                        link
+                        plain
+                        size="default"
                         :icon="Plus"
                         class="add-pago-btn"
                         @click="addPago"
                       >
                         {{ $t('sales.form.addPaymentMethod') }}
                       </el-button>
-                      <span v-else-if="!canAddPago && !isReadOnly" class="max-pagos-hint">
-                        {{ $t('sales.form.maxPaymentMethodsReached') }}
+                      <span v-if="!isReadOnly" class="max-payments-hint">
+                        {{ formData.pagos.length }}/4 métodos
                       </span>
                     </div>
                   </div>
 
-                  <div class="payment-bottom-row">
-                    <div class="payment-total-col">
-                      <el-form-item :label="$t('sales.form.totalUsdCalculated')" required>
-                        <div class="calculated-total-box">
-                          <span class="currency-symbol">$</span>
-                          <span class="total-amount">{{ totalCalculado.toFixed(2) }}</span>
-                          <span class="currency-tag">USD</span>
-                        </div>
-                      </el-form-item>
+                  <!-- Data-First: Total Gigante Verde -->
+                  <div class="total-kpi-card">
+                    <div class="kpi-label-box">
+                      <span class="kpi-label">{{ $t('sales.totalSale') }}</span>
+                      <el-tag size="small" type="success" effect="plain" class="currency-tag">USD</el-tag>
+                    </div>
+                    <div class="kpi-value-row">
+                      <span class="kpi-currency-symbol">$</span>
+                      <span class="kpi-amount">{{ totalCalculado.toFixed(2) }}</span>
+                    </div>
+                    <div class="kpi-footer">
+                      <el-icon class="kpi-check-icon"><Zap /></el-icon>
+                      <span>{{ $t('sales.saleAppointmentCommissionsNotice') }}</span>
                     </div>
                   </div>
                 </div>
@@ -519,16 +527,18 @@ const formattedSelectedSaleDateTime = computed(() => {
               : {}
           "
         >
-          <!-- Estado A: Sin Sesión Seleccionada -->
+          <!-- Estado A: Sin Sesión Seleccionada (o Venta Directa) -->
           <div v-if="!formData.sesionId" class="session-card-main">
             <div class="session-default-circle">
               <el-icon :size="22"><Camera /></el-icon>
             </div>
             <div class="session-info-box">
               <span class="session-category-label">
-                {{ $t('sales.sessionPicker.noSessionAssociated') }}
+                {{ isDirectSale ? 'VENTA DIRECTA' : $t('sales.sessionPicker.noSessionAssociated') }}
               </span>
-              <span class="session-title-label">{{ $t('sales.sessionPicker.chooseSession') }}</span>
+              <span class="session-title-label">
+                {{ isDirectSale ? 'Venta directa sin sesión previa' : $t('sales.sessionPicker.chooseSession') }}
+              </span>
             </div>
           </div>
 
@@ -612,6 +622,7 @@ const formattedSelectedSaleDateTime = computed(() => {
 
           <!-- Barra toggle VER SESIONES -->
           <div
+            v-if="!isDirectSale"
             class="session-toggle-bar"
             :class="{ 'is-open': showSessionsList, 'is-selected-toggle': !!formData.sesionId }"
             role="button"
@@ -895,6 +906,18 @@ const formattedSelectedSaleDateTime = computed(() => {
   font-size: 1.1rem;
 }
 
+.title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-type-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
 .page-title {
   font-size: 1.5rem;
   font-weight: 700;
@@ -1014,68 +1037,78 @@ const formattedSelectedSaleDateTime = computed(() => {
 .payment-actions-col {
   display: flex;
   align-items: center;
-  min-height: 28px;
-  margin-top: 0.2rem;
+  min-height: 32px;
+  margin-top: 0.5rem;
 }
 
 .add-pago-btn {
   font-size: 0.82rem;
   font-weight: 600;
-  padding: 0;
+  padding: 0 12px;
+  height: 32px;
 }
 
-.max-pagos-hint {
-  font-size: 0.72rem;
-  color: var(--el-text-color-secondary, #909399);
-  font-style: italic;
+.max-payments-hint {
+  font-size: 0.8rem;
+  color: var(--nav-link-color, #64748b);
+  margin-left: 0.75rem;
 }
 
-.payment-bottom-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-top: 0.5rem;
+/* Data-First: Total KPI Card (Verde) */
+.total-kpi-card {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border: 1.5px solid #a7f3d0;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-.payment-total-col {
-  grid-column: 2;
+.kpi-label-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.payment-total-col .el-form-item {
-  margin-bottom: 0;
+.kpi-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #065f46;
 }
 
-.calculated-total-box {
+.kpi-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+.kpi-currency-symbol {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #059669;
+}
+
+.kpi-amount {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #065f46;
+  line-height: 1;
+}
+
+.kpi-footer {
   display: flex;
   align-items: center;
-  gap: 4px;
-  height: 32px;
-  padding: 0 10px;
-  background-color: var(--el-fill-color-light, #f8fafc);
-  border: 1px solid var(--el-border-color, #dcdfe6);
-  border-radius: 4px;
-  color: var(--el-text-color-primary, #303133);
-  width: 100%;
-  box-sizing: border-box;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #047857;
+  margin-top: 0.25rem;
 }
 
-.calculated-total-box .currency-symbol {
-  font-size: 0.85rem;
-  color: var(--el-text-color-secondary, #909399);
-  font-weight: 600;
-}
-
-.calculated-total-box .total-amount {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--el-color-primary, #409eff);
-}
-
-.calculated-total-box .currency-tag {
-  font-size: 0.7rem;
-  color: var(--el-text-color-secondary, #909399);
-  margin-left: auto;
-  font-weight: 600;
+.kpi-check-icon {
+  font-size: 1rem;
 }
 
 .status-grid {

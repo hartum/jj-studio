@@ -12,6 +12,7 @@ import HotelFormView from '@/features/hotels/ui/HotelFormView.vue'
 import HotelCalendarView from '@/features/photo-sessions/ui/HotelCalendarView.vue'
 import PhotoSessionFormView from '@/features/photo-sessions/ui/PhotoSessionFormView.vue'
 import SaleAppointmentFormView from '@/features/sales/ui/SaleAppointmentFormView.vue'
+import DirectSaleFormView from '@/features/sales/ui/DirectSaleFormView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,6 +67,12 @@ const router = createRouter({
       path: '/ventas/nueva',
       name: 'venta-nueva',
       component: SaleAppointmentFormView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/ventas/directa/nueva',
+      name: 'venta-directa-nueva',
+      component: DirectSaleFormView,
       meta: { requiresAuth: true },
     },
     {

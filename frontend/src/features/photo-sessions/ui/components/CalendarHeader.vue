@@ -5,6 +5,7 @@ import { Building2 } from '@lucide/vue'
 import type { Hotel } from '@/features/hotels/domain/hotel.model'
 import iconoCamara from '@/assets/icono_camara.png'
 import iconoCita from '@/assets/icono_cita.png'
+import iconoVentaDirecta from '@/assets/icono_venta_directa.png'
 
 interface Props {
   hotelIds: number[]
@@ -24,6 +25,7 @@ const emit = defineEmits<{
   (e: 'update:showMiniCalendar', value: boolean): void
   (e: 'newSession'): void
   (e: 'newSale'): void
+  (e: 'newDirectSale'): void
 }>()
 
 interface AreaGroup {
@@ -178,6 +180,18 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
         >
           <img :src="iconoCita" :alt="$t('calendar.appointment')" class="btn-action-icon btn-icon-calendar" />
           <span class="btn-action-label">{{ $t('calendar.newSaleAppointment') }}</span>
+        </el-button>
+
+        <!-- Botón Nueva Venta Directa -->
+        <el-button
+          type="primary"
+          size="large"
+          plain
+          class="header-action-btn"
+          @click="emit('newDirectSale')"
+        >
+          <img :src="iconoVentaDirecta" :alt="$t('calendar.directSale', 'Venta Directa')" class="btn-action-icon btn-icon-direct-sale" />
+          <span class="btn-action-label">{{ $t('calendar.newDirectSale', 'Venta Directa') }}</span>
         </el-button>
       </div>
     </div>

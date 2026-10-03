@@ -385,7 +385,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
   const baseCalculoUsd = Number(Math.max(0, totalVentaUsd * (1 - impuestoPct / 100)).toFixed(2))
 
   // 1. Fotógrafo Commission
-  if (cita.sesion.fotografoId) {
+  if (cita.sesion?.fotografoId) {
     const fotografo = await prisma.usuario.findUnique({
       where: { id: cita.sesion.fotografoId },
     })
@@ -447,7 +447,7 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
   }
 
   // 2. Vendedor / Agendador Commission (asignado a la cita o creador de la sesión)
-  const vendedorUsuarioId = cita.vendedorId || cita.sesion.creadorId
+  const vendedorUsuarioId = cita.vendedorId || cita.sesion?.creadorId
   if (vendedorUsuarioId) {
     const vendedor = await prisma.usuario.findUnique({
       where: { id: vendedorUsuarioId },

@@ -271,6 +271,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         const v = decryptUser(c.vendedor)
         return {
           id: c.id,
+          tipo: c.tipo || 'CITA_VENTA',
           sesionId: c.sesionId,
           hotelId: c.sesion?.hotelId || c.hotelId,
           hotelNombre: c.hotel?.nombre || '',
@@ -287,12 +288,12 @@ export async function saleRoutes(fastify: FastifyInstance) {
             importeUsd: p.importeUsd,
           })),
           notas: c.notas || '',
-          clienteNombre: decrypt(c.sesion.clienteNombre) || '',
-          clienteEmail: decrypt(c.sesion.clienteEmail) || '',
-          clienteTelefono: decrypt(c.sesion.clienteTelefono) || '',
-          numeroHabitacion: c.sesion.numeroHabitacion || '',
-          fotografoId: c.sesion.fotografoId || null,
-          sesionFechaHoraInicio: c.sesion.fechaHoraInicio.toISOString().slice(0, 16),
+          clienteNombre: decrypt(c.sesion?.clienteNombre) || (c.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : ''),
+          clienteEmail: decrypt(c.sesion?.clienteEmail) || '',
+          clienteTelefono: decrypt(c.sesion?.clienteTelefono) || '',
+          numeroHabitacion: c.sesion?.numeroHabitacion || '',
+          fotografoId: c.sesion?.fotografoId || null,
+          sesionFechaHoraInicio: c.sesion?.fechaHoraInicio ? c.sesion.fechaHoraInicio.toISOString().slice(0, 16) : null,
           googleCalendarEventId: c.googleCalendarEventId || null,
           createdAt: c.createdAt.toISOString(),
           updatedAt: c.updatedAt.toISOString(),
@@ -327,8 +328,8 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const mapped = conflicts.map((c) => ({
         id: c.id,
         fechaHoraCita: c.fechaHoraCita.toISOString().slice(0, 16),
-        clienteNombre: decrypt(c.sesion.clienteNombre) || '',
-        numeroHabitacion: c.sesion.numeroHabitacion || '',
+        clienteNombre: decrypt(c.sesion?.clienteNombre) || (c.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : ''),
+        numeroHabitacion: c.sesion?.numeroHabitacion || '',
       }))
 
       return reply.send(mapped)
@@ -356,6 +357,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const v = decryptUser(cita.vendedor)
       return reply.send({
         id: cita.id,
+        tipo: cita.tipo || 'CITA_VENTA',
         sesionId: cita.sesionId,
         hotelId: cita.hotelId,
         vendedorId: cita.vendedorId || null,
@@ -371,15 +373,15 @@ export async function saleRoutes(fastify: FastifyInstance) {
           importeUsd: p.importeUsd,
         })),
         notas: cita.notas || '',
-        clienteNombre: decrypt(cita.sesion.clienteNombre) || '',
-        clienteEmail: decrypt(cita.sesion.clienteEmail) || '',
-        clienteTelefono: decrypt(cita.sesion.clienteTelefono) || '',
-        numeroHabitacion: cita.sesion.numeroHabitacion || '',
-        fotografoId: cita.sesion.fotografoId || null,
-        numAdultos: cita.sesion.numAdultos ?? 1,
-        numNinos: cita.sesion.numNinos ?? 0,
-        concepto: cita.sesion.concepto || '',
-        sesionFechaHoraInicio: cita.sesion.fechaHoraInicio.toISOString().slice(0, 16),
+        clienteNombre: decrypt(cita.sesion?.clienteNombre) || (cita.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : ''),
+        clienteEmail: decrypt(cita.sesion?.clienteEmail) || '',
+        clienteTelefono: decrypt(cita.sesion?.clienteTelefono) || '',
+        numeroHabitacion: cita.sesion?.numeroHabitacion || '',
+        fotografoId: cita.sesion?.fotografoId || null,
+        numAdultos: cita.sesion?.numAdultos ?? 1,
+        numNinos: cita.sesion?.numNinos ?? 0,
+        concepto: cita.sesion?.concepto || '',
+        sesionFechaHoraInicio: cita.sesion?.fechaHoraInicio ? cita.sesion.fechaHoraInicio.toISOString().slice(0, 16) : null,
         hotelNombre: cita.hotel.nombre,
         googleCalendarEventId: cita.googleCalendarEventId || null,
         createdAt: cita.createdAt.toISOString(),
@@ -660,7 +662,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         response.conflictos = conflicts.map((c) => ({
           id: c.id,
           fechaHoraCita: c.fechaHoraCita.toISOString().slice(0, 16),
-          clienteNombre: decrypt(c.sesion.clienteNombre) || '',
+          clienteNombre: decrypt(c.sesion?.clienteNombre) || '',
         }))
       }
 
@@ -668,6 +670,174 @@ export async function saleRoutes(fastify: FastifyInstance) {
     } catch (err: unknown) {
       fastify.log.error(err)
       const message = err instanceof Error ? err.message : 'Error al crear la cita de venta'
+      return reply.status(400).send({ error: message })
+    }
+  })
+
+  // POST /api/ventas-directas - Create direct sale (no session, immediate completion)
+  fastify.post('/api/ventas-directas', async (request, reply) => {
+    try {
+      const body = request.body as {
+        hotelId: number
+        vendedorId: string
+        numFotosVendidas: number
+        totalVentaUsd?: number | null
+        modoCobro?: string | null
+        pagos: Array<{ metodoPago: string; importeUsd: number }>
+        notas?: string
+      }
+
+      if (!body.hotelId) {
+        return reply.status(400).send({ error: 'El hotel es obligatorio' })
+      }
+      if (!body.vendedorId) {
+        return reply.status(400).send({ error: 'El vendedor es obligatorio' })
+      }
+      if (!body.numFotosVendidas || body.numFotosVendidas < 1) {
+        return reply.status(400).send({ error: 'Debes indicar al menos 1 foto vendida' })
+      }
+      if (!Array.isArray(body.pagos) || body.pagos.length === 0) {
+        return reply.status(400).send({ error: 'Debes registrar al menos un método de pago' })
+      }
+      if (body.pagos.length > 4) {
+        return reply.status(400).send({ error: 'No se permiten más de 4 métodos de pago' })
+      }
+
+      const incomingPagos: PagoInput[] = []
+      for (const p of body.pagos) {
+        const metodo = String(p.metodoPago || '').trim()
+        const importe = Number(p.importeUsd) || 0
+        if (!metodo) {
+          return reply.status(400).send({ error: 'Cada método de pago debe tener seleccionado un tipo de cobro' })
+        }
+        if (importe <= 0) {
+          return reply.status(400).send({ error: 'El importe de cada método de pago debe ser mayor a 0' })
+        }
+        incomingPagos.push({ metodoPago: metodo, importeUsd: importe })
+      }
+
+      const totalCalculado = incomingPagos.reduce((sum, p) => sum + p.importeUsd, 0)
+      const totalVentaUsd = Math.round(totalCalculado * 100) / 100
+      const derivedModoCobro = deriveModoCobro(incomingPagos)
+
+      const hotel = await prisma.hotel.findUnique({
+        where: { id: Number(body.hotelId) },
+      })
+      if (!hotel || hotel.deletedAt) {
+        return reply.status(404).send({ error: 'Hotel no encontrado o inactivo' })
+      }
+
+      const userId = getAuthUserId(request)
+      if (userId) {
+        const allowedHotels = await getAllowedHotelIds(userId)
+        if (allowedHotels !== null && !allowedHotels.includes(Number(body.hotelId))) {
+          return reply.status(403).send({ error: 'No tienes acceso a este hotel' })
+        }
+      }
+
+      const vendedor = await prisma.usuario.findUnique({
+        where: { id: body.vendedorId },
+        include: { role: true, hotelesAsignados: true },
+      })
+      if (!vendedor || !vendedor.activo || vendedor.deletedAt) {
+        return reply.status(400).send({ error: 'El vendedor seleccionado no existe o no está activo' })
+      }
+
+      const nueva = await prisma.citaVenta.create({
+        data: {
+          tipo: 'VENTA_DIRECTA',
+          sesionId: null,
+          hotelId: Number(body.hotelId),
+          vendedorId: body.vendedorId,
+          fechaHoraCita: new Date(),
+          estado: 'COMPLETADA',
+          numFotosVendidas: Number(body.numFotosVendidas),
+          totalVentaUsd,
+          modoCobro: derivedModoCobro,
+          notas: body.notas ? body.notas.trim() : null,
+          pagos: {
+            create: incomingPagos.map((p) => ({
+              metodoPago: p.metodoPago,
+              importeUsd: p.importeUsd,
+            })),
+          },
+        },
+        include: {
+          hotel: true,
+          vendedor: true,
+          pagos: true,
+        },
+      })
+
+      // Calcular comisiones
+      try {
+        await calculateAndSaveCommissionsForSale(nueva.id)
+      } catch (commErr) {
+        fastify.log.error(commErr, 'Error al calcular comisiones para venta directa')
+      }
+
+      // Sincronizar con Google Calendar
+      let googleEventId: string | null = null
+      try {
+        googleEventId = await syncCitaVentaToGoogle(nueva.id)
+      } catch (gErr) {
+        fastify.log.error(gErr, 'Error al sincronizar venta directa con Google Calendar')
+      }
+
+      const authUserId = getAuthUserId(request) || nueva.vendedorId
+      const v = decryptUser(nueva.vendedor)
+      const vendedorNombre = v ? `${v.nombre} ${v.apellidos}`.trim() : 'Sin asignar'
+
+      registrarAudit({
+        accion: 'CREAR',
+        entidad: 'CITA_VENTA',
+        entidadId: nueva.id,
+        usuarioId: authUserId || 'sistema',
+        hotelId: nueva.hotelId,
+        clienteNombre: 'Venta directa',
+        descripcion: 'registró una nueva venta directa',
+        contexto: `Venta directa de ${nueva.numFotosVendidas} fotos ($${nueva.totalVentaUsd} USD) por ${vendedorNombre}`,
+        ipAddress: request.ip,
+        metadatos: {
+          tipo: 'VENTA_DIRECTA',
+          fechaHoraCita: nueva.fechaHoraCita.toISOString().slice(0, 16).replace('T', ' '),
+          vendedorAsignado: vendedorNombre,
+          estado: nueva.estado,
+          numFotosVendidas: nueva.numFotosVendidas,
+          totalVentaUsd: nueva.totalVentaUsd,
+          modoCobro: derivedModoCobro,
+          desglosePagos: incomingPagos.map((p) => `${p.metodoPago}: $${p.importeUsd}`).join(', '),
+        },
+      })
+
+      const response: any = {
+        id: nueva.id,
+        tipo: nueva.tipo,
+        sesionId: null,
+        hotelId: nueva.hotelId,
+        vendedorId: nueva.vendedorId || null,
+        vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
+        fechaHoraCita: nueva.fechaHoraCita.toISOString().slice(0, 16),
+        estado: nueva.estado,
+        numFotosVendidas: nueva.numFotosVendidas,
+        totalVentaUsd: nueva.totalVentaUsd,
+        modoCobro: derivedModoCobro,
+        pagos: nueva.pagos.map((p) => ({
+          id: p.id,
+          metodoPago: p.metodoPago,
+          importeUsd: p.importeUsd,
+        })),
+        notas: nueva.notas || '',
+        clienteNombre: 'Venta directa',
+        googleCalendarEventId: googleEventId || null,
+        createdAt: nueva.createdAt.toISOString(),
+        updatedAt: nueva.updatedAt.toISOString(),
+      }
+
+      return reply.status(201).send(response)
+    } catch (err: unknown) {
+      fastify.log.error(err)
+      const message = err instanceof Error ? err.message : 'Error al crear la venta directa'
       return reply.status(400).send({ error: message })
     }
   })
@@ -752,7 +922,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       if (targetPutEstado === 'COMPLETADA') {
         const sesionId = existing.sesionId
         const vendedorId = body.vendedorId !== undefined ? body.vendedorId : existing.vendedorId
-        if (!sesionId) {
+        if (existing.tipo !== 'VENTA_DIRECTA' && !sesionId) {
           return reply
             .status(400)
             .send({ error: 'Para completar la cita, debes seleccionar una sesión fotográfica' })
@@ -868,7 +1038,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       }
 
       const updateAuthUserId = getAuthUserId(request) || actualizada.vendedorId
-      const updateClientePlano = decrypt(actualizada.sesion.clienteNombre) || ''
+      const updateClientePlano = decrypt(actualizada.sesion?.clienteNombre) || (actualizada.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : '')
       const creadorSesion = existing.sesion?.creador ? decryptUser(existing.sesion.creador) : null
       const creadorNombre = creadorSesion ? `${creadorSesion.nombre} ${creadorSesion.apellidos}`.trim() : 'un usuario'
       const creadorOriginal = formatCreadorOriginal(creadorNombre, existing.createdAt)
@@ -942,6 +1112,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const v = decryptUser(actualizada.vendedor)
       const response: any = {
         id: actualizada.id,
+        tipo: actualizada.tipo || 'CITA_VENTA',
         sesionId: actualizada.sesionId,
         hotelId: actualizada.hotelId,
         vendedorId: actualizada.vendedorId || null,
@@ -957,7 +1128,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           importeUsd: p.importeUsd,
         })),
         notas: actualizada.notas || '',
-        clienteNombre: decrypt(actualizada.sesion.clienteNombre) || '',
+        clienteNombre: decrypt(actualizada.sesion?.clienteNombre) || (actualizada.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : ''),
         googleCalendarEventId: googleEventId || null,
         createdAt: actualizada.createdAt.toISOString(),
         updatedAt: actualizada.updatedAt.toISOString(),
@@ -970,7 +1141,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           response.conflictos = conflicts.map((c) => ({
             id: c.id,
             fechaHoraCita: c.fechaHoraCita.toISOString().slice(0, 16),
-            clienteNombre: decrypt(c.sesion.clienteNombre) || '',
+            clienteNombre: decrypt(c.sesion?.clienteNombre) || '',
           }))
         }
       }
@@ -1009,7 +1180,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       })
 
       const delAuthUserId = getAuthUserId(request) || cita.vendedorId
-      const delClienteNombre = decrypt(cita.sesion.clienteNombre) || ''
+      const delClienteNombre = decrypt(cita.sesion?.clienteNombre) || (cita.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : '')
       const v = cita.vendedor ? decryptUser(cita.vendedor) : null
       const vendedorNombre = v ? `${v.nombre} ${v.apellidos}`.trim() : 'Sin asignar'
 

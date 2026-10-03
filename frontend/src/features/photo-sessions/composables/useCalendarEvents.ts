@@ -11,7 +11,7 @@ import type { CitaVenta } from '@/features/sales/domain/sale.model'
 import type { Hotel } from '@/features/hotels/domain/hotel.model'
 
 export interface ExtendedEventProps {
-  type?: 'session' | 'sale'
+  type?: 'session' | 'sale' | 'direct-sale'
   rawSession?: SesionFotografica
   rawSale?: CitaVenta
   paxStr?: string
@@ -124,7 +124,8 @@ export function useCalendarEvents(
       number,
       {
         id: number
-        sesionId: number
+        tipo?: string
+        sesionId?: number | null
         hotelId: number
         vendedorId?: string | null
         fotografoId?: string | null
@@ -140,19 +141,21 @@ export function useCalendarEvents(
 
     // Add from saleStore
     saleStore.citasVenta.forEach((c) => {
-      const parentSession = sessionStore.sessions.find((s) => s.id === c.sesionId)
+      const isDirectSale = c.tipo === 'VENTA_DIRECTA' || !c.sesionId
+      const parentSession = c.sesionId ? sessionStore.sessions.find((s) => s.id === c.sesionId) : undefined
       const effectiveHotelId = parentSession ? Number(parentSession.hotelId) : Number(c.hotelId)
 
       salesMap.set(c.id, {
         id: c.id,
-        sesionId: c.sesionId,
+        tipo: c.tipo || (isDirectSale ? 'VENTA_DIRECTA' : 'CITA_VENTA'),
+        sesionId: c.sesionId || null,
         hotelId: effectiveHotelId,
         vendedorId: c.vendedorId || parentSession?.citaVenta?.vendedorId || null,
         fotografoId: c.fotografoId || parentSession?.fotografoId || null,
         fechaHoraCita: c.fechaHoraCita,
         estado: c.estado,
         totalVentaUsd: c.totalVentaUsd ?? parentSession?.citaVenta?.totalVentaUsd ?? null,
-        clienteNombre: c.clienteNombre || parentSession?.clienteNombre || 'Cliente',
+        clienteNombre: isDirectSale ? 'Venta directa' : (c.clienteNombre || parentSession?.clienteNombre || 'Cliente'),
         numeroHabitacion: c.numeroHabitacion || parentSession?.numeroHabitacion || undefined,
         numAdultos: c.numAdultos ?? parentSession?.numAdultos,
         numNinos: c.numNinos ?? parentSession?.numNinos,
@@ -165,6 +168,7 @@ export function useCalendarEvents(
         if (!salesMap.has(s.citaVenta.id)) {
           salesMap.set(s.citaVenta.id, {
             id: s.citaVenta.id,
+            tipo: 'CITA_VENTA',
             sesionId: s.id,
             hotelId: Number(s.hotelId),
             vendedorId: s.citaVenta.vendedorId || null,
@@ -190,6 +194,7 @@ export function useCalendarEvents(
     })
 
     const salesEvents = salesList.map((sale) => {
+      const isDirectSale = sale.tipo === 'VENTA_DIRECTA'
       let fotografoId: string | null = sale.fotografoId || null
       let parentSession: SesionFotografica | undefined
       if (sale.sesionId) {
@@ -199,30 +204,33 @@ export function useCalendarEvents(
         }
       }
 
-      let color = '#94a3b8' // Gris para citas de venta sin fotógrafo asignado
+      // Para venta directa, si no hay fotógrafo pero sí vendedor, el vendedor es quien aparece en el avatar del evento
+      const personId = isDirectSale ? (sale.vendedorId || fotografoId) : fotografoId
+
+      let color = isDirectSale ? '#10b981' : '#94a3b8' // Esmeralda para venta directa, Gris para citas sin fotógrafo
       let fotografoPrimerNombre = ''
       let fotografoNombre: string | null = null
       let fotografoApellidos: string | null = null
       let fotografoImagen: string | null = null
       let fotografoColor: string | null = null
-      if (fotografoId) {
-        const fotografo = userStore.users.find((u) => String(u.id) === String(fotografoId))
-        if (fotografo) {
-          fotografoNombre = fotografo.nombre || null
-          fotografoApellidos = fotografo.apellidos || null
-          fotografoImagen = fotografo.imagen || null
-          fotografoColor = fotografo.color || null
-          color = fotografo.color || '#2563eb'
-          fotografoPrimerNombre = (fotografo.nombre ? fotografo.nombre.split(' ')[0] : '') || ''
+      if (personId) {
+        const person = userStore.users.find((u) => String(u.id) === String(personId))
+        if (person) {
+          fotografoNombre = person.nombre || null
+          fotografoApellidos = person.apellidos || null
+          fotografoImagen = person.imagen || null
+          fotografoColor = person.color || null
+          color = person.color || (isDirectSale ? '#10b981' : '#2563eb')
+          fotografoPrimerNombre = (person.nombre ? person.nombre.split(' ')[0] : '') || ''
         }
       }
 
       const numAdultos = sale.numAdultos ?? parentSession?.numAdultos ?? 1
       const numNinos = sale.numNinos ?? parentSession?.numNinos ?? 0
-      const paxStr = `[${numAdultos}.${numNinos} PAX]`
+      const paxStr = isDirectSale ? '' : `[${numAdultos}.${numNinos} PAX]`
       const habitacionNum = sale.numeroHabitacion || parentSession?.numeroHabitacion
-      const roomStr = habitacionNum ? `Hab ${habitacionNum}` : ''
-      const clienteNombre = sale.clienteNombre || parentSession?.clienteNombre || 'Cliente'
+      const roomStr = isDirectSale ? '' : (habitacionNum ? `Hab ${habitacionNum}` : '')
+      const clienteNombre = isDirectSale ? 'Venta directa' : (sale.clienteNombre || parentSession?.clienteNombre || 'Cliente')
 
       return {
         id: `sale-${sale.id}`,
@@ -232,7 +240,7 @@ export function useCalendarEvents(
         borderColor: color,
         extendedProps: {
           rawSale: sale,
-          type: 'sale' as const,
+          type: isDirectSale ? ('direct-sale' as const) : ('sale' as const),
           iconType: 'money',
           fotografoPrimerNombre,
           fotografoNombre,

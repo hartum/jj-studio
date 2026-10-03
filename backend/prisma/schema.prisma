@@ -185,9 +185,10 @@ model SesionFotografica {
 
 model CitaVenta {
   id               Int        @id @default(autoincrement())
-  sesionId         Int        @unique @map("sesion_id")
+  sesionId         Int?       @unique @map("sesion_id")
   hotelId          Int        @map("hotel_id")
   vendedorId       String?    @map("vendedor_id")
+  tipo             String     @default("CITA_VENTA")
   fechaHoraCita    DateTime   @map("fecha_hora_cita")
   estado           String     @default("PROGRAMADA")
   numFotosVendidas Int?       @map("num_fotos_vendidas")
@@ -200,8 +201,8 @@ model CitaVenta {
   updatedAt        DateTime   @updatedAt @map("updated_at")
   deletedAt        DateTime?  @map("deleted_at")
 
-  sesion     SesionFotografica @relation(fields: [sesionId], references: [id])
-  hotel      Hotel             @relation(fields: [hotelId], references: [id])
+  sesion     SesionFotografica? @relation(fields: [sesionId], references: [id])
+  hotel      Hotel              @relation(fields: [hotelId], references: [id])
   vendedor   Usuario?          @relation("VendedorCitas", fields: [vendedorId], references: [id])
   comisiones Comision[]
   pagos      PagoCitaVenta[]

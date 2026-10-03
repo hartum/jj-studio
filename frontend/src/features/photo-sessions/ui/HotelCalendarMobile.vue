@@ -12,6 +12,7 @@ import { ElMessage } from 'element-plus'
 import dayjs from 'dayjs'
 import iconoCamara from '@/assets/icono_camara.png'
 import iconoCita from '@/assets/icono_cita.png'
+import iconoVentaDirecta from '@/assets/icono_venta_directa.png'
 
 import type { DatesSetArg, EventClickArg, CalendarOptions } from '@fullcalendar/core'
 
@@ -187,6 +188,17 @@ function navigateToNewSaleForm() {
   router.push({ path: '/ventas/nueva', query })
 }
 
+function navigateToNewDirectSaleForm() {
+  if (!canCreateEvents.value) return
+  const query: Record<string, string> = {}
+  if (selectedHotelIds.value.length === 1 && selectedHotelIds.value[0]) {
+    query.hotelId = String(selectedHotelIds.value[0])
+  } else if (userHotels.value.length === 1 && userHotels.value[0]) {
+    query.hotelId = String(userHotels.value[0].id)
+  }
+  router.push({ path: '/ventas/directa/nueva', query })
+}
+
 // Control del menú flotante Speed Dial (FAB)
 const fabMenuOpen = ref(false)
 
@@ -202,6 +214,11 @@ function handleNewSessionClick() {
 function handleNewSaleClick() {
   fabMenuOpen.value = false
   navigateToNewSaleForm()
+}
+
+function handleNewDirectSaleClick() {
+  fabMenuOpen.value = false
+  navigateToNewDirectSaleForm()
 }
 
 function handleDateSelect(selectInfo: { startStr: string }) {
@@ -225,7 +242,7 @@ function handleEventClick(clickInfo: EventClickArg) {
   // Si el usuario no tiene permiso para editar la sesión/cita, no ocurre nada
   if (!canEditCalendarEvent(props)) return
 
-  if (props.type === 'sale' && props.rawSale?.id) {
+  if ((props.type === 'sale' || props.type === 'direct-sale') && props.rawSale?.id) {
     router.push(`/ventas/${props.rawSale.id}/editar`)
     return
   }
@@ -434,6 +451,18 @@ onUnmounted(() => {
             :aria-label="$t('calendar.newSaleAppointment')"
           >
             <img :src="iconoCita" :alt="$t('calendar.appointment')" class="speed-dial-icon icon-cita" />
+          </button>
+        </div>
+
+        <!-- Opción 3: Nueva Venta Directa -->
+        <div class="speed-dial-item item-direct-sale" @click="handleNewDirectSaleClick">
+          <span class="speed-dial-label">{{ $t('calendar.newDirectSale', 'Venta Directa') }}</span>
+          <button
+            type="button"
+            class="speed-dial-btn btn-direct-sale"
+            :aria-label="$t('calendar.newDirectSale', 'Venta Directa')"
+          >
+            <img :src="iconoVentaDirecta" :alt="$t('calendar.directSale', 'Venta Directa')" class="speed-dial-icon icon-direct-sale" />
           </button>
         </div>
       </div>
@@ -672,8 +701,12 @@ onUnmounted(() => {
   pointer-events: auto;
 }
 
+.speed-dial-container.is-open .item-direct-sale {
+  transition-delay: 0.01s;
+}
+
 .speed-dial-container.is-open .item-sale {
-  transition-delay: 0.03s;
+  transition-delay: 0.04s;
 }
 
 .speed-dial-container.is-open .item-session {
@@ -719,7 +752,8 @@ onUnmounted(() => {
 }
 
 .btn-session,
-.btn-sale {
+.btn-sale,
+.btn-direct-sale {
   background: #ffffff;
   border-color: #334155;
 }
@@ -735,6 +769,11 @@ onUnmounted(() => {
 }
 
 .icon-cita {
+  width: 26px;
+  height: 26px;
+}
+
+.icon-direct-sale {
   width: 26px;
   height: 26px;
 }

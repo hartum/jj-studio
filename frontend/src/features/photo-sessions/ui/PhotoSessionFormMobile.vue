@@ -19,6 +19,7 @@ import {
 } from '@lucide/vue'
 
 import { useLocale } from '@/i18n/useLocale'
+import iconoCamara from '@/assets/icono_camara.png'
 
 const props = defineProps<{
   form: PhotoSessionFormContext
@@ -475,9 +476,13 @@ function handleSave() {
     <!-- Header móvil con botón Volver y Título -->
     <div class="mobile-header">
       <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleGoBack" />
-      <h1 class="mobile-title">
-        {{ isEditing ? $t('sessions.titleMobileEdit') : $t('sessions.titleMobileNew') }}
-      </h1>
+      <div class="mobile-header-title">
+        <img :src="iconoCamara" alt="Sesión de Fotos" class="mobile-title-icon" />
+        <h1 class="mobile-title">
+          {{ isEditing ? $t('sessions.titleMobileEdit') : $t('sessions.titleMobileNew') }}
+        </h1>
+      </div>
+      <div class="header-placeholder"></div>
     </div>
 
     <!-- Contenido del Formulario en Pantalla Única -->
@@ -1261,7 +1266,22 @@ function handleSave() {
 .mobile-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.mobile-header-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  text-align: center;
+}
+
+.mobile-title-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
 }
 
 .mobile-title {
@@ -1269,6 +1289,11 @@ function handleSave() {
   font-weight: 700;
   color: var(--heading-color, #0f172a);
   margin: 0;
+}
+
+.header-placeholder {
+  width: 32px;
+  flex-shrink: 0;
 }
 
 .back-btn {

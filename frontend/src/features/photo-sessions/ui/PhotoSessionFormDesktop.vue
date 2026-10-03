@@ -15,6 +15,7 @@ import {
 } from '@lucide/vue'
 
 import { useLocale } from '@/i18n/useLocale'
+import iconoCamara from '@/assets/icono_camara.png'
 
 const props = defineProps<{
   form: PhotoSessionFormContext
@@ -252,7 +253,8 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
     <div class="page-header">
       <div class="header-left">
         <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleGoBack" />
-        <div class="header-titles">
+        <div class="title-with-icon">
+          <img :src="iconoCamara" alt="Sesión de Fotos" class="header-type-icon" />
           <h1 class="page-title">
             {{ isEditing ? $t('sessions.titleEdit') : $t('sessions.titleNew') }}
           </h1>
@@ -1078,6 +1080,18 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
   background-color: var(--el-fill-color-light, #f1f5f9);
   border-color: var(--el-color-primary, #3b82f6);
   color: var(--el-color-primary, #3b82f6);
+}
+
+.title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-type-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 .header-titles {

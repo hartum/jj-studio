@@ -3,9 +3,19 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLocale } from '@/i18n/useLocale'
 import type { SaleAppointmentFormContext } from '../composables/useSaleAppointmentForm'
-import { ArrowLeft, Check, Close, Camera, WarnTriangleFilled, User, Plus, Delete } from '@element-plus/icons-vue'
+import {
+  ArrowLeft,
+  Check,
+  Close,
+  Camera,
+  WarnTriangleFilled,
+  User,
+  Plus,
+  Delete,
+} from '@element-plus/icons-vue'
 import { ChevronDown } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
+import iconoCita from '@/assets/icono_cita.png'
 
 const props = defineProps<{
   form: SaleAppointmentFormContext
@@ -21,6 +31,7 @@ const {
   isSaving,
   isReadOnly,
   isLockedByPhotographer,
+  isDirectSale,
   conflicts,
   availableSessions,
   excludedSessionsCount,
@@ -32,7 +43,6 @@ const {
   estadoOptions,
   modoCobroOptions,
   totalCalculado,
-  MAX_PAGOS,
   canAddPago,
   addPago,
   removePago,
@@ -236,9 +246,13 @@ const isSellerPhotographer = computed(() => {
     <!-- Header Móvil -->
     <div class="mobile-header">
       <el-button :icon="ArrowLeft" circle class="back-btn" @click="handleGoBack" />
-      <h1 class="mobile-title">
-        {{ isEditing ? $t('sales.titleEdit') : $t('sales.titleNew') }}
-      </h1>
+      <div class="mobile-header-title">
+        <img :src="iconoCita" alt="Cita de Venta" class="mobile-title-icon" />
+        <h1 class="mobile-title">
+          {{ isEditing ? $t('sales.titleEdit') : $t('sales.titleNew') }}
+        </h1>
+      </div>
+      <div class="header-placeholder"></div>
     </div>
 
     <!-- Selector de Citas Estilo Card (Móvil) -->
@@ -255,14 +269,22 @@ const isSellerPhotographer = computed(() => {
           : {}
       "
     >
-      <!-- Estado A: Sin Sesión Seleccionada -->
+      <!-- Estado A: Sin Sesión Seleccionada (o Venta Directa) -->
       <div v-if="!formData.sesionId" class="session-card-main">
         <div class="session-default-circle">
           <el-icon :size="22"><Camera /></el-icon>
         </div>
         <div class="session-info-box">
-          <span class="session-category-label">{{ $t('sales.sessionPicker.noSessionAssociated') }}</span>
-          <span class="session-title-label">{{ $t('sales.sessionPicker.chooseSession') }}</span>
+          <span class="session-category-label">
+            {{ isDirectSale ? 'VENTA DIRECTA' : $t('sales.sessionPicker.noSessionAssociated') }}
+          </span>
+          <span class="session-title-label">
+            {{
+              isDirectSale
+                ? 'Venta directa sin sesión previa'
+                : $t('sales.sessionPicker.chooseSession')
+            }}
+          </span>
         </div>
       </div>
 
@@ -290,7 +312,9 @@ const isSellerPhotographer = computed(() => {
           </div>
 
           <div class="session-selected-titles">
-            <span class="session-selected-badge-label">{{ $t('sales.sessionPicker.assignedPhotographer') }}</span>
+            <span class="session-selected-badge-label">
+              {{ $t('sales.sessionPicker.assignedPhotographer') }}
+            </span>
             <span class="session-selected-name">{{ photographerName }}</span>
           </div>
 
@@ -331,13 +355,16 @@ const isSellerPhotographer = computed(() => {
           </div>
           <div class="detail-row">
             <span class="detail-label">{{ $t('sales.summary.reason') }}</span>
-            <span class="detail-value">{{ sessionInfo.concepto || $t('sales.summary.otherReason') }}</span>
+            <span class="detail-value">
+              {{ sessionInfo.concepto || $t('sales.summary.otherReason') }}
+            </span>
           </div>
         </div>
       </div>
 
       <!-- Barra toggle VER SESIONES -->
       <div
+        v-if="!isDirectSale"
         class="session-toggle-bar"
         :class="{ 'is-open': showSessionsList, 'is-selected-toggle': !!formData.sesionId }"
         role="button"
@@ -345,7 +372,11 @@ const isSellerPhotographer = computed(() => {
         @click="toggleSessionsList"
       >
         <span class="toggle-text">
-          {{ showSessionsList ? $t('sales.sessionPicker.hideSessions') : $t('sales.sessionPicker.viewSessions') }}
+          {{
+            showSessionsList
+              ? $t('sales.sessionPicker.hideSessions')
+              : $t('sales.sessionPicker.viewSessions')
+          }}
         </span>
         <el-icon class="toggle-icon" :class="{ 'is-rotated': showSessionsList }">
           <ChevronDown :size="18" />
@@ -407,7 +438,11 @@ const isSellerPhotographer = computed(() => {
                   :type="session.estado === 'COMPLETADA' ? 'success' : 'primary'"
                   effect="light"
                 >
-                  {{ session.estado === 'COMPLETADA' ? $t('sales.status.completed') : $t('sales.status.scheduled') }}
+                  {{
+                    session.estado === 'COMPLETADA'
+                      ? $t('sales.status.completed')
+                      : $t('sales.status.scheduled')
+                  }}
                 </el-tag>
               </div>
             </div>
@@ -422,8 +457,8 @@ const isSellerPhotographer = computed(() => {
       </el-collapse-transition>
     </div>
 
-    <!-- Pasos restantes (Solo visibles si hay una sesión asociada seleccionada) -->
-    <template v-if="formData.sesionId">
+    <!-- Pasos restantes (Visibles si hay una sesión asociada o si es venta directa) -->
+    <template v-if="formData.sesionId || isDirectSale">
       <!-- 1. Bloque de Calendario Cita de Ventas (Selecciona Fecha) -->
       <div class="mobile-calendar-section">
         <div class="mobile-card-section-label">
@@ -589,7 +624,11 @@ const isSellerPhotographer = computed(() => {
           @click="toggleSellersList"
         >
           <span class="toggle-text">
-            {{ showSellersList ? $t('sales.sellerPicker.hideSellers') : $t('sales.sellerPicker.viewSellers') }}
+            {{
+              showSellersList
+                ? $t('sales.sellerPicker.hideSellers')
+                : $t('sales.sellerPicker.viewSellers')
+            }}
           </span>
           <el-icon class="toggle-icon" :class="{ 'is-rotated': showSellersList }">
             <ChevronDown :size="18" />
@@ -666,7 +705,9 @@ const isSellerPhotographer = computed(() => {
 
       <!-- Read-only lock banner -->
       <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-        {{ isLockedByPhotographer ? $t('sales.readOnlyAssignedNotice') : $t('sales.readOnlyNotice') }}
+        {{
+          isLockedByPhotographer ? $t('sales.readOnlyAssignedNotice') : $t('sales.readOnlyNotice')
+        }}
       </el-alert>
 
       <!-- Datos de Venta y Notas (Directo en el flujo del formulario, sin tarjeta) -->
@@ -854,7 +895,7 @@ const isSellerPhotographer = computed(() => {
 .mobile-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: space-between;
   margin-bottom: 1rem;
 }
 
@@ -862,11 +903,31 @@ const isSellerPhotographer = computed(() => {
   font-size: 1rem;
 }
 
+.mobile-header-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  text-align: center;
+}
+
+.mobile-title-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
 .mobile-title {
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--heading-color, #0f172a);
   margin: 0;
+}
+
+.header-placeholder {
+  width: 32px;
+  flex-shrink: 0;
 }
 
 .mobile-card-section-label {

@@ -375,9 +375,15 @@ export function useSaleAppointmentForm() {
     { immediate: true },
   )
 
+  const isDirectSale = computed(
+    () =>
+      loadedCita.value?.tipo === 'VENTA_DIRECTA' ||
+      (isEditing.value && !loadedCita.value?.sesionId),
+  )
+
   const isSubmitDisabled = computed(() => {
     if (isReadOnly.value) return true
-    if (!formData.value.sesionId) return true
+    if (!isDirectSale.value && !formData.value.sesionId) return true
     if (!selectedDateOnly.value || !selectedTimeOnly.value) return true
     if (formData.value.estado === 'COMPLETADA') {
       if (!formData.value.vendedorId) return true
@@ -707,7 +713,7 @@ export function useSaleAppointmentForm() {
               : [{ metodoPago: 'tarjeta', importeUsd: null }]
 
         formData.value = {
-          sesionId: existing.sesionId,
+          sesionId: existing.sesionId ?? null,
           hotelId: existing.hotelId,
           vendedorId: existing.vendedorId || null,
           fechaHoraCita: existing.fechaHoraCita,
@@ -880,6 +886,7 @@ export function useSaleAppointmentForm() {
     isSaving,
     isReadOnly,
     isLockedByPhotographer,
+    isDirectSale,
     conflicts,
     loadedCita,
     formData,

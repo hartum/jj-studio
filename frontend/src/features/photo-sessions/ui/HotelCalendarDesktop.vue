@@ -115,7 +115,7 @@ const currentPeriodStats = computed(() => {
     if (!evt.start) continue
     const evtTime = new Date(evt.start).getTime()
     if (evtTime >= startMs && evtTime < endMs) {
-      if (evt.extendedProps?.type === 'sale') {
+      if (evt.extendedProps?.type === 'sale' || evt.extendedProps?.type === 'direct-sale') {
         sales++
       } else {
         sessions++
@@ -194,6 +194,17 @@ function navigateToNewSaleForm() {
   router.push({ path: '/ventas/nueva', query })
 }
 
+function navigateToNewDirectSaleForm() {
+  if (!canCreateEvents.value) return
+  const query: Record<string, string> = {}
+  if (selectedHotelIds.value.length === 1 && selectedHotelIds.value[0]) {
+    query.hotelId = String(selectedHotelIds.value[0])
+  } else if (userHotels.value.length === 1 && userHotels.value[0]) {
+    query.hotelId = String(userHotels.value[0].id)
+  }
+  router.push({ path: '/ventas/directa/nueva', query })
+}
+
 // 10. Configuración de FullCalendar
 const { fullCalendarLocale, t } = useLocale()
 
@@ -218,7 +229,7 @@ function handleEventClick(clickInfo: EventClickArg) {
   // Si el usuario no tiene permiso para editar la sesión/cita, no ocurre nada
   if (!canEditCalendarEvent(props)) return
 
-  if (props.type === 'sale' && props.rawSale?.id) {
+  if ((props.type === 'sale' || props.type === 'direct-sale') && props.rawSale?.id) {
     router.push(`/ventas/${props.rawSale.id}/editar`)
     return
   }
@@ -316,6 +327,7 @@ onUnmounted(() => {
       @update:hotel-ids="selectedHotelIds = $event"
       @new-session="navigateToNewSessionForm()"
       @new-sale="navigateToNewSaleForm()"
+      @new-direct-sale="navigateToNewDirectSaleForm()"
     />
 
     <!-- 2. Panel de Alertas Colapsable -->

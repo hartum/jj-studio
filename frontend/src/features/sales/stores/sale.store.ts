@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import type {
   CitaVenta,
   CreateCitaVentaPayload,
+  CreateVentaDirectaPayload,
   UpdateCitaVentaPayload,
   ConflictoCitaVenta,
 } from '../domain/sale.model'
@@ -149,12 +150,35 @@ export const useSaleStore = defineStore('sales', () => {
     }
   }
 
+  async function addVentaDirecta(payload: CreateVentaDirectaPayload): Promise<CitaVenta> {
+    isLoading.value = true
+    try {
+      const res = await fetch(`${API_URL}/ventas-directas`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload),
+      })
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}))
+        throw new Error(errorData.error || `HTTP ${res.status}: Error al crear la venta directa`)
+      }
+
+      const created = await res.json()
+      citasVenta.value.push(created)
+      return created
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     citasVenta,
     isLoading,
     fetchCitasVenta,
     fetchCitaVenta,
     addCitaVenta,
+    addVentaDirecta,
     updateCitaVenta,
     deleteCitaVenta,
     checkConflictos,

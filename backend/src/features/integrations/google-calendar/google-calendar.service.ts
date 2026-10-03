@@ -473,8 +473,12 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
     ? `${creadorUser.nombre} ${creadorUser.apellidos}`.trim()
     : 'Sistema'
 
-  // Título: [Hotel] CITA VENTA [Cliente] | [Vendedor]
-  const summary = `${hotelName} CITA VENTA ${clienteNombre} | ${vendedorNombre}`
+  const isDirectSale = (cita as any).tipo === 'VENTA_DIRECTA'
+
+  // Título: [Hotel] CITA VENTA [Cliente] | [Vendedor] (o VENTA DIRECTA si es venta directa)
+  const summary = isDirectSale
+    ? `${hotelName} VENTA DIRECTA | ${vendedorNombre}`
+    : `${hotelName} CITA VENTA ${clienteNombre} | ${vendedorNombre}`
 
   // Color: Color del vendedor si tiene, o fotógrafo, o Gris ("8")
   const colorHex =
@@ -490,7 +494,13 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
   const phoneHtml = formatPhoneHtml(decrypt(cita.sesion?.clienteTelefono))
   const emailHtml = formatEmailHtml(decrypt(cita.sesion?.clienteEmail))
 
-  let description = `<b>[CITA DE VENTA]</b>
+  let description = isDirectSale
+    ? `<b>[VENTA DIRECTA]</b>
+<b>HOTEL:</b> ${hotelName}
+<b>VENDEDOR:</b> ${vendedorNombre}
+<b>TOTAL:</b> $${cita.totalVentaUsd || 0} USD
+<b>FOTOS VENDIDAS:</b> ${cita.numFotosVendidas || 0}`
+    : `<b>[CITA DE VENTA]</b>
 <b>HABITACIÓN:</b> ${roomValue}
 <b>CLIENTE:</b> ${clienteNombre}
 <b>CHECK OUT:</b> ${checkoutFormatted}
