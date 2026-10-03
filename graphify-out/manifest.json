@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/hotels/ui/HotelFormView.vue": {
-    "mtime": 1791041915.2719347,
-    "ast_hash": "61815c7ad234ef1f3a00270e2a8dde6a",
+    "mtime": 1791043022.8685849,
+    "ast_hash": "6688e4e022cf5840a162b6501b24bbf8",
     "semantic_hash": ""
   },
   "frontend/src/features/hotels/ui/HotelesConfig.vue": {
