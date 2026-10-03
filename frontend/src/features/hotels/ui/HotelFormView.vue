@@ -311,11 +311,7 @@ async function handleSave() {
       </el-form-item>
 
       <el-form-item :label="t('hotelsConfig.form.ventaDirecta', 'Venta directa')">
-        <el-switch
-          v-model="formData.ventaDirecta"
-          :active-text="t('common.active', 'Activada')"
-          :inactive-text="t('common.inactive', 'Desactivada')"
-        />
+        <el-switch v-model="formData.ventaDirecta" />
       </el-form-item>
 
       <!-- Sección Google Calendar -->
