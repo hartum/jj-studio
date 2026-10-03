@@ -108,6 +108,7 @@ model Hotel {
   email              String?
   telefono           String?
   metaMensualDefault Float?              @map("meta_mensual_default")
+  ventaDirecta       Boolean             @default(false) @map("venta_directa")
   gcalCalendarId     String?             @map("gcal_calendar_id")
   gcalServiceAccountEmail String?        @map("gcal_sa_email")
   gcalServiceAccountKey   String?        @map("gcal_sa_key") @db.Text

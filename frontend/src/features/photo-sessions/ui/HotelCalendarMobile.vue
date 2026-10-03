@@ -159,6 +159,16 @@ const isContable = computed(() => currentUser.value?.roleCode?.toUpperCase() ===
 const canCreateEvents = computed(() => !isContable.value)
 const canEditEvents = computed(() => !isContable.value)
 
+const canCreateDirectSale = computed(() => {
+  if (!canCreateEvents.value) return false
+  if (selectedHotelIds.value.length > 0) {
+    return userHotels.value.some(
+      (h) => selectedHotelIds.value.includes(h.id) && !!h.ventaDirecta
+    )
+  }
+  return userHotels.value.some((h) => !!h.ventaDirecta)
+})
+
 const canDeleteEvents = computed(() => {
   const roleCode = currentUser.value?.roleCode?.toUpperCase()
   return roleCode === 'ADMIN' || roleCode === 'SUPERUSUARIO'
@@ -333,6 +343,7 @@ onUnmounted(() => {
       :hotels="userHotels"
       :selected-hotel-name="selectedHotelName"
       :can-create="canCreateEvents"
+      :can-create-direct-sale="canCreateDirectSale"
       :is-mobile="true"
       :show-mini-calendar="showMiniCalendar"
       @update:hotel-ids="selectedHotelIds = $event"
@@ -455,7 +466,11 @@ onUnmounted(() => {
         </div>
 
         <!-- Opción 3: Nueva Venta Directa -->
-        <div class="speed-dial-item item-direct-sale" @click="handleNewDirectSaleClick">
+        <div
+          v-if="canCreateDirectSale"
+          class="speed-dial-item item-direct-sale"
+          @click="handleNewDirectSaleClick"
+        >
           <span class="speed-dial-label">{{ $t('calendar.newDirectSale', 'Venta Directa') }}</span>
           <button
             type="button"

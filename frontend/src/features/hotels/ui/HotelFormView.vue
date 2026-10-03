@@ -41,6 +41,7 @@ const formData = ref({
   telefono: '',
   latitud: null as number | null,
   longitud: null as number | null,
+  ventaDirecta: false,
   gcalCalendarId: '',
   gcalServiceAccountEmail: '',
   gcalConfigured: false,
@@ -79,6 +80,7 @@ onMounted(async () => {
         telefono: existing.telefono || '',
         latitud: existing.latitud || null,
         longitud: existing.longitud || null,
+        ventaDirecta: existing.ventaDirecta ?? false,
         gcalCalendarId: existing.gcalCalendarId || '',
         gcalServiceAccountEmail: existing.gcalServiceAccountEmail || '',
         gcalConfigured: existing.gcalConfigured ?? !!existing.gcalCalendarId,
@@ -205,6 +207,7 @@ async function handleSave() {
       personaContacto: formData.value.personaContacto,
       email: formData.value.email,
       telefono: formData.value.telefono,
+      ventaDirecta: formData.value.ventaDirecta,
       gcalCalendarId: formData.value.gcalCalendarId ? formData.value.gcalCalendarId.trim() : undefined,
       gcalServiceAccountEmail: formData.value.gcalServiceAccountEmail ? formData.value.gcalServiceAccountEmail.trim() : undefined,
       serviceAccountJson: serviceAccountJson.value ? serviceAccountJson.value.trim() : undefined,
@@ -304,6 +307,14 @@ async function handleSave() {
           type="textarea"
           :rows="3"
           :placeholder="t('hotelsConfig.form.addressPlaceholder')"
+        />
+      </el-form-item>
+
+      <el-form-item :label="t('hotelsConfig.form.ventaDirecta', 'Venta directa')">
+        <el-switch
+          v-model="formData.ventaDirecta"
+          :active-text="t('common.active', 'Activada')"
+          :inactive-text="t('common.inactive', 'Desactivada')"
         />
       </el-form-item>
 

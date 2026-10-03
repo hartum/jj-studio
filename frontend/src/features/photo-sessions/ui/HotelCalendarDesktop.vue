@@ -165,6 +165,16 @@ const isContable = computed(() => currentUser.value?.roleCode?.toUpperCase() ===
 const canCreateEvents = computed(() => !isContable.value)
 const canEditEvents = computed(() => !isContable.value)
 
+const canCreateDirectSale = computed(() => {
+  if (!canCreateEvents.value) return false
+  if (selectedHotelIds.value.length > 0) {
+    return userHotels.value.some(
+      (h) => selectedHotelIds.value.includes(h.id) && !!h.ventaDirecta
+    )
+  }
+  return userHotels.value.some((h) => !!h.ventaDirecta)
+})
+
 const canDeleteEvents = computed(() => {
   const roleCode = currentUser.value?.roleCode?.toUpperCase()
   return roleCode === 'ADMIN' || roleCode === 'SUPERUSUARIO'
@@ -323,6 +333,7 @@ onUnmounted(() => {
       :hotels="userHotels"
       :selected-hotel-name="selectedHotelName"
       :can-create="canCreateEvents"
+      :can-create-direct-sale="canCreateDirectSale"
       :is-mobile="false"
       @update:hotel-ids="selectedHotelIds = $event"
       @new-session="navigateToNewSessionForm()"

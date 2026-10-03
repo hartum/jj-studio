@@ -15,6 +15,7 @@ export interface Hotel {
   email?: string
   telefono?: string
   metaMensualDefault?: number | null
+  ventaDirecta?: boolean
   gcalConfigured?: boolean
   gcalCalendarId?: string
   gcalServiceAccountEmail?: string
@@ -33,6 +34,7 @@ export interface CreateHotelPayload {
   email?: string
   telefono?: string
   metaMensualDefault?: number | null
+  ventaDirecta?: boolean
   gcalCalendarId?: string
   gcalServiceAccountEmail?: string
   serviceAccountJson?: string

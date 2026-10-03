@@ -14,10 +14,12 @@ interface Props {
   isMobile?: boolean
   showMiniCalendar?: boolean
   canCreate?: boolean
+  canCreateDirectSale?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   canCreate: true,
+  canCreateDirectSale: false,
 })
 
 const emit = defineEmits<{
@@ -184,6 +186,7 @@ const groupedHotelsByCountry = computed<CountryGroup[]>(() => {
 
         <!-- Botón Nueva Venta Directa -->
         <el-button
+          v-if="canCreateDirectSale"
           type="primary"
           size="large"
           plain

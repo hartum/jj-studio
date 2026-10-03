@@ -49,6 +49,7 @@ export async function hotelRoutes(fastify: FastifyInstance) {
         email: h.email || '',
         telefono: h.telefono || '',
         metaMensualDefault: h.metaMensualDefault ?? null,
+        ventaDirecta: Boolean(h.ventaDirecta),
         gcalConfigured: !!(h.gcalCalendarId && h.gcalCalendarId.trim()),
         gcalCalendarId: h.gcalCalendarId || '',
         gcalServiceAccountEmail: h.gcalServiceAccountEmail || '',
@@ -78,6 +79,7 @@ export async function hotelRoutes(fastify: FastifyInstance) {
         email?: string
         telefono?: string
         metaMensualDefault?: number | null
+        ventaDirecta?: boolean
         gcalCalendarId?: string
         gcalServiceAccountEmail?: string
         gcalServiceAccountKey?: string
@@ -117,6 +119,7 @@ export async function hotelRoutes(fastify: FastifyInstance) {
           email: body.email ? body.email.trim() : null,
           telefono: body.telefono ? body.telefono.trim() : null,
           metaMensualDefault: body.metaMensualDefault != null ? Number(body.metaMensualDefault) : null,
+          ventaDirecta: body.ventaDirecta !== undefined ? Boolean(body.ventaDirecta) : false,
           gcalCalendarId: body.gcalCalendarId ? body.gcalCalendarId.trim() : null,
           gcalServiceAccountEmail: saEmail,
           gcalServiceAccountKey: saKey,
@@ -162,6 +165,7 @@ export async function hotelRoutes(fastify: FastifyInstance) {
         email: nuevo.email || '',
         telefono: nuevo.telefono || '',
         metaMensualDefault: nuevo.metaMensualDefault ?? null,
+        ventaDirecta: Boolean(nuevo.ventaDirecta),
         gcalConfigured: !!(nuevo.gcalCalendarId && nuevo.gcalCalendarId.trim()),
         gcalCalendarId: nuevo.gcalCalendarId || '',
         gcalServiceAccountEmail: nuevo.gcalServiceAccountEmail || '',
@@ -190,6 +194,7 @@ export async function hotelRoutes(fastify: FastifyInstance) {
         email?: string
         telefono?: string
         metaMensualDefault?: number | null
+        ventaDirecta?: boolean
         gcalCalendarId?: string | null
         gcalServiceAccountEmail?: string | null
         gcalServiceAccountKey?: string | null
@@ -243,6 +248,7 @@ export async function hotelRoutes(fastify: FastifyInstance) {
           ...(body.metaMensualDefault !== undefined && {
             metaMensualDefault: body.metaMensualDefault != null ? Number(body.metaMensualDefault) : null,
           }),
+          ...(body.ventaDirecta !== undefined && { ventaDirecta: Boolean(body.ventaDirecta) }),
           ...(body.gcalCalendarId !== undefined && {
             gcalCalendarId: body.gcalCalendarId ? body.gcalCalendarId.trim() : null,
           }),
@@ -292,6 +298,7 @@ export async function hotelRoutes(fastify: FastifyInstance) {
         email: actualizado.email || '',
         telefono: actualizado.telefono || '',
         metaMensualDefault: actualizado.metaMensualDefault ?? null,
+        ventaDirecta: Boolean(actualizado.ventaDirecta),
         gcalConfigured: !!(actualizado.gcalCalendarId && actualizado.gcalCalendarId.trim()),
         gcalCalendarId: actualizado.gcalCalendarId || '',
         gcalServiceAccountEmail: actualizado.gcalServiceAccountEmail || '',

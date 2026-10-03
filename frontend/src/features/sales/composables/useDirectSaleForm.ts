@@ -74,23 +74,23 @@ export function useDirectSaleForm(): DirectSaleFormContext {
 
   const currentUser = computed(() => authStore.user)
 
-  // Hoteles a los que tiene acceso el usuario según matriz de roles
+  // Hoteles a los que tiene acceso el usuario según matriz de roles que admiten venta directa
   const userHotels = computed(() => {
     const user = currentUser.value
-    if (!user) return hotelStore.hotels
+    if (!user) return hotelStore.hotels.filter((h) => !!h.ventaDirecta)
 
     const roleCode = user.roleCode?.toUpperCase()
     if (roleCode === 'SUPERUSUARIO' || roleCode === 'ADMIN') {
-      return hotelStore.hotels
+      return hotelStore.hotels.filter((h) => !!h.ventaDirecta)
     }
 
     if (roleCode === 'GERENTE' || roleCode === 'CONTABLE') {
       const areaIds = new Set(user.areaIds || [])
-      return hotelStore.hotels.filter((h) => areaIds.has(h.areaId))
+      return hotelStore.hotels.filter((h) => areaIds.has(h.areaId) && !!h.ventaDirecta)
     }
 
     const userHotelIds = new Set(user.hotelIds || [])
-    return hotelStore.hotels.filter((h) => userHotelIds.has(h.id))
+    return hotelStore.hotels.filter((h) => userHotelIds.has(h.id) && !!h.ventaDirecta)
   })
 
   const selectedHotel = computed(() =>
