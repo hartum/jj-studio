@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "backend/src/features/hotels/infrastructure/hotel.routes.ts": {
-    "mtime": 1790082475.9570415,
-    "ast_hash": "a1f4370547d6b0447e4f49cce903c062",
+    "mtime": 1791041848.148162,
+    "ast_hash": "76aa59fcb5c30640806b63f4bbc51857",
     "semantic_hash": ""
   },
   "backend/src/features/integrations/google-calendar/google-calendar.routes.ts": {
@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/hotels/domain/hotel.model.ts": {
-    "mtime": 1790068514.018562,
-    "ast_hash": "62e45524891f76214b3ce8c9a3da0be8",
+    "mtime": 1791041859.0993369,
+    "ast_hash": "d8e320ba490a88ce6a8017d6c0e35e1e",
     "semantic_hash": ""
   },
   "frontend/src/features/hotels/stores/hotel.store.ts": {
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/hotels/ui/HotelFormView.vue": {
-    "mtime": 1790082495.7576616,
-    "ast_hash": "807868ad8516d2f228a7fc08dd311a63",
+    "mtime": 1791041915.2719347,
+    "ast_hash": "61815c7ad234ef1f3a00270e2a8dde6a",
     "semantic_hash": ""
   },
   "frontend/src/features/hotels/ui/HotelesConfig.vue": {
@@ -475,13 +475,13 @@
     "semantic_hash": "f5149dbf22b1fc42c4c476a58cdc56df"
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue": {
-    "mtime": 1791027374.1646614,
-    "ast_hash": "88869fc634730c60ae3a86a92aea6d81",
+    "mtime": 1791041952.5741286,
+    "ast_hash": "3770f5cce96f3d531e53dc2cd798c804",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue": {
-    "mtime": 1791027413.6905158,
-    "ast_hash": "302cf0e2fc3af420ce3adb194d5bbb20",
+    "mtime": 1791041974.4985557,
+    "ast_hash": "cc11b4d0540167e8c18fd64eb812c1c9",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarView.vue": {
@@ -525,8 +525,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarHeader.vue": {
-    "mtime": 1791027344.6733897,
-    "ast_hash": "d4036f04b55f01b5488f294d41a52f3f",
+    "mtime": 1791041933.1225677,
+    "ast_hash": "cd8608a5bd3f599804389c42c721ab94",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/components/CalendarMobileDateNavigator.vue": {
@@ -1050,8 +1050,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/sales/composables/useDirectSaleForm.ts": {
-    "mtime": 1791031870.9468713,
-    "ast_hash": "709ef018844bbf8401ba0f5b02a5a031",
+    "mtime": 1791041983.5055852,
+    "ast_hash": "f02fd1e0acf8ebbf2124662012ebfff8",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/DirectSaleFormDesktop.vue": {
