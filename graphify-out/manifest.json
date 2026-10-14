@@ -450,8 +450,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts": {
-    "mtime": 1791027248.5170014,
-    "ast_hash": "5441bc1b6a16e8fc81904bedc104fed6",
+    "mtime": 1791990863.9513967,
+    "ast_hash": "8a3d685b7dfe1c3cff5f6290dd17752c",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarScope.ts": {

@@ -915,6 +915,8 @@
       "hotelChain": "Hotel Chain",
       "stars": "Stars",
       "contact": "Contact",
+      "directSale": "Direct Sale",
+      "directSaleActive": "Active",
       "actions": "Actions"
     },
     "editHotelTooltip": "Edit hotel",

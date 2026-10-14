@@ -7,7 +7,7 @@ import type { Hotel } from '../domain/hotel.model'
 import { getFlagEmoji } from '@/shared/flagEmoji'
 import { useLocale } from '@/i18n/useLocale'
 import { Search, Plus, EditPen, Delete, Location, Calendar } from '@element-plus/icons-vue'
-import { Building2 } from '@lucide/vue'
+import { Building2, Check } from '@lucide/vue'
 import { ElMessage } from 'element-plus'
 
 const { t } = useLocale()
@@ -165,6 +165,22 @@ async function handleDeleteHotel(hotel: Hotel) {
               <span>{{ row.personaContacto || 'N/A' }}</span>
               <small v-if="row.telefono" class="contact-phone">{{ row.telefono }}</small>
             </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column :label="t('hotelsConfig.table.directSale')" width="140" align="center">
+          <template #default="{ row }">
+            <el-tag
+              v-if="row.ventaDirecta"
+              type="success"
+              size="small"
+              effect="plain"
+              class="direct-sale-tag"
+            >
+              <el-icon class="mr-1"><Check /></el-icon>
+              {{ t('hotelsConfig.table.directSaleActive') }}
+            </el-tag>
+            <span v-else class="text-muted">—</span>
           </template>
         </el-table-column>
 

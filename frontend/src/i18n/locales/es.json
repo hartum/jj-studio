@@ -915,6 +915,8 @@
       "hotelChain": "Cadena Hotelera",
       "stars": "Estrellas",
       "contact": "Contacto",
+      "directSale": "Venta Directa",
+      "directSaleActive": "Activa",
       "actions": "Acciones"
     },
     "editHotelTooltip": "Editar hotel",
