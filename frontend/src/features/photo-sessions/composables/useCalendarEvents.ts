@@ -519,7 +519,7 @@ export function useCalendarEvents(
     // Si es un evento de Cita de Venta:
     if (props.type === 'sale') {
       const fotografoId = props.rawSale?.fotografoId || null
-      const vendedorId = (props.rawSale as any)?.vendedorId || null
+      const vendedorId = props.rawSale?.vendedorId || null
 
       const isAssignedFotografo = Boolean(
         fotografoId && String(fotografoId) === String(currentUser.id),
