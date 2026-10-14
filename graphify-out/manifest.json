@@ -425,8 +425,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/hotels/ui/HotelesConfig.vue": {
-    "mtime": 1790079622.2549455,
-    "ast_hash": "0b70c482bf6cf30a7b1c39851bcd1f2b",
+    "mtime": 1791991688.0754719,
+    "ast_hash": "92c12fb7be542b0d418e87f54881a70f",
     "semantic_hash": ""
   },
   "frontend/src/features/notifications/composables/useEmailTemplates.ts": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1791038171.4003189,
-    "ast_hash": "19c08b99c2c242ca0c75fd45e7b96e2f",
+    "mtime": 1791991201.1559188,
+    "ast_hash": "d1c6c9307f5afea09f9ea26bed5a914a",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1791038165.5252204,
-    "ast_hash": "ef850291dc6c1ee719828db666d92382",
+    "mtime": 1791991194.3717089,
+    "ast_hash": "3b15d48d45a18328bb9a8835d43f38be",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
