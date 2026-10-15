@@ -259,9 +259,10 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const citas = await prisma.citaVenta.findMany({
         where,
         include: {
-          sesion: true,
+          sesion: { include: { fotografo: true } },
           hotel: true,
           vendedor: true,
+          fotografo: { include: { colorAsignado: true } },
           pagos: true,
         },
         orderBy: { fechaHoraCita: 'asc' },
@@ -269,6 +270,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const mapped = citas.map((c) => {
         const v = decryptUser(c.vendedor)
+        const f = decryptUser(c.fotografo || c.sesion?.fotografo)
         return {
           id: c.id,
           tipo: c.tipo || 'CITA_VENTA',
@@ -277,6 +279,8 @@ export async function saleRoutes(fastify: FastifyInstance) {
           hotelNombre: c.hotel?.nombre || '',
           vendedorId: c.vendedorId || null,
           vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
+          fotografoId: c.fotografoId || c.sesion?.fotografoId || null,
+          fotografoNombre: f ? `${f.nombre} ${f.apellidos}`.trim() : null,
           fechaHoraCita: c.fechaHoraCita.toISOString().slice(0, 16),
           estado: c.estado,
           numFotosVendidas: c.numFotosVendidas,
@@ -292,7 +296,6 @@ export async function saleRoutes(fastify: FastifyInstance) {
           clienteEmail: decrypt(c.sesion?.clienteEmail) || '',
           clienteTelefono: decrypt(c.sesion?.clienteTelefono) || '',
           numeroHabitacion: c.sesion?.numeroHabitacion || '',
-          fotografoId: c.sesion?.fotografoId || null,
           sesionFechaHoraInicio: c.sesion?.fechaHoraInicio ? c.sesion.fechaHoraInicio.toISOString().slice(0, 16) : null,
           googleCalendarEventId: c.googleCalendarEventId || null,
           createdAt: c.createdAt.toISOString(),
@@ -347,7 +350,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const cita = await prisma.citaVenta.findUnique({
         where: { id },
-        include: { sesion: true, hotel: true, vendedor: true, pagos: true },
+        include: { sesion: { include: { fotografo: true } }, hotel: true, vendedor: true, fotografo: true, pagos: true },
       })
 
       if (!cita || cita.deletedAt) {
@@ -355,6 +358,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       }
 
       const v = decryptUser(cita.vendedor)
+      const f = decryptUser(cita.fotografo || cita.sesion?.fotografo)
       return reply.send({
         id: cita.id,
         tipo: cita.tipo || 'CITA_VENTA',
@@ -362,6 +366,8 @@ export async function saleRoutes(fastify: FastifyInstance) {
         hotelId: cita.hotelId,
         vendedorId: cita.vendedorId || null,
         vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
+        fotografoId: cita.fotografoId || cita.sesion?.fotografoId || null,
+        fotografoNombre: f ? `${f.nombre} ${f.apellidos}`.trim() : null,
         fechaHoraCita: cita.fechaHoraCita.toISOString().slice(0, 16),
         estado: cita.estado,
         numFotosVendidas: cita.numFotosVendidas,
@@ -377,7 +383,6 @@ export async function saleRoutes(fastify: FastifyInstance) {
         clienteEmail: decrypt(cita.sesion?.clienteEmail) || '',
         clienteTelefono: decrypt(cita.sesion?.clienteTelefono) || '',
         numeroHabitacion: cita.sesion?.numeroHabitacion || '',
-        fotografoId: cita.sesion?.fotografoId || null,
         numAdultos: cita.sesion?.numAdultos ?? 1,
         numNinos: cita.sesion?.numNinos ?? 0,
         concepto: cita.sesion?.concepto || '',
@@ -680,6 +685,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const body = request.body as {
         hotelId: number
         vendedorId: string
+        fotografoId?: string | null
         numFotosVendidas: number
         totalVentaUsd?: number | null
         modoCobro?: string | null
@@ -743,12 +749,25 @@ export async function saleRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ error: 'El vendedor seleccionado no existe o no está activo' })
       }
 
+      // Validar fotógrafo si se proporciona
+      let fotografo: any = null
+      if (body.fotografoId) {
+        fotografo = await prisma.usuario.findUnique({
+          where: { id: body.fotografoId },
+          include: { role: true, hotelesAsignados: true },
+        })
+        if (!fotografo || !fotografo.activo || fotografo.deletedAt) {
+          return reply.status(400).send({ error: 'El fotógrafo seleccionado no existe o no está activo' })
+        }
+      }
+
       const nueva = await prisma.citaVenta.create({
         data: {
           tipo: 'VENTA_DIRECTA',
           sesionId: null,
           hotelId: Number(body.hotelId),
           vendedorId: body.vendedorId,
+          fotografoId: body.fotografoId || null,
           fechaHoraCita: new Date(),
           estado: 'COMPLETADA',
           numFotosVendidas: Number(body.numFotosVendidas),
@@ -765,6 +784,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         include: {
           hotel: true,
           vendedor: true,
+          fotografo: true,
           pagos: true,
         },
       })
@@ -787,6 +807,8 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const authUserId = getAuthUserId(request) || nueva.vendedorId
       const v = decryptUser(nueva.vendedor)
       const vendedorNombre = v ? `${v.nombre} ${v.apellidos}`.trim() : 'Sin asignar'
+      const fot = decryptUser(nueva.fotografo)
+      const fotografoNombre = fot ? `${fot.nombre} ${fot.apellidos}`.trim() : 'Sin asignar'
 
       registrarAudit({
         accion: 'CREAR',
@@ -796,12 +818,13 @@ export async function saleRoutes(fastify: FastifyInstance) {
         hotelId: nueva.hotelId,
         clienteNombre: 'Venta directa',
         descripcion: 'registró una nueva venta directa',
-        contexto: `Venta directa de ${nueva.numFotosVendidas} fotos ($${nueva.totalVentaUsd} USD) por ${vendedorNombre}`,
+        contexto: `Venta directa de ${nueva.numFotosVendidas} fotos ($${nueva.totalVentaUsd} USD) por ${vendedorNombre}` + (nueva.fotografoId ? `, fotógrafo: ${fotografoNombre}` : ''),
         ipAddress: request.ip,
         metadatos: {
           tipo: 'VENTA_DIRECTA',
           fechaHoraCita: nueva.fechaHoraCita.toISOString().slice(0, 16).replace('T', ' '),
           vendedorAsignado: vendedorNombre,
+          fotografoAsignado: fotografoNombre,
           estado: nueva.estado,
           numFotosVendidas: nueva.numFotosVendidas,
           totalVentaUsd: nueva.totalVentaUsd,
@@ -817,6 +840,8 @@ export async function saleRoutes(fastify: FastifyInstance) {
         hotelId: nueva.hotelId,
         vendedorId: nueva.vendedorId || null,
         vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
+        fotografoId: nueva.fotografoId || null,
+        fotografoNombre: fot ? `${fot.nombre} ${fot.apellidos}`.trim() : null,
         fechaHoraCita: nueva.fechaHoraCita.toISOString().slice(0, 16),
         estado: nueva.estado,
         numFotosVendidas: nueva.numFotosVendidas,
@@ -848,6 +873,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const id = Number((request.params as any).id)
       const body = request.body as {
         vendedorId?: string | null
+        fotografoId?: string | null
         fechaHoraCita?: string
         estado?: string
         numFotosVendidas?: number | null
@@ -859,7 +885,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const existing = await prisma.citaVenta.findUnique({
         where: { id },
-        include: { sesion: { include: { creador: true, hotel: true } }, hotel: true, vendedor: true },
+        include: { sesion: { include: { creador: true, hotel: true } }, hotel: true, vendedor: true, fotografo: true },
       })
       if (!existing || existing.deletedAt) {
         return reply.status(404).send({ error: 'Cita de venta no encontrada' })
@@ -883,7 +909,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       } else {
         // 2. If cita is PROGRAMADA and the associated session has an assigned photographer or the cita has an assigned seller:
         // Only assigned photographer, assigned seller, supervisor, gerente, admin, and superusuario can edit.
-        const fotografoId = existing.sesion?.fotografoId
+        const fotografoId = existing.fotografoId || existing.sesion?.fotografoId
         const vendedorId = existing.vendedorId
         if (fotografoId || vendedorId) {
           if (!userId) {
@@ -969,6 +995,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const data: any = {}
       if (body.vendedorId !== undefined) data.vendedorId = body.vendedorId || null
+      if (body.fotografoId !== undefined) data.fotografoId = body.fotografoId || null
       if (body.fechaHoraCita !== undefined) {
         data.fechaHoraCita = parseLocalDateTime(body.fechaHoraCita)
       }
@@ -988,7 +1015,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const actualizada = await prisma.citaVenta.update({
         where: { id },
         data,
-        include: { sesion: true, vendedor: true, pagos: true },
+        include: { sesion: true, vendedor: true, fotografo: true, pagos: true },
       })
 
       if (incomingPagos !== undefined) {
@@ -1071,6 +1098,13 @@ export async function saleRoutes(fastify: FastifyInstance) {
         metadatos.vendedorNuevo = actualVendedorNombre
       }
 
+      if (existing.fotografoId !== actualizada.fotografoId) {
+        const existFot = existing.fotografo ? decryptUser(existing.fotografo) : null
+        const actualFot = actualizada.fotografo ? decryptUser(actualizada.fotografo) : null
+        metadatos.fotografoAnterior = existFot ? `${existFot.nombre} ${existFot.apellidos}`.trim() : 'Sin asignar'
+        metadatos.fotografoNuevo = actualFot ? `${actualFot.nombre} ${actualFot.apellidos}`.trim() : 'Sin asignar'
+      }
+
       if (existing.totalVentaUsd !== actualizada.totalVentaUsd) {
         metadatos.totalVentaUsdAnterior = existing.totalVentaUsd
         metadatos.totalVentaUsdNuevo = actualizada.totalVentaUsd
@@ -1110,6 +1144,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       })
 
       const v = decryptUser(actualizada.vendedor)
+      const fot = decryptUser(actualizada.fotografo)
       const response: any = {
         id: actualizada.id,
         tipo: actualizada.tipo || 'CITA_VENTA',
@@ -1117,6 +1152,8 @@ export async function saleRoutes(fastify: FastifyInstance) {
         hotelId: actualizada.hotelId,
         vendedorId: actualizada.vendedorId || null,
         vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
+        fotografoId: actualizada.fotografoId || actualizada.sesion?.fotografoId || null,
+        fotografoNombre: fot ? `${fot.nombre} ${fot.apellidos}`.trim() : null,
         fechaHoraCita: actualizada.fechaHoraCita.toISOString().slice(0, 16),
         estado: actualizada.estado,
         numFotosVendidas: actualizada.numFotosVendidas,

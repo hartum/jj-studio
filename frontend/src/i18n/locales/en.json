@@ -524,7 +524,8 @@
     "saleAppointmentCommissionsNotice": "Commissions will be calculated automatically upon completion.",
     "addPaymentMethod": "Add another payment method",
     "hotel": "Hotel",
-    "seller": "Seller / Photographer",
+    "photographer": "Photographer",
+    "seller": "Seller",
     "numPhotosSold": "Number of photos sold",
     "paymentBreakdown": "Payment Breakdown",
     "totalSale": "TOTAL COLLECTED",
@@ -544,6 +545,8 @@
       "date": "Sale date",
       "time": "Sale time",
       "stepTime": "SELECT TIME",
+      "photographer": "Photographer",
+      "photographerUpper": "PHOTOGRAPHER",
       "seller": "Seller",
       "sellerUpper": "SELLER",
       "sale": "Sale",
@@ -576,6 +579,12 @@
       "statusAbsent": "Absent{motivo}",
       "statusOccupied": "Busy{motivo}",
       "statusAssigned": "Selected"
+    },
+    "photographerPicker": {
+      "selectPhotographer": "Select photographer",
+      "hidePhotographers": "HIDE PHOTOGRAPHERS",
+      "viewPhotographers": "VIEW PHOTOGRAPHERS",
+      "noPhotographersInHotel": "No photographers assigned to this hotel."
     },
     "form": {
       "photosSold": "Photos Sold",

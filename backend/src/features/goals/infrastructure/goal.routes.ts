@@ -565,7 +565,7 @@ export async function goalRoutes(fastify: FastifyInstance) {
             : cuotaEquitativaSugerida
           const esMetaPersonalizada = Boolean(metaPersonal)
 
-          const ventasFoto = ventasHotel.filter((c: any) => c.sesion?.fotografoId === fotografo.id)
+          const ventasFoto = ventasHotel.filter((c: any) => (c.fotografoId || c.sesion?.fotografoId) === fotografo.id)
           const ventasRealesFoto = ventasFoto.reduce((sum, c) => sum + (c.totalVentaUsd || 0), 0)
           const numVentasFoto = ventasFoto.length
           const numSesionesFoto = new Set(ventasFoto.map((c) => c.sesionId)).size

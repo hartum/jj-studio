@@ -16,6 +16,8 @@ const {
   userHotels,
   sellers,
   selectedSeller,
+  photographers,
+  selectedPhotographer,
   modoCobroOptions,
   totalCalculado,
   canAddPago,
@@ -28,6 +30,7 @@ const {
 } = props.form
 
 const showSellersList = ref(false)
+const showPhotographersList = ref(false)
 
 function toggleSellersList() {
   showSellersList.value = !showSellersList.value
@@ -38,9 +41,23 @@ function selectSeller(sellerId: string) {
   showSellersList.value = false
 }
 
+function togglePhotographersList() {
+  showPhotographersList.value = !showPhotographersList.value
+}
+
+function selectPhotographer(photographerId: string) {
+  formData.value.fotografoId = photographerId
+  showPhotographersList.value = false
+}
+
 const isSellerPhotographer = computed(() => {
   if (!selectedSeller.value) return false
   return !!selectedSeller.value.color
+})
+
+const isPhotographerColored = computed(() => {
+  if (!selectedPhotographer.value) return false
+  return !!selectedPhotographer.value.color
 })
 
 function getRoleTagType(role?: string): 'success' | 'primary' | 'warning' | 'info' {
@@ -104,6 +121,135 @@ function getRoleTagType(role?: string): 'success' | 'primary' | 'warning' | 'inf
             <div v-else class="read-only-box">
               <el-icon :size="18"><Building2 /></el-icon>
               <span class="box-text">{{ userHotels[0]?.nombre || 'Sin hotel asignado' }}</span>
+            </div>
+          </div>
+
+          <!-- Selector de Fotógrafo Estilo Card -->
+          <div class="form-field">
+            <label class="field-label">
+              {{ t('sales.photographer') }}
+              <span class="required-star">*</span>
+            </label>
+
+            <div
+              class="desktop-seller-selector-card"
+              :class="{ 'is-seller-colored': isPhotographerColored }"
+              :style="
+                isPhotographerColored
+                  ? { backgroundColor: getUserBgColor(selectedPhotographer?.color) || '#10b981' }
+                  : {}
+              "
+            >
+              <div class="seller-card-main">
+                <div class="seller-avatar-circle">
+                  <el-avatar
+                    v-if="selectedPhotographer"
+                    :src="selectedPhotographer.avatar || undefined"
+                    :size="44"
+                    :style="{
+                      backgroundColor: isPhotographerColored
+                        ? 'rgba(255, 255, 255, 0.25)'
+                        : getUserBgColor(selectedPhotographer.color),
+                      color: '#ffffff',
+                      fontWeight: '600',
+                      fontSize: '13px',
+                    }"
+                    :class="
+                      isPhotographerColored ? 'seller-header-avatar-colored' : 'seller-header-avatar'
+                    "
+                  >
+                    {{ getUserInitials(selectedPhotographer.nombre) }}
+                  </el-avatar>
+                  <div v-else class="seller-default-circle">
+                    <el-icon :size="22"><User /></el-icon>
+                  </div>
+                </div>
+                <div class="seller-info-box">
+                  <span
+                    class="seller-subtitle-label"
+                    :class="{ 'text-white-subtle': isPhotographerColored }"
+                  >
+                    {{ t('sales.steps.photographer') }}
+                  </span>
+                  <span class="seller-title-label" :class="{ 'text-white': isPhotographerColored }">
+                    {{
+                      selectedPhotographer
+                        ? selectedPhotographer.nombre
+                        : t('sales.photographerPicker.selectPhotographer')
+                    }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Barra toggle VER FOTÓGRAFOS -->
+              <div
+                class="seller-toggle-bar"
+                :class="{ 'is-open': showPhotographersList, 'is-selected-toggle': isPhotographerColored }"
+                role="button"
+                tabindex="0"
+                @click="togglePhotographersList"
+              >
+                <span class="toggle-text">
+                  {{
+                    showPhotographersList
+                      ? t('sales.photographerPicker.hidePhotographers')
+                      : t('sales.photographerPicker.viewPhotographers')
+                  }}
+                </span>
+                <el-icon class="toggle-icon" :class="{ 'is-rotated': showPhotographersList }">
+                  <ChevronDown :size="18" />
+                </el-icon>
+              </div>
+
+              <!-- Lista colapsable de fotógrafos -->
+              <el-collapse-transition>
+                <div v-if="showPhotographersList" class="seller-dropdown-container">
+                  <div v-if="photographers.length === 0" class="seller-empty-state">
+                    {{ t('sales.photographerPicker.noPhotographersInHotel') }}
+                  </div>
+                  <div v-else class="seller-dropdown-list">
+                    <div
+                      v-for="photographer in photographers"
+                      :key="photographer.id"
+                      class="seller-pick-item"
+                      :class="{
+                        'is-selected': String(formData.fotografoId) === String(photographer.id),
+                      }"
+                      @click="selectPhotographer(photographer.id)"
+                    >
+                      <div class="pick-item-left">
+                        <el-avatar
+                          :src="photographer.avatar || undefined"
+                          :size="36"
+                          :style="{
+                            backgroundColor: getUserBgColor(photographer.color),
+                            color: '#ffffff',
+                            fontWeight: '600',
+                            fontSize: '11px',
+                          }"
+                          class="pick-seller-avatar"
+                        >
+                          {{ getUserInitials(photographer.nombre) }}
+                        </el-avatar>
+
+                        <div class="pick-item-info">
+                          <div class="pick-item-client">{{ photographer.nombre }}</div>
+                          <div class="pick-item-meta">
+                            <el-tag
+                              size="small"
+                              :type="getRoleTagType(photographer.role)"
+                              effect="light"
+                              class="seller-role-tag"
+                            >
+                              {{ photographer.role }}
+                            </el-tag>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </el-collapse-transition>
             </div>
           </div>
 

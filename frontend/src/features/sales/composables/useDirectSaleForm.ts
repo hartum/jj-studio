@@ -7,12 +7,13 @@ import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { useProfileStore } from '@/features/users/stores/profile.store'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
-import { MODO_COBRO_OPTIONS } from '../domain/sale.model'
+import { MODO_COBRO_OPTIONS, type CreateVentaDirectaPayload } from '../domain/sale.model'
 import type { Hotel } from '@/features/hotels/domain/hotel.model'
 
 export interface DirectSaleFormData {
   hotelId: number
   vendedorId: string | null
+  fotografoId: string | null
   numFotosVendidas: number | null
   totalVentaUsd: number | null
   modoCobro: string | null
@@ -36,6 +37,8 @@ export interface DirectSaleFormContext {
   selectedHotel: ComputedRef<Hotel | undefined>
   sellers: ComputedRef<SellerUser[]>
   selectedSeller: ComputedRef<SellerUser | undefined>
+  photographers: ComputedRef<SellerUser[]>
+  selectedPhotographer: ComputedRef<SellerUser | undefined>
   modoCobroOptions: ComputedRef<Array<{ value: string; label: string }>>
   totalCalculado: ComputedRef<number>
   canAddPago: ComputedRef<boolean>
@@ -65,6 +68,7 @@ export function useDirectSaleForm(): DirectSaleFormContext {
   const formData = ref<DirectSaleFormData>({
     hotelId: 0,
     vendedorId: null,
+    fotografoId: null,
     numFotosVendidas: 1,
     totalVentaUsd: null,
     modoCobro: null,
@@ -134,6 +138,43 @@ export function useDirectSaleForm(): DirectSaleFormContext {
     sellers.value.find((s) => String(s.id) === String(formData.value.vendedorId)),
   )
 
+  // Fotógrafos disponibles en el hotel seleccionado (Fotógrafos y Supervisores)
+  const photographers = computed<SellerUser[]>(() => {
+    const selectedHotelId = Number(formData.value.hotelId)
+    if (!selectedHotelId) return []
+
+    return userStore.usersWithProfile
+      .filter((u) => {
+        if (u.status === 'Inactivo') return false
+        const perfilCode =
+          u.perfil?.code?.toUpperCase() ||
+          profileStore.getProfileById(u.profileId)?.code?.toUpperCase()
+        const allowedRoles = ['FOTOGRAFO', 'SUPERVISOR']
+        if (!allowedRoles.includes(perfilCode || '')) return false
+        const assignedHotelIds = u.hotelIds || []
+        return assignedHotelIds.some((hId) => Number(hId) === selectedHotelId)
+      })
+      .map((u) => {
+        const perfilCode =
+          u.perfil?.code?.toUpperCase() ||
+          profileStore.getProfileById(u.profileId)?.code?.toUpperCase() ||
+          ''
+        const fullName = `${u.nombre || ''} ${u.apellidos || ''}`.trim()
+        return {
+          id: String(u.id),
+          nombre: fullName || u.nombre || 'Usuario',
+          email: u.email,
+          avatar: u.imagen || null,
+          color: u.color || null,
+          role: perfilCode,
+        }
+      })
+  })
+
+  const selectedPhotographer = computed(() =>
+    photographers.value.find((p) => String(p.id) === String(formData.value.fotografoId)),
+  )
+
   // Auto-seleccionar vendedor cuando cambia la lista de vendedores
   watch(
     sellers,
@@ -158,6 +199,35 @@ export function useDirectSaleForm(): DirectSaleFormContext {
       // De lo contrario, seleccionar el primer vendedor disponible
       if (newList[0]) {
         formData.value.vendedorId = newList[0].id
+      }
+    },
+    { immediate: true },
+  )
+
+  // Auto-seleccionar fotógrafo cuando cambia la lista de fotógrafos
+  watch(
+    photographers,
+    (newList) => {
+      if (newList.length === 0) {
+        formData.value.fotografoId = null
+        return
+      }
+
+      // Si el fotógrafo actual ya está en la lista, conservarlo
+      const currentValid = newList.some((p) => String(p.id) === String(formData.value.fotografoId))
+      if (currentValid) return
+
+      // Priorizar el usuario actualmente logueado si es fotógrafo en este hotel
+      const currentUserId = String(currentUser.value?.id || '')
+      const isCurrentUserPhotographer = newList.some((p) => String(p.id) === currentUserId)
+      if (isCurrentUserPhotographer) {
+        formData.value.fotografoId = currentUserId
+        return
+      }
+
+      // De lo contrario, seleccionar el primer fotógrafo disponible
+      if (newList[0]) {
+        formData.value.fotografoId = newList[0].id
       }
     },
     { immediate: true },
@@ -211,6 +281,7 @@ export function useDirectSaleForm(): DirectSaleFormContext {
     if (isSaving.value) return true
     if (!formData.value.hotelId) return true
     if (!formData.value.vendedorId) return true
+    if (!formData.value.fotografoId) return true
     if (!formData.value.numFotosVendidas || formData.value.numFotosVendidas < 1) return true
     if (!pagosValidos.value) return true
     return false
@@ -225,9 +296,10 @@ export function useDirectSaleForm(): DirectSaleFormContext {
 
     isSaving.value = true
     try {
-      const payload = {
+      const payload: CreateVentaDirectaPayload = {
         hotelId: Number(formData.value.hotelId),
         vendedorId: String(formData.value.vendedorId),
+        fotografoId: formData.value.fotografoId ? String(formData.value.fotografoId) : null,
         numFotosVendidas: Number(formData.value.numFotosVendidas),
         totalVentaUsd: totalCalculado.value,
         pagos: (formData.value.pagos || []).map((p) => ({
@@ -271,6 +343,8 @@ export function useDirectSaleForm(): DirectSaleFormContext {
     selectedHotel,
     sellers,
     selectedSeller,
+    photographers,
+    selectedPhotographer,
     modoCobroOptions,
     totalCalculado,
     canAddPago,

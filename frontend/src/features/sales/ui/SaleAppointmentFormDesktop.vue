@@ -37,6 +37,8 @@ const {
   conflicts,
   availableSessions,
   excludedSessionsCount,
+  photographers,
+  selectedPhotographer,
   photographerUser,
   photographerName,
   sellers,
@@ -64,6 +66,12 @@ const {
 } = props.form
 
 const showSessionsList = ref(!isEditing.value && !formData.value.sesionId)
+const showPhotographersList = ref(false)
+
+function togglePhotographersList() {
+  if (isReadOnly.value) return
+  showPhotographersList.value = !showPhotographersList.value
+}
 
 function getPhotographer(fotografoId?: string | null) {
   if (!fotografoId) return null
@@ -520,29 +528,67 @@ const formattedSelectedSaleDateTime = computed(() => {
         <!-- Selector de Sesión Fotográfica Asociada (Card con lista desplegable) -->
         <div
           class="desktop-session-selector-card"
-          :class="{ 'is-session-selected': !!formData.sesionId }"
+          :class="{
+            'is-session-selected': !!formData.sesionId || (isDirectSale && !!formData.fotografoId),
+          }"
           :style="
-            formData.sesionId
+            formData.sesionId || (isDirectSale && formData.fotografoId)
               ? { backgroundColor: getUserBgColor(photographerUser?.color) || '#8b5cf6' }
               : {}
           "
         >
-          <!-- Estado A: Sin Sesión Seleccionada (o Venta Directa) -->
-          <div v-if="!formData.sesionId" class="session-card-main">
+          <!-- Estado A: Sin Sesión Seleccionada (Cita Estándar sin sesión) -->
+          <div v-if="!formData.sesionId && !isDirectSale" class="session-card-main">
             <div class="session-default-circle">
               <el-icon :size="22"><Camera /></el-icon>
             </div>
             <div class="session-info-box">
               <span class="session-category-label">
-                {{ isDirectSale ? 'VENTA DIRECTA' : $t('sales.sessionPicker.noSessionAssociated') }}
+                {{ $t('sales.sessionPicker.noSessionAssociated') }}
               </span>
               <span class="session-title-label">
-                {{ isDirectSale ? 'Venta directa sin sesión previa' : $t('sales.sessionPicker.chooseSession') }}
+                {{ $t('sales.sessionPicker.chooseSession') }}
               </span>
             </div>
           </div>
 
-          <!-- Estado B: Sesión Seleccionada (Color del fotógrafo + Datos de la sesión) -->
+          <!-- Estado B: Venta Directa (Muestra Fotógrafo Asignado) -->
+          <div v-else-if="isDirectSale" class="session-card-main">
+            <div class="session-avatar-circle">
+              <el-avatar
+                v-if="photographerUser"
+                :src="photographerUser.imagen || undefined"
+                :size="44"
+                :style="{
+                  backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                  color: '#ffffff',
+                  fontWeight: '700',
+                  fontSize: '13px',
+                }"
+              >
+                {{ getUserInitials(photographerUser.nombre, photographerUser.apellidos) }}
+              </el-avatar>
+              <div v-else class="session-default-circle">
+                <el-icon :size="22"><Camera /></el-icon>
+              </div>
+            </div>
+            <div class="session-info-box">
+              <span
+                class="session-category-label"
+                :class="{ 'text-white-subtle': !!formData.fotografoId }"
+              >
+                {{ $t('sales.photographer') }}
+              </span>
+              <span
+                class="session-title-label"
+                :class="{ 'text-white': !!formData.fotografoId }"
+              >
+                {{ photographerName }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Estado C: Sesión Seleccionada (Color del fotógrafo + Datos de la sesión) -->
           <div v-else class="session-card-selected-content">
             <div class="session-selected-header">
               <div class="session-selected-avatar-wrapper">
@@ -714,6 +760,67 @@ const formattedSelectedSaleDateTime = computed(() => {
                     <WarnTriangleFilled />
                   </el-icon>
                   {{ $t('sales.conflicts.excludedNote', { count: excludedSessionsCount }) }}
+                </div>
+              </div>
+            </div>
+          </el-collapse-transition>
+
+          <!-- Barra toggle VER FOTÓGRAFOS para Venta Directa (si no es de solo lectura) -->
+          <div
+            v-if="isDirectSale && !isReadOnly"
+            class="session-toggle-bar"
+            :class="{ 'is-open': showPhotographersList, 'is-selected-toggle': !!formData.fotografoId }"
+            role="button"
+            tabindex="0"
+            @click="togglePhotographersList"
+          >
+            <span class="toggle-text">
+              {{
+                showPhotographersList
+                  ? ($t('sales.photographerPicker.hidePhotographers') || 'OCULTAR FOTÓGRAFOS')
+                  : ($t('sales.photographerPicker.viewPhotographers') || 'VER FOTÓGRAFOS')
+              }}
+            </span>
+            <el-icon class="toggle-icon" :class="{ 'is-rotated': showPhotographersList }">
+              <ChevronDown :size="18" />
+            </el-icon>
+          </div>
+
+          <!-- Lista colapsable de fotógrafos para Venta Directa -->
+          <el-collapse-transition v-if="isDirectSale">
+            <div v-if="showPhotographersList" class="session-dropdown-container">
+              <div v-if="photographers.length === 0" class="session-empty-state">
+                {{ $t('sales.photographerPicker.noPhotographersInHotel') || 'No hay fotógrafos en este hotel.' }}
+              </div>
+              <div v-else class="session-dropdown-list">
+                <div
+                  v-for="photo in photographers"
+                  :key="photo.id"
+                  class="session-pick-item"
+                  :class="{ 'is-selected': String(formData.fotografoId) === String(photo.id) }"
+                  @click="formData.fotografoId = String(photo.id); showPhotographersList = false"
+                >
+                  <div class="pick-item-left">
+                    <el-avatar
+                      :src="photo.imagen || undefined"
+                      :size="36"
+                      :style="{
+                        backgroundColor: getUserBgColor(photo.color),
+                        color: '#ffffff',
+                        fontWeight: '600',
+                        fontSize: '11px',
+                      }"
+                      class="pick-session-avatar"
+                    >
+                      {{ getUserInitials(photo.nombre, photo.apellidos) }}
+                    </el-avatar>
+                    <div class="pick-item-info">
+                      <div class="pick-item-client">{{ photo.nombre }} {{ photo.apellidos }}</div>
+                      <div class="pick-item-meta">
+                        <el-tag size="small" type="success" effect="light">{{ photo.perfilNombre }}</el-tag>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

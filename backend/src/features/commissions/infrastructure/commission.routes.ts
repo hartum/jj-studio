@@ -451,7 +451,9 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         importeComisionUsd: c.importeComisionUsd,
         estado: c.estado,
         fechaVenta: c.fechaVenta.toISOString().slice(0, 10),
-        clienteNombre: decrypt(c.citaVenta?.sesion?.clienteNombre) || '',
+        clienteNombre:
+          decrypt(c.citaVenta?.sesion?.clienteNombre) ||
+          (c.citaVenta?.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : ''),
         numFotosVendidas: c.citaVenta?.numFotosVendidas || null,
         createdAt: c.createdAt.toISOString(),
       }))

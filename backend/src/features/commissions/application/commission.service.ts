@@ -385,9 +385,10 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
   const baseCalculoUsd = Number(Math.max(0, totalVentaUsd * (1 - impuestoPct / 100)).toFixed(2))
 
   // 1. Fotógrafo Commission
-  if (cita.sesion?.fotografoId) {
+  const fotografoUsuarioId = cita.fotografoId || cita.sesion?.fotografoId
+  if (fotografoUsuarioId) {
     const fotografo = await prisma.usuario.findUnique({
-      where: { id: cita.sesion.fotografoId },
+      where: { id: fotografoUsuarioId },
     })
     if (fotografo) {
       const tipoContrato = fotografo.tipoContrato || 'ASALARIADO'
@@ -639,7 +640,10 @@ export async function recalculateCommissionsForUser(usuarioId: string): Promise<
   const salesAsFotografo = await prisma.citaVenta.findMany({
     where: {
       estado: 'COMPLETADA',
-      sesion: { fotografoId: usuarioId },
+      OR: [
+        { fotografoId: usuarioId },
+        { sesion: { fotografoId: usuarioId } },
+      ],
     },
     select: { id: true },
   })

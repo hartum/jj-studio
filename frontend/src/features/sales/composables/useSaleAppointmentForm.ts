@@ -26,6 +26,7 @@ export interface SaleAppointmentFormData {
   sesionId: number | null
   hotelId: number
   vendedorId: string | null
+  fotografoId?: string | null
   fechaHoraCita: string
   estado: EstadoCitaVenta
   numFotosVendidas: number | null
@@ -91,6 +92,7 @@ export function useSaleAppointmentForm() {
     sesionId: null,
     hotelId: 0,
     vendedorId: null,
+    fotografoId: null,
     fechaHoraCita: '',
     estado: 'PROGRAMADA',
     numFotosVendidas: null,
@@ -217,18 +219,63 @@ export function useSaleAppointmentForm() {
     }).length
   })
 
+  // Photographers list for assignment in hotel (Fotógrafo, Supervisor)
+  const photographers = computed(() => {
+    const selectedHotelId = Number(formData.value.hotelId)
+    if (!selectedHotelId) return []
+
+    return userStore.usersWithProfile
+      .filter((u) => {
+        if (u.status === 'Inactivo') return false
+        const perfilCode =
+          u.perfil?.code?.toUpperCase() ||
+          profileStore.getProfileById(u.profileId)?.code?.toUpperCase()
+        const allowedRoles = ['FOTOGRAFO', 'SUPERVISOR']
+        if (!allowedRoles.includes(perfilCode || '')) return false
+        const assignedHotelIds = u.hotelIds || []
+        return assignedHotelIds.some((hId) => Number(hId) === selectedHotelId)
+      })
+      .map((u) => {
+        const perfil = u.perfil || profileStore.getProfileById(u.profileId)
+        const perfilCode = perfil?.code?.toUpperCase() || ''
+        return {
+          id: u.id,
+          nombre: u.nombre,
+          apellidos: u.apellidos,
+          color: u.color,
+          imagen: u.imagen,
+          perfilNombre: perfil?.name || perfil?.code || t('sales.photographer'),
+          roleCode: perfilCode,
+        }
+      })
+  })
+
   // Photographer name and avatar for display
   const photographerUser = computed(() => {
-    if (!sessionInfo.value.fotografoId) return null
+    const fotoId = isDirectSale.value
+      ? (formData.value.fotografoId || sessionInfo.value.fotografoId)
+      : sessionInfo.value.fotografoId
+    if (!fotoId) return null
     return (
-      userStore.users.find((u) => String(u.id) === String(sessionInfo.value.fotografoId)) || null
+      userStore.users.find((u) => String(u.id) === String(fotoId)) || null
     )
   })
 
   const photographerName = computed(() => {
-    if (!sessionInfo.value.fotografoId) return t('sales.summary.unassigned')
+    const fotoId = isDirectSale.value
+      ? (formData.value.fotografoId || sessionInfo.value.fotografoId)
+      : sessionInfo.value.fotografoId
+    if (!fotoId) return t('sales.summary.unassigned')
     const user = photographerUser.value
     return user ? `${user.nombre} ${user.apellidos}` : t('sales.summary.unknown')
+  })
+
+  const selectedPhotographer = computed(() => {
+    const fotoId = isDirectSale.value
+      ? (formData.value.fotografoId || sessionInfo.value.fotografoId)
+      : sessionInfo.value.fotografoId
+    if (!fotoId) return null
+    return photographers.value.find((p) => String(p.id) === String(fotoId)) || null
   })
 
   // Sellers list for assignment (filtered by hotel: Agendador, Fotógrafo, and Supervisor)
@@ -716,6 +763,7 @@ export function useSaleAppointmentForm() {
           sesionId: existing.sesionId ?? null,
           hotelId: existing.hotelId,
           vendedorId: existing.vendedorId || null,
+          fotografoId: existing.fotografoId || null,
           fechaHoraCita: existing.fechaHoraCita,
           estado: existing.estado,
           numFotosVendidas: existing.numFotosVendidas ?? null,
@@ -835,6 +883,7 @@ export function useSaleAppointmentForm() {
       if (isEditing.value && citaId.value) {
         const payload: UpdateCitaVentaPayload = {
           vendedorId: formData.value.vendedorId || null,
+          fotografoId: isDirectSale.value ? (formData.value.fotografoId || null) : undefined,
           fechaHoraCita: formData.value.fechaHoraCita,
           estado: formData.value.estado,
           numFotosVendidas: formData.value.numFotosVendidas,
@@ -895,6 +944,8 @@ export function useSaleAppointmentForm() {
     userHotels,
     availableSessions,
     excludedSessionsCount,
+    photographers,
+    selectedPhotographer,
     photographerUser,
     photographerName,
     sellers,

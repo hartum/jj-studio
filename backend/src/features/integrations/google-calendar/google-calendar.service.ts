@@ -438,6 +438,9 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
       vendedor: {
         include: { colorAsignado: true },
       },
+      fotografo: {
+        include: { colorAsignado: true },
+      },
       sesion: {
         include: {
           fotografo: {
@@ -461,7 +464,7 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
   const hotelName = cita.hotel?.nombre || 'Hotel'
   const clienteNombre = decrypt(cita.sesion?.clienteNombre) || 'Cliente'
   const vendUser = decryptUser(cita.vendedor)
-  const fotoUser = decryptUser(cita.sesion?.fotografo)
+  const fotoUser = decryptUser(cita.fotografo || cita.sesion?.fotografo)
   const creadorUser = decryptUser(cita.sesion?.creador)
   const vendedorNombre = vendUser
     ? `${vendUser.nombre} ${vendUser.apellidos}`.trim()
@@ -482,7 +485,10 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
 
   // Color: Color del vendedor si tiene, o fotógrafo, o Gris ("8")
   const colorHex =
-    cita.vendedor?.colorAsignado?.color || cita.sesion?.fotografo?.colorAsignado?.color || null
+    cita.vendedor?.colorAsignado?.color ||
+    cita.fotografo?.colorAsignado?.color ||
+    cita.sesion?.fotografo?.colorAsignado?.color ||
+    null
   const colorId = colorHex ? mapHexToGoogleColorId(colorHex) : '8'
 
   const startDateTime = cita.fechaHoraCita
@@ -497,6 +503,7 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
   let description = isDirectSale
     ? `<b>[VENTA DIRECTA]</b>
 <b>HOTEL:</b> ${hotelName}
+<b>FOTÓGRAFO:</b> ${fotografoNombre}
 <b>VENDEDOR:</b> ${vendedorNombre}
 <b>TOTAL:</b> $${cita.totalVentaUsd || 0} USD
 <b>FOTOS VENDIDAS:</b> ${cita.numFotosVendidas || 0}`

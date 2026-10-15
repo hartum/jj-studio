@@ -35,6 +35,7 @@ export interface CitaVenta {
   clienteTelefono?: string | null
   numeroHabitacion?: string | null
   fotografoId?: string | null
+  fotografoNombre?: string | null
   numAdultos?: number
   numNinos?: number
   concepto?: string | null
@@ -61,6 +62,7 @@ export interface CreateCitaVentaPayload {
 export interface CreateVentaDirectaPayload {
   hotelId: number
   vendedorId: string
+  fotografoId?: string | null
   numFotosVendidas: number
   totalVentaUsd?: number | null
   modoCobro?: string | null
@@ -70,6 +72,7 @@ export interface CreateVentaDirectaPayload {
 
 export interface UpdateCitaVentaPayload {
   vendedorId?: string | null
+  fotografoId?: string | null
   fechaHoraCita?: string
   estado?: EstadoCitaVenta
   numFotosVendidas?: number | null

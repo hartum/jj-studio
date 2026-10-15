@@ -50,6 +50,7 @@ model Usuario {
   passwordResetTokens   PasswordResetToken[]
   plantillasModificadas PlantillaEmail[]            @relation("EditorPlantillas")
   auditLogs             AuditLog[]
+  citasComoFotografo    CitaVenta[]                 @relation("FotografoCitas")
 
   @@map("usuarios")
 }
@@ -189,6 +190,7 @@ model CitaVenta {
   sesionId         Int?       @unique @map("sesion_id")
   hotelId          Int        @map("hotel_id")
   vendedorId       String?    @map("vendedor_id")
+  fotografoId      String?    @map("fotografo_id")
   tipo             String     @default("CITA_VENTA")
   fechaHoraCita    DateTime   @map("fecha_hora_cita")
   estado           String     @default("PROGRAMADA")
@@ -205,6 +207,7 @@ model CitaVenta {
   sesion     SesionFotografica? @relation(fields: [sesionId], references: [id])
   hotel      Hotel              @relation(fields: [hotelId], references: [id])
   vendedor   Usuario?          @relation("VendedorCitas", fields: [vendedorId], references: [id])
+  fotografo  Usuario?          @relation("FotografoCitas", fields: [fotografoId], references: [id])
   comisiones Comision[]
   pagos      PagoCitaVenta[]
 

@@ -23,6 +23,8 @@ const {
   userHotels,
   sellers,
   selectedSeller,
+  photographers,
+  selectedPhotographer,
   modoCobroOptions,
   totalCalculado,
   canAddPago,
@@ -35,6 +37,7 @@ const {
 } = props.form
 
 const showSellersList = ref(false)
+const showPhotographersList = ref(false)
 
 function toggleSellersList() {
   showSellersList.value = !showSellersList.value
@@ -45,17 +48,32 @@ function selectSeller(sellerId: string) {
   showSellersList.value = false
 }
 
+function togglePhotographersList() {
+  showPhotographersList.value = !showPhotographersList.value
+}
+
+function selectPhotographer(photographerId: string) {
+  formData.value.fotografoId = photographerId
+  showPhotographersList.value = false
+}
+
 const isSellerPhotographer = computed(() => {
   if (!selectedSeller.value) return false
   return !!selectedSeller.value.color
 })
 
+const isPhotographerColored = computed(() => {
+  if (!selectedPhotographer.value) return false
+  return !!selectedPhotographer.value.color
+})
+
 // Dynamic step numbering based on whether Hotel selector is visible
 const stepHotel = computed(() => (userHotels.value.length > 1 ? 1 : null))
-const stepSeller = computed(() => (userHotels.value.length > 1 ? 2 : 1))
-const stepPhotos = computed(() => (userHotels.value.length > 1 ? 3 : 2))
-const stepPayments = computed(() => (userHotels.value.length > 1 ? 4 : 3))
-const stepNotes = computed(() => (userHotels.value.length > 1 ? 5 : 4))
+const stepPhotographer = computed(() => (userHotels.value.length > 1 ? 2 : 1))
+const stepSeller = computed(() => (userHotels.value.length > 1 ? 3 : 2))
+const stepPhotos = computed(() => (userHotels.value.length > 1 ? 4 : 3))
+const stepPayments = computed(() => (userHotels.value.length > 1 ? 5 : 4))
+const stepNotes = computed(() => (userHotels.value.length > 1 ? 6 : 5))
 
 function getRoleTagType(role?: string): 'success' | 'primary' | 'warning' | 'info' {
   switch (role?.toUpperCase()) {
@@ -114,7 +132,133 @@ function getRoleTagType(role?: string): 'success' | 'primary' | 'warning' | 'inf
         </div>
       </section>
 
-      <!-- 2 / 1. Vendedor -->
+      <!-- Fotógrafo -->
+      <section class="mobile-section-block">
+        <div class="mobile-card-section-label">
+          <span class="step-badge-num">{{ stepPhotographer }}</span>
+          <span>{{ t('sales.photographer') }}</span>
+        </div>
+
+        <div
+          class="mobile-seller-selector-card"
+          :class="{ 'is-seller-colored': isPhotographerColored }"
+          :style="
+            isPhotographerColored
+              ? { backgroundColor: getUserBgColor(selectedPhotographer?.color) || '#10b981' }
+              : {}
+          "
+        >
+          <div class="seller-card-main">
+            <div class="seller-avatar-circle">
+              <el-avatar
+                v-if="selectedPhotographer"
+                :src="selectedPhotographer.avatar || undefined"
+                :size="44"
+                :style="{
+                  backgroundColor: isPhotographerColored
+                    ? 'rgba(255, 255, 255, 0.25)'
+                    : getUserBgColor(selectedPhotographer.color),
+                  color: '#ffffff',
+                  fontWeight: '600',
+                  fontSize: '13px',
+                }"
+                :class="
+                  isPhotographerColored ? 'seller-header-avatar-colored' : 'seller-header-avatar'
+                "
+              >
+                {{ getUserInitials(selectedPhotographer.nombre) }}
+              </el-avatar>
+              <div v-else class="seller-default-circle">
+                <el-icon :size="22"><User /></el-icon>
+              </div>
+            </div>
+            <div class="seller-info-box">
+              <span
+                class="seller-title-label"
+                :class="{ 'text-white': isPhotographerColored }"
+              >
+                {{
+                  selectedPhotographer
+                    ? selectedPhotographer.nombre
+                    : t('sales.photographerPicker.selectPhotographer')
+                }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Barra toggle VER FOTÓGRAFOS -->
+          <div
+            class="seller-toggle-bar"
+            :class="{ 'is-open': showPhotographersList, 'is-selected-toggle': isPhotographerColored }"
+            role="button"
+            tabindex="0"
+            @click="togglePhotographersList"
+          >
+            <span class="toggle-text">
+              {{
+                showPhotographersList
+                  ? t('sales.photographerPicker.hidePhotographers')
+                  : t('sales.photographerPicker.viewPhotographers')
+              }}
+            </span>
+            <el-icon class="toggle-icon" :class="{ 'is-rotated': showPhotographersList }">
+              <ChevronDown :size="18" />
+            </el-icon>
+          </div>
+
+          <!-- Lista colapsable de fotógrafos -->
+          <el-collapse-transition>
+            <div v-if="showPhotographersList" class="seller-dropdown-container">
+              <div v-if="photographers.length === 0" class="seller-empty-state">
+                {{ t('sales.photographerPicker.noPhotographersInHotel') }}
+              </div>
+              <div v-else class="seller-dropdown-list">
+                <div
+                  v-for="photographer in photographers"
+                  :key="photographer.id"
+                  class="seller-pick-item"
+                  :class="{
+                    'is-selected': String(formData.fotografoId) === String(photographer.id),
+                  }"
+                  @click="selectPhotographer(photographer.id)"
+                >
+                  <div class="pick-item-left">
+                    <el-avatar
+                      :src="photographer.avatar || undefined"
+                      :size="36"
+                      :style="{
+                        backgroundColor: getUserBgColor(photographer.color),
+                        color: '#ffffff',
+                        fontWeight: '600',
+                        fontSize: '11px',
+                      }"
+                      class="pick-seller-avatar"
+                    >
+                      {{ getUserInitials(photographer.nombre) }}
+                    </el-avatar>
+
+                    <div class="pick-item-info">
+                      <div class="pick-item-client">{{ photographer.nombre }}</div>
+                      <div class="pick-item-meta">
+                        <el-tag
+                          size="small"
+                          :type="getRoleTagType(photographer.role)"
+                          effect="light"
+                          class="seller-role-tag"
+                        >
+                          {{ photographer.role }}
+                        </el-tag>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </el-collapse-transition>
+        </div>
+      </section>
+
+      <!-- Vendedor -->
       <section class="mobile-section-block">
         <div class="mobile-card-section-label">
           <span class="step-badge-num">{{ stepSeller }}</span>

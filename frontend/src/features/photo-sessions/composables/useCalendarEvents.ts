@@ -204,8 +204,8 @@ export function useCalendarEvents(
         }
       }
 
-      // Para venta directa, si no hay fotógrafo pero sí vendedor, el vendedor es quien aparece en el avatar del evento
-      const personId = isDirectSale ? (sale.vendedorId || fotografoId) : fotografoId
+      // Para venta directa, el fotógrafo es quien aparece prioritariamente en el avatar (o vendedor como fallback)
+      const personId = isDirectSale ? (sale.fotografoId || sale.vendedorId) : fotografoId
 
       let color = isDirectSale ? '#10b981' : '#94a3b8' // Esmeralda para venta directa, Gris para citas sin fotógrafo
       let fotografoPrimerNombre = ''

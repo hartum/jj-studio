@@ -524,7 +524,8 @@
     "saleAppointmentCommissionsNotice": "Las comisiones se liquidarán automáticamente al completar.",
     "addPaymentMethod": "Añadir otro método de cobro",
     "hotel": "Hotel",
-    "seller": "Vendedor / Fotógrafo",
+    "photographer": "Fotógrafo",
+    "seller": "Vendedor",
     "numPhotosSold": "Nº de fotos vendidas",
     "paymentBreakdown": "Desglose de Cobros",
     "totalSale": "TOTAL COBRADO",
@@ -544,6 +545,8 @@
       "date": "Fecha de la venta",
       "time": "Hora de la venta",
       "stepTime": "SELECCIONA HORARIO",
+      "photographer": "Fotógrafo",
+      "photographerUpper": "FOTÓGRAFO",
       "seller": "Vendedor",
       "sellerUpper": "VENDEDOR",
       "sale": "Venta",
@@ -576,6 +579,12 @@
       "statusAbsent": "Ausente{motivo}",
       "statusOccupied": "Ocupado{motivo}",
       "statusAssigned": "Seleccionado"
+    },
+    "photographerPicker": {
+      "selectPhotographer": "Selecciona fotógrafo",
+      "hidePhotographers": "OCULTAR FOTÓGRAFOS",
+      "viewPhotographers": "VER FOTÓGRAFOS",
+      "noPhotographersInHotel": "No hay fotógrafos asignados a este hotel."
     },
     "form": {
       "photosSold": "Fotos Vendidas",
