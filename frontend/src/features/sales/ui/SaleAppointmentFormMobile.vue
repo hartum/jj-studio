@@ -36,7 +36,6 @@ const {
   availableSessions,
   excludedSessionsCount,
   photographers,
-  selectedPhotographer,
   photographerUser,
   photographerName,
   sellers,
@@ -321,10 +320,7 @@ const isSellerPhotographer = computed(() => {
           >
             {{ $t('sales.photographer') }}
           </span>
-          <span
-            class="session-title-label"
-            :class="{ 'text-white': !!formData.fotografoId }"
-          >
+          <span class="session-title-label" :class="{ 'text-white': !!formData.fotografoId }">
             {{ photographerName }}
           </span>
         </div>
@@ -510,8 +506,8 @@ const isSellerPhotographer = computed(() => {
         <span class="toggle-text">
           {{
             showPhotographersList
-              ? ($t('sales.photographerPicker.hidePhotographers') || 'OCULTAR FOTÓGRAFOS')
-              : ($t('sales.photographerPicker.viewPhotographers') || 'VER FOTÓGRAFOS')
+              ? $t('sales.photographerPicker.hidePhotographers') || 'OCULTAR FOTÓGRAFOS'
+              : $t('sales.photographerPicker.viewPhotographers') || 'VER FOTÓGRAFOS'
           }}
         </span>
         <el-icon class="toggle-icon" :class="{ 'is-rotated': showPhotographersList }">
@@ -523,7 +519,10 @@ const isSellerPhotographer = computed(() => {
       <el-collapse-transition v-if="isDirectSale">
         <div v-if="showPhotographersList" class="session-dropdown-container">
           <div v-if="photographers.length === 0" class="session-empty-state">
-            {{ $t('sales.photographerPicker.noPhotographersInHotel') || 'No hay fotógrafos en este hotel.' }}
+            {{
+              $t('sales.photographerPicker.noPhotographersInHotel') ||
+              'No hay fotógrafos en este hotel.'
+            }}
           </div>
           <div v-else class="session-dropdown-list">
             <div
@@ -531,7 +530,10 @@ const isSellerPhotographer = computed(() => {
               :key="photo.id"
               class="session-pick-item"
               :class="{ 'is-selected': String(formData.fotografoId) === String(photo.id) }"
-              @click="formData.fotografoId = String(photo.id); showPhotographersList = false"
+              @click="
+                formData.fotografoId = String(photo.id)
+                showPhotographersList = false
+              "
             >
               <div class="pick-item-left">
                 <el-avatar
@@ -550,7 +552,9 @@ const isSellerPhotographer = computed(() => {
                 <div class="pick-item-info">
                   <div class="pick-item-client">{{ photo.nombre }} {{ photo.apellidos }}</div>
                   <div class="pick-item-meta">
-                    <el-tag size="small" type="success" effect="light">{{ photo.perfilNombre }}</el-tag>
+                    <el-tag size="small" type="success" effect="light">
+                      {{ photo.perfilNombre }}
+                    </el-tag>
                   </div>
                 </div>
               </div>
