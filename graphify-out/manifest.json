@@ -560,8 +560,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue": {
-    "mtime": 1792028108.0109088,
-    "ast_hash": "5edbce10f6a062631a281c67681ebfb1",
+    "mtime": 1792451526.5024993,
+    "ast_hash": "73f78e990f7effeda26b684e9b61cd17",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormView.vue": {
