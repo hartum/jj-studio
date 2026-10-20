@@ -1188,8 +1188,8 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 
 .schedule-main-grid {
   display: grid;
-  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
-  gap: 1.75rem;
+  grid-template-columns: minmax(300px, 340px) minmax(0, 1fr);
+  gap: 1.5rem;
   align-items: start;
 }
 
@@ -1201,6 +1201,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  box-sizing: border-box;
 }
 
 .calendar-panel-box {
@@ -1214,16 +1215,38 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 }
 
 .inline-calendar-picker :deep(.el-picker-panel) {
-  border: none;
-  box-shadow: none;
-  background: transparent;
-  width: 100%;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+
+.inline-calendar-picker :deep(.el-picker-panel__body-wrapper),
+.inline-calendar-picker :deep(.el-picker-panel__body),
+.inline-calendar-picker :deep(.el-picker-panel__content) {
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+.inline-calendar-picker :deep(.el-date-picker__header) {
+  margin: 0 0 12px 0 !important;
+  width: 100% !important;
+}
+
+.inline-calendar-picker :deep(.el-date-table) {
+  width: 100% !important;
+  margin: 0 auto !important;
 }
 
 .schedule-details-col {
+  container-type: inline-size;
+  container-name: schedule-details;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-width: 0;
 }
 
 .schedule-section-block {
@@ -1260,8 +1283,22 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 .time-slots-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 0.65rem 0.45rem;
+  gap: 0.5rem 0.35rem;
   padding-top: 0.35rem;
+  min-width: 0;
+  width: 100%;
+}
+
+@container schedule-details (max-width: 380px) {
+  .time-slots-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@container schedule-details (max-width: 250px) {
+  .time-slots-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .minute-slots-divider {
@@ -1276,15 +1313,25 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 .minute-slots-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 0.65rem 0.45rem;
+  gap: 0.5rem 0.35rem;
+  min-width: 0;
+  width: 100%;
+}
+
+@container schedule-details (max-width: 260px) {
+  .minute-slots-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .minute-slot-btn {
   font-weight: 600;
+  padding: 0.45rem 0.2rem;
 }
 
 .time-slot-badge-wrapper {
   width: 100%;
+  min-width: 0;
   display: block;
 }
 
@@ -1298,9 +1345,10 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 
 .time-slot-btn {
   width: 100%;
+  min-width: 0;
   box-sizing: border-box;
-  padding: 0.5rem 0.4rem;
-  font-size: 0.82rem;
+  padding: 0.45rem 0.25rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--heading-color, #0f172a);
   background: var(--el-fill-color-light, #f8fafc);
@@ -1309,6 +1357,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
   cursor: pointer;
   transition: all 0.15s ease;
   text-align: center;
+  white-space: nowrap;
 }
 
 .time-slot-btn--partial {
@@ -2089,5 +2138,20 @@ html.dark .motivo-grid-btn.is-active {
   background-color: var(--el-color-primary, #3b82f6) !important;
   border-color: var(--el-color-primary, #3b82f6) !important;
   color: #ffffff !important;
+}
+
+@media (max-width: 1366px) {
+  .schedule-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .session-form-layout {
+    grid-template-columns: 1fr;
+  }
+  .form-sidebar-col {
+    position: static;
+  }
 }
 </style>

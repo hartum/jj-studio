@@ -531,8 +531,8 @@ const isSellerPhotographer = computed(() => {
               class="session-pick-item"
               :class="{ 'is-selected': String(formData.fotografoId) === String(photo.id) }"
               @click="
-                formData.fotografoId = String(photo.id)
-                showPhotographersList = false
+                formData.fotografoId = String(photo.id);
+                showPhotographersList = false;
               "
             >
               <div class="pick-item-left">

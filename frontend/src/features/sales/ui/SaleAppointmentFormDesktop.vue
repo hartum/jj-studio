@@ -271,7 +271,9 @@ const formattedSelectedSaleDateTime = computed(() => {
       <div class="form-main-col">
         <!-- Read-only lock banner -->
         <el-alert v-if="isReadOnly" type="warning" :closable="false" show-icon class="lock-banner">
-          {{ isLockedByPhotographer ? $t('sales.readOnlyAssignedNotice') : $t('sales.readOnlyNotice') }}
+          {{
+            isLockedByPhotographer ? $t('sales.readOnlyAssignedNotice') : $t('sales.readOnlyNotice')
+          }}
         </el-alert>
 
         <!-- Conflict banner -->
@@ -475,7 +477,9 @@ const formattedSelectedSaleDateTime = computed(() => {
                   <div class="total-kpi-card">
                     <div class="kpi-label-box">
                       <span class="kpi-label">{{ $t('sales.totalSale') }}</span>
-                      <el-tag size="small" type="success" effect="plain" class="currency-tag">USD</el-tag>
+                      <el-tag size="small" type="success" effect="plain" class="currency-tag">
+                        USD
+                      </el-tag>
                     </div>
                     <div class="kpi-value-row">
                       <span class="kpi-currency-symbol">$</span>
@@ -579,10 +583,7 @@ const formattedSelectedSaleDateTime = computed(() => {
               >
                 {{ $t('sales.photographer') }}
               </span>
-              <span
-                class="session-title-label"
-                :class="{ 'text-white': !!formData.fotografoId }"
-              >
+              <span class="session-title-label" :class="{ 'text-white': !!formData.fotografoId }">
                 {{ photographerName }}
               </span>
             </div>
@@ -769,7 +770,10 @@ const formattedSelectedSaleDateTime = computed(() => {
           <div
             v-if="isDirectSale && !isReadOnly"
             class="session-toggle-bar"
-            :class="{ 'is-open': showPhotographersList, 'is-selected-toggle': !!formData.fotografoId }"
+            :class="{
+              'is-open': showPhotographersList,
+              'is-selected-toggle': !!formData.fotografoId,
+            }"
             role="button"
             tabindex="0"
             @click="togglePhotographersList"
@@ -777,8 +781,8 @@ const formattedSelectedSaleDateTime = computed(() => {
             <span class="toggle-text">
               {{
                 showPhotographersList
-                  ? ($t('sales.photographerPicker.hidePhotographers') || 'OCULTAR FOTÓGRAFOS')
-                  : ($t('sales.photographerPicker.viewPhotographers') || 'VER FOTÓGRAFOS')
+                  ? $t('sales.photographerPicker.hidePhotographers') || 'OCULTAR FOTÓGRAFOS'
+                  : $t('sales.photographerPicker.viewPhotographers') || 'VER FOTÓGRAFOS'
               }}
             </span>
             <el-icon class="toggle-icon" :class="{ 'is-rotated': showPhotographersList }">
@@ -790,7 +794,10 @@ const formattedSelectedSaleDateTime = computed(() => {
           <el-collapse-transition v-if="isDirectSale">
             <div v-if="showPhotographersList" class="session-dropdown-container">
               <div v-if="photographers.length === 0" class="session-empty-state">
-                {{ $t('sales.photographerPicker.noPhotographersInHotel') || 'No hay fotógrafos en este hotel.' }}
+                {{
+                  $t('sales.photographerPicker.noPhotographersInHotel') ||
+                  'No hay fotógrafos en este hotel.'
+                }}
               </div>
               <div v-else class="session-dropdown-list">
                 <div
@@ -798,7 +805,10 @@ const formattedSelectedSaleDateTime = computed(() => {
                   :key="photo.id"
                   class="session-pick-item"
                   :class="{ 'is-selected': String(formData.fotografoId) === String(photo.id) }"
-                  @click="formData.fotografoId = String(photo.id); showPhotographersList = false"
+                  @click="
+                    formData.fotografoId = String(photo.id);
+                    showPhotographersList = false;
+                  "
                 >
                   <div class="pick-item-left">
                     <el-avatar
@@ -817,7 +827,9 @@ const formattedSelectedSaleDateTime = computed(() => {
                     <div class="pick-item-info">
                       <div class="pick-item-client">{{ photo.nombre }} {{ photo.apellidos }}</div>
                       <div class="pick-item-meta">
-                        <el-tag size="small" type="success" effect="light">{{ photo.perfilNombre }}</el-tag>
+                        <el-tag size="small" type="success" effect="light">
+                          {{ photo.perfilNombre }}
+                        </el-tag>
                       </div>
                     </div>
                   </div>
@@ -1326,8 +1338,8 @@ const formattedSelectedSaleDateTime = computed(() => {
 
 .schedule-main-grid {
   display: grid;
-  grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
-  gap: 1.75rem;
+  grid-template-columns: minmax(300px, 340px) minmax(0, 1fr);
+  gap: 1.5rem;
 }
 
 .schedule-calendar-col {
@@ -1341,9 +1353,12 @@ const formattedSelectedSaleDateTime = computed(() => {
 }
 
 .schedule-details-col {
+  container-type: inline-size;
+  container-name: schedule-details;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  min-width: 0;
 }
 
 .schedule-section-block {
@@ -1385,8 +1400,22 @@ const formattedSelectedSaleDateTime = computed(() => {
 .time-slots-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 0.65rem 0.45rem;
+  gap: 0.5rem 0.35rem;
   padding-top: 0.35rem;
+  min-width: 0;
+  width: 100%;
+}
+
+@container schedule-details (max-width: 380px) {
+  .time-slots-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@container schedule-details (max-width: 250px) {
+  .time-slots-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .minute-slots-divider {
@@ -1401,15 +1430,25 @@ const formattedSelectedSaleDateTime = computed(() => {
 .minute-slots-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 0.65rem 0.45rem;
+  gap: 0.5rem 0.35rem;
+  min-width: 0;
+  width: 100%;
+}
+
+@container schedule-details (max-width: 260px) {
+  .minute-slots-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .minute-slot-btn {
   font-weight: 600;
+  padding: 0.45rem 0.2rem;
 }
 
 .time-slot-badge-wrapper {
   width: 100%;
+  min-width: 0;
   display: block;
 }
 
@@ -1423,9 +1462,10 @@ const formattedSelectedSaleDateTime = computed(() => {
 
 .time-slot-btn {
   width: 100%;
+  min-width: 0;
   box-sizing: border-box;
-  padding: 0.5rem 0.4rem;
-  font-size: 0.82rem;
+  padding: 0.45rem 0.25rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--heading-color, #0f172a);
   background: var(--el-fill-color-light, #f8fafc);
@@ -1434,6 +1474,7 @@ const formattedSelectedSaleDateTime = computed(() => {
   cursor: pointer;
   transition: all 0.15s ease;
   text-align: center;
+  white-space: nowrap;
 }
 
 .time-slot-btn--partial {
@@ -1486,6 +1527,22 @@ const formattedSelectedSaleDateTime = computed(() => {
   border: 1px solid var(--toolbar-border, #e2e8f0);
   border-radius: 12px;
   background: var(--toolbar-bg, #ffffff);
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.inline-calendar-picker :deep(.el-picker-panel__body-wrapper),
+.inline-calendar-picker :deep(.el-picker-panel__body),
+.inline-calendar-picker :deep(.el-picker-panel__content) {
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 8px 8px 8px !important;
+  box-sizing: border-box !important;
+}
+
+.inline-calendar-picker :deep(.el-date-table) {
+  width: 100% !important;
+  margin: 0 auto !important;
 }
 
 /* Ocultar botones de navegación anual (« y ») para dejar únicamente flechas simples (mes anterior/siguiente) */
@@ -2176,7 +2233,13 @@ html.dark .status-grid-btn:hover:not(:disabled):not(.is-active) {
   color: #ffffff;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1366px) {
+  .schedule-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
   .sale-form-layout {
     grid-template-columns: 1fr;
   }
