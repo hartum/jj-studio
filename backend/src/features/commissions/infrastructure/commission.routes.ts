@@ -469,6 +469,11 @@ export async function commissionRoutes(fastify: FastifyInstance) {
           decrypt(c.citaVenta?.sesion?.clienteNombre) ||
           (c.citaVenta?.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : ''),
         numFotosVendidas: c.citaVenta?.numFotosVendidas || null,
+        totalVentaUsd: c.citaVenta?.totalVentaUsd ?? c.baseCalculoUsd,
+        impuestoMontoUsd: Number(
+          Math.max(0, (c.citaVenta?.totalVentaUsd ?? c.baseCalculoUsd) - c.baseCalculoUsd).toFixed(2),
+        ),
+        numeroMiscelaneo: c.citaVenta?.numeroMiscelaneo || null,
         createdAt: c.createdAt.toISOString(),
       }))
 

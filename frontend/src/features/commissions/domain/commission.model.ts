@@ -44,7 +44,9 @@ export interface Comision {
   estado: 'PENDIENTE' | 'APROBADA' | 'PAGADA' | string
   fechaVenta: string
   clienteNombre?: string
-  numFotosVendidas?: number | null
+  totalVentaUsd?: number
+  impuestoMontoUsd?: number
+  numeroMiscelaneo?: string | null
   createdAt?: string
 }
 

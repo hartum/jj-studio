@@ -293,7 +293,19 @@
       "salaried": "Asalariado",
       "seller": "Vendedor",
       "photographerRole": "Fotógrafo",
-      "supervisorRole": "Supervisor"
+      "supervisorRole": "Supervisor",
+      "exchangeRate": "Tipo de cambio (USD → MXN)",
+      "grossSales": "Ventas Brutas",
+      "taxWithholding": "Impuesto / Ret.",
+      "photographerCommission": "Comisión Foto",
+      "sellerCommission": "Comisión Venta",
+      "otherCommission": "Otras Comis.",
+      "totalCommissionsUsd": "Total Comisiones (USD)",
+      "totalToPayMxn": "Pesos a Pagar (MXN)",
+      "saleDetails": "Detalle de Ventas",
+      "bonusAchieved": "Bono",
+      "voucherFolio": "Folio / Misc.",
+      "hotels": "Hoteles"
     },
     "trafficLightLabels": {
       "noGoal": "Meta no definida",

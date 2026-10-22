@@ -293,7 +293,19 @@
       "salaried": "Salaried",
       "seller": "Seller",
       "photographerRole": "Photographer",
-      "supervisorRole": "Supervisor"
+      "supervisorRole": "Supervisor",
+      "exchangeRate": "Exchange Rate (USD → MXN)",
+      "grossSales": "Gross Sales",
+      "taxWithholding": "Tax / Retention",
+      "photographerCommission": "Photo Comm.",
+      "sellerCommission": "Sales Comm.",
+      "otherCommission": "Other Comm.",
+      "totalCommissionsUsd": "Total Comm. (USD)",
+      "totalToPayMxn": "Total to Pay (MXN)",
+      "saleDetails": "Sales Breakdown",
+      "bonusAchieved": "Bonus",
+      "voucherFolio": "Folio / Misc.",
+      "hotels": "Hotels"
     },
     "trafficLightLabels": {
       "noGoal": "Goal not set",
