@@ -735,7 +735,6 @@
       "noAssignedAreas": "Sin áreas asignadas",
       "selectAreasPlaceholder": "Selecciona una o varias áreas",
       "assignedToOtherManager": "(Asignada a otro gerente)",
-      "assignedToOtherAccountant": "(Asignada a otro contable)",
       "assignedHotels": "Hoteles asignados",
       "assignedHotelsHint": "Indica los hoteles sobre los que este {role} podrá gestionar u operar.",
       "roleSupervisor": "supervisor",

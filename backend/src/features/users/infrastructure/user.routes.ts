@@ -476,10 +476,7 @@ export async function userRoutes(fastify: FastifyInstance) {
         where: { id: Number(body.profileId) },
       })
 
-      if (
-        (targetRole?.codigo === 'GERENTE' || targetRole?.codigo === 'CONTABLE') &&
-        areaIds.length > 0
-      ) {
+      if (targetRole?.codigo === 'GERENTE' && areaIds.length > 0) {
         const conflict = await prisma.usuarioArea.findFirst({
           where: {
             areaId: { in: areaIds },
@@ -492,9 +489,8 @@ export async function userRoutes(fastify: FastifyInstance) {
         })
         if (conflict) {
           const conflictUser = decryptUser(conflict.usuario)
-          const roleLabel = targetRole.codigo === 'GERENTE' ? 'al gerente' : 'al contable'
           return reply.status(400).send({
-            error: `El área "${conflict.area.nombre}" ya está asignada ${roleLabel} ${conflictUser?.nombre} ${conflictUser?.apellidos}`,
+            error: `El área "${conflict.area.nombre}" ya está asignada al gerente ${conflictUser?.nombre} ${conflictUser?.apellidos}`,
           })
         }
       }
@@ -689,10 +685,7 @@ export async function userRoutes(fastify: FastifyInstance) {
 
       if (body.areaIds !== undefined) {
         const newAreaIds = Array.isArray(body.areaIds) ? body.areaIds.map(Number) : []
-        if (
-          (targetRole?.codigo === 'GERENTE' || targetRole?.codigo === 'CONTABLE') &&
-          newAreaIds.length > 0
-        ) {
+        if (targetRole?.codigo === 'GERENTE' && newAreaIds.length > 0) {
           const conflict = await prisma.usuarioArea.findFirst({
             where: {
               areaId: { in: newAreaIds },
@@ -706,9 +699,8 @@ export async function userRoutes(fastify: FastifyInstance) {
           })
           if (conflict) {
             const conflictUser = decryptUser(conflict.usuario)
-            const roleLabel = targetRole.codigo === 'GERENTE' ? 'al gerente' : 'al contable'
             return reply.status(400).send({
-              error: `El área "${conflict.area.nombre}" ya está asignada ${roleLabel} ${conflictUser?.nombre} ${conflictUser?.apellidos}`,
+              error: `El área "${conflict.area.nombre}" ya está asignada al gerente ${conflictUser?.nombre} ${conflictUser?.apellidos}`,
             })
           }
         }

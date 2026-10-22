@@ -204,9 +204,6 @@ const assignedAreaIdsByOtherRoleUsers = computed<Set<number>>(() => {
   if (selectedRoleCode.value === 'GERENTE') {
     return getAssignedIdsByOtherUsers('GERENTE', 'areaIds')
   }
-  if (selectedRoleCode.value === 'CONTABLE') {
-    return getAssignedIdsByOtherUsers('CONTABLE', 'areaIds')
-  }
   return new Set()
 })
 
@@ -684,11 +681,7 @@ async function handleSave() {
                           v-if="assignedAreaIdsByOtherRoleUsers.has(area.id)"
                           class="disabled-label"
                         >
-                          {{
-                            isGerente
-                              ? $t('users.form.assignedToOtherManager')
-                              : $t('users.form.assignedToOtherAccountant')
-                          }}
+                          {{ $t('users.form.assignedToOtherManager') }}
                         </small>
                       </div>
                     </el-option>

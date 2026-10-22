@@ -735,7 +735,6 @@
       "noAssignedAreas": "No assigned areas",
       "selectAreasPlaceholder": "Select one or more areas",
       "assignedToOtherManager": "(Assigned to another manager)",
-      "assignedToOtherAccountant": "(Assigned to another accountant)",
       "assignedHotels": "Assigned Hotels",
       "assignedHotelsHint": "Indicate the hotels that this {role} will be able to manage or operate.",
       "roleSupervisor": "supervisor",
