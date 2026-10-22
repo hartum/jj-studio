@@ -170,8 +170,8 @@
     "semantic_hash": "8b7fbbfd3c080a1fc2affb721c830dfc"
   },
   "backend/src/features/sales/infrastructure/sale.routes.ts": {
-    "mtime": 1792025786.0367367,
-    "ast_hash": "916f9bfbafe1022e2d3ff7ad6ac681a3",
+    "mtime": 1792688914.4315658,
+    "ast_hash": "849311f5046933078cd734d86044bc5c",
     "semantic_hash": ""
   },
   "backend/src/features/users/infrastructure/calendario-laboral.routes.ts": {
@@ -540,13 +540,13 @@
     "semantic_hash": "16440f1ecb1ffdb79be1ccf3070cfcde"
   },
   "frontend/src/features/sales/composables/useSaleAppointmentForm.ts": {
-    "mtime": 1792026984.6434953,
-    "ast_hash": "76d5eb39fd8081b27b9df25e16a208db",
+    "mtime": 1792688849.728682,
+    "ast_hash": "b2f36b2ccd3e7394816d69e8ce2c277a",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/domain/sale.model.ts": {
-    "mtime": 1792025878.0697997,
-    "ast_hash": "15c3c24254d1dd674a1ee037952ed821",
+    "mtime": 1792687370.923362,
+    "ast_hash": "649ef83a67d04acc355d15d51b891d99",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/stores/sale.store.ts": {
@@ -555,13 +555,13 @@
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue": {
-    "mtime": 1792461626.1152701,
-    "ast_hash": "63f7620c8926b1f220f5142fd34392b7",
+    "mtime": 1792689261.4097288,
+    "ast_hash": "04a1a53ea9fc73cf37ef04a423fbb615",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue": {
-    "mtime": 1792452985.3478959,
-    "ast_hash": "16a1906d19f4acf891820093f1527b5a",
+    "mtime": 1792688706.658166,
+    "ast_hash": "4f236b4aa2865fb229215db6b7490061",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormView.vue": {
@@ -610,8 +610,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuarioFormView.vue": {
-    "mtime": 1792680681.9286897,
-    "ast_hash": "4248791f7d38b64092d70ff699dbbee3",
+    "mtime": 1792685327.6943865,
+    "ast_hash": "196ef600ac9d16c56b800fab7e1ffa1e",
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuariosView.vue": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792684509.2823625,
-    "ast_hash": "4606d4ccce58aa8370b591a4386c4941",
+    "mtime": 1792688674.0507045,
+    "ast_hash": "a9d26542ee7bcb3d03546839ee1f2d59",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792684496.237618,
-    "ast_hash": "d0e3233d7ce5b7d27d2c4ae9cfe85d13",
+    "mtime": 1792688648.6411994,
+    "ast_hash": "b91574ebb343646ea4ddb4df980766ed",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1050,18 +1050,18 @@
     "semantic_hash": ""
   },
   "frontend/src/features/sales/composables/useDirectSaleForm.ts": {
-    "mtime": 1792025992.950043,
-    "ast_hash": "b67f7428285ab34e852e51aa7670a50b",
+    "mtime": 1792688814.9545581,
+    "ast_hash": "06aec65b3dbf58fb10865d3ec59e1c38",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/DirectSaleFormDesktop.vue": {
-    "mtime": 1792028061.0780091,
-    "ast_hash": "16ed6cc37373c70ab3c4848cbcd5d38b",
+    "mtime": 1792688730.0016367,
+    "ast_hash": "ce3176ed74a8de4f6bfd8261b8d2ae84",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/DirectSaleFormMobile.vue": {
-    "mtime": 1792028077.4135325,
-    "ast_hash": "0df6787fe7f1fd903625f6d7742470e7",
+    "mtime": 1792688748.177521,
+    "ast_hash": "3a4fdf7b604b6dfde88c8c556c65f00a",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/DirectSaleFormView.vue": {
