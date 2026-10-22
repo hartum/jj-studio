@@ -390,8 +390,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
-    "mtime": 1792707048.1901383,
-    "ast_hash": "e143d7dca0d609bcc01b24eed10c62e4",
+    "mtime": 1792707530.1629977,
+    "ast_hash": "ba29ec9483b22c0c3402c05d7c6ec19c",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
@@ -1072,6 +1072,16 @@
   "frontend/src/assets/icono_venta_directa.png": {
     "mtime": 1791024433.2821267,
     "ast_hash": "4b618b77153c2f9ce288516c28278daf",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
+    "mtime": 1792707582.6311424,
+    "ast_hash": "d31e44c7243157a56b4fb772a6ee1294",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {
+    "mtime": 1792707571.1945417,
+    "ast_hash": "36d6f01e0e24195829c74172a27c94e2",
     "semantic_hash": ""
   }
 }

@@ -110,8 +110,8 @@
     "semantic_hash": "bc40081e430bbca34e5564d307c98855"
   },
   "backend/src/features/goals/infrastructure/goal.routes.ts": {
-    "mtime": 1792025645.8743713,
-    "ast_hash": "fbb3f1f845c2e7c8b2ae99d199f3c751",
+    "mtime": 1792708371.998723,
+    "ast_hash": "243a6bffa90387b263a39bfef8a2f967",
     "semantic_hash": ""
   },
   "backend/src/features/hotels/infrastructure/hotel.routes.ts": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792704020.5144486,
-    "ast_hash": "a0369517c30a31e8521b5589c9a73724",
+    "mtime": 1792708396.1895506,
+    "ast_hash": "f06a591f761835ee1a2c9ce62c997238",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792704007.4831874,
-    "ast_hash": "23278c4480759dc43cf98068658791a6",
+    "mtime": 1792708383.8914762,
+    "ast_hash": "2b36ee522f04c6d85a890b91fd4c7765",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1080,8 +1080,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {
-    "mtime": 1792707571.1945417,
-    "ast_hash": "36d6f01e0e24195829c74172a27c94e2",
+    "mtime": 1792708837.0032055,
+    "ast_hash": "6787bacd425882243c2f460e3365f121",
     "semantic_hash": ""
   }
 }
