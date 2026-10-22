@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1792696159.83459,
-    "ast_hash": "00c0fbcc872fcdff258d6236e2d369e1",
+    "mtime": 1792704041.4139411,
+    "ast_hash": "ad8b650f83bc2da65da1f8bb610ab651",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/InicioView.vue": {
@@ -390,8 +390,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
-    "mtime": 1792696314.7956269,
-    "ast_hash": "d76a4657a2c66ba6c723c36809f95878",
+    "mtime": 1792704073.9920828,
+    "ast_hash": "cd0ffeed3c345349e7bd4875a4b793ab",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792696189.2486978,
-    "ast_hash": "61ed2ba355370bd10b1f6c43e474d076",
+    "mtime": 1792704020.5144486,
+    "ast_hash": "a0369517c30a31e8521b5589c9a73724",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792696178.555296,
-    "ast_hash": "ab40d586a9b39776b517e448714b2f23",
+    "mtime": 1792704007.4831874,
+    "ast_hash": "23278c4480759dc43cf98068658791a6",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
