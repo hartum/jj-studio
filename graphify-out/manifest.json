@@ -390,8 +390,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
-    "mtime": 1792706132.148775,
-    "ast_hash": "cd32dda53f50ed9285a9fd2e9087ee21",
+    "mtime": 1792706384.3068354,
+    "ast_hash": "fe37121b9b7506f42e2869ad4e567bdb",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
