@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { useProfileStore } from '@/features/users/stores/profile.store'
 import { useCountryStore } from '@/features/countries/stores/country.store'
-import type { UserStatus, UserInput } from '@/features/users/domain/user.model'
+import type { UserStatus, UserInput, UserWithProfile } from '@/features/users/domain/user.model'
 import {
   getUserInitials,
   getUserBgColor,
@@ -34,6 +34,7 @@ const isEditing = computed(() => !!userId.value)
 const isSelfEditing = computed(() => isEditing.value && userId.value === currentUser.value?.id)
 
 const isSaving = ref(false)
+const isLoadingData = ref(isEditing.value)
 const activeTab = ref<'datos' | 'calendario'>('datos')
 
 // Ref para cropper dialog y file input
@@ -272,54 +273,74 @@ const isActivo = computed({
   },
 })
 
+function populateForm(existing: UserWithProfile) {
+  formData.value = {
+    nombre: existing.nombre,
+    apellidos: existing.apellidos,
+    email: existing.email,
+    password: '',
+    telefono: existing.telefono,
+    profileId: existing.profileId,
+    status: existing.status,
+    tipoContrato: existing.tipoContrato || 'ASALARIADO',
+    fechaContratacion: existing.fechaContratacion || null,
+    imagen: existing.imagen || null,
+    color: existing.color || '#3b82f6',
+    areaIds: existing.areaIds ? [...existing.areaIds] : [],
+    hotelIds: existing.hotelIds ? [...existing.hotelIds] : [],
+  }
+}
+
 onMounted(async () => {
-  await Promise.all([
-    profileStore.fetchProfiles(),
-    userStore.fetchUsers(),
-    countryStore.fetchCountries(),
-  ])
+  if (isEditing.value) {
+    isLoadingData.value = true
+  }
 
-  if (isEditing.value && userId.value) {
-    const existing = userStore.usersWithProfile.find((u) => u.id === userId.value)
-    if (existing) {
-      const targetRoleCode = existing.perfil?.code
-      if (
-        !canEditUser(
-          currentUser.value?.roleCode,
-          targetRoleCode,
-          currentUser.value?.id,
-          existing.id,
-        )
-      ) {
-        ElMessage.error(t('users.toasts.noPermissionEdit'))
-        router.push('/usuarios')
-        return
+  try {
+    // Si los usuarios ya estaban precargados en memoria, poblamos inmediatamente
+    if (isEditing.value && userId.value && userStore.usersWithProfile.length > 0) {
+      const cached = userStore.usersWithProfile.find((u) => u.id === userId.value)
+      if (cached) {
+        populateForm(cached)
       }
+    }
 
-      formData.value = {
-        nombre: existing.nombre,
-        apellidos: existing.apellidos,
-        email: existing.email,
-        password: '',
-        telefono: existing.telefono,
-        profileId: existing.profileId,
-        status: existing.status,
-        tipoContrato: existing.tipoContrato || 'ASALARIADO',
-        fechaContratacion: existing.fechaContratacion || null,
-        imagen: existing.imagen || null,
-        color: existing.color || '#3b82f6',
-        areaIds: existing.areaIds ? [...existing.areaIds] : [],
-        hotelIds: existing.hotelIds ? [...existing.hotelIds] : [],
+    await Promise.all([
+      profileStore.fetchProfiles(),
+      userStore.fetchUsers(),
+      countryStore.fetchCountries(),
+    ])
+
+    if (isEditing.value && userId.value) {
+      const existing = userStore.usersWithProfile.find((u) => u.id === userId.value)
+      if (existing) {
+        const targetRoleCode = existing.perfil?.code
+        if (
+          !canEditUser(
+            currentUser.value?.roleCode,
+            targetRoleCode,
+            currentUser.value?.id,
+            existing.id,
+          )
+        ) {
+          ElMessage.error(t('users.toasts.noPermissionEdit'))
+          router.push('/usuarios')
+          return
+        }
+
+        populateForm(existing)
+      } else {
+        ElMessage.error(t('users.toasts.userNotFound'))
+        router.push('/usuarios')
       }
     } else {
-      ElMessage.error(t('users.toasts.userNotFound'))
-      router.push('/usuarios')
+      const defaultProfile = assignableProfiles.value[0]
+      if (defaultProfile) {
+        formData.value.profileId = defaultProfile.id
+      }
     }
-  } else {
-    const defaultProfile = assignableProfiles.value[0]
-    if (defaultProfile) {
-      formData.value.profileId = defaultProfile.id
-    }
+  } finally {
+    isLoadingData.value = false
   }
 })
 
@@ -437,6 +458,7 @@ async function handleSave() {
 
     <!-- Formulario alineado según documentación oficial de Element Plus -->
     <el-form
+      v-loading="isLoadingData"
       :model="formData"
       label-width="150px"
       label-position="left"
@@ -895,6 +917,7 @@ async function handleSave() {
 
 .user-form {
   margin-top: 1rem;
+  min-height: 420px;
 }
 
 .avatar-field-container {
