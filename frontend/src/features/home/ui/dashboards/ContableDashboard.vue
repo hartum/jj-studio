@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDashboard } from '@/features/home/composables/useDashboard'
 import type { HotelItem } from '@/features/countries/domain/country.model'
@@ -35,7 +35,16 @@ const {
   handleUpdateCommissionStatus,
   contableAreas,
   contableHotels,
+  commissionDateRange,
+  commissionDateShortcuts,
+  loadCommissionsData,
 } = useDashboard()
+
+watch(activeTab, (tab) => {
+  if (tab === 'comisiones') {
+    loadCommissionsData()
+  }
+})
 
 interface AreaGroup {
   id: number
@@ -361,7 +370,9 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
             </el-option-group>
           </el-select>
 
+          <!-- Pestaña Estadísticas: Filtro de Meses para Metas -->
           <el-date-picker
+            v-if="activeTab === 'estadisticas'"
             v-model="selectedMonths"
             type="months"
             :placeholder="$t('dashboard.selectMonths')"
@@ -369,6 +380,22 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
             value-format="YYYY-MM"
             size="default"
             style="width: 220px"
+            :clearable="false"
+          />
+
+          <!-- Pestaña Comisiones: Filtro por Rango de Fechas para Liquidación y Nómina -->
+          <el-date-picker
+            v-else
+            v-model="commissionDateRange"
+            type="daterange"
+            :range-separator="$t('auditLog.filters.dateRangeSeparator') || 'a'"
+            :start-placeholder="$t('auditLog.filters.startDate') || 'Desde'"
+            :end-placeholder="$t('auditLog.filters.endDate') || 'Hasta'"
+            format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD"
+            size="default"
+            :shortcuts="commissionDateShortcuts"
+            style="width: 270px"
             :clearable="false"
           />
         </div>
@@ -609,7 +636,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
             </div>
             <div class="stat-content">
               <span class="stat-label">
-                {{ $t('dashboard.commissionsToSettle', { period: selectedMonths.length > 1 ? `${selectedMonths.length} meses` : 'Mes' }) }}
+                {{ $t('dashboard.commissionsToSettle', { period: `${commissionDateRange[0]} a ${commissionDateRange[1]}` }) }}
               </span>
               <span class="stat-value text-success">
                 {{ formatCurrency(globalMonthlyCommissions) }}

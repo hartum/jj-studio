@@ -49,8 +49,10 @@ export interface ComisionDTO {
 }
 
 export interface ResumenComisionesDTO {
-  mes: number
-  anio: number
+  mes?: number
+  anio?: number
+  fechaDesde?: string
+  fechaHasta?: string
   totalComisionesUsd: number
   totalVentasUsd: number
   porRol: {

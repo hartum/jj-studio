@@ -109,6 +109,8 @@ export const useCommissionStore = defineStore('commission', () => {
     hotelIds?: number[]
     anio?: number
     mes?: number
+    fechaDesde?: string
+    fechaHasta?: string
   }) {
     isLoading.value = true
     error.value = null
@@ -121,6 +123,8 @@ export const useCommissionStore = defineStore('commission', () => {
       }
       if (params?.anio) query.append('anio', String(params.anio))
       if (params?.mes) query.append('mes', String(params.mes))
+      if (params?.fechaDesde) query.append('fechaDesde', params.fechaDesde)
+      if (params?.fechaHasta) query.append('fechaHasta', params.fechaHasta)
 
       const res = await fetch(`${API_URL}/comisiones/resumen?${query.toString()}`, {
         headers: getHeaders(),
@@ -145,6 +149,8 @@ export const useCommissionStore = defineStore('commission', () => {
     mes?: number
     rolEnVenta?: string
     estado?: string
+    fechaDesde?: string
+    fechaHasta?: string
   }) {
     isLoading.value = true
     error.value = null
@@ -160,6 +166,8 @@ export const useCommissionStore = defineStore('commission', () => {
       if (params?.mes) query.append('mes', String(params.mes))
       if (params?.rolEnVenta) query.append('rolEnVenta', params.rolEnVenta)
       if (params?.estado) query.append('estado', params.estado)
+      if (params?.fechaDesde) query.append('fechaDesde', params.fechaDesde)
+      if (params?.fechaHasta) query.append('fechaHasta', params.fechaHasta)
 
       const res = await fetch(`${API_URL}/comisiones?${query.toString()}`, {
         headers: getHeaders(),

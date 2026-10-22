@@ -143,6 +143,117 @@ export function useDashboard() {
     return years
   })
 
+  // --- Filtro por Rango de Fechas para Comisiones ---
+  function formatLocalDateIso(d: Date): string {
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const day = String(d.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
+  const firstDayOfMonth = new Date(initialYear, initialMonth - 1, 1)
+  const lastDayOfMonth = new Date(initialYear, initialMonth, 0)
+  const commissionDateRange = ref<[string, string]>([
+    formatLocalDateIso(firstDayOfMonth),
+    formatLocalDateIso(lastDayOfMonth),
+  ])
+
+  const commissionDateShortcuts = computed(() => {
+    const current = new Date()
+    const cYear = current.getFullYear()
+    const cMonth = current.getMonth()
+
+    return [
+      {
+        text: t('auditLog.shortcuts.thisMonth') || 'Este mes',
+        value: () => {
+          const start = new Date(cYear, cMonth, 1)
+          const end = new Date(cYear, cMonth + 1, 0)
+          return [formatLocalDateIso(start), formatLocalDateIso(end)]
+        },
+      },
+      {
+        text: '1ª Quincena (1 - 15)',
+        value: () => {
+          const start = new Date(cYear, cMonth, 1)
+          const end = new Date(cYear, cMonth, 15)
+          return [formatLocalDateIso(start), formatLocalDateIso(end)]
+        },
+      },
+      {
+        text: '2ª Quincena (16 - Fin)',
+        value: () => {
+          const start = new Date(cYear, cMonth, 16)
+          const end = new Date(cYear, cMonth + 1, 0)
+          return [formatLocalDateIso(start), formatLocalDateIso(end)]
+        },
+      },
+      {
+        text: 'Bloque 1 (1 - 12)',
+        value: () => {
+          const start = new Date(cYear, cMonth, 1)
+          const end = new Date(cYear, cMonth, 12)
+          return [formatLocalDateIso(start), formatLocalDateIso(end)]
+        },
+      },
+      {
+        text: 'Bloque 2 (13 - 27)',
+        value: () => {
+          const start = new Date(cYear, cMonth, 13)
+          const end = new Date(cYear, cMonth, 27)
+          return [formatLocalDateIso(start), formatLocalDateIso(end)]
+        },
+      },
+      {
+        text: 'Bloque 3 (28 - Fin)',
+        value: () => {
+          const start = new Date(cYear, cMonth, 28)
+          const end = new Date(cYear, cMonth + 1, 0)
+          return [formatLocalDateIso(start), formatLocalDateIso(end)]
+        },
+      },
+      {
+        text: 'Mes anterior',
+        value: () => {
+          const start = new Date(cYear, cMonth - 1, 1)
+          const end = new Date(cYear, cMonth, 0)
+          return [formatLocalDateIso(start), formatLocalDateIso(end)]
+        },
+      },
+    ]
+  })
+
+  async function loadCommissionsData() {
+    const hotelIdsParam =
+      selectedHotelFilters.value.length > 0 ? selectedHotelFilters.value : undefined
+
+    if (
+      commissionDateRange.value &&
+      commissionDateRange.value.length === 2 &&
+      commissionDateRange.value[0] &&
+      commissionDateRange.value[1]
+    ) {
+      const [fechaDesde, fechaHasta] = commissionDateRange.value
+      commissionStore.isLoading = true
+      try {
+        await Promise.all([
+          commissionStore.fetchResumen({
+            hotelIds: hotelIdsParam,
+            fechaDesde,
+            fechaHasta,
+          }),
+          commissionStore.fetchComisiones({
+            hotelIds: hotelIdsParam,
+            fechaDesde,
+            fechaHasta,
+          }),
+        ])
+      } finally {
+        commissionStore.isLoading = false
+      }
+    }
+  }
+
   // --- Carga de datos ---
   async function loadCommissionConfigForUser() {
     let paisId: number | undefined = undefined
@@ -206,16 +317,20 @@ export function useDashboard() {
           anio: targetAnio,
           mes: targetMes,
         }),
-        commissionStore.fetchResumen({
-          hotelIds: hotelIdsParam,
-          anio: targetAnio,
-          mes: targetMes,
-        }),
-        commissionStore.fetchComisiones({
-          hotelIds: hotelIdsParam,
-          anio: targetAnio,
-          mes: targetMes,
-        }),
+        userRole.value === 'CONTABLE'
+          ? loadCommissionsData()
+          : Promise.all([
+              commissionStore.fetchResumen({
+                hotelIds: hotelIdsParam,
+                anio: targetAnio,
+                mes: targetMes,
+              }),
+              commissionStore.fetchComisiones({
+                hotelIds: hotelIdsParam,
+                anio: targetAnio,
+                mes: targetMes,
+              }),
+            ]),
         loadCommissionConfigForUser(),
       ])
       return
@@ -407,6 +522,9 @@ export function useDashboard() {
         const dateB = new Date(b.createdAt || 0).getTime()
         return dateB - dateA
       })
+      if (userRole.value === 'CONTABLE') {
+        await loadCommissionsData()
+      }
     } finally {
       goalStore.isLoading = false
       commissionStore.isLoading = false
@@ -469,6 +587,16 @@ export function useDashboard() {
   watch(selectedHotelFilters, async () => {
     await loadGoalsData()
   })
+
+  watch(
+    commissionDateRange,
+    async (newRange) => {
+      if (newRange && newRange.length === 2 && newRange[0] && newRange[1]) {
+        await loadCommissionsData()
+      }
+    },
+    { deep: true },
+  )
 
   // --- Helpers de hoy ---
   function getTodaySessionsForHotel(hotelId: number) {
@@ -985,5 +1113,8 @@ export function useDashboard() {
     gerenteMonthlyCommissions,
     globalMonthlyCommissions,
     handleUpdateCommissionStatus,
+    commissionDateRange,
+    commissionDateShortcuts,
+    loadCommissionsData,
   }
 }

@@ -294,16 +294,18 @@ export async function commissionRoutes(fastify: FastifyInstance) {
   // GET /api/comisiones/resumen - Resumen de comisiones para dashboards
   fastify.get('/api/comisiones/resumen', async (request, reply) => {
     try {
-      const { hotelId, hotelIds, anio, mes } = request.query as {
+      const { hotelId, hotelIds, anio, mes, fechaDesde, fechaHasta } = request.query as {
         hotelId?: string
         hotelIds?: string
         anio?: string
         mes?: string
+        fechaDesde?: string
+        fechaHasta?: string
       }
 
       const now = new Date()
-      const targetAnio = anio ? Number(anio) : now.getFullYear()
-      const targetMes = mes ? Number(mes) : now.getMonth() + 1
+      const targetAnio = anio ? Number(anio) : (!fechaDesde && !fechaHasta ? now.getFullYear() : undefined)
+      const targetMes = mes ? Number(mes) : (!fechaDesde && !fechaHasta ? now.getMonth() + 1 : undefined)
 
       const userId = getAuthUserId(request)
       let filterUserId: string | undefined = undefined
@@ -347,6 +349,8 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         usuarioId: filterUserId,
         anio: targetAnio,
         mes: targetMes,
+        fechaDesde: fechaDesde || undefined,
+        fechaHasta: fechaHasta || undefined,
       })
 
       return reply.send(resumen)
@@ -361,7 +365,7 @@ export async function commissionRoutes(fastify: FastifyInstance) {
   // GET /api/comisiones - Listado de comisiones detalladas
   fastify.get('/api/comisiones', async (request, reply) => {
     try {
-      const { hotelId, hotelIds, usuarioId, anio, mes, rolEnVenta, estado } = request.query as {
+      const { hotelId, hotelIds, usuarioId, anio, mes, rolEnVenta, estado, fechaDesde, fechaHasta } = request.query as {
         hotelId?: string
         hotelIds?: string
         usuarioId?: string
@@ -369,6 +373,8 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         mes?: string
         rolEnVenta?: string
         estado?: string
+        fechaDesde?: string
+        fechaHasta?: string
       }
 
       const authId = getAuthUserId(request)
@@ -413,7 +419,15 @@ export async function commissionRoutes(fastify: FastifyInstance) {
       if (rolEnVenta) where.rolEnVenta = rolEnVenta
       if (estado) where.estado = estado
 
-      if (anio && mes) {
+      if (fechaDesde || fechaHasta) {
+        where.fechaVenta = {}
+        if (fechaDesde) {
+          where.fechaVenta.gte = new Date(`${fechaDesde}T00:00:00.000Z`)
+        }
+        if (fechaHasta) {
+          where.fechaVenta.lte = new Date(`${fechaHasta}T23:59:59.999Z`)
+        }
+      } else if (anio && mes) {
         const targetAnio = Number(anio)
         const targetMes = Number(mes)
         const startDate = new Date(Date.UTC(targetAnio, targetMes - 1, 1, 0, 0, 0))

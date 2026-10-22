@@ -689,20 +689,42 @@ export async function getResumenComisiones(params: {
   hotelId?: number
   hotelIds?: number[]
   usuarioId?: string
-  anio: number
-  mes: number
+  anio?: number
+  mes?: number
+  fechaDesde?: string
+  fechaHasta?: string
 }): Promise<ResumenComisionesDTO> {
-  const { hotelId, hotelIds, usuarioId, anio, mes } = params
-
-  const startDate = new Date(Date.UTC(anio, mes - 1, 1, 0, 0, 0))
-  const endDate = new Date(Date.UTC(anio, mes, 1, 0, 0, 0))
+  const { hotelId, hotelIds, usuarioId, anio, mes, fechaDesde, fechaHasta } = params
 
   const where: any = {
     deletedAt: null,
-    fechaVenta: {
+  }
+
+  if (fechaDesde || fechaHasta) {
+    where.fechaVenta = {}
+    if (fechaDesde) {
+      where.fechaVenta.gte = new Date(`${fechaDesde}T00:00:00.000Z`)
+    }
+    if (fechaHasta) {
+      where.fechaVenta.lte = new Date(`${fechaHasta}T23:59:59.999Z`)
+    }
+  } else if (anio && mes) {
+    const startDate = new Date(Date.UTC(anio, mes - 1, 1, 0, 0, 0))
+    const endDate = new Date(Date.UTC(anio, mes, 1, 0, 0, 0))
+    where.fechaVenta = {
       gte: startDate,
       lt: endDate,
-    },
+    }
+  } else {
+    const now = new Date()
+    const defAnio = now.getFullYear()
+    const defMes = now.getMonth() + 1
+    const startDate = new Date(Date.UTC(defAnio, defMes - 1, 1, 0, 0, 0))
+    const endDate = new Date(Date.UTC(defAnio, defMes, 1, 0, 0, 0))
+    where.fechaVenta = {
+      gte: startDate,
+      lt: endDate,
+    }
   }
 
   if (usuarioId) {
@@ -794,6 +816,8 @@ export async function getResumenComisiones(params: {
   return {
     mes,
     anio,
+    fechaDesde,
+    fechaHasta,
     totalComisionesUsd: Number(totalComisionesUsd.toFixed(2)),
     totalVentasUsd: Number(totalVentasUsd.toFixed(2)),
     porRol: Object.entries(porRolMap).map(([rol, data]) => ({
