@@ -1,7 +1,7 @@
-# Graph Report - JJ Studio  (2026-10-22)
+# Graph Report - JJ Studio  (2026-10-23)
 
 ## Corpus Check
-- 153 files · ~263,868 words
+- 153 files · ~263,949 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6e678300`
+- Built from commit: `cb7214b0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -496,13 +496,12 @@ Cohesion: 0.83
 Nodes (3): calendarioLaboralRoutes(), formatDateToIsoString(), parseDateOnly()
 
 ## Knowledge Gaps
-- **725 isolated node(s):** `{ t }`, `activeTab`, `{
+- **725 isolated node(s):** `PhotographerHotelData`, `MONTH_KEYS`, `{ t }`, `activeTab`, `{
   countryStore,
   userStore,
   hotelStore,
   goalStore,
   commissionStore,
-  selectedMonths,
   selectedMonthsLabel,
   selectedHotelFilters,
   currentHotelProgreso,
@@ -521,7 +520,8 @@ Nodes (3): calendarioLaboralRoutes(), formatDateToIsoString(), parseDateOnly()
   commissionDateRange,
   commissionDateShortcuts,
   loadCommissionsData,
-}`, `AreaGroup`, `CountryGroup` (+720 more)
+  loadGoalsData,
+}` (+720 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -534,32 +534,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **Why does `User` connect `user.model.ts` to `vue`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **What connects `{ t }`, `activeTab`, `{
-  countryStore,
-  userStore,
-  hotelStore,
-  goalStore,
-  commissionStore,
-  selectedMonths,
-  selectedMonthsLabel,
-  selectedHotelFilters,
-  currentHotelProgreso,
-  filteredProgresoHoteles,
-  globalProgresoTotals,
-  selectedHotelsSummary,
-  getSemaforoTagType,
-  getSemaforoText,
-  getProgressColor,
-  formatCurrency,
-  globalMonthlyCommissions,
-  handleUpdateCommissionStatus,
-  handleUpdateCommissionsStatusMasivo,
-  contableAreas,
-  contableHotels,
-  commissionDateRange,
-  commissionDateShortcuts,
-  loadCommissionsData,
-}` to the rest of the system?**
+- **What connects `PhotographerHotelData`, `MONTH_KEYS`, `{ t }` to the rest of the system?**
   _725 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
