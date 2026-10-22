@@ -21,7 +21,6 @@ const {
   hotelStore,
   goalStore,
   commissionStore,
-  selectedMonths,
   selectedMonthsLabel,
   selectedHotelFilters,
   currentHotelProgreso,
@@ -40,11 +39,14 @@ const {
   commissionDateRange,
   commissionDateShortcuts,
   loadCommissionsData,
+  loadGoalsData,
 } = useDashboard()
 
 watch(activeTab, (tab) => {
   if (tab === 'comisiones') {
     loadCommissionsData()
+  } else if (tab === 'estadisticas') {
+    loadGoalsData()
   }
 })
 
@@ -453,22 +455,8 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
             </el-option-group>
           </el-select>
 
-          <!-- Pestaña Estadísticas: Filtro de Meses para Metas -->
+          <!-- Selector unificado de Rango de Fechas para Estadísticas y Liquidación -->
           <el-date-picker
-            v-if="activeTab === 'estadisticas'"
-            v-model="selectedMonths"
-            type="months"
-            :placeholder="$t('dashboard.selectMonths')"
-            format="YYYY-MM"
-            value-format="YYYY-MM"
-            size="default"
-            style="width: 220px; flex-shrink: 0"
-            :clearable="false"
-          />
-
-          <!-- Pestaña Comisiones: Filtro por Rango de Fechas para Liquidación y Nómina -->
-          <el-date-picker
-            v-else
             v-model="commissionDateRange"
             type="daterange"
             :range-separator="$t('auditLog.filters.dateRangeSeparator') || 'a'"

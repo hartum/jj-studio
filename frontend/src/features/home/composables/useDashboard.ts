@@ -595,7 +595,36 @@ export function useDashboard() {
     commissionDateRange,
     async (newRange) => {
       if (newRange && newRange.length === 2 && newRange[0] && newRange[1]) {
-        await loadCommissionsData()
+        // Sincronizar meses para metas y estadísticas
+        const startMonth = newRange[0].slice(0, 7)
+        const endMonth = newRange[1].slice(0, 7)
+        const [startY, startM] = startMonth.split('-').map(Number)
+        const [endY, endM] = endMonth.split('-').map(Number)
+
+        const months: string[] = []
+        let curY = startY!
+        let curM = startM!
+        while (curY < endY! || (curY === endY! && curM <= endM!)) {
+          months.push(`${curY}-${String(curM).padStart(2, '0')}`)
+          curM++
+          if (curM > 12) {
+            curM = 1
+            curY++
+          }
+        }
+
+        if (months.length > 0) {
+          isInternalSync = true
+          selectedMonths.value = months
+          const latest = parsedMonths.value[parsedMonths.value.length - 1]
+          if (latest) {
+            selectedAnio.value = latest.anio
+            selectedMes.value = latest.mes
+          }
+          isInternalSync = false
+        }
+
+        await Promise.all([loadCommissionsData(), loadGoalsData()])
       }
     },
     { deep: true },
@@ -1145,5 +1174,6 @@ export function useDashboard() {
     commissionDateRange,
     commissionDateShortcuts,
     loadCommissionsData,
+    loadGoalsData,
   }
 }
