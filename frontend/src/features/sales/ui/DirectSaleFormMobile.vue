@@ -73,7 +73,8 @@ const stepPhotographer = computed(() => (userHotels.value.length > 1 ? 2 : 1))
 const stepSeller = computed(() => (userHotels.value.length > 1 ? 3 : 2))
 const stepPhotos = computed(() => (userHotels.value.length > 1 ? 4 : 3))
 const stepPayments = computed(() => (userHotels.value.length > 1 ? 5 : 4))
-const stepNotes = computed(() => (userHotels.value.length > 1 ? 6 : 5))
+const stepMiscelaneo = computed(() => (userHotels.value.length > 1 ? 6 : 5))
+const stepNotes = computed(() => (userHotels.value.length > 1 ? 7 : 6))
 
 function getRoleTagType(role?: string): 'success' | 'primary' | 'warning' | 'info' {
   switch (role?.toUpperCase()) {
@@ -492,7 +493,24 @@ function getRoleTagType(role?: string): 'success' | 'primary' | 'warning' | 'inf
         </div>
       </section>
 
-      <!-- 5 / 4. Notas -->
+      <!-- Número de Miscelánea -->
+      <section class="mobile-section-block">
+        <div class="mobile-card-section-label">
+          <span class="step-badge-num">{{ stepMiscelaneo }}</span>
+          <span>{{ t('sales.form.miscelaneo') }}</span>
+          <span class="required-star">*</span>
+        </div>
+        <el-input
+          v-model="formData.numeroMiscelaneo"
+          :placeholder="t('sales.form.miscelaneoPlaceholder')"
+          inputmode="numeric"
+          clearable
+          size="large"
+          @input="(val: string) => { formData.numeroMiscelaneo = val.replace(/\D/g, '') }"
+        />
+      </section>
+
+      <!-- Notas -->
       <section class="mobile-section-block">
         <div class="mobile-card-section-label">
           <span class="step-badge-num">{{ stepNotes }}</span>

@@ -291,6 +291,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
             metodoPago: p.metodoPago,
             importeUsd: p.importeUsd,
           })),
+          numeroMiscelaneo: c.numeroMiscelaneo || '',
           notas: c.notas || '',
           clienteNombre: decrypt(c.sesion?.clienteNombre) || (c.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : ''),
           clienteEmail: decrypt(c.sesion?.clienteEmail) || '',
@@ -378,6 +379,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           metodoPago: p.metodoPago,
           importeUsd: p.importeUsd,
         })),
+        numeroMiscelaneo: cita.numeroMiscelaneo || '',
         notas: cita.notas || '',
         clienteNombre: decrypt(cita.sesion?.clienteNombre) || (cita.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : ''),
         clienteEmail: decrypt(cita.sesion?.clienteEmail) || '',
@@ -411,6 +413,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas?: number | null
         totalVentaUsd?: number | null
         modoCobro?: string | null
+        numeroMiscelaneo?: string | null
         pagos?: Array<{ metodoPago: string; importeUsd: number }>
         notas?: string
       }
@@ -499,6 +502,17 @@ export async function saleRoutes(fastify: FastifyInstance) {
             .status(400)
             .send({ error: 'Para completar la cita, debes indicar el nº de fotos vendidas' })
         }
+        const miscStr = body.numeroMiscelaneo ? String(body.numeroMiscelaneo).trim() : ''
+        if (!miscStr) {
+          return reply
+            .status(400)
+            .send({ error: 'Para completar la cita, el número de miscelánea es obligatorio' })
+        }
+        if (!/^\d+$/.test(miscStr)) {
+          return reply
+            .status(400)
+            .send({ error: 'El número de miscelánea debe ser un valor numérico' })
+        }
         if (incomingPagos.length === 0) {
           return reply
             .status(400)
@@ -538,6 +552,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
             numFotosVendidas: body.numFotosVendidas ?? null,
             totalVentaUsd: calculatedTotalUsd,
             modoCobro: derivedModoCobro,
+            numeroMiscelaneo: body.numeroMiscelaneo ? body.numeroMiscelaneo.trim() : null,
             notas: body.notas ? body.notas.trim() : null,
             deletedAt: null,
           },
@@ -564,6 +579,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
             numFotosVendidas: body.numFotosVendidas ?? null,
             totalVentaUsd: calculatedTotalUsd,
             modoCobro: derivedModoCobro,
+            numeroMiscelaneo: body.numeroMiscelaneo ? body.numeroMiscelaneo.trim() : null,
             notas: body.notas ? body.notas.trim() : null,
             ...(incomingPagos.length > 0
               ? {
@@ -651,6 +667,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas: nueva.numFotosVendidas,
         totalVentaUsd: nueva.totalVentaUsd,
         modoCobro: derivedModoCobro,
+        numeroMiscelaneo: nueva.numeroMiscelaneo || '',
         pagos: pagosRegistrados.map((p) => ({
           id: p.id,
           metodoPago: p.metodoPago,
@@ -689,6 +706,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas: number
         totalVentaUsd?: number | null
         modoCobro?: string | null
+        numeroMiscelaneo?: string | null
         pagos: Array<{ metodoPago: string; importeUsd: number }>
         notas?: string
       }
@@ -698,6 +716,13 @@ export async function saleRoutes(fastify: FastifyInstance) {
       }
       if (!body.vendedorId) {
         return reply.status(400).send({ error: 'El vendedor es obligatorio' })
+      }
+      const directMiscStr = body.numeroMiscelaneo ? String(body.numeroMiscelaneo).trim() : ''
+      if (!directMiscStr) {
+        return reply.status(400).send({ error: 'El número de miscelánea es obligatorio' })
+      }
+      if (!/^\d+$/.test(directMiscStr)) {
+        return reply.status(400).send({ error: 'El número de miscelánea debe ser un valor numérico' })
       }
       if (!body.numFotosVendidas || body.numFotosVendidas < 1) {
         return reply.status(400).send({ error: 'Debes indicar al menos 1 foto vendida' })
@@ -773,6 +798,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           numFotosVendidas: Number(body.numFotosVendidas),
           totalVentaUsd,
           modoCobro: derivedModoCobro,
+          numeroMiscelaneo: directMiscStr,
           notas: body.notas ? body.notas.trim() : null,
           pagos: {
             create: incomingPagos.map((p) => ({
@@ -829,6 +855,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           numFotosVendidas: nueva.numFotosVendidas,
           totalVentaUsd: nueva.totalVentaUsd,
           modoCobro: derivedModoCobro,
+          numeroMiscelaneo: nueva.numeroMiscelaneo,
           desglosePagos: incomingPagos.map((p) => `${p.metodoPago}: $${p.importeUsd}`).join(', '),
         },
       })
@@ -847,6 +874,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas: nueva.numFotosVendidas,
         totalVentaUsd: nueva.totalVentaUsd,
         modoCobro: derivedModoCobro,
+        numeroMiscelaneo: nueva.numeroMiscelaneo || '',
         pagos: nueva.pagos.map((p) => ({
           id: p.id,
           metodoPago: p.metodoPago,
@@ -879,6 +907,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas?: number | null
         totalVentaUsd?: number | null
         modoCobro?: string | null
+        numeroMiscelaneo?: string | null
         pagos?: Array<{ metodoPago: string; importeUsd: number }>
         notas?: string
       }
@@ -964,6 +993,18 @@ export async function saleRoutes(fastify: FastifyInstance) {
             .status(400)
             .send({ error: 'Para completar la cita, debes indicar el nº de fotos vendidas' })
         }
+        const miscelaneoVal = body.numeroMiscelaneo !== undefined ? body.numeroMiscelaneo : existing.numeroMiscelaneo
+        const putMiscStr = miscelaneoVal ? String(miscelaneoVal).trim() : ''
+        if (!putMiscStr) {
+          return reply
+            .status(400)
+            .send({ error: 'Para completar la cita, el número de miscelánea es obligatorio' })
+        }
+        if (!/^\d+$/.test(putMiscStr)) {
+          return reply
+            .status(400)
+            .send({ error: 'El número de miscelánea debe ser un valor numérico' })
+        }
 
         if (incomingPagos !== undefined) {
           if (incomingPagos.length === 0) {
@@ -1001,6 +1042,9 @@ export async function saleRoutes(fastify: FastifyInstance) {
       }
       if (body.estado !== undefined) data.estado = body.estado
       if (body.numFotosVendidas !== undefined) data.numFotosVendidas = body.numFotosVendidas
+      if (body.numeroMiscelaneo !== undefined) {
+        data.numeroMiscelaneo = body.numeroMiscelaneo ? body.numeroMiscelaneo.trim() : null
+      }
       if (body.notas !== undefined) data.notas = body.notas ? body.notas.trim() : null
 
       if (incomingPagos !== undefined) {
@@ -1164,6 +1208,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           metodoPago: p.metodoPago,
           importeUsd: p.importeUsd,
         })),
+        numeroMiscelaneo: actualizada.numeroMiscelaneo || '',
         notas: actualizada.notas || '',
         clienteNombre: decrypt(actualizada.sesion?.clienteNombre) || (actualizada.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : ''),
         googleCalendarEventId: googleEventId || null,

@@ -38,7 +38,6 @@ const {
   availableSessions,
   excludedSessionsCount,
   photographers,
-  selectedPhotographer,
   photographerUser,
   photographerName,
   sellers,
@@ -493,6 +492,21 @@ const formattedSelectedSaleDateTime = computed(() => {
                 </div>
               </div>
             </div>
+
+            <!-- Número de Miscelánea -->
+            <el-form-item
+              :label="$t('sales.form.miscelaneo')"
+              :required="formData.estado === 'COMPLETADA'"
+            >
+              <el-input
+                v-model="formData.numeroMiscelaneo"
+                :placeholder="$t('sales.form.miscelaneoPlaceholder')"
+                inputmode="numeric"
+                clearable
+                :disabled="isReadOnly"
+                @input="(val: string) => { formData.numeroMiscelaneo = val.replace(/\D/g, '') }"
+              />
+            </el-form-item>
 
             <!-- Notes -->
             <el-form-item :label="$t('sales.form.notes')">

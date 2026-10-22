@@ -380,6 +380,21 @@ function getRoleTagType(role?: string): 'success' | 'primary' | 'warning' | 'inf
             </div>
           </div>
 
+          <!-- Número de Miscelánea -->
+          <div class="form-field">
+            <label class="field-label">
+              {{ t('sales.form.miscelaneo') }}
+              <span class="required-star">*</span>
+            </label>
+            <el-input
+              v-model="formData.numeroMiscelaneo"
+              :placeholder="t('sales.form.miscelaneoPlaceholder')"
+              inputmode="numeric"
+              clearable
+              @input="(val: string) => { formData.numeroMiscelaneo = val.replace(/\D/g, '') }"
+            />
+          </div>
+
           <!-- Notas Adicionales -->
           <div class="form-field">
             <label class="field-label">{{ t('sales.notes') }}</label>

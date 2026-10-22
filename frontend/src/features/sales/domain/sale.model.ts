@@ -27,6 +27,7 @@ export interface CitaVenta {
   numFotosVendidas?: number | null
   totalVentaUsd?: number | null
   modoCobro?: string | null
+  numeroMiscelaneo?: string | null
   pagos?: PagoCitaVenta[]
   notas?: string | null
   // Inherited from session join
@@ -55,6 +56,7 @@ export interface CreateCitaVentaPayload {
   numFotosVendidas?: number | null
   totalVentaUsd?: number | null
   modoCobro?: string | null
+  numeroMiscelaneo?: string | null
   pagos?: Array<{ metodoPago: string; importeUsd: number }>
   notas?: string | null
 }
@@ -66,6 +68,7 @@ export interface CreateVentaDirectaPayload {
   numFotosVendidas: number
   totalVentaUsd?: number | null
   modoCobro?: string | null
+  numeroMiscelaneo?: string | null
   pagos: Array<{ metodoPago: string; importeUsd: number }>
   notas?: string | null
 }
@@ -78,6 +81,7 @@ export interface UpdateCitaVentaPayload {
   numFotosVendidas?: number | null
   totalVentaUsd?: number | null
   modoCobro?: string | null
+  numeroMiscelaneo?: string | null
   pagos?: Array<{ metodoPago: string; importeUsd: number }>
   notas?: string | null
 }

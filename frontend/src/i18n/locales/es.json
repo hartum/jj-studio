@@ -601,6 +601,9 @@
       "paymentAmount": "Importe (USD)",
       "totalPayments": "Total Pagos",
       "paymentValidationFailed": "Cada método de pago debe tener un tipo seleccionado y un importe mayor a 0",
+      "miscelaneo": "Nº de Miscelánea",
+      "miscelaneoRequired": "Nº de Miscelánea *",
+      "miscelaneoPlaceholder": "Ej. 12345",
       "notes": "Notas",
       "notesPlaceholder": "Notas sobre la cita de venta..."
     },
@@ -643,6 +646,7 @@
       "completeSessionRequired": "Debes seleccionar una sesión fotográfica para completar la cita",
       "completeSellerRequired": "Debes seleccionar un vendedor para completar la cita",
       "completeAmountsRequired": "Para completar la cita, indica el nº de fotos vendidas y el total en USD",
+      "completeMiscelaneoRequired": "El número de miscelánea es obligatorio y debe ser numérico",
       "completePaymentMethodRequired": "Para completar la cita, debes seleccionar un modo de cobro",
       "appointmentUpdatedWithConflicts": "Cita actualizada, pero hay {count} cita(s) solapada(s) en el mismo hotel",
       "appointmentUpdated": "Cita de venta actualizada correctamente",

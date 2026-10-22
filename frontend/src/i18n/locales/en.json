@@ -601,6 +601,9 @@
       "paymentAmount": "Amount (USD)",
       "totalPayments": "Total Payments",
       "paymentValidationFailed": "Each payment method must have a type selected and an amount greater than 0",
+      "miscelaneo": "Misc Number",
+      "miscelaneoRequired": "Misc Number *",
+      "miscelaneoPlaceholder": "e.g. 12345",
       "notes": "Notes",
       "notesPlaceholder": "Notes about the sales appointment..."
     },
@@ -643,6 +646,7 @@
       "completeSessionRequired": "You must select a photo session to complete the appointment",
       "completeSellerRequired": "You must select a seller to complete the appointment",
       "completeAmountsRequired": "To complete the appointment, enter the number of photos sold and the total in USD",
+      "completeMiscelaneoRequired": "The misc number is required and must be numeric",
       "completePaymentMethodRequired": "To complete the appointment, you must select a payment method",
       "appointmentUpdatedWithConflicts": "Appointment updated, but there are {count} overlapping appointment(s) in the same hotel",
       "appointmentUpdated": "Sales appointment updated successfully",

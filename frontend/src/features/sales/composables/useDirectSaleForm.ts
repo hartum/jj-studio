@@ -17,6 +17,7 @@ export interface DirectSaleFormData {
   numFotosVendidas: number | null
   totalVentaUsd: number | null
   modoCobro: string | null
+  numeroMiscelaneo: string
   pagos: Array<{ metodoPago: string; importeUsd: number | null }>
   notas: string
 }
@@ -72,6 +73,7 @@ export function useDirectSaleForm(): DirectSaleFormContext {
     numFotosVendidas: 1,
     totalVentaUsd: null,
     modoCobro: null,
+    numeroMiscelaneo: '',
     pagos: [{ metodoPago: 'tarjeta', importeUsd: null }],
     notas: '',
   })
@@ -283,6 +285,7 @@ export function useDirectSaleForm(): DirectSaleFormContext {
     if (!formData.value.vendedorId) return true
     if (!formData.value.fotografoId) return true
     if (!formData.value.numFotosVendidas || formData.value.numFotosVendidas < 1) return true
+    if (!formData.value.numeroMiscelaneo || !/^\d+$/.test(formData.value.numeroMiscelaneo.trim())) return true
     if (!pagosValidos.value) return true
     return false
   })
@@ -302,6 +305,7 @@ export function useDirectSaleForm(): DirectSaleFormContext {
         fotografoId: formData.value.fotografoId ? String(formData.value.fotografoId) : null,
         numFotosVendidas: Number(formData.value.numFotosVendidas),
         totalVentaUsd: totalCalculado.value,
+        numeroMiscelaneo: formData.value.numeroMiscelaneo.trim(),
         pagos: (formData.value.pagos || []).map((p) => ({
           metodoPago: p.metodoPago,
           importeUsd: Number(p.importeUsd) || 0,

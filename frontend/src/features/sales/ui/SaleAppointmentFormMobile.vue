@@ -926,10 +926,30 @@ const isSellerPhotographer = computed(() => {
           </div>
         </div>
 
-        <!-- Notas -->
+        <!-- Número de Miscelánea -->
         <div>
           <div class="mobile-card-section-label">
             <span class="step-badge-num">7</span>
+            {{ $t('sales.form.miscelaneo') }}
+            <span v-if="formData.estado === 'COMPLETADA'" class="required-star">*</span>
+          </div>
+          <el-form-item>
+            <el-input
+              v-model="formData.numeroMiscelaneo"
+              :placeholder="$t('sales.form.miscelaneoPlaceholder')"
+              inputmode="numeric"
+              clearable
+              size="large"
+              :disabled="isReadOnly"
+              @input="(val: string) => { formData.numeroMiscelaneo = val.replace(/\D/g, '') }"
+            />
+          </el-form-item>
+        </div>
+
+        <!-- Notas -->
+        <div>
+          <div class="mobile-card-section-label">
+            <span class="step-badge-num">8</span>
             {{ $t('sales.steps.notes') }}
           </div>
           <el-form-item>
@@ -946,7 +966,7 @@ const isSellerPhotographer = computed(() => {
       <!-- Estado de la Cita (Directo en el flujo del formulario, sin tarjeta) -->
       <div class="mobile-status-section">
         <div class="mobile-card-section-label">
-          <span class="step-badge-num">8</span>
+          <span class="step-badge-num">9</span>
           {{ $t('sales.steps.status') }}
         </div>
         <div class="status-radio-container">

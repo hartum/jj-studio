@@ -32,6 +32,7 @@ export interface SaleAppointmentFormData {
   numFotosVendidas: number | null
   totalVentaUsd: number | null
   modoCobro: string | null
+  numeroMiscelaneo: string
   pagos: FormPagoItem[]
   notas: string
 }
@@ -98,6 +99,7 @@ export function useSaleAppointmentForm() {
     numFotosVendidas: null,
     totalVentaUsd: null,
     modoCobro: null,
+    numeroMiscelaneo: '',
     pagos: [{ metodoPago: 'tarjeta', importeUsd: null }],
     notas: '',
   })
@@ -435,6 +437,7 @@ export function useSaleAppointmentForm() {
     if (formData.value.estado === 'COMPLETADA') {
       if (!formData.value.vendedorId) return true
       if (formData.value.numFotosVendidas == null) return true
+      if (!formData.value.numeroMiscelaneo || !/^\d+$/.test(formData.value.numeroMiscelaneo.trim())) return true
       if (!pagosValidos.value) return true
     }
     return false
@@ -769,6 +772,7 @@ export function useSaleAppointmentForm() {
           numFotosVendidas: existing.numFotosVendidas ?? null,
           totalVentaUsd: existing.totalVentaUsd ?? null,
           modoCobro: existing.modoCobro || null,
+          numeroMiscelaneo: existing.numeroMiscelaneo || '',
           pagos: loadedPagos,
           notas: existing.notas || '',
         }
@@ -865,6 +869,10 @@ export function useSaleAppointmentForm() {
         ElMessage.warning(t('sales.toasts.completeAmountsRequired'))
         return
       }
+      if (!formData.value.numeroMiscelaneo || !/^\d+$/.test(formData.value.numeroMiscelaneo.trim())) {
+        ElMessage.warning(t('sales.toasts.completeMiscelaneoRequired'))
+        return
+      }
       if (!pagosValidos.value) {
         ElMessage.warning(t('sales.form.paymentValidationFailed'))
         return
@@ -888,6 +896,7 @@ export function useSaleAppointmentForm() {
           estado: formData.value.estado,
           numFotosVendidas: formData.value.numFotosVendidas,
           totalVentaUsd: totalCalculado.value > 0 ? totalCalculado.value : null,
+          numeroMiscelaneo: formData.value.numeroMiscelaneo ? formData.value.numeroMiscelaneo.trim() : null,
           pagos: cleanPagos,
           notas: formData.value.notas ? formData.value.notas.trim() : null,
         }
@@ -908,6 +917,7 @@ export function useSaleAppointmentForm() {
           estado: formData.value.estado,
           numFotosVendidas: formData.value.numFotosVendidas,
           totalVentaUsd: totalCalculado.value > 0 ? totalCalculado.value : null,
+          numeroMiscelaneo: formData.value.numeroMiscelaneo ? formData.value.numeroMiscelaneo.trim() : null,
           pagos: cleanPagos,
           notas: formData.value.notas ? formData.value.notas.trim() : null,
         })
