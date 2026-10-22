@@ -1081,4 +1081,29 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
   background-color: var(--el-color-primary-light-9, #ecf5ff) !important;
   color: var(--el-color-primary, #409eff) !important;
 }
+
+/* Separadores punteados entre grupos de atajos (Grupo 1: Meses | Grupo 2: Bloques | Grupo 3: Quincenas) */
+:global(.commission-date-range-popper .el-picker-panel__shortcut:nth-child(2)),
+:global(.commission-date-range-popper .el-picker-panel__shortcut:nth-child(5)) {
+  margin-bottom: 12px !important;
+  position: relative !important;
+  overflow: visible !important;
+}
+
+:global(.commission-date-range-popper .el-picker-panel__shortcut:nth-child(2)::after),
+:global(.commission-date-range-popper .el-picker-panel__shortcut:nth-child(5)::after) {
+  content: "" !important;
+  position: absolute !important;
+  bottom: -6px !important;
+  left: 6px !important;
+  right: 6px !important;
+  height: 0 !important;
+  border-top: 1px dotted var(--el-border-color, #cbd5e1) !important;
+  pointer-events: none !important;
+}
+
+:global(html.dark .commission-date-range-popper .el-picker-panel__shortcut:nth-child(2)::after),
+:global(html.dark .commission-date-range-popper .el-picker-panel__shortcut:nth-child(5)::after) {
+  border-top-color: var(--el-border-color, #4c4d4f) !important;
+}
 </style>

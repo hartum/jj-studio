@@ -164,6 +164,7 @@ export function useDashboard() {
     const cMonth = current.getMonth()
 
     return [
+      // Grupo 1: Mensuales
       {
         text: t('auditLog.shortcuts.thisMonth') || 'Este mes',
         value: () => {
@@ -173,21 +174,14 @@ export function useDashboard() {
         },
       },
       {
-        text: '1ª Quincena (1 - 15)',
+        text: t('auditLog.shortcuts.lastMonth') || 'Mes anterior',
         value: () => {
-          const start = new Date(cYear, cMonth, 1)
-          const end = new Date(cYear, cMonth, 15)
+          const start = new Date(cYear, cMonth - 1, 1)
+          const end = new Date(cYear, cMonth, 0)
           return [formatLocalDateIso(start), formatLocalDateIso(end)]
         },
       },
-      {
-        text: '2ª Quincena (16 - Fin)',
-        value: () => {
-          const start = new Date(cYear, cMonth, 16)
-          const end = new Date(cYear, cMonth + 1, 0)
-          return [formatLocalDateIso(start), formatLocalDateIso(end)]
-        },
-      },
+      // Grupo 2: Bloques
       {
         text: 'Bloque 1 (1 - 12)',
         value: () => {
@@ -212,11 +206,20 @@ export function useDashboard() {
           return [formatLocalDateIso(start), formatLocalDateIso(end)]
         },
       },
+      // Grupo 3: Quincenas
       {
-        text: 'Mes anterior',
+        text: '1ª Quincena (1 - 15)',
         value: () => {
-          const start = new Date(cYear, cMonth - 1, 1)
-          const end = new Date(cYear, cMonth, 0)
+          const start = new Date(cYear, cMonth, 1)
+          const end = new Date(cYear, cMonth, 15)
+          return [formatLocalDateIso(start), formatLocalDateIso(end)]
+        },
+      },
+      {
+        text: '2ª Quincena (16 - Fin)',
+        value: () => {
+          const start = new Date(cYear, cMonth, 16)
+          const end = new Date(cYear, cMonth + 1, 0)
           return [formatLocalDateIso(start), formatLocalDateIso(end)]
         },
       },
