@@ -1035,7 +1035,32 @@ export function useDashboard() {
       } else {
         ElMessage.success(t('dashboard.commissionStatusUpdatedSuccess', { status: nuevoEstado }))
       }
-      await loadGoalsData()
+      if (userRole.value === 'CONTABLE') {
+        await loadCommissionsData()
+      } else {
+        await loadGoalsData()
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : t('dashboard.commissionUpdateError')
+      ElMessage.error(message)
+    }
+  }
+
+  async function handleUpdateCommissionsStatusMasivo(ids: number[], nuevoEstado: string) {
+    if (!ids || ids.length === 0) return
+    try {
+      await commissionStore.updateEstadoMasivo(ids, nuevoEstado)
+      ElMessage.success(
+        t('dashboard.bulkUpdateSuccess', {
+          count: ids.length,
+          status: nuevoEstado,
+        }) || `${ids.length} comisiones actualizadas a ${nuevoEstado}`,
+      )
+      if (userRole.value === 'CONTABLE') {
+        await loadCommissionsData()
+      } else {
+        await loadGoalsData()
+      }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : t('dashboard.commissionUpdateError')
       ElMessage.error(message)
@@ -1113,6 +1138,7 @@ export function useDashboard() {
     gerenteMonthlyCommissions,
     globalMonthlyCommissions,
     handleUpdateCommissionStatus,
+    handleUpdateCommissionsStatusMasivo,
     commissionDateRange,
     commissionDateShortcuts,
     loadCommissionsData,

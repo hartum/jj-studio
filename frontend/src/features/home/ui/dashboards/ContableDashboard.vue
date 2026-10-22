@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { ElMessageBox, ElMessage, type TableInstance } from 'element-plus'
 import { useDashboard } from '@/features/home/composables/useDashboard'
 import type { HotelItem } from '@/features/countries/domain/country.model'
 import type { SemaforoEstado } from '@/features/goals/domain/goal.model'
@@ -33,6 +34,7 @@ const {
   formatCurrency,
   globalMonthlyCommissions,
   handleUpdateCommissionStatus,
+  handleUpdateCommissionsStatusMasivo,
   contableAreas,
   contableHotels,
   commissionDateRange,
@@ -270,9 +272,82 @@ const filteredComisiones = computed(() => {
   return list
 })
 
+// Selección y acciones masivas de comisiones
+const comisionesTableRef = ref<TableInstance>()
+const selectedComisiones = ref<Comision[]>([])
+
+function handleSelectionChange(val: Comision[]) {
+  selectedComisiones.value = val
+}
+
+const pendingSelectedCount = computed(() =>
+  selectedComisiones.value.filter((c) => c.estado === 'PENDIENTE').length,
+)
+
+const payableSelectedCount = computed(() =>
+  selectedComisiones.value.filter((c) => c.estado === 'PENDIENTE' || c.estado === 'APROBADA').length,
+)
+
+async function handleBulkApprove() {
+  const pendingItems = selectedComisiones.value.filter((c) => c.estado === 'PENDIENTE')
+  if (pendingItems.length === 0) {
+    ElMessage.warning(t('dashboard.noPendingSelected'))
+    return
+  }
+
+  try {
+    await ElMessageBox.confirm(
+      t('dashboard.confirmBulkApproveMsg', { count: pendingItems.length }),
+      t('dashboard.confirmBulkApproveTitle'),
+      {
+        confirmButtonText: t('dashboard.approve'),
+        cancelButtonText: t('common.cancel'),
+        type: 'warning',
+      },
+    )
+
+    const ids = pendingItems.map((c) => c.id)
+    await handleUpdateCommissionsStatusMasivo(ids, 'APROBADA')
+    comisionesTableRef.value?.clearSelection()
+    selectedComisiones.value = []
+  } catch {
+    // Cancelado por el usuario
+  }
+}
+
+async function handleBulkPay() {
+  const payableItems = selectedComisiones.value.filter(
+    (c) => c.estado === 'PENDIENTE' || c.estado === 'APROBADA',
+  )
+  if (payableItems.length === 0) {
+    ElMessage.warning(t('dashboard.noApprovableSelected'))
+    return
+  }
+
+  try {
+    await ElMessageBox.confirm(
+      t('dashboard.confirmBulkPayMsg', { count: payableItems.length }),
+      t('dashboard.confirmBulkPayTitle'),
+      {
+        confirmButtonText: t('dashboard.pay'),
+        cancelButtonText: t('common.cancel'),
+        type: 'success',
+      },
+    )
+
+    const ids = payableItems.map((c) => c.id)
+    await handleUpdateCommissionsStatusMasivo(ids, 'PAGADA')
+    comisionesTableRef.value?.clearSelection()
+    selectedComisiones.value = []
+  } catch {
+    // Cancelado por el usuario
+  }
+}
+
 interface TableColumnSummaryCtx {
   property: string
   label: string
+  type?: string
 }
 
 interface SummaryMethodProps {
@@ -284,8 +359,10 @@ function getComisionesSummaries(param: SummaryMethodProps): string[] {
   const { columns, data } = param
   const sums: string[] = []
 
+  const firstDataIndex = columns.findIndex((c) => c.type !== 'selection')
+
   columns.forEach((column, index) => {
-    if (index === 0) {
+    if (index === firstDataIndex) {
       sums[index] = t('dashboard.table.total') || 'Total'
       return
     }
@@ -395,7 +472,8 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
             value-format="YYYY-MM-DD"
             size="default"
             :shortcuts="commissionDateShortcuts"
-            style="width: 270px"
+            popper-class="commission-date-range-popper"
+            style="width: 310px"
             :clearable="false"
           />
         </div>
@@ -663,7 +741,32 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
       <el-card class="dashboard-card mb-4" shadow="hover">
         <template #header>
           <div class="comisiones-card-header">
-            <span class="card-header-title">{{ $t('dashboard.commissionsListTitle') }}</span>
+            <div class="comisiones-header-left">
+              <span class="card-header-title">{{ $t('dashboard.commissionsListTitle') }}</span>
+              <transition name="fade">
+                <div v-if="selectedComisiones.length > 0" class="bulk-actions-toolbar">
+                  <el-tag type="info" effect="plain" round class="selected-count-tag">
+                    {{ $t('dashboard.selectedCount', { count: selectedComisiones.length }) }}
+                  </el-tag>
+                  <el-button
+                    type="warning"
+                    size="small"
+                    :disabled="pendingSelectedCount === 0"
+                    @click="handleBulkApprove"
+                  >
+                    {{ $t('dashboard.bulkApprove', { count: pendingSelectedCount }) }}
+                  </el-button>
+                  <el-button
+                    type="success"
+                    size="small"
+                    :disabled="payableSelectedCount === 0"
+                    @click="handleBulkPay"
+                  >
+                    {{ $t('dashboard.bulkPay', { count: payableSelectedCount }) }}
+                  </el-button>
+                </div>
+              </transition>
+            </div>
             <div class="comisiones-filters">
               <el-select
                 v-model="comisionUsuarioFilter"
@@ -696,12 +799,15 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
         </div>
         <el-table
           v-else
+          ref="comisionesTableRef"
           :data="filteredComisiones"
           stripe
           show-summary
           :summary-method="getComisionesSummaries"
           style="width: 100%"
+          @selection-change="handleSelectionChange"
         >
+          <el-table-column type="selection" width="48" align="center" />
           <el-table-column prop="fechaVenta" :label="$t('dashboard.table.date')" width="110" />
           <el-table-column :label="$t('dashboard.table.beneficiary')" min-width="170">
             <template #default="{ row }">
@@ -879,6 +985,26 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
   gap: 0.75rem;
 }
 
+.comisiones-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.bulk-actions-toolbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--toolbar-border, #e2e8f0);
+}
+
+.selected-count-tag {
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
 .card-header-title {
   font-weight: 600;
   font-size: 1rem;
@@ -921,5 +1047,38 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Custom Date Range Popper con Sidebar Ampliado para Atajos y Bloques */
+:global(.commission-date-range-popper .el-date-range-picker.has-sidebar) {
+  width: 846px !important;
+}
+
+:global(.commission-date-range-popper .el-picker-panel__sidebar) {
+  width: 200px !important;
+  padding: 8px 6px !important;
+  box-sizing: border-box !important;
+}
+
+:global(.commission-date-range-popper .el-picker-panel__sidebar + .el-picker-panel__body) {
+  margin-left: 200px !important;
+}
+
+:global(.commission-date-range-popper .el-picker-panel__shortcut) {
+  font-size: 12.5px !important;
+  line-height: 32px !important;
+  height: 32px !important;
+  padding: 0 12px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  border-radius: 6px !important;
+  margin-bottom: 2px !important;
+  transition: all 0.15s ease !important;
+}
+
+:global(.commission-date-range-popper .el-picker-panel__shortcut:hover) {
+  background-color: var(--el-color-primary-light-9, #ecf5ff) !important;
+  color: var(--el-color-primary, #409eff) !important;
 }
 </style>

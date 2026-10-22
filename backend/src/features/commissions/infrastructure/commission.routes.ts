@@ -490,10 +490,14 @@ export async function commissionRoutes(fastify: FastifyInstance) {
       if (!userId) return reply.status(401).send({ error: 'No autenticado' })
 
       const ctx = await getUserContext(userId)
-      if (!ctx || !['SUPERUSUARIO', 'ADMIN', 'CONTABLE'].includes(ctx.roleCode)) {
+      if (!ctx || !['SUPERUSUARIO', 'ADMIN', 'GERENTE', 'CONTABLE'].includes(ctx.roleCode)) {
         return reply
           .status(403)
           .send({ error: 'No autorizado para cambiar el estado de las comisiones' })
+      }
+
+      if (!['PENDIENTE', 'APROBADA', 'PAGADA'].includes(estado)) {
+        return reply.status(400).send({ error: 'Estado de comisión no válido' })
       }
 
       if (ctx.allowedHotelIds !== null) {
@@ -513,6 +517,57 @@ export async function commissionRoutes(fastify: FastifyInstance) {
       fastify.log.error(err)
       const message =
         err instanceof Error ? err.message : 'Error al actualizar el estado de la comisión'
+      return reply.status(400).send({ error: message })
+    }
+  })
+
+  // PATCH /api/comisiones/estado-masivo - Actualización masiva de estado de comisiones
+  fastify.patch('/api/comisiones/estado-masivo', async (request, reply) => {
+    try {
+      const { ids, estado } = request.body as { ids?: number[]; estado: string }
+
+      const userId = getAuthUserId(request)
+      if (!userId) return reply.status(401).send({ error: 'No autenticado' })
+
+      const ctx = await getUserContext(userId)
+      if (!ctx || !['SUPERUSUARIO', 'ADMIN', 'GERENTE', 'CONTABLE'].includes(ctx.roleCode)) {
+        return reply
+          .status(403)
+          .send({ error: 'No autorizado para cambiar el estado de las comisiones' })
+      }
+
+      if (!['PENDIENTE', 'APROBADA', 'PAGADA'].includes(estado)) {
+        return reply.status(400).send({ error: 'Estado de comisión no válido' })
+      }
+
+      if (!ids || !Array.isArray(ids) || ids.length === 0) {
+        return reply.status(400).send({ error: 'Debes proporcionar una lista de comisiones' })
+      }
+
+      const numericIds = ids.map(Number).filter((n) => !isNaN(n))
+      if (numericIds.length === 0) {
+        return reply.status(400).send({ error: 'Identificadores de comisiones no válidos' })
+      }
+
+      const where: any = {
+        id: { in: numericIds },
+        deletedAt: null,
+      }
+
+      if (ctx.allowedHotelIds !== null) {
+        where.hotelId = { in: ctx.allowedHotelIds }
+      }
+
+      const result = await prisma.comision.updateMany({
+        where,
+        data: { estado },
+      })
+
+      return reply.send({ success: true, count: result.count })
+    } catch (err: unknown) {
+      fastify.log.error(err)
+      const message =
+        err instanceof Error ? err.message : 'Error al actualizar masivamente el estado de comisiones'
       return reply.status(400).send({ error: message })
     }
   })

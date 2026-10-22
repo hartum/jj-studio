@@ -204,6 +204,33 @@ export const useCommissionStore = defineStore('commission', () => {
     }
   }
 
+  async function updateEstadoMasivo(ids: number[], estado: string) {
+    try {
+      const res = await fetch(`${API_URL}/comisiones/estado-masivo`, {
+        method: 'PATCH',
+        headers: getHeaders(true),
+        body: JSON.stringify({ ids, estado }),
+      })
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}))
+        throw new Error(
+          errorData.error || 'Error al actualizar el estado masivo de las comisiones',
+        )
+      }
+      const data = await res.json()
+      const idSet = new Set(ids)
+      for (const c of comisiones.value) {
+        if (idSet.has(c.id)) {
+          c.estado = estado
+        }
+      }
+      return data
+    } catch (err: unknown) {
+      error.value = err instanceof Error ? err.message : String(err)
+      throw err
+    }
+  }
+
   async function fetchUserConfigs() {
     isLoading.value = true
     error.value = null
@@ -293,5 +320,6 @@ export const useCommissionStore = defineStore('commission', () => {
     fetchResumen,
     fetchComisiones,
     updateEstadoComision,
+    updateEstadoMasivo,
   }
 })
