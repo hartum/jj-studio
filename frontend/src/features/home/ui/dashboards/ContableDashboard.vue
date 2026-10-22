@@ -410,7 +410,7 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
             multiple
             collapse-tags
             collapse-tags-tooltip
-            :max-collapse-tags="3"
+            :max-collapse-tags="2"
             filterable
             clearable
             size="default"
