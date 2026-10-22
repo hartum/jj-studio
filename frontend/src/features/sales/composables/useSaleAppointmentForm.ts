@@ -825,7 +825,7 @@ export function useSaleAppointmentForm() {
   async function handleSave() {
     if (isReadOnly.value) return
 
-    if (!formData.value.sesionId) {
+    if (!isDirectSale.value && !formData.value.sesionId) {
       ElMessage.warning(t('sales.toasts.sessionRequired'))
       return
     }
@@ -857,7 +857,7 @@ export function useSaleAppointmentForm() {
     }
 
     if (formData.value.estado === 'COMPLETADA') {
-      if (!formData.value.sesionId) {
+      if (!isDirectSale.value && !formData.value.sesionId) {
         ElMessage.warning(t('sales.toasts.completeSessionRequired'))
         return
       }
@@ -910,7 +910,7 @@ export function useSaleAppointmentForm() {
         }
       } else {
         const result = await saleStore.addCitaVenta({
-          sesionId: formData.value.sesionId,
+          sesionId: Number(formData.value.sesionId),
           hotelId: formData.value.hotelId,
           vendedorId: formData.value.vendedorId || null,
           fechaHoraCita: formData.value.fechaHoraCita,
