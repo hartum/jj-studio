@@ -85,18 +85,18 @@
     "semantic_hash": "cf8cd866d45ae3dfd5e008bbbeef80d5"
   },
   "backend/src/features/commissions/application/commission.service.ts": {
-    "mtime": 1792025627.8478847,
-    "ast_hash": "5d9873cfa93297284c02da2a437d84a6",
+    "mtime": 1792690667.0852368,
+    "ast_hash": "f3dc0fe07ff26ccb1bcf38997666b6c7",
     "semantic_hash": ""
   },
   "backend/src/features/commissions/domain/commission.model.ts": {
-    "mtime": 1789397232.0079174,
-    "ast_hash": "a6e1db78a42680555e034f63066bb54d",
+    "mtime": 1792690636.8236783,
+    "ast_hash": "fa995dbd258f5f11412b69ea3c16dd7a",
     "semantic_hash": ""
   },
   "backend/src/features/commissions/infrastructure/commission.routes.ts": {
-    "mtime": 1792027219.6016817,
-    "ast_hash": "9bdef1e60e63b2300f57f72c7bd79ffe",
+    "mtime": 1792695811.0562096,
+    "ast_hash": "90875142d911f72a9e2d41ee67505116",
     "semantic_hash": ""
   },
   "backend/src/features/countries/infrastructure/country.routes.ts": {
@@ -290,13 +290,13 @@
     "semantic_hash": ""
   },
   "frontend/src/features/commissions/domain/commission.model.ts": {
-    "mtime": 1789397326.0061393,
-    "ast_hash": "eff9a1e04ac0cf7bd80d5e7dea5fb3e7",
+    "mtime": 1792690851.8308914,
+    "ast_hash": "325ef1c724b32ecb9e28d0ebb2357bdf",
     "semantic_hash": ""
   },
   "frontend/src/features/commissions/stores/commission.store.ts": {
-    "mtime": 1789399947.924759,
-    "ast_hash": "4e4878eea2aa718d9e886562535192ee",
+    "mtime": 1792696002.8924427,
+    "ast_hash": "15ff7f62680ec3f01f6ff2b2d99e1ec7",
     "semantic_hash": ""
   },
   "frontend/src/features/commissions/ui/ComisionesConfig.vue": {
@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1789891822.4974842,
-    "ast_hash": "e7795e93875635d383abd7e65c748c1b",
+    "mtime": 1792696159.83459,
+    "ast_hash": "00c0fbcc872fcdff258d6236e2d369e1",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/InicioView.vue": {
@@ -390,8 +390,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
-    "mtime": 1789713720.170617,
-    "ast_hash": "878e1dce175957a3cee651310129a08e",
+    "mtime": 1792696314.7956269,
+    "ast_hash": "d76a4657a2c66ba6c723c36809f95878",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
@@ -540,8 +540,8 @@
     "semantic_hash": "16440f1ecb1ffdb79be1ccf3070cfcde"
   },
   "frontend/src/features/sales/composables/useSaleAppointmentForm.ts": {
-    "mtime": 1792688849.728682,
-    "ast_hash": "b2f36b2ccd3e7394816d69e8ce2c277a",
+    "mtime": 1792689805.9873977,
+    "ast_hash": "420557eec4e008b87715b3e14e039802",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/domain/sale.model.ts": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792688674.0507045,
-    "ast_hash": "a9d26542ee7bcb3d03546839ee1f2d59",
+    "mtime": 1792696189.2486978,
+    "ast_hash": "61ed2ba355370bd10b1f6c43e474d076",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792688648.6411994,
-    "ast_hash": "b91574ebb343646ea4ddb4df980766ed",
+    "mtime": 1792696178.555296,
+    "ast_hash": "ab40d586a9b39776b517e448714b2f23",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {

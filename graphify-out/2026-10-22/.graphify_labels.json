@@ -92,7 +92,7 @@
   "90": "LanguageSelector.vue",
   "91": "CalendarAlertsPanel.vue",
   "92": "CalendarEventCard.vue",
-  "93": "useDirectSaleForm.ts",
+  "93": "ForgotPasswordView.vue",
   "94": "reminder.service.ts",
   "95": "CalendarDeleteConfirmPopover.vue",
   "96": "src/index.ts",
@@ -101,5 +101,9 @@
   "99": "GoalProgressCard.vue",
   "100": "session.routes.ts",
   "101": "email.service.ts",
-  "102": "calendario-laboral.routes.ts"
+  "102": "calendario-laboral.routes.ts",
+  "103": "User",
+  "104": "PhotoSessionFormView.vue",
+  "105": "useLocale.ts",
+  "106": "HotelCalendarView.vue"
 }
