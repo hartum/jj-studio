@@ -481,7 +481,7 @@ export async function goalRoutes(fastify: FastifyInstance) {
           usuariosAsignados: {
             where: {
               usuario: {
-                role: { codigo: 'FOTOGRAFO' },
+                role: { codigo: { in: ['FOTOGRAFO', 'SUPERVISOR'] } },
                 activo: true,
                 deletedAt: null,
               },
@@ -565,7 +565,11 @@ export async function goalRoutes(fastify: FastifyInstance) {
             : cuotaEquitativaSugerida
           const esMetaPersonalizada = Boolean(metaPersonal)
 
-          const ventasFoto = ventasHotel.filter((c: any) => (c.fotografoId || c.sesion?.fotografoId) === fotografo.id)
+          const ventasFoto = ventasHotel.filter(
+            (c: any) =>
+              (c.fotografoId || c.sesion?.fotografoId) === fotografo.id ||
+              c.vendedorId === fotografo.id,
+          )
           const ventasRealesFoto = ventasFoto.reduce((sum, c) => sum + (c.totalVentaUsd || 0), 0)
           const numVentasFoto = ventasFoto.length
           const numSesionesFoto = new Set(ventasFoto.map((c) => c.sesionId)).size

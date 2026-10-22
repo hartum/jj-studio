@@ -292,7 +292,8 @@
       "withoutSalary": "Sin Salario",
       "salaried": "Asalariado",
       "seller": "Vendedor",
-      "photographerRole": "Fotógrafo"
+      "photographerRole": "Fotógrafo",
+      "supervisorRole": "Supervisor"
     },
     "trafficLightLabels": {
       "noGoal": "Meta no definida",

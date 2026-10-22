@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { useGoalStore } from '@/features/goals/stores/goal.store'
@@ -44,7 +43,6 @@ const props = defineProps<{
   getSemaforoText: (semaforo: string, metaImporte: number) => string
 }>()
 
-const { t } = useI18n()
 const userStore = useUserStore()
 const hotelStore = useHotelStore()
 const goalStore = useGoalStore()
@@ -87,6 +85,14 @@ const empleadosRendimiento = computed<EmpleadoRendimiento[]>(() => {
     for (const f of hotel.fotografos || []) {
       const uInfo = userStore.usersWithProfile.find((u) => u.id === f.usuarioId)
       const existing = userMap.get(f.usuarioId)
+      const roleCode = uInfo?.perfil?.code?.toUpperCase() || 'FOTOGRAFO'
+      const roleNombre =
+        roleCode === 'SUPERVISOR'
+          ? 'Supervisor'
+          : roleCode === 'FOTOGRAFO'
+            ? 'Fotógrafo'
+            : 'Vendedor'
+
       if (!existing) {
         userMap.set(f.usuarioId, {
           usuarioId: f.usuarioId,
@@ -95,8 +101,8 @@ const empleadosRendimiento = computed<EmpleadoRendimiento[]>(() => {
           nombreCompleto:
             f.nombreCompleto || (uInfo ? `${uInfo.nombre} ${uInfo.apellidos}`.trim() : 'Usuario'),
           email: f.email || uInfo?.email || '',
-          rolCodigo: 'FOTOGRAFO',
-          rolNombre: 'Fotógrafo',
+          rolCodigo: roleCode,
+          rolNombre: roleNombre,
           hotelNombre: hotel.hotelNombre,
           areaNombre: hotel.areaNombre,
           metaImporte: f.metaImporte,
@@ -131,11 +137,11 @@ const empleadosRendimiento = computed<EmpleadoRendimiento[]>(() => {
     }
   }
 
-  // 3. Usuarios de ventas (AGENDADOR / VENDEDOR) en hoteles activos
+  // 3. Usuarios de ventas o supervisión (AGENDADOR / VENDEDOR / SUPERVISOR) en hoteles activos no incluidos arriba
   const sellingUsers = userStore.usersWithProfile.filter((u) => {
     if (u.status !== 'Activo') return false
     const role = u.perfil?.code?.toUpperCase() || ''
-    if (role !== 'AGENDADOR' && role !== 'FOTOGRAFO') return false
+    if (role !== 'AGENDADOR' && role !== 'FOTOGRAFO' && role !== 'SUPERVISOR') return false
     if (userMap.has(u.id)) return false
 
     const userHotels = u.hotelIds || []
@@ -144,7 +150,8 @@ const empleadosRendimiento = computed<EmpleadoRendimiento[]>(() => {
 
   for (const u of sellingUsers) {
     const roleCode = u.perfil?.code?.toUpperCase() || 'AGENDADOR'
-    const roleNombre = roleCode === 'FOTOGRAFO' ? 'Fotógrafo' : 'Vendedor'
+    const roleNombre =
+      roleCode === 'SUPERVISOR' ? 'Supervisor' : roleCode === 'FOTOGRAFO' ? 'Fotógrafo' : 'Vendedor'
 
     const assignedHotels = hotelStore.hotels.filter(
       (h) => (u.hotelIds || []).includes(h.id) && activeHotelIds.has(h.id),
@@ -340,9 +347,11 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
           sortable
         >
           <template #default="{ row }">
-            <div style="display: flex; align-items: center; gap: 8px">
+            <div class="employee-cell">
               <el-avatar
                 :size="28"
+                shape="circle"
+                fit="cover"
                 :src="row.imagen || undefined"
                 :style="{
                   backgroundColor: getUserBgColor(row.color),
@@ -350,12 +359,13 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
                   fontSize: '11px',
                   fontWeight: 'bold',
                 }"
+                class="employee-avatar"
               >
                 {{ getUserInitials(row.nombre, row.apellidos) }}
               </el-avatar>
-              <div>
-                <div style="font-weight: 600; line-height: 1.2">{{ row.nombreCompleto }}</div>
-                <div style="font-size: 0.75rem; color: var(--el-text-color-secondary)">
+              <div class="employee-info">
+                <div class="employee-name">{{ row.nombreCompleto }}</div>
+                <div class="employee-email">
                   {{ row.email }}
                 </div>
               </div>
@@ -372,13 +382,21 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
           <template #default="{ row }">
             <el-tag
               size="small"
-              :type="row.rolCodigo === 'FOTOGRAFO' ? 'success' : 'primary'"
+              :type="
+                row.rolCodigo === 'FOTOGRAFO'
+                  ? 'success'
+                  : row.rolCodigo === 'SUPERVISOR'
+                    ? 'warning'
+                    : 'primary'
+              "
               effect="light"
             >
               {{
                 row.rolCodigo === 'FOTOGRAFO'
                   ? $t('dashboard.table.photographerRole')
-                  : $t('dashboard.table.seller')
+                  : row.rolCodigo === 'SUPERVISOR'
+                    ? $t('dashboard.table.supervisorRole') || 'Supervisor'
+                    : $t('dashboard.table.seller')
               }}
             </el-tag>
           </template>
@@ -463,6 +481,47 @@ function semaforoSortWeight(row: { metaImporte?: number; semaforo?: SemaforoEsta
 <style scoped>
 .tab-content-fade {
   animation: fadeIn 0.25s ease-in-out;
+}
+
+.employee-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.employee-avatar {
+  flex-shrink: 0 !important;
+  width: 28px !important;
+  min-width: 28px !important;
+  height: 28px !important;
+}
+
+:deep(.employee-avatar img) {
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.employee-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.employee-name {
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.employee-email {
+  font-size: 0.75rem;
+  color: var(--el-text-color-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @keyframes fadeIn {
