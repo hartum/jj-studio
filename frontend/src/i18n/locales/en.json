@@ -680,7 +680,7 @@
     "subtitle": "Manage system users and their access profiles",
     "newUser": "New User",
     "searchPlaceholder": "Search by name, email or profile...",
-    "totalUsers": "Total: <strong>{count}</strong> users",
+    "totalUsers": "Total: {count} users",
     "editUserTooltip": "Edit user",
     "deleteUserTooltip": "Delete user",
     "deleteConfirm": "Delete user {name}?",
@@ -694,7 +694,11 @@
       "role": "Profile / Role",
       "seniority": "Seniority",
       "color": "Color",
-      "actions": "Actions"
+      "actions": "Actions",
+      "columns": "Columns",
+      "atLeastOneColumn": "At least one column must be visible",
+      "hotels": "Hotels",
+      "all": "All"
     },
     "form": {
       "titleNew": "New User",

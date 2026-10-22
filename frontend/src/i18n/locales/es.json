@@ -680,7 +680,7 @@
     "subtitle": "Administra los usuarios del sistema y sus perfiles de acceso",
     "newUser": "Nuevo Usuario",
     "searchPlaceholder": "Buscar por nombre, email o perfil...",
-    "totalUsers": "Total: <strong>{count}</strong> usuarios",
+    "totalUsers": "Total: {count} usuarios",
     "editUserTooltip": "Editar usuario",
     "deleteUserTooltip": "Eliminar usuario",
     "deleteConfirm": "¿Eliminar al usuario {name}?",
@@ -694,7 +694,11 @@
       "role": "Perfil / Rol",
       "seniority": "Antigüedad",
       "color": "Color",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "columns": "Columnas",
+      "atLeastOneColumn": "Debe haber al menos una columna visible",
+      "hotels": "Hoteles",
+      "all": "Todos"
     },
     "form": {
       "titleNew": "Nuevo Usuario",
