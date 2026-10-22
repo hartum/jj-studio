@@ -1,16 +1,16 @@
 # Graph Report - JJ Studio  (2026-10-22)
 
 ## Corpus Check
-- 153 files · ~261,601 words
+- 153 files · ~261,665 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1387 nodes · 1895 edges · 100 communities (79 shown, 21 thin omitted)
+- 1389 nodes · 1897 edges · 100 communities (79 shown, 21 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.6)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `438a1891`
+- Built from commit: `eff65ea7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -147,7 +147,7 @@ Nodes (13): element-plus, dependencies, element-plus, @fullcalendar/daygrid, @fu
 
 ### Community 2 - "UsuarioFormView.vue"
 Cohesion: 0.04
-Nodes (39): activeTab, assignableProfiles, assignedAreaIdsByOtherRoleUsers, assignedAreaNames, assignedHotelIdsByOtherSupervisores, assignedHotelNames, assignedNames, authStore (+31 more)
+Nodes (40): activeTab, assignableProfiles, assignedAreaIdsByOtherRoleUsers, assignedAreaNames, assignedHotelIdsByOtherSupervisores, assignedHotelNames, assignedNames, authStore (+32 more)
 
 ### Community 3 - "devDependencies"
 Cohesion: 0.05
@@ -205,7 +205,7 @@ Nodes (12): AuditLogEntry, AuditLogFilters, AuditLogResponse, useAuditLogStore, 
 
 ### Community 14 - "SaleAppointmentFormDesktop.vue"
 Cohesion: 0.08
-Nodes (13): SaleAppointmentFormContext, formattedSelectedSaleDateTime, isSellerPhotographer, minuteSlots, props, router, salesCountByHour, selectedHourOnly (+5 more)
+Nodes (12): formattedSelectedSaleDateTime, isSellerPhotographer, minuteSlots, props, router, salesCountByHour, selectedHourOnly, selectedMinuteOnly (+4 more)
 
 ### Community 15 - "ComisionesConfig.vue"
 Cohesion: 0.07
@@ -361,11 +361,11 @@ Nodes (6): AreaNode, CountryNode, emit, handleHotelClick(), handleNavClick(), Ho
 
 ### Community 56 - "useSaleAppointmentForm.ts"
 Cohesion: 0.18
-Nodes (15): FormPagoItem, SaleAppointmentFormData, SessionContextInfo, VendedorDisponibilidadItem, VendedoresDisponibilidadResponse, CitaVenta, ConflictoCitaVenta, CreateCitaVentaPayload (+7 more)
+Nodes (15): FormPagoItem, SaleAppointmentFormContext, SaleAppointmentFormData, SessionContextInfo, VendedorDisponibilidadItem, VendedoresDisponibilidadResponse, CitaVenta, ConflictoCitaVenta (+7 more)
 
 ### Community 57 - "DirectSaleFormDesktop.vue"
-Cohesion: 0.17
-Nodes (6): DirectSaleFormContext, isPhotographerColored, isSellerPhotographer, props, showPhotographersList, showSellersList
+Cohesion: 0.18
+Nodes (5): isPhotographerColored, isSellerPhotographer, props, showPhotographersList, showSellersList
 
 ### Community 58 - "scripts"
 Cohesion: 0.33
@@ -420,8 +420,8 @@ Cohesion: 0.29
 Nodes (5): emit, eventStatus, Props, StatusConfig, { t }
 
 ### Community 93 - "useDirectSaleForm.ts"
-Cohesion: 0.29
-Nodes (5): DirectSaleFormData, SellerUser, useDirectSaleForm(), form, isMobile
+Cohesion: 0.22
+Nodes (7): DirectSaleFormContext, DirectSaleFormData, SellerUser, useDirectSaleForm(), MODO_COBRO_OPTIONS, form, isMobile
 
 ### Community 99 - "useLocale.ts"
 Cohesion: 0.40
@@ -432,7 +432,7 @@ Cohesion: 0.53
 Nodes (5): escapeHtml(), getAppBaseUrl(), getMailTransporter(), sendPasswordResetEmail(), SendPasswordResetParams
 
 ## Knowledge Gaps
-- **718 isolated node(s):** `router`, `{ t, locale }`, `userStore`, `profileStore`, `authStore` (+713 more)
+- **719 isolated node(s):** `route`, `router`, `{ t }`, `userStore`, `profileStore` (+714 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -440,15 +440,15 @@ Nodes (5): escapeHtml(), getAppBaseUrl(), getMailTransporter(), sendPasswordRese
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `AvatarCropperDialog.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `SaleAppointmentFormView.vue`, `SupervisorHotelGoalCard.vue`, `ContableDashboard.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `AgendadorHotelGoalCard.vue`, `LoginView.vue`, `useSaleAppointmentForm.ts`, `DirectSaleFormDesktop.vue`, `ForgotPasswordView.vue`, `CalendarHeader.vue`, `ConfiguracionView.vue`, `DirectSaleFormMobile.vue`, `CalendarAlertsPanel.vue`, `CalendarEventCard.vue`, `useDirectSaleForm.ts`, `useDashboard.ts`, `auth.store.ts`, `HotelCalendarView.vue`, `useLocale.ts`?**
-  _High betweenness centrality (0.323) - this node is a cross-community bridge._
+  _High betweenness centrality (0.324) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
   _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **What connects `router`, `{ t, locale }`, `userStore` to the rest of the system?**
-  _718 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `route`, `router`, `{ t }` to the rest of the system?**
+  _719 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `encryption.ts` be split into smaller, more focused modules?**
   _Cohesion score 0.06359649122807018 - nodes in this community are weakly interconnected._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
-  _Cohesion score 0.0392156862745098 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
 - **Should `HotelCalendarMobile.vue` be split into smaller, more focused modules?**

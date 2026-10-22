@@ -615,8 +615,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/users/ui/UsuariosView.vue": {
-    "mtime": 1790231700.6406739,
-    "ast_hash": "d6051b6cdba603ca0b8779dc0029a2af",
+    "mtime": 1792684657.8761501,
+    "ast_hash": "b1cafca58ebde22a001c3dc42dbd22a7",
     "semantic_hash": ""
   },
   "frontend/src/features/users/utils/user-avatar.ts": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792680726.7118816,
-    "ast_hash": "0653955209c9155c4799c06e9d31540c",
+    "mtime": 1792684509.2823625,
+    "ast_hash": "4606d4ccce58aa8370b591a4386c4941",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792680708.981963,
-    "ast_hash": "f754e6ba8bae8a8cad4b97c422ecd6e2",
+    "mtime": 1792684496.237618,
+    "ast_hash": "d0e3233d7ce5b7d27d2c4ae9cfe85d13",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
