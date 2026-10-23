@@ -390,8 +390,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
-    "mtime": 1792707530.1629977,
-    "ast_hash": "ba29ec9483b22c0c3402c05d7c6ec19c",
+    "mtime": 1792773732.2231603,
+    "ast_hash": "e60a7d127965e7978c1ded7de16373b7",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
@@ -1075,8 +1075,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1792770216.6482146,
-    "ast_hash": "70f914af4fea8ba0cbf646d6bc71ad00",
+    "mtime": 1792773851.439206,
+    "ast_hash": "22a93e572d96508925fa27f59b21d9fe",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {

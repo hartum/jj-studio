@@ -104,5 +104,9 @@
   "102": "handleAccordionChange",
   "103": "handleSave",
   "104": "email.service.ts",
-  "105": "calendario-laboral.routes.ts"
+  "105": "calendario-laboral.routes.ts",
+  "106": "ContableEstadisticasTab.vue",
+  "107": "useDirectSaleForm.ts",
+  "108": "ContableDashboard.vue",
+  "109": "PhotoSessionFormView.vue"
 }

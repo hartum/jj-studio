@@ -99,8 +99,10 @@
   "97": "sale.routes.ts",
   "98": "user.routes.ts",
   "99": "GoalProgressCard.vue",
-  "100": "PhotoSessionFormView.vue",
+  "100": "session.routes.ts",
   "101": "CalendarDeleteConfirmPopover.vue",
   "102": "handleAccordionChange",
-  "103": "handleSave"
+  "103": "handleSave",
+  "104": "email.service.ts",
+  "105": "calendario-laboral.routes.ts"
 }
