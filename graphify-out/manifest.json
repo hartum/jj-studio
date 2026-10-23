@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792710654.7190685,
-    "ast_hash": "e1f7316bf5e63634e1f185f69e06c2a0",
+    "mtime": 1792763871.901755,
+    "ast_hash": "73524a32dd29ef26ee2776aa36f04a87",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792710645.5268548,
-    "ast_hash": "69c44104330fb26cd392df30be5ced6d",
+    "mtime": 1792763849.0629046,
+    "ast_hash": "52695921bb39895dccf0143dee767417",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1075,8 +1075,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1792711511.704942,
-    "ast_hash": "0d935c51fcc4072849bb643e91c3f261",
+    "mtime": 1792763890.2417316,
+    "ast_hash": "76c49f2e336a52d648474ab45fe5e724",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {

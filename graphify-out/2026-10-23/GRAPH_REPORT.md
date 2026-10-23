@@ -1,16 +1,16 @@
 # Graph Report - JJ Studio  (2026-10-23)
 
 ## Corpus Check
-- 155 files · ~264,381 words
+- 155 files · ~266,246 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1411 nodes · 1906 edges · 105 communities (87 shown, 18 thin omitted)
+- 1418 nodes · 1913 edges · 102 communities (84 shown, 18 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d619b0dc`
+- Built from commit: `c13fb8ca`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -102,15 +102,12 @@
 - CalendarEventCard.vue
 - ForgotPasswordView.vue
 - reminder.service.ts
-- ContableEstadisticasTab.vue
+- session.routes.ts
 - src/index.ts
 - sale.routes.ts
 - user.routes.ts
 - GoalProgressCard.vue
-- calendario-laboral.routes.ts
-- AdminDashboard.vue
-- ContableDashboard.vue
-- GerenteDashboard.vue
+- email.service.ts
 - HotelCalendarView.vue
 
 ## God Nodes (most connected - your core abstractions)
@@ -126,25 +123,25 @@
 10. `compilerOptions` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `sessionRoutes()` --calls--> `syncSesionToGoogle()`  [EXTRACTED]
+  backend/src/features/photo-sessions/infrastructure/session.routes.ts → backend/src/features/integrations/google-calendar/google-calendar.service.ts
 - `registrarAudit()` --calls--> `decrypt()`  [EXTRACTED]
   backend/src/features/audit-log/application/audit-log.service.ts → backend/src/shared/encryption.ts
 - `registrarAudit()` --calls--> `decryptUser()`  [EXTRACTED]
   backend/src/features/audit-log/application/audit-log.service.ts → backend/src/shared/encryption.ts
-- `processSaleAppointmentReminders()` --calls--> `decryptUser()`  [EXTRACTED]
+- `processSessionReminders()` --calls--> `decryptSesion()`  [EXTRACTED]
   backend/src/features/notifications/application/reminder.service.ts → backend/src/shared/encryption.ts
-- `getAuthUser()` --calls--> `decryptUser()`  [EXTRACTED]
-  backend/src/features/notifications/infrastructure/template.routes.ts → backend/src/shared/encryption.ts
-- `testPasswordResetFlow()` --calls--> `blindIndex()`  [EXTRACTED]
-  backend/src/scripts/test-password-reset.ts → backend/src/shared/encryption.ts
+- `processSaleAppointmentReminders()` --calls--> `decryptSesion()`  [EXTRACTED]
+  backend/src/features/notifications/application/reminder.service.ts → backend/src/shared/encryption.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (105 total, 18 thin omitted)
+## Communities (102 total, 18 thin omitted)
 
 ### Community 0 - "encryption.ts"
-Cohesion: 0.22
-Nodes (16): main(), prisma, seedUser(), migrateAll(), migrateSessions(), migrateUsers(), testCrypto(), testPasswordResetFlow() (+8 more)
+Cohesion: 0.21
+Nodes (18): main(), prisma, seedUser(), migrateAll(), migrateSessions(), migrateUsers(), testCrypto(), testPasswordResetFlow() (+10 more)
 
 ### Community 1 - "dependencies"
 Cohesion: 0.15
@@ -309,8 +306,35 @@ Cohesion: 0.24
 Nodes (11): getProgressColor(), getSemaforoBg(), getSemaforoColor(), getSemaforoIcon(), getSemaforoLabel(), getSemaforoTagType(), getSemaforoText(), isSinMeta() (+3 more)
 
 ### Community 39 - "InicioView.vue"
-Cohesion: 0.18
-Nodes (7): {
+Cohesion: 0.09
+Nodes (15): AreaGroup, CountryGroup, {
+  countryStore,
+  hotelStore,
+  goalStore,
+  commissionStore,
+  selectedAnio,
+  selectedMes,
+  selectedMonthDate,
+  selectedMonthLabel,
+  selectedHotelFilters,
+  totalUsers,
+  activeUsers,
+  totalCountries,
+  totalAreas,
+  totalHotels,
+  currentHotelProgreso,
+  filteredProgresoHoteles,
+  globalProgresoTotals,
+  selectedHotelsSummary,
+  getSemaforoTagType,
+  getSemaforoText,
+  getProgressColor,
+  goToConfig,
+  goToUsers,
+  formatCurrency,
+  handleNavigateToGoalForm,
+  globalMonthlyCommissions,
+}, groupedHotelsByCountry, {
   commissionStore,
   selectedMes,
   selectedAnio,
@@ -341,20 +365,7 @@ Nodes (7): {
   myMonthlyCommissions,
   myCommissionFormula,
   myCommissionTooltip,
-}, {
-  goalStore,
-  commissionStore,
-  selectedAnio,
-  selectedMes,
-  selectedMonthDate,
-  selectedMonthLabel,
-  selectedHotelFilter,
-  formatCurrency,
-  supervisorHotels,
-  supervisorMonthlyCommissions,
-  myCommissionFormula,
-  myCommissionTooltip,
-}, authStore, currentUser, userRole
+}, AreaGroup (+7 more)
 
 ### Community 41 - "commission.service.ts"
 Cohesion: 0.17
@@ -377,8 +388,8 @@ Cohesion: 0.18
 Nodes (6): FotografoProgreso, displayHotelTitle, fotografoSubtitle, numFotografos, props, { t }
 
 ### Community 46 - "google-calendar.service.ts"
-Cohesion: 0.18
-Nodes (24): googleCalendarRoutes(), deleteCitaVentaFromGoogle(), deleteSesionFromGoogle(), __dirname, __filename, formatDateLongSpanish(), formatEmailHtml(), formatPaxDisplay() (+16 more)
+Cohesion: 0.24
+Nodes (17): googleCalendarRoutes(), __dirname, __filename, formatDateLongSpanish(), formatEmailHtml(), formatPaxDisplay(), formatPhoneHtml(), formatRoomDisplay() (+9 more)
 
 ### Community 47 - "backend/package.json"
 Cohesion: 0.22
@@ -461,8 +472,8 @@ Cohesion: 0.29
 Nodes (6): engines, node, name, private, type, version
 
 ### Community 91 - "ContableComisionesTab.vue"
-Cohesion: 0.10
-Nodes (15): availableContableUsers, comisionesTableRef, comisionUsuarioFilter, commissionStore, ContableAreaSummary, ContableHotelSummary, filteredComisiones, payableSelectedCount (+7 more)
+Cohesion: 0.05
+Nodes (32): availableContableUsers, comisionUsuarioFilter, commissionStore, ContableAreaSummary, ContableHotelSummary, EmpleadoComisionResumen, payableSelectedCount, pendingSelectedCount (+24 more)
 
 ### Community 92 - "CalendarEventCard.vue"
 Cohesion: 0.29
@@ -473,128 +484,47 @@ Cohesion: 0.29
 Nodes (5): email, isLoading, isSubmitted, router, { t }
 
 ### Community 94 - "reminder.service.ts"
-Cohesion: 0.19
-Nodes (22): formatDateDisplay(), formatTimeDisplay(), getMailTransporter(), getTemplate(), isValidEmail(), processAllReminders(), processSaleAppointmentReminders(), processSessionReminders() (+14 more)
+Cohesion: 0.21
+Nodes (20): formatDateDisplay(), formatTimeDisplay(), getMailTransporter(), getTemplate(), isValidEmail(), processAllReminders(), processSaleAppointmentReminders(), processSessionReminders() (+12 more)
 
-### Community 95 - "ContableEstadisticasTab.vue"
-Cohesion: 0.18
-Nodes (9): commissionStore, ContableHotelSummary, EmpleadoRendimiento, empleadosRendimiento, GlobalProgresoTotals, goalStore, hotelStore, props (+1 more)
+### Community 95 - "session.routes.ts"
+Cohesion: 0.54
+Nodes (7): deleteCitaVentaFromGoogle(), deleteSesionFromGoogle(), getAuthUserId(), getHotelAvailability(), parseDateOnly(), parseLocalDateTime(), sessionRoutes()
 
 ### Community 96 - "src/index.ts"
-Cohesion: 0.19
-Nodes (15): AuditParams, DIAS_SEMANA, formatAuditDateTime(), formatCreadorOriginal(), MESES, registrarAudit(), auditLogRoutes(), getAuthTokenInfo() (+7 more)
+Cohesion: 0.15
+Nodes (18): AuditParams, DIAS_SEMANA, formatAuditDateTime(), formatCreadorOriginal(), MESES, registrarAudit(), auditLogRoutes(), getAuthTokenInfo() (+10 more)
 
 ### Community 97 - "sale.routes.ts"
 Cohesion: 0.36
 Nodes (9): deriveModoCobro(), findConflicts(), getAllowedHotelIds(), getAuthUserId(), getUserRole(), PagoInput, parseDateOnly(), parseLocalDateTime() (+1 more)
 
 ### Community 98 - "user.routes.ts"
-Cohesion: 0.21
-Nodes (13): getAuthUser(), userRoutes(), escapeHtml(), getAppBaseUrl(), getMailTransporter(), sendPasswordResetEmail(), SendPasswordResetParams, canDeleteUser() (+5 more)
+Cohesion: 0.33
+Nodes (8): getAuthUser(), userRoutes(), canDeleteUser(), canEditUser(), getRolePermissions(), PERMISSION_MATRIX, RoleCode, RoleConfig
 
 ### Community 99 - "GoalProgressCard.vue"
 Cohesion: 0.20
 Nodes (8): cappedPercentage, isSinMeta, props, semaforoBgLight, semaforoColor, semaforoIcon, semaforoLabel, { t }
 
-### Community 100 - "calendario-laboral.routes.ts"
-Cohesion: 0.83
-Nodes (3): calendarioLaboralRoutes(), formatDateToIsoString(), parseDateOnly()
-
-### Community 101 - "AdminDashboard.vue"
-Cohesion: 0.33
-Nodes (4): AreaGroup, CountryGroup, {
-  countryStore,
-  hotelStore,
-  goalStore,
-  commissionStore,
-  selectedAnio,
-  selectedMes,
-  selectedMonthDate,
-  selectedMonthLabel,
-  selectedHotelFilters,
-  totalUsers,
-  activeUsers,
-  totalCountries,
-  totalAreas,
-  totalHotels,
-  currentHotelProgreso,
-  filteredProgresoHoteles,
-  globalProgresoTotals,
-  selectedHotelsSummary,
-  getSemaforoTagType,
-  getSemaforoText,
-  getProgressColor,
-  goToConfig,
-  goToUsers,
-  formatCurrency,
-  handleNavigateToGoalForm,
-  globalMonthlyCommissions,
-}, groupedHotelsByCountry
-
-### Community 102 - "ContableDashboard.vue"
-Cohesion: 0.33
-Nodes (5): activeTab, AreaGroup, CountryGroup, {
-  countryStore,
-  currentHotelProgreso,
-  filteredProgresoHoteles,
-  globalProgresoTotals,
-  selectedHotelsSummary,
-  selectedMonthsLabel,
-  selectedHotelFilters,
-  globalMonthlyCommissions,
-  handleUpdateCommissionStatus,
-  handleUpdateCommissionsStatusMasivo,
-  contableAreas,
-  contableHotels,
-  commissionDateRange,
-  commissionDateShortcuts,
-  loadCommissionsData,
-  loadGoalsData,
-  getProgressColor,
-  getSemaforoTagType,
-  getSemaforoText,
-}, groupedContableHotelsByCountry
-
-### Community 104 - "GerenteDashboard.vue"
-Cohesion: 0.40
-Nodes (4): AreaGroup, CountryGroup, {
-  countryStore,
-  goalStore,
-  commissionStore,
-  selectedAnio,
-  selectedMes,
-  selectedMonthDate,
-  selectedMonthLabel,
-  selectedHotelFilters,
-  currentHotelProgreso,
-  filteredProgresoHoteles,
-  globalProgresoTotals,
-  selectedHotelsSummary,
-  getSemaforoTagType,
-  getSemaforoText,
-  getProgressColor,
-  formatCurrency,
-  handleNavigateToGoalForm,
-  managerAreas,
-  managerHotels,
-  managerTeam,
-  gerenteMonthlyCommissions,
-  myCommissionFormula,
-  myCommissionTooltip,
-}, groupedManagerHotelsByCountry
+### Community 100 - "email.service.ts"
+Cohesion: 0.53
+Nodes (5): escapeHtml(), getAppBaseUrl(), getMailTransporter(), sendPasswordResetEmail(), SendPasswordResetParams
 
 ## Knowledge Gaps
-- **737 isolated node(s):** `MESES_NOMBRES`, `ContableHotelSummary`, `GlobalProgresoTotals`, `props`, `userStore` (+732 more)
+- **740 isolated node(s):** `ComisionDTO`, `ContableHotelSummary`, `ContableAreaSummary`, `EmpleadoComisionResumen`, `props` (+735 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `AvatarCropperDialog.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `SaleAppointmentFormView.vue`, `SupervisorHotelGoalCard.vue`, `InicioView.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `AgendadorHotelGoalCard.vue`, `LoginView.vue`, `useSaleAppointmentForm.ts`, `DirectSaleFormDesktop.vue`, `useLocale.ts`, `CalendarHeader.vue`, `ConfiguracionView.vue`, `DirectSaleFormMobile.vue`, `ContableComisionesTab.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `ContableEstadisticasTab.vue`, `GoalProgressCard.vue`, `AdminDashboard.vue`, `ContableDashboard.vue`, `GerenteDashboard.vue`, `HotelCalendarView.vue`?**
-  _High betweenness centrality (0.361) - this node is a cross-community bridge._
-- **What connects `MESES_NOMBRES`, `ContableHotelSummary`, `GlobalProgresoTotals` to the rest of the system?**
-  _737 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `AvatarCropperDialog.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `SaleAppointmentFormView.vue`, `SupervisorHotelGoalCard.vue`, `InicioView.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `AgendadorHotelGoalCard.vue`, `LoginView.vue`, `useSaleAppointmentForm.ts`, `DirectSaleFormDesktop.vue`, `useLocale.ts`, `CalendarHeader.vue`, `ConfiguracionView.vue`, `DirectSaleFormMobile.vue`, `ContableComisionesTab.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `GoalProgressCard.vue`, `HotelCalendarView.vue`?**
+  _High betweenness centrality (0.397) - this node is a cross-community bridge._
+- **Why does `plugins` connect `plugins` to `vue`?**
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+- **What connects `ComisionDTO`, `ContableHotelSummary`, `ContableAreaSummary` to the rest of the system?**
+  _740 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
@@ -603,5 +533,3 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.05668016194331984 - nodes in this community are weakly interconnected._
 - **Should `PhotoSessionFormMobile.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.06050420168067227 - nodes in this community are weakly interconnected._
-- **Should `HotelFormView.vue` be split into smaller, more focused modules?**
-  _Cohesion score 0.05555555555555555 - nodes in this community are weakly interconnected._
