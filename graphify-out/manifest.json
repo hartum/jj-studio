@@ -1075,8 +1075,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1792763890.2417316,
-    "ast_hash": "76c49f2e336a52d648474ab45fe5e724",
+    "mtime": 1792764909.524593,
+    "ast_hash": "97ea38997644315c4ef89d26e9f893db",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {
