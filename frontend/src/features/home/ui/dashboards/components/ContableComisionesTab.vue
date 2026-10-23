@@ -630,10 +630,10 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
         style="width: 100%"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="45" align="center" />
+        <el-table-column type="selection" width="36" align="center" fixed="left" />
 
         <!-- Desglose expandible de ventas individuales por empleado -->
-        <el-table-column type="expand" width="45">
+        <el-table-column type="expand" width="36" fixed="left">
           <template #default="{ row }">
             <div class="expand-table-wrapper">
               <div class="expand-header">
@@ -781,7 +781,8 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
         <el-table-column
           prop="nombreCompleto"
           :label="$t('dashboard.table.employee')"
-          min-width="190"
+          width="220"
+          fixed="left"
         >
           <template #default="{ row }">
             <div class="employee-cell">
@@ -871,6 +872,7 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
           width="165"
           align="right"
           sortable
+          class-name="col-highlighted"
         >
           <template #header>
             <span class="inline-flex items-center gap-1">
@@ -952,6 +954,7 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
           width="195"
           align="right"
           sortable
+          class-name="col-highlighted"
         >
           <template #default="{ row }">
             <strong class="text-success font-bold text-base">
@@ -967,6 +970,7 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
           width="185"
           align="right"
           sortable
+          class-name="col-highlighted"
         >
           <template #default="{ row }">
             <strong class="text-primary font-bold">
@@ -1236,6 +1240,20 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
 :deep(.el-table th.el-table__cell .cell) {
   white-space: nowrap !important;
   word-break: keep-all !important;
+}
+
+:deep(.el-table th.el-table-column--selection .cell),
+:deep(.el-table td.el-table-column--selection .cell),
+:deep(.el-table th.el-table__expand-column .cell),
+:deep(.el-table td.el-table__expand-column .cell) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center;
+}
+
+:deep(.el-table th.col-highlighted),
+:deep(.el-table td.col-highlighted) {
+  background-color: var(--el-color-primary-light-9, #ecf5ff) !important;
 }
 
 :deep(.el-table__footer-wrapper tbody td) {
