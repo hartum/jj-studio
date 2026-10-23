@@ -95,7 +95,16 @@ watch(tipoCambioMxn, (newVal) => {
 })
 
 // --- Filtro de usuario ---
-const comisionUsuarioFilter = ref<string | null>(null)
+const LOCAL_STORAGE_KEY_USER_FILTER = 'jj_studio_contable_user_filter'
+const comisionUsuarioFilter = ref<string | null>(localStorage.getItem(LOCAL_STORAGE_KEY_USER_FILTER) || null)
+
+watch(comisionUsuarioFilter, (newVal) => {
+  if (newVal) {
+    localStorage.setItem(LOCAL_STORAGE_KEY_USER_FILTER, newVal)
+  } else {
+    localStorage.removeItem(LOCAL_STORAGE_KEY_USER_FILTER)
+  }
+})
 
 const availableContableUsers = computed(() => {
   const activeHotelIds = new Set<number>()
@@ -139,6 +148,37 @@ const availableContableUsers = computed(() => {
     `${a.nombre} ${a.apellidos}`.localeCompare(`${b.nombre} ${b.apellidos}`),
   )
 })
+
+// --- Orden de la tabla (preservado en LocalStorage) ---
+interface TableSortState {
+  prop: string
+  order: 'ascending' | 'descending' | null
+}
+
+const LOCAL_STORAGE_KEY_SORT = 'jj_studio_contable_table_sort'
+function getInitialSort(): TableSortState {
+  try {
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY_SORT)
+    if (stored) {
+      const parsed = JSON.parse(stored)
+      if (parsed && typeof parsed.prop === 'string') {
+        return parsed
+      }
+    }
+  } catch {}
+  return { prop: 'totalComisionesUsd', order: 'descending' }
+}
+
+const currentSort = ref<TableSortState>(getInitialSort())
+
+function handleSortChange({ prop, order }: { prop: string; order: 'ascending' | 'descending' | null }) {
+  currentSort.value = { prop: prop || '', order }
+  if (order) {
+    localStorage.setItem(LOCAL_STORAGE_KEY_SORT, JSON.stringify({ prop, order }))
+  } else {
+    localStorage.removeItem(LOCAL_STORAGE_KEY_SORT)
+  }
+}
 
 // --- Agrupación de comisiones por Usuario (Estilo Excel COMISIONES1) ---
 const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
@@ -288,11 +328,48 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     item.cumpleBono = item.totalVentasBrutasUsd >= 500
   }
 
-  return Array.from(userMap.values()).sort((a, b) => b.totalComisionesUsd - a.totalComisionesUsd)
+  const result = Array.from(userMap.values())
+  if (currentSort.value.prop && currentSort.value.order) {
+    const { prop, order } = currentSort.value
+    const isAsc = order === 'ascending'
+    result.sort((a, b) => {
+      const valA = (a as unknown as Record<string, unknown>)[prop]
+      const valB = (b as unknown as Record<string, unknown>)[prop]
+      if (typeof valA === 'string' && typeof valB === 'string') {
+        return isAsc ? valA.localeCompare(valB) : valB.localeCompare(valA)
+      }
+      const numA = typeof valA === 'number' ? valA : 0
+      const numB = typeof valB === 'number' ? valB : 0
+      return isAsc ? numA - numB : numB - numA
+    })
+  } else {
+    result.sort((a, b) => b.totalComisionesUsd - a.totalComisionesUsd)
+  }
+  return result
 })
 
-// --- Control de filas expandidas (preservar estado al recargar datos) ---
-const expandedRowKeys = ref<string[]>([])
+// --- Control de filas expandidas (preservado en LocalStorage) ---
+const LOCAL_STORAGE_KEY_EXPANDED = 'jj_studio_contable_expanded_rows'
+function getInitialExpandedRows(): string[] {
+  try {
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY_EXPANDED)
+    if (stored) {
+      const parsed = JSON.parse(stored)
+      if (Array.isArray(parsed)) return parsed
+    }
+  } catch {}
+  return []
+}
+
+const expandedRowKeys = ref<string[]>(getInitialExpandedRows())
+
+watch(
+  expandedRowKeys,
+  (keys) => {
+    localStorage.setItem(LOCAL_STORAGE_KEY_EXPANDED, JSON.stringify(keys))
+  },
+  { deep: true },
+)
 
 function handleExpandChange(_row: EmpleadoComisionResumen, expandedRows: EmpleadoComisionResumen[]) {
   expandedRowKeys.value = expandedRows.map((r) => r.usuarioId)
@@ -707,12 +784,14 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
         :data="resumenUsuariosComision"
         row-key="usuarioId"
         :expand-row-keys="expandedRowKeys"
+        :default-sort="currentSort.order ? { prop: currentSort.prop, order: currentSort.order } : undefined"
         stripe
         show-summary
         :summary-method="getUsuariosSummaries"
         style="width: 100%"
         @selection-change="handleSelectionChange"
         @expand-change="handleExpandChange"
+        @sort-change="handleSortChange"
       >
         <el-table-column type="selection" width="36" align="center" fixed="left" />
 
@@ -913,6 +992,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
           :label="$t('dashboard.table.employee')"
           width="220"
           fixed="left"
+          sortable="custom"
         >
           <template #default="{ row }">
             <div class="employee-cell">
@@ -957,7 +1037,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
           :label="$t('dashboard.table.grossSales')"
           width="180"
           align="right"
-          sortable
+          sortable="custom"
         >
           <template #default="{ row }">
             <span class="font-semibold">{{ formatCurrency(row.totalVentasBrutasUsd, 2) }}</span>
@@ -965,7 +1045,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
         </el-table-column>
 
         <!-- Columna 4: Retención / Impuesto Estatal deducido -->
-        <el-table-column prop="totalImpuestoUsd" width="170" align="right" sortable>
+        <el-table-column prop="totalImpuestoUsd" width="170" align="right" sortable="custom">
           <template #header>
             <span class="inline-flex items-center gap-1">
               <span>{{ $t('dashboard.table.taxWithholding') }}</span>
@@ -1001,7 +1081,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
           prop="totalBaseNetaUsd"
           width="165"
           align="right"
-          sortable
+          sortable="custom"
           class-name="col-highlighted"
         >
           <template #header>
@@ -1035,7 +1115,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
           :label="$t('dashboard.table.photographerCommission')"
           width="150"
           align="right"
-          sortable
+          sortable="custom"
         >
           <template #default="{ row }">
             <span v-if="row.comisionFotografoUsd > 0">
@@ -1051,7 +1131,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
           :label="$t('dashboard.table.sellerCommission')"
           width="155"
           align="right"
-          sortable
+          sortable="custom"
         >
           <template #default="{ row }">
             <span v-if="row.comisionVendedorUsd > 0">
@@ -1067,7 +1147,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
           :label="$t('dashboard.table.otherCommission')"
           width="145"
           align="right"
-          sortable
+          sortable="custom"
         >
           <template #default="{ row }">
             <span v-if="row.comisionOtrasUsd > 0">
@@ -1083,7 +1163,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
           :label="$t('dashboard.table.totalCommissionsUsd')"
           width="195"
           align="right"
-          sortable
+          sortable="custom"
           class-name="col-highlighted"
         >
           <template #default="{ row }">
@@ -1099,7 +1179,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
           :label="$t('dashboard.table.totalToPayMxn')"
           width="185"
           align="right"
-          sortable
+          sortable="custom"
           class-name="col-highlighted"
         >
           <template #default="{ row }">

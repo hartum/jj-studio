@@ -7,7 +7,9 @@ import { Building2 } from '@lucide/vue'
 import ContableEstadisticasTab from './components/ContableEstadisticasTab.vue'
 import ContableComisionesTab from './components/ContableComisionesTab.vue'
 
-const activeTab = ref<'estadisticas' | 'comisiones'>('estadisticas')
+const LOCAL_STORAGE_KEY_TAB = 'jj_studio_contable_active_tab'
+const LOCAL_STORAGE_KEY_DATES = 'jj_studio_contable_date_range'
+const LOCAL_STORAGE_KEY_HOTELS = 'jj_studio_contable_selected_hotels'
 
 const {
   countryStore,
@@ -31,13 +33,62 @@ const {
   getSemaforoText,
 } = useDashboard()
 
+// 1. Restaurar pestaña activa guardada
+const savedTab = localStorage.getItem(LOCAL_STORAGE_KEY_TAB) as 'estadisticas' | 'comisiones' | null
+const activeTab = ref<'estadisticas' | 'comisiones'>(savedTab === 'comisiones' ? 'comisiones' : 'estadisticas')
+
+// 2. Restaurar rango de fechas guardado para el contable
+try {
+  const savedDates = localStorage.getItem(LOCAL_STORAGE_KEY_DATES)
+  if (savedDates) {
+    const parsed = JSON.parse(savedDates)
+    if (Array.isArray(parsed) && parsed.length === 2 && parsed[0] && parsed[1]) {
+      commissionDateRange.value = [parsed[0], parsed[1]]
+    }
+  }
+} catch (e) {
+  console.warn('Error al restaurar commissionDateRange de localStorage', e)
+}
+
+// 3. Restaurar hoteles seleccionados para el contable
+try {
+  const savedHotels = localStorage.getItem(LOCAL_STORAGE_KEY_HOTELS)
+  if (savedHotels) {
+    const parsed = JSON.parse(savedHotels)
+    if (Array.isArray(parsed)) {
+      selectedHotelFilters.value = parsed.map(Number).filter((n) => !isNaN(n))
+    }
+  }
+} catch (e) {
+  console.warn('Error al restaurar selectedHotelFilters de localStorage', e)
+}
+
 watch(activeTab, (tab) => {
+  localStorage.setItem(LOCAL_STORAGE_KEY_TAB, tab)
   if (tab === 'comisiones') {
     loadCommissionsData()
   } else if (tab === 'estadisticas') {
     loadGoalsData()
   }
 })
+
+watch(
+  commissionDateRange,
+  (val) => {
+    if (val && val.length === 2 && val[0] && val[1]) {
+      localStorage.setItem(LOCAL_STORAGE_KEY_DATES, JSON.stringify(val))
+    }
+  },
+  { deep: true },
+)
+
+watch(
+  selectedHotelFilters,
+  (val) => {
+    localStorage.setItem(LOCAL_STORAGE_KEY_HOTELS, JSON.stringify(val))
+  },
+  { deep: true },
+)
 
 interface AreaGroup {
   id: number
