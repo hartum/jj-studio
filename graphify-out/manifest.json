@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "backend/src/features/commissions/infrastructure/commission.routes.ts": {
-    "mtime": 1792710537.939507,
-    "ast_hash": "a64e0e61943d6cdb6d791af7207060a1",
+    "mtime": 1792770969.6718006,
+    "ast_hash": "e4853b61c2973680c210f84fe4953aeb",
     "semantic_hash": ""
   },
   "backend/src/features/countries/infrastructure/country.routes.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": "8b7fbbfd3c080a1fc2affb721c830dfc"
   },
   "backend/src/features/sales/infrastructure/sale.routes.ts": {
-    "mtime": 1792688914.4315658,
-    "ast_hash": "849311f5046933078cd734d86044bc5c",
+    "mtime": 1792770417.0035782,
+    "ast_hash": "cc74e5539ed5eb9d1547e092ab75d8e9",
     "semantic_hash": ""
   },
   "backend/src/features/users/infrastructure/calendario-laboral.routes.ts": {
@@ -240,8 +240,8 @@
     "semantic_hash": "02697ba222f688fcd12e8425e5be45d4"
   },
   "backend/src/shared/permissions.ts": {
-    "mtime": 1789656990.7651503,
-    "ast_hash": "9598c4383a535a80ec1cd88cd534ed6b",
+    "mtime": 1792769341.1158423,
+    "ast_hash": "30190dc9bddc751726a084c7dd0f40c0",
     "semantic_hash": ""
   },
   "backend/tsconfig.json": {
@@ -265,8 +265,8 @@
     "semantic_hash": "fa5e38919ee7a393bfc67089945aa170"
   },
   "frontend/src/features/audit-log/ui/AuditLogTab.vue": {
-    "mtime": 1790079943.6104503,
-    "ast_hash": "e76d4f062f0e0f22492c5e2a61bddef8",
+    "mtime": 1792771005.616929,
+    "ast_hash": "efd3481715cd95e9d45caed03de02e20",
     "semantic_hash": ""
   },
   "frontend/src/features/auth/stores/auth.store.ts": {
@@ -450,8 +450,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts": {
-    "mtime": 1792026001.7195437,
-    "ast_hash": "21b0652a71b900c312f27095208bb1fb",
+    "mtime": 1792769445.5317914,
+    "ast_hash": "546bd8cc35f0d0edd4c8e964091a1f9e",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarScope.ts": {
@@ -475,13 +475,13 @@
     "semantic_hash": "f5149dbf22b1fc42c4c476a58cdc56df"
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue": {
-    "mtime": 1791041952.5741286,
-    "ast_hash": "3770f5cce96f3d531e53dc2cd798c804",
+    "mtime": 1792769466.8642159,
+    "ast_hash": "f6f76c222a768d5ce031cf6e373dba30",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue": {
-    "mtime": 1791041974.4985557,
-    "ast_hash": "cc11b4d0540167e8c18fd64eb812c1c9",
+    "mtime": 1792769504.6201646,
+    "ast_hash": "e7048f510b7f0ac160564f26cf2f67e9",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarView.vue": {
@@ -540,8 +540,8 @@
     "semantic_hash": "16440f1ecb1ffdb79be1ccf3070cfcde"
   },
   "frontend/src/features/sales/composables/useSaleAppointmentForm.ts": {
-    "mtime": 1792689805.9873977,
-    "ast_hash": "420557eec4e008b87715b3e14e039802",
+    "mtime": 1792769406.2225902,
+    "ast_hash": "cbf98232219bdbcc9e3eb1047acc17ff",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/domain/sale.model.ts": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792765405.3890045,
-    "ast_hash": "2b6704a34e545af49c044834a3c84f29",
+    "mtime": 1792770994.164666,
+    "ast_hash": "006b5b72256e9ab2449165563c3ddc8e",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792765395.7012653,
-    "ast_hash": "5580363461ddfd4cdb3016f3cef6d3f8",
+    "mtime": 1792770981.569096,
+    "ast_hash": "d78849a325031d7666f35f26d2639a37",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1050,8 +1050,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/sales/composables/useDirectSaleForm.ts": {
-    "mtime": 1792688814.9545581,
-    "ast_hash": "06aec65b3dbf58fb10865d3ec59e1c38",
+    "mtime": 1792769419.2208445,
+    "ast_hash": "cf511137075c8d12a3cf663df1759ca2",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/DirectSaleFormDesktop.vue": {
@@ -1075,8 +1075,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1792768071.0632162,
-    "ast_hash": "7787a94874aa255d60c329331d415c6c",
+    "mtime": 1792770216.6482146,
+    "ast_hash": "70f914af4fea8ba0cbf646d6bc71ad00",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {
