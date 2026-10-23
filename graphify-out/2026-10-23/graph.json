@@ -4,290 +4,81 @@
   "graph": {},
   "nodes": [
     {
-      "label": "ContableDashboard.vue",
+      "label": "goal.routes.ts",
       "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_contabledashboard",
-      "community": 102,
-      "community_name": "ContableDashboard.vue",
-      "norm_label": "contabledashboard.vue"
+      "id": "backend_src_features_goals_infrastructure_goal_routes",
+      "community": 25,
+      "community_name": "goal.routes.ts",
+      "norm_label": "goal.routes.ts"
     },
     {
-      "label": "activeTab",
+      "label": "getAuthUserId()",
       "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
-      "source_location": "L10",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L14",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_contabledashboard_activetab",
-      "community": 102,
-      "community_name": "ContableDashboard.vue",
-      "norm_label": "activetab"
+      "id": "backend_src_features_goals_infrastructure_goal_routes_getauthuserid",
+      "community": 25,
+      "community_name": "goal.routes.ts",
+      "norm_label": "getauthuserid()"
     },
     {
-      "label": "{\n  countryStore,\n  currentHotelProgreso,\n  filteredProgresoHoteles,\n  globalProgresoTotals,\n  selectedHotelsSummary,\n  selectedMonthsLabel,\n  selectedHotelFilters,\n  globalMonthlyCommissions,\n  handleUpdateCommissionStatus,\n  handleUpdateCommissionsStatusMasivo,\n  contableAreas,\n  contableHotels,\n  commissionDateRange,\n  commissionDateShortcuts,\n  loadCommissionsData,\n  loadGoalsData,\n  getProgressColor,\n  getSemaforoTagType,\n  getSemaforoText,\n}",
+      "label": "getUserContext()",
       "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
-      "source_location": "L12",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_contabledashboard_countrystore_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_selectedmonthslabel_selectedhotelfilters_globalmonthlycommissions_handleupdatecommissionstatus_handleupdatecommissionsstatusmasivo_contableareas_contablehotels_commissiondaterange_commissiondateshortcuts_loadcommissionsdata_loadgoalsdata_getprogresscolor_getsemaforotagtype_getsemaforotext",
-      "community": 102,
-      "community_name": "ContableDashboard.vue",
-      "norm_label": "{\n  countrystore,\n  currenthotelprogreso,\n  filteredprogresohoteles,\n  globalprogresototals,\n  selectedhotelssummary,\n  selectedmonthslabel,\n  selectedhotelfilters,\n  globalmonthlycommissions,\n  handleupdatecommissionstatus,\n  handleupdatecommissionsstatusmasivo,\n  contableareas,\n  contablehotels,\n  commissiondaterange,\n  commissiondateshortcuts,\n  loadcommissionsdata,\n  loadgoalsdata,\n  getprogresscolor,\n  getsemaforotagtype,\n  getsemaforotext,\n}"
-    },
-    {
-      "label": "AreaGroup",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
-      "source_location": "L42",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_contabledashboard_areagroup",
-      "community": 102,
-      "community_name": "ContableDashboard.vue",
-      "norm_label": "areagroup"
-    },
-    {
-      "label": "CountryGroup",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
-      "source_location": "L48",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_contabledashboard_countrygroup",
-      "community": 102,
-      "community_name": "ContableDashboard.vue",
-      "norm_label": "countrygroup"
-    },
-    {
-      "label": "groupedContableHotelsByCountry",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
-      "source_location": "L55",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_contabledashboard_groupedcontablehotelsbycountry",
-      "community": 102,
-      "community_name": "ContableDashboard.vue",
-      "norm_label": "groupedcontablehotelsbycountry"
-    },
-    {
-      "label": "ContableComisionesTab.vue",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "contablecomisionestab.vue"
-    },
-    {
-      "label": "ContableHotelSummary",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L12",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contablehotelsummary",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "contablehotelsummary"
-    },
-    {
-      "label": "ContableAreaSummary",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L19",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contableareasummary",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "contableareasummary"
-    },
-    {
-      "label": "props",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_props",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "props"
+      "id": "backend_src_features_goals_infrastructure_goal_routes_getusercontext",
+      "community": 25,
+      "community_name": "goal.routes.ts",
+      "norm_label": "getusercontext()"
     },
     {
-      "label": "{ t }",
+      "label": "getAllowedHotelIds()",
       "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L36",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_t",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "{ t }"
-    },
-    {
-      "label": "userStore",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_userstore",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "userstore"
+      "id": "backend_src_features_goals_infrastructure_goal_routes_getallowedhotelids",
+      "community": 25,
+      "community_name": "goal.routes.ts",
+      "norm_label": "getallowedhotelids()"
     },
     {
-      "label": "commissionStore",
+      "label": "calcularSemaforo()",
       "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L38",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L57",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_commissionstore",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "commissionstore"
+      "id": "backend_src_features_goals_infrastructure_goal_routes_calcularsemaforo",
+      "community": 25,
+      "community_name": "goal.routes.ts",
+      "norm_label": "calcularsemaforo()"
     },
     {
-      "label": "comisionUsuarioFilter",
+      "label": "MESES_NOMBRES",
       "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L41",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionusuariofilter",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "comisionusuariofilter"
-    },
-    {
-      "label": "availableContableUsers",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L43",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_availablecontableusers",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "availablecontableusers"
-    },
-    {
-      "label": "filteredComisiones",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
       "source_location": "L86",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_filteredcomisiones",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "filteredcomisiones"
+      "id": "backend_src_features_goals_infrastructure_goal_routes_meses_nombres",
+      "community": 25,
+      "community_name": "goal.routes.ts",
+      "norm_label": "meses_nombres"
     },
     {
-      "label": "comisionesTableRef",
+      "label": "goalRoutes()",
       "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L95",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L101",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionestableref",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "comisionestableref"
-    },
-    {
-      "label": "selectedComisiones",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L96",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_selectedcomisiones",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "selectedcomisiones"
-    },
-    {
-      "label": "handleSelectionChange()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L98",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleselectionchange",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "handleselectionchange()"
-    },
-    {
-      "label": "pendingSelectedCount",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L102",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_pendingselectedcount",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "pendingselectedcount"
-    },
-    {
-      "label": "payableSelectedCount",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L106",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_payableselectedcount",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "payableselectedcount"
-    },
-    {
-      "label": "handleBulkApprove()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L112",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkapprove",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "handlebulkapprove()"
-    },
-    {
-      "label": "handleBulkPay()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L139",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkpay",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "handlebulkpay()"
-    },
-    {
-      "label": "TableColumnSummaryCtx",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L168",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablecolumnsummaryctx",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "tablecolumnsummaryctx"
-    },
-    {
-      "label": "SummaryMethodProps",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L174",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_summarymethodprops",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "summarymethodprops"
-    },
-    {
-      "label": "getComisionesSummaries()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L179",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getcomisionessummaries",
-      "community": 91,
-      "community_name": "ContableComisionesTab.vue",
-      "norm_label": "getcomisionessummaries()"
+      "id": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
+      "community": 25,
+      "community_name": "goal.routes.ts",
+      "norm_label": "goalroutes()"
     },
     {
       "label": "ContableEstadisticasTab.vue",
@@ -304,7 +95,7 @@
       "label": "ContableHotelSummary",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L14",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_contablehotelsummary",
       "community": 95,
@@ -315,7 +106,7 @@
       "label": "GlobalProgresoTotals",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L21",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_globalprogresototals",
       "community": 95,
@@ -326,7 +117,7 @@
       "label": "props",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L31",
+      "source_location": "L30",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_props",
       "community": 95,
@@ -334,21 +125,10 @@
       "norm_label": "props"
     },
     {
-      "label": "{ t }",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L47",
-      "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_t",
-      "community": 95,
-      "community_name": "ContableEstadisticasTab.vue",
-      "norm_label": "{ t }"
-    },
-    {
       "label": "userStore",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L48",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_userstore",
       "community": 95,
@@ -359,7 +139,7 @@
       "label": "hotelStore",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L49",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_hotelstore",
       "community": 95,
@@ -370,7 +150,7 @@
       "label": "goalStore",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L50",
+      "source_location": "L48",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_goalstore",
       "community": 95,
@@ -381,7 +161,7 @@
       "label": "commissionStore",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L51",
+      "source_location": "L49",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_commissionstore",
       "community": 95,
@@ -392,7 +172,7 @@
       "label": "EmpleadoRendimiento",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L53",
+      "source_location": "L51",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_empleadorendimiento",
       "community": 95,
@@ -403,7 +183,7 @@
       "label": "empleadosRendimiento",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L73",
+      "source_location": "L71",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_empleadosrendimiento",
       "community": 95,
@@ -414,7 +194,7 @@
       "label": "semaforoSortWeight()",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L187",
+      "source_location": "L194",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_semaforosortweight",
       "community": 95,
@@ -422,13 +202,299 @@
       "norm_label": "semaforosortweight()"
     },
     {
+      "label": "ContableDashboard.vue",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 102,
+      "community_name": "ContableDashboard.vue",
+      "norm_label": "contabledashboard.vue",
+      "id": "frontend_src_features_home_ui_dashboards_contabledashboard"
+    },
+    {
+      "label": "activeTab",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
+      "source_location": "L10",
+      "_origin": "ast",
+      "community": 102,
+      "community_name": "ContableDashboard.vue",
+      "norm_label": "activetab",
+      "id": "frontend_src_features_home_ui_dashboards_contabledashboard_activetab"
+    },
+    {
+      "label": "{\n  countryStore,\n  currentHotelProgreso,\n  filteredProgresoHoteles,\n  globalProgresoTotals,\n  selectedHotelsSummary,\n  selectedMonthsLabel,\n  selectedHotelFilters,\n  globalMonthlyCommissions,\n  handleUpdateCommissionStatus,\n  handleUpdateCommissionsStatusMasivo,\n  contableAreas,\n  contableHotels,\n  commissionDateRange,\n  commissionDateShortcuts,\n  loadCommissionsData,\n  loadGoalsData,\n  getProgressColor,\n  getSemaforoTagType,\n  getSemaforoText,\n}",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
+      "source_location": "L12",
+      "_origin": "ast",
+      "community": 102,
+      "community_name": "ContableDashboard.vue",
+      "norm_label": "{\n  countrystore,\n  currenthotelprogreso,\n  filteredprogresohoteles,\n  globalprogresototals,\n  selectedhotelssummary,\n  selectedmonthslabel,\n  selectedhotelfilters,\n  globalmonthlycommissions,\n  handleupdatecommissionstatus,\n  handleupdatecommissionsstatusmasivo,\n  contableareas,\n  contablehotels,\n  commissiondaterange,\n  commissiondateshortcuts,\n  loadcommissionsdata,\n  loadgoalsdata,\n  getprogresscolor,\n  getsemaforotagtype,\n  getsemaforotext,\n}",
+      "id": "frontend_src_features_home_ui_dashboards_contabledashboard_countrystore_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_selectedmonthslabel_selectedhotelfilters_globalmonthlycommissions_handleupdatecommissionstatus_handleupdatecommissionsstatusmasivo_contableareas_contablehotels_commissiondaterange_commissiondateshortcuts_loadcommissionsdata_loadgoalsdata_getprogresscolor_getsemaforotagtype_getsemaforotext"
+    },
+    {
+      "label": "AreaGroup",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
+      "source_location": "L42",
+      "_origin": "ast",
+      "community": 102,
+      "community_name": "ContableDashboard.vue",
+      "norm_label": "areagroup",
+      "id": "frontend_src_features_home_ui_dashboards_contabledashboard_areagroup"
+    },
+    {
+      "label": "CountryGroup",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
+      "source_location": "L48",
+      "_origin": "ast",
+      "community": 102,
+      "community_name": "ContableDashboard.vue",
+      "norm_label": "countrygroup",
+      "id": "frontend_src_features_home_ui_dashboards_contabledashboard_countrygroup"
+    },
+    {
+      "label": "groupedContableHotelsByCountry",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
+      "source_location": "L55",
+      "_origin": "ast",
+      "community": 102,
+      "community_name": "ContableDashboard.vue",
+      "norm_label": "groupedcontablehotelsbycountry",
+      "id": "frontend_src_features_home_ui_dashboards_contabledashboard_groupedcontablehotelsbycountry"
+    },
+    {
+      "label": "ContableComisionesTab.vue",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "contablecomisionestab.vue",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab"
+    },
+    {
+      "label": "ContableHotelSummary",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L12",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "contablehotelsummary",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contablehotelsummary"
+    },
+    {
+      "label": "ContableAreaSummary",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L19",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "contableareasummary",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contableareasummary"
+    },
+    {
+      "label": "props",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L26",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "props",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_props"
+    },
+    {
+      "label": "{ t }",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L36",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "{ t }",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_t"
+    },
+    {
+      "label": "userStore",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L37",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "userstore",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_userstore"
+    },
+    {
+      "label": "commissionStore",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "commissionstore",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_commissionstore"
+    },
+    {
+      "label": "comisionUsuarioFilter",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L41",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "comisionusuariofilter",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionusuariofilter"
+    },
+    {
+      "label": "availableContableUsers",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L43",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "availablecontableusers",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_availablecontableusers"
+    },
+    {
+      "label": "filteredComisiones",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L86",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "filteredcomisiones",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_filteredcomisiones"
+    },
+    {
+      "label": "comisionesTableRef",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L95",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "comisionestableref",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionestableref"
+    },
+    {
+      "label": "selectedComisiones",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L96",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "selectedcomisiones",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_selectedcomisiones"
+    },
+    {
+      "label": "handleSelectionChange()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L98",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "handleselectionchange()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleselectionchange"
+    },
+    {
+      "label": "pendingSelectedCount",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L102",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "pendingselectedcount",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_pendingselectedcount"
+    },
+    {
+      "label": "payableSelectedCount",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L106",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "payableselectedcount",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_payableselectedcount"
+    },
+    {
+      "label": "handleBulkApprove()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L112",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "handlebulkapprove()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkapprove"
+    },
+    {
+      "label": "handleBulkPay()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L139",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "handlebulkpay()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkpay"
+    },
+    {
+      "label": "TableColumnSummaryCtx",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L168",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "tablecolumnsummaryctx",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablecolumnsummaryctx"
+    },
+    {
+      "label": "SummaryMethodProps",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L174",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "summarymethodprops",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_summarymethodprops"
+    },
+    {
+      "label": "getComisionesSummaries()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L179",
+      "_origin": "ast",
+      "community": 91,
+      "community_name": "ContableComisionesTab.vue",
+      "norm_label": "getcomisionessummaries()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getcomisionessummaries"
+    },
+    {
       "label": "useDashboard.ts",
       "file_type": "code",
       "source_file": "frontend/src/features/home/composables/useDashboard.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 105,
-      "community_name": "useDashboard.ts",
+      "community": 59,
+      "community_name": "useLocale.ts",
       "norm_label": "usedashboard.ts",
       "id": "frontend_src_features_home_composables_usedashboard"
     },
@@ -438,8 +504,8 @@
       "source_file": "frontend/src/features/home/composables/useDashboard.ts",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 105,
-      "community_name": "useDashboard.ts",
+      "community": 59,
+      "community_name": "useLocale.ts",
       "norm_label": "photographerhoteldata",
       "id": "frontend_src_features_home_composables_usedashboard_photographerhoteldata"
     },
@@ -449,8 +515,8 @@
       "source_file": "frontend/src/features/home/composables/useDashboard.ts",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 105,
-      "community_name": "useDashboard.ts",
+      "community": 59,
+      "community_name": "useLocale.ts",
       "norm_label": "month_keys",
       "id": "frontend_src_features_home_composables_usedashboard_month_keys"
     },
@@ -460,8 +526,8 @@
       "source_file": "frontend/src/features/home/composables/useDashboard.ts",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 105,
-      "community_name": "useDashboard.ts",
+      "community": 59,
+      "community_name": "useLocale.ts",
       "norm_label": "usedashboard()",
       "id": "frontend_src_features_home_composables_usedashboard_usedashboard"
     },
@@ -867,8 +933,8 @@
       "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
       "source_location": "L998",
       "_origin": "ast",
-      "community": 14,
-      "community_name": "SaleAppointmentFormDesktop.vue",
+      "community": 56,
+      "community_name": "useSaleAppointmentForm.ts",
       "norm_label": "saleappointmentformcontext",
       "id": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext"
     },
@@ -988,8 +1054,8 @@
       "source_file": "frontend/src/features/sales/composables/useDirectSaleForm.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 100,
-      "community_name": "useDirectSaleForm.ts",
+      "community": 57,
+      "community_name": "DirectSaleFormDesktop.vue",
       "norm_label": "usedirectsaleform.ts",
       "id": "frontend_src_features_sales_composables_usedirectsaleform"
     },
@@ -999,8 +1065,8 @@
       "source_file": "frontend/src/features/sales/composables/useDirectSaleForm.ts",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 100,
-      "community_name": "useDirectSaleForm.ts",
+      "community": 57,
+      "community_name": "DirectSaleFormDesktop.vue",
       "norm_label": "directsaleformdata",
       "id": "frontend_src_features_sales_composables_usedirectsaleform_directsaleformdata"
     },
@@ -1010,8 +1076,8 @@
       "source_file": "frontend/src/features/sales/composables/useDirectSaleForm.ts",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 100,
-      "community_name": "useDirectSaleForm.ts",
+      "community": 57,
+      "community_name": "DirectSaleFormDesktop.vue",
       "norm_label": "selleruser",
       "id": "frontend_src_features_sales_composables_usedirectsaleform_selleruser"
     },
@@ -1032,8 +1098,8 @@
       "source_file": "frontend/src/features/sales/composables/useDirectSaleForm.ts",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 100,
-      "community_name": "useDirectSaleForm.ts",
+      "community": 57,
+      "community_name": "DirectSaleFormDesktop.vue",
       "norm_label": "usedirectsaleform()",
       "id": "frontend_src_features_sales_composables_usedirectsaleform_usedirectsaleform"
     },
@@ -1076,8 +1142,8 @@
       "source_file": "frontend/src/features/sales/domain/sale.model.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "useSaleAppointmentForm.ts",
+      "community": 57,
+      "community_name": "DirectSaleFormDesktop.vue",
       "norm_label": "modo_cobro_options",
       "id": "frontend_src_features_sales_domain_sale_model_modo_cobro_options"
     },
@@ -1120,8 +1186,8 @@
       "source_file": "frontend/src/features/sales/domain/sale.model.ts",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 56,
-      "community_name": "useSaleAppointmentForm.ts",
+      "community": 57,
+      "community_name": "DirectSaleFormDesktop.vue",
       "norm_label": "createventadirectapayload",
       "id": "frontend_src_features_sales_domain_sale_model_createventadirectapayload"
     },
@@ -2996,83 +3062,6 @@
       "id": "backend_src_features_users_infrastructure_user_routes_userroutes"
     },
     {
-      "label": "goal.routes.ts",
-      "file_type": "code",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "goal.routes.ts",
-      "norm_label": "goal.routes.ts",
-      "id": "backend_src_features_goals_infrastructure_goal_routes"
-    },
-    {
-      "label": "getAuthUserId()",
-      "file_type": "code",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L14",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "goal.routes.ts",
-      "norm_label": "getauthuserid()",
-      "id": "backend_src_features_goals_infrastructure_goal_routes_getauthuserid"
-    },
-    {
-      "label": "getUserContext()",
-      "file_type": "code",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L26",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "goal.routes.ts",
-      "norm_label": "getusercontext()",
-      "id": "backend_src_features_goals_infrastructure_goal_routes_getusercontext"
-    },
-    {
-      "label": "getAllowedHotelIds()",
-      "file_type": "code",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L37",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "goal.routes.ts",
-      "norm_label": "getallowedhotelids()",
-      "id": "backend_src_features_goals_infrastructure_goal_routes_getallowedhotelids"
-    },
-    {
-      "label": "calcularSemaforo()",
-      "file_type": "code",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L57",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "goal.routes.ts",
-      "norm_label": "calcularsemaforo()",
-      "id": "backend_src_features_goals_infrastructure_goal_routes_calcularsemaforo"
-    },
-    {
-      "label": "MESES_NOMBRES",
-      "file_type": "code",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L86",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "goal.routes.ts",
-      "norm_label": "meses_nombres",
-      "id": "backend_src_features_goals_infrastructure_goal_routes_meses_nombres"
-    },
-    {
-      "label": "goalRoutes()",
-      "file_type": "code",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L101",
-      "_origin": "ast",
-      "community": 25,
-      "community_name": "goal.routes.ts",
-      "norm_label": "goalroutes()",
-      "id": "backend_src_features_goals_infrastructure_goal_routes_goalroutes"
-    },
-    {
       "label": "google-calendar.service.ts",
       "file_type": "code",
       "source_file": "backend/src/features/integrations/google-calendar/google-calendar.service.ts",
@@ -3320,8 +3309,8 @@
       "source_file": "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 8,
-      "community_name": "HotelCalendarDesktop.vue",
+      "community": 18,
+      "community_name": "vue",
       "norm_label": "usecalendarevents()",
       "id": "frontend_src_features_photo_sessions_composables_usecalendarevents_usecalendarevents"
     },
@@ -5300,8 +5289,8 @@
       "source_file": "frontend/src/features/sales/ui/DirectSaleFormView.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 100,
-      "community_name": "useDirectSaleForm.ts",
+      "community": 57,
+      "community_name": "DirectSaleFormDesktop.vue",
       "norm_label": "directsaleformview.vue",
       "id": "frontend_src_features_sales_ui_directsaleformview"
     },
@@ -5311,8 +5300,8 @@
       "source_file": "frontend/src/features/sales/ui/DirectSaleFormView.vue",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 100,
-      "community_name": "useDirectSaleForm.ts",
+      "community": 57,
+      "community_name": "DirectSaleFormDesktop.vue",
       "norm_label": "form",
       "id": "frontend_src_features_sales_ui_directsaleformview_form"
     },
@@ -5322,8 +5311,8 @@
       "source_file": "frontend/src/features/sales/ui/DirectSaleFormView.vue",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 100,
-      "community_name": "useDirectSaleForm.ts",
+      "community": 57,
+      "community_name": "DirectSaleFormDesktop.vue",
       "norm_label": "ismobile",
       "id": "frontend_src_features_sales_ui_directsaleformview_ismobile"
     },
@@ -5333,8 +5322,8 @@
       "source_file": "frontend/src/features/sales/ui/DirectSaleFormView.vue",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 100,
-      "community_name": "useDirectSaleForm.ts",
+      "community": 57,
+      "community_name": "DirectSaleFormDesktop.vue",
       "norm_label": "checkmobile()",
       "id": "frontend_src_features_sales_ui_directsaleformview_checkmobile"
     },
@@ -6400,8 +6389,8 @@
       "source_file": "frontend/src/features/photo-sessions/composables/usePhotoSessionForm.ts",
       "source_location": "L1107",
       "_origin": "ast",
-      "community": 18,
-      "community_name": "vue",
+      "community": 19,
+      "community_name": "PhotoSessionFormDesktop.vue",
       "norm_label": "photosessionformcontext",
       "id": "frontend_src_features_photo_sessions_composables_usephotosessionform_photosessionformcontext"
     },
@@ -6752,8 +6741,8 @@
       "source_file": "frontend/src/features/auth/stores/auth.store.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 106,
-      "community_name": "auth.store.ts",
+      "community": 18,
+      "community_name": "vue",
       "norm_label": "auth.store.ts",
       "id": "frontend_src_features_auth_stores_auth_store"
     },
@@ -6763,8 +6752,8 @@
       "source_file": "frontend/src/features/auth/stores/auth.store.ts",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 106,
-      "community_name": "auth.store.ts",
+      "community": 18,
+      "community_name": "vue",
       "norm_label": "authuser",
       "id": "frontend_src_features_auth_stores_auth_store_authuser"
     },
@@ -6774,8 +6763,8 @@
       "source_file": "frontend/src/features/auth/stores/auth.store.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 106,
-      "community_name": "auth.store.ts",
+      "community": 18,
+      "community_name": "vue",
       "norm_label": "useauthstore",
       "id": "frontend_src_features_auth_stores_auth_store_useauthstore"
     },
@@ -8039,8 +8028,8 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarAlertsPanel.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 103,
-      "community_name": "CalendarAlertsPanel.vue",
+      "community": 18,
+      "community_name": "vue",
       "norm_label": "calendaralertspanel.vue",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel"
     },
@@ -8050,8 +8039,8 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarAlertsPanel.vue",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 103,
-      "community_name": "CalendarAlertsPanel.vue",
+      "community": 18,
+      "community_name": "vue",
       "norm_label": "props",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel_props"
     },
@@ -8061,8 +8050,8 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarAlertsPanel.vue",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 103,
-      "community_name": "CalendarAlertsPanel.vue",
+      "community": 18,
+      "community_name": "vue",
       "norm_label": "router",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel_router"
     },
@@ -8072,8 +8061,8 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarAlertsPanel.vue",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 103,
-      "community_name": "CalendarAlertsPanel.vue",
+      "community": 18,
+      "community_name": "vue",
       "norm_label": "activealertpanels",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel_activealertpanels"
     },
@@ -8083,8 +8072,8 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarAlertsPanel.vue",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 103,
-      "community_name": "CalendarAlertsPanel.vue",
+      "community": 18,
+      "community_name": "vue",
       "norm_label": "totalalertscount",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel_totalalertscount"
     },
@@ -8094,8 +8083,8 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarAlertsPanel.vue",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 103,
-      "community_name": "CalendarAlertsPanel.vue",
+      "community": 18,
+      "community_name": "vue",
       "norm_label": "formatdatetime()",
       "id": "frontend_src_features_photo_sessions_ui_components_calendaralertspanel_formatdatetime"
     },
@@ -8105,8 +8094,8 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarDeleteConfirmPopover.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "CalendarDeleteConfirmPopover.vue",
+      "community": 8,
+      "community_name": "HotelCalendarDesktop.vue",
       "norm_label": "calendardeleteconfirmpopover.vue",
       "id": "frontend_src_features_photo_sessions_ui_components_calendardeleteconfirmpopover"
     },
@@ -8116,8 +8105,8 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarDeleteConfirmPopover.vue",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "CalendarDeleteConfirmPopover.vue",
+      "community": 8,
+      "community_name": "HotelCalendarDesktop.vue",
       "norm_label": "props",
       "id": "frontend_src_features_photo_sessions_ui_components_calendardeleteconfirmpopover_props"
     },
@@ -8127,8 +8116,8 @@
       "source_file": "frontend/src/features/photo-sessions/ui/components/CalendarDeleteConfirmPopover.vue",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 107,
-      "community_name": "CalendarDeleteConfirmPopover.vue",
+      "community": 8,
+      "community_name": "HotelCalendarDesktop.vue",
       "norm_label": "emit",
       "id": "frontend_src_features_photo_sessions_ui_components_calendardeleteconfirmpopover_emit"
     },
@@ -12318,9 +12307,9 @@
       "source_file": "backend/src/features/users/infrastructure/calendario-laboral.routes.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 96,
+      "community": 100,
       "norm_label": "calendario-laboral.routes.ts",
-      "community_name": "src/index.ts",
+      "community_name": "calendario-laboral.routes.ts",
       "id": "backend_src_features_users_infrastructure_calendario_laboral_routes"
     },
     {
@@ -12329,9 +12318,9 @@
       "source_file": "backend/src/features/users/infrastructure/calendario-laboral.routes.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 96,
+      "community": 100,
       "norm_label": "formatdatetoisostring()",
-      "community_name": "src/index.ts",
+      "community_name": "calendario-laboral.routes.ts",
       "id": "backend_src_features_users_infrastructure_calendario_laboral_routes_formatdatetoisostring"
     },
     {
@@ -12340,9 +12329,9 @@
       "source_file": "backend/src/features/users/infrastructure/calendario-laboral.routes.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 96,
+      "community": 100,
       "norm_label": "parsedateonly()",
-      "community_name": "src/index.ts",
+      "community_name": "calendario-laboral.routes.ts",
       "id": "backend_src_features_users_infrastructure_calendario_laboral_routes_parsedateonly"
     },
     {
@@ -12351,9 +12340,9 @@
       "source_file": "backend/src/features/users/infrastructure/calendario-laboral.routes.ts",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 96,
+      "community": 100,
       "norm_label": "calendariolaboralroutes()",
-      "community_name": "src/index.ts",
+      "community_name": "calendario-laboral.routes.ts",
       "id": "backend_src_features_users_infrastructure_calendario_laboral_routes_calendariolaboralroutes"
     },
     {
@@ -12681,9 +12670,9 @@
       "source_file": "backend/src/shared/encryption.ts",
       "source_location": "L137",
       "_origin": "ast",
-      "community": 98,
+      "community": 0,
       "norm_label": "decryptusers()",
-      "community_name": "user.routes.ts",
+      "community_name": "encryption.ts",
       "id": "backend_src_shared_encryption_decryptusers"
     },
     {
@@ -15409,12 +15398,404 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
-      "source_location": "L8",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_contabledashboard",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_domain_goal_model",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_domain_goal_model_alcancetipo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_domain_goal_model_evolucionmetasresponse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_domain_goal_model_fotografoprogreso",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_domain_goal_model_hotelprogresoresumen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_domain_goal_model_puntodiaevolucion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_domain_goal_model_puntomesevolucion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_domain_goal_model_semaforoestado",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_calcularsemaforo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_getallowedhotelids",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_getauthuserid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_getusercontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L101",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_meses_nombres",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_shared_db",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_shared_db_prisma",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_shared_encryption",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes",
+      "target": "backend_src_shared_encryption_decryptuser",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_index",
+      "target": "backend_src_features_goals_infrastructure_goal_routes"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_getauthuserid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L120",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_getusercontext",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L122",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_getallowedhotelids",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
+      "source_location": "L542",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_calcularsemaforo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_index",
+      "target": "backend_src_features_goals_infrastructure_goal_routes_goalroutes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_commissionstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_contablehotelsummary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_empleadorendimiento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
+      "source_location": "L71",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_empleadosrendimiento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_globalprogresototals",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_goalstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_hotelstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
+      "source_location": "L194",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_semaforosortweight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_userstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
+      "target": "ref_vue",
       "confidence_score": 1.0
     },
     {
@@ -15425,9 +15806,21 @@
       "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_contabledashboard",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_home_ui_dashboards_contabledashboard",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab"
     },
     {
       "relation": "contains",
@@ -15436,9 +15829,9 @@
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_contabledashboard",
-      "target": "frontend_src_features_home_ui_dashboards_contabledashboard_activetab",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_contabledashboard_activetab"
     },
     {
       "relation": "contains",
@@ -15447,9 +15840,9 @@
       "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_contabledashboard",
-      "target": "frontend_src_features_home_ui_dashboards_contabledashboard_areagroup",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_contabledashboard_areagroup"
     },
     {
       "relation": "contains",
@@ -15458,9 +15851,9 @@
       "source_location": "L48",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_contabledashboard",
-      "target": "frontend_src_features_home_ui_dashboards_contabledashboard_countrygroup",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_contabledashboard_countrygroup"
     },
     {
       "relation": "contains",
@@ -15469,9 +15862,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_contabledashboard",
-      "target": "frontend_src_features_home_ui_dashboards_contabledashboard_countrystore_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_selectedmonthslabel_selectedhotelfilters_globalmonthlycommissions_handleupdatecommissionstatus_handleupdatecommissionsstatusmasivo_contableareas_contablehotels_commissiondaterange_commissiondateshortcuts_loadcommissionsdata_loadgoalsdata_getprogresscolor_getsemaforotagtype_getsemaforotext",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_contabledashboard_countrystore_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_selectedmonthslabel_selectedhotelfilters_globalmonthlycommissions_handleupdatecommissionstatus_handleupdatecommissionsstatusmasivo_contableareas_contablehotels_commissiondaterange_commissiondateshortcuts_loadcommissionsdata_loadgoalsdata_getprogresscolor_getsemaforotagtype_getsemaforotext"
     },
     {
       "relation": "contains",
@@ -15480,9 +15873,9 @@
       "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_contabledashboard",
-      "target": "frontend_src_features_home_ui_dashboards_contabledashboard_groupedcontablehotelsbycountry",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_contabledashboard_groupedcontablehotelsbycountry"
     },
     {
       "relation": "imports_from",
@@ -15492,9 +15885,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_contabledashboard",
-      "target": "ref_vue",
-      "confidence_score": 1.0
+      "target": "ref_vue"
     },
     {
       "relation": "imports_from",
@@ -15515,9 +15908,9 @@
       "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_availablecontableusers",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_availablecontableusers"
     },
     {
       "relation": "contains",
@@ -15526,9 +15919,9 @@
       "source_location": "L95",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionestableref",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionestableref"
     },
     {
       "relation": "contains",
@@ -15537,9 +15930,9 @@
       "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionusuariofilter",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionusuariofilter"
     },
     {
       "relation": "contains",
@@ -15548,9 +15941,9 @@
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_commissionstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_commissionstore"
     },
     {
       "relation": "contains",
@@ -15559,9 +15952,9 @@
       "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contableareasummary",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contableareasummary"
     },
     {
       "relation": "contains",
@@ -15570,9 +15963,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contablehotelsummary",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contablehotelsummary"
     },
     {
       "relation": "contains",
@@ -15581,9 +15974,9 @@
       "source_location": "L86",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_filteredcomisiones",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_filteredcomisiones"
     },
     {
       "relation": "contains",
@@ -15592,9 +15985,9 @@
       "source_location": "L179",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getcomisionessummaries",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getcomisionessummaries"
     },
     {
       "relation": "contains",
@@ -15603,9 +15996,9 @@
       "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkapprove",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkapprove"
     },
     {
       "relation": "contains",
@@ -15614,9 +16007,9 @@
       "source_location": "L139",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkpay",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkpay"
     },
     {
       "relation": "contains",
@@ -15625,9 +16018,9 @@
       "source_location": "L98",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleselectionchange",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleselectionchange"
     },
     {
       "relation": "contains",
@@ -15636,9 +16029,9 @@
       "source_location": "L106",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_payableselectedcount",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_payableselectedcount"
     },
     {
       "relation": "contains",
@@ -15647,9 +16040,9 @@
       "source_location": "L102",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_pendingselectedcount",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_pendingselectedcount"
     },
     {
       "relation": "contains",
@@ -15658,9 +16051,9 @@
       "source_location": "L26",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_props",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_props"
     },
     {
       "relation": "contains",
@@ -15669,9 +16062,9 @@
       "source_location": "L96",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_selectedcomisiones",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_selectedcomisiones"
     },
     {
       "relation": "contains",
@@ -15680,9 +16073,9 @@
       "source_location": "L174",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_summarymethodprops",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_summarymethodprops"
     },
     {
       "relation": "contains",
@@ -15691,9 +16084,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_t",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_t"
     },
     {
       "relation": "contains",
@@ -15702,9 +16095,9 @@
       "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablecolumnsummaryctx",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablecolumnsummaryctx"
     },
     {
       "relation": "contains",
@@ -15713,9 +16106,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_userstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_userstore"
     },
     {
       "relation": "imports_from",
@@ -15725,142 +16118,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "ref_vue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L51",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_commissionstore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_contablehotelsummary",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L53",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_empleadorendimiento",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L73",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_empleadosrendimiento",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L21",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_globalprogresototals",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L50",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_goalstore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L49",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_hotelstore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L31",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_props",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L187",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_semaforosortweight",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L47",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_t",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L48",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab_userstore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contableestadisticastab",
-      "target": "ref_vue",
-      "confidence_score": 1.0
+      "target": "ref_vue"
     },
     {
       "relation": "contains",
@@ -19856,288 +20116,6 @@
       "confidence_score": 1.0,
       "source": "backend_src_index",
       "target": "backend_src_features_users_infrastructure_user_routes_userroutes"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_domain_goal_model"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_domain_goal_model_alcancetipo"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_domain_goal_model_evolucionmetasresponse"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_domain_goal_model_fotografoprogreso"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_domain_goal_model_hotelprogresoresumen"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_domain_goal_model_puntodiaevolucion"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_domain_goal_model_puntomesevolucion"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_domain_goal_model_semaforoestado"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L57",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_calcularsemaforo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_getallowedhotelids"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_getauthuserid"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L26",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_getusercontext"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L101",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_goalroutes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L86",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_meses_nombres"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_shared_db"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_shared_db_prisma"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_shared_encryption"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes",
-      "target": "backend_src_shared_encryption_decryptuser"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_goals_infrastructure_goal_routes"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L118",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_getauthuserid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L120",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_getusercontext"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L122",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_getallowedhotelids"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/goals/infrastructure/goal.routes.ts",
-      "source_location": "L542",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_features_goals_infrastructure_goal_routes_goalroutes",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_calcularsemaforo"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_goals_infrastructure_goal_routes_goalroutes"
     },
     {
       "relation": "imports_from",
@@ -36978,5 +36956,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8896b6788d0ca8ee3d165764f6c7955e34015105"
+  "built_at_commit": "d619b0dc6719c508d868a8ad32abd877c658b6f9"
 }

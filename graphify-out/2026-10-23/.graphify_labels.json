@@ -99,13 +99,9 @@
   "97": "sale.routes.ts",
   "98": "user.routes.ts",
   "99": "GoalProgressCard.vue",
-  "100": "useDirectSaleForm.ts",
+  "100": "calendario-laboral.routes.ts",
   "101": "AdminDashboard.vue",
   "102": "ContableDashboard.vue",
-  "103": "CalendarAlertsPanel.vue",
   "104": "GerenteDashboard.vue",
-  "105": "useDashboard.ts",
-  "106": "auth.store.ts",
-  "107": "CalendarDeleteConfirmPopover.vue",
   "108": "HotelCalendarView.vue"
 }

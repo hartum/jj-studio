@@ -94,14 +94,11 @@
   "92": "CalendarEventCard.vue",
   "93": "ForgotPasswordView.vue",
   "94": "reminder.service.ts",
-  "95": "ContableEstadisticasTab.vue",
+  "95": "session.routes.ts",
   "96": "src/index.ts",
   "97": "sale.routes.ts",
   "98": "user.routes.ts",
   "99": "GoalProgressCard.vue",
-  "100": "calendario-laboral.routes.ts",
-  "101": "AdminDashboard.vue",
-  "102": "ContableDashboard.vue",
-  "104": "GerenteDashboard.vue",
+  "100": "email.service.ts",
   "108": "HotelCalendarView.vue"
 }
