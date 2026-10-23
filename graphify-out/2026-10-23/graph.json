@@ -4,160 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "label": "backend/src/features/commissions/domain/commission.model.ts",
-      "file_type": "code",
-      "source_file": "backend/src/features/commissions/domain/commission.model.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_src_features_commissions_domain_commission_model",
-      "community": 41,
-      "community_name": "commission.service.ts",
-      "norm_label": "backend/src/features/commissions/domain/commission.model.ts"
-    },
-    {
-      "label": "ComisionConfigDTO",
-      "file_type": "code",
-      "source_file": "backend/src/features/commissions/domain/commission.model.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_src_features_commissions_domain_commission_model_comisionconfigdto",
-      "community": 41,
-      "community_name": "commission.service.ts",
-      "norm_label": "comisionconfigdto"
-    },
-    {
-      "label": "ComisionUsuarioConfigDTO",
-      "file_type": "code",
-      "source_file": "backend/src/features/commissions/domain/commission.model.ts",
-      "source_location": "L17",
-      "_origin": "ast",
-      "id": "backend_src_features_commissions_domain_commission_model_comisionusuarioconfigdto",
-      "community": 41,
-      "community_name": "commission.service.ts",
-      "norm_label": "comisionusuarioconfigdto"
-    },
-    {
-      "label": "ComisionDTO",
-      "file_type": "code",
-      "source_file": "backend/src/features/commissions/domain/commission.model.ts",
-      "source_location": "L30",
-      "_origin": "ast",
-      "id": "backend_src_features_commissions_domain_commission_model_comisiondto",
-      "community": 41,
-      "community_name": "commission.service.ts",
-      "norm_label": "comisiondto"
-    },
-    {
-      "label": "ResumenComisionesDTO",
-      "file_type": "code",
-      "source_file": "backend/src/features/commissions/domain/commission.model.ts",
-      "source_location": "L53",
-      "_origin": "ast",
-      "id": "backend_src_features_commissions_domain_commission_model_resumencomisionesdto",
-      "community": 41,
-      "community_name": "commission.service.ts",
-      "norm_label": "resumencomisionesdto"
-    },
-    {
-      "label": "commission.routes.ts",
-      "file_type": "code",
-      "source_file": "backend/src/features/commissions/infrastructure/commission.routes.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_src_features_commissions_infrastructure_commission_routes",
-      "community": 41,
-      "community_name": "commission.service.ts",
-      "norm_label": "commission.routes.ts"
-    },
-    {
-      "label": "getAuthUserId()",
-      "file_type": "code",
-      "source_file": "backend/src/features/commissions/infrastructure/commission.routes.ts",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "backend_src_features_commissions_infrastructure_commission_routes_getauthuserid",
-      "community": 41,
-      "community_name": "commission.service.ts",
-      "norm_label": "getauthuserid()"
-    },
-    {
-      "label": "getUserContext()",
-      "file_type": "code",
-      "source_file": "backend/src/features/commissions/infrastructure/commission.routes.ts",
-      "source_location": "L27",
-      "_origin": "ast",
-      "id": "backend_src_features_commissions_infrastructure_commission_routes_getusercontext",
-      "community": 41,
-      "community_name": "commission.service.ts",
-      "norm_label": "getusercontext()"
-    },
-    {
-      "label": "commissionRoutes()",
-      "file_type": "code",
-      "source_file": "backend/src/features/commissions/infrastructure/commission.routes.ts",
-      "source_location": "L61",
-      "_origin": "ast",
-      "id": "backend_src_features_commissions_infrastructure_commission_routes_commissionroutes",
-      "community": 41,
-      "community_name": "commission.service.ts",
-      "norm_label": "commissionroutes()"
-    },
-    {
-      "label": "frontend/src/features/commissions/domain/commission.model.ts",
-      "file_type": "code",
-      "source_file": "frontend/src/features/commissions/domain/commission.model.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "frontend_src_features_commissions_domain_commission_model",
-      "community": 15,
-      "community_name": "ComisionesConfig.vue",
-      "norm_label": "frontend/src/features/commissions/domain/commission.model.ts"
-    },
-    {
-      "label": "ComisionConfig",
-      "file_type": "code",
-      "source_file": "frontend/src/features/commissions/domain/commission.model.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "frontend_src_features_commissions_domain_commission_model_comisionconfig",
-      "community": 15,
-      "community_name": "ComisionesConfig.vue",
-      "norm_label": "comisionconfig"
-    },
-    {
-      "label": "ComisionUsuarioConfig",
-      "file_type": "code",
-      "source_file": "frontend/src/features/commissions/domain/commission.model.ts",
-      "source_location": "L17",
-      "_origin": "ast",
-      "id": "frontend_src_features_commissions_domain_commission_model_comisionusuarioconfig",
-      "community": 15,
-      "community_name": "ComisionesConfig.vue",
-      "norm_label": "comisionusuarioconfig"
-    },
-    {
-      "label": "Comision",
-      "file_type": "code",
-      "source_file": "frontend/src/features/commissions/domain/commission.model.ts",
-      "source_location": "L30",
-      "_origin": "ast",
-      "id": "frontend_src_features_commissions_domain_commission_model_comision",
-      "community": 15,
-      "community_name": "ComisionesConfig.vue",
-      "norm_label": "comision"
-    },
-    {
-      "label": "ResumenComisiones",
-      "file_type": "code",
-      "source_file": "frontend/src/features/commissions/domain/commission.model.ts",
-      "source_location": "L53",
-      "_origin": "ast",
-      "id": "frontend_src_features_commissions_domain_commission_model_resumencomisiones",
-      "community": 15,
-      "community_name": "ComisionesConfig.vue",
-      "norm_label": "resumencomisiones"
-    },
-    {
       "label": "ContableComisionesTab.vue",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
@@ -205,7 +51,7 @@
       "label": "props",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L63",
+      "source_location": "L64",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_props",
       "community": 91,
@@ -216,7 +62,7 @@
       "label": "{ t }",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L73",
+      "source_location": "L74",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_t",
       "community": 91,
@@ -227,7 +73,7 @@
       "label": "userStore",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L74",
+      "source_location": "L75",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_userstore",
       "community": 91,
@@ -238,7 +84,7 @@
       "label": "commissionStore",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L75",
+      "source_location": "L76",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_commissionstore",
       "community": 91,
@@ -249,7 +95,7 @@
       "label": "storedTc",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L79",
+      "source_location": "L80",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_storedtc",
       "community": 91,
@@ -260,7 +106,7 @@
       "label": "tipoCambioMxn",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L80",
+      "source_location": "L81",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tipocambiomxn",
       "community": 91,
@@ -271,7 +117,7 @@
       "label": "comisionUsuarioFilter",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L89",
+      "source_location": "L90",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionusuariofilter",
       "community": 91,
@@ -282,7 +128,7 @@
       "label": "availableContableUsers",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L91",
+      "source_location": "L92",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_availablecontableusers",
       "community": 91,
@@ -293,7 +139,7 @@
       "label": "resumenUsuariosComision",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L135",
+      "source_location": "L136",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_resumenusuarioscomision",
       "community": 91,
@@ -304,7 +150,7 @@
       "label": "usuariosTableRef",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L278",
+      "source_location": "L287",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_usuariostableref",
       "community": 91,
@@ -315,7 +161,7 @@
       "label": "selectedUsuarios",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L279",
+      "source_location": "L288",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_selectedusuarios",
       "community": 91,
@@ -326,7 +172,7 @@
       "label": "handleSelectionChange()",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L281",
+      "source_location": "L290",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleselectionchange",
       "community": 91,
@@ -337,7 +183,7 @@
       "label": "pendingSelectedCount",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L285",
+      "source_location": "L294",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_pendingselectedcount",
       "community": 91,
@@ -348,7 +194,7 @@
       "label": "payableSelectedCount",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L289",
+      "source_location": "L298",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_payableselectedcount",
       "community": 91,
@@ -359,7 +205,7 @@
       "label": "handleBulkApprove()",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L293",
+      "source_location": "L302",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkapprove",
       "community": 91,
@@ -370,7 +216,7 @@
       "label": "handleBulkPay()",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L323",
+      "source_location": "L332",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkpay",
       "community": 91,
@@ -381,7 +227,7 @@
       "label": "handleUserApprove()",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L354",
+      "source_location": "L363",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserapprove",
       "community": 91,
@@ -392,7 +238,7 @@
       "label": "handleUserPay()",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L372",
+      "source_location": "L381",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserpay",
       "community": 91,
@@ -403,7 +249,7 @@
       "label": "handleUserResetToPending()",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L390",
+      "source_location": "L399",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserresettopending",
       "community": 91,
@@ -414,7 +260,7 @@
       "label": "TableColumnSummaryCtx",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L400",
+      "source_location": "L409",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablecolumnsummaryctx",
       "community": 91,
@@ -425,7 +271,7 @@
       "label": "SummaryMethodProps",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L406",
+      "source_location": "L415",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_summarymethodprops",
       "community": 91,
@@ -436,7 +282,7 @@
       "label": "getUsuariosSummaries()",
       "file_type": "code",
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L411",
+      "source_location": "L420",
       "_origin": "ast",
       "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getusuariossummaries",
       "community": 91,
@@ -444,15 +290,169 @@
       "norm_label": "getusuariossummaries()"
     },
     {
+      "label": "backend/src/features/commissions/domain/commission.model.ts",
+      "file_type": "code",
+      "source_file": "backend/src/features/commissions/domain/commission.model.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "commission.service.ts",
+      "norm_label": "backend/src/features/commissions/domain/commission.model.ts",
+      "id": "backend_src_features_commissions_domain_commission_model"
+    },
+    {
+      "label": "ComisionConfigDTO",
+      "file_type": "code",
+      "source_file": "backend/src/features/commissions/domain/commission.model.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "commission.service.ts",
+      "norm_label": "comisionconfigdto",
+      "id": "backend_src_features_commissions_domain_commission_model_comisionconfigdto"
+    },
+    {
+      "label": "ComisionUsuarioConfigDTO",
+      "file_type": "code",
+      "source_file": "backend/src/features/commissions/domain/commission.model.ts",
+      "source_location": "L17",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "commission.service.ts",
+      "norm_label": "comisionusuarioconfigdto",
+      "id": "backend_src_features_commissions_domain_commission_model_comisionusuarioconfigdto"
+    },
+    {
+      "label": "ComisionDTO",
+      "file_type": "code",
+      "source_file": "backend/src/features/commissions/domain/commission.model.ts",
+      "source_location": "L30",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "commission.service.ts",
+      "norm_label": "comisiondto",
+      "id": "backend_src_features_commissions_domain_commission_model_comisiondto"
+    },
+    {
+      "label": "ResumenComisionesDTO",
+      "file_type": "code",
+      "source_file": "backend/src/features/commissions/domain/commission.model.ts",
+      "source_location": "L53",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "commission.service.ts",
+      "norm_label": "resumencomisionesdto",
+      "id": "backend_src_features_commissions_domain_commission_model_resumencomisionesdto"
+    },
+    {
+      "label": "commission.routes.ts",
+      "file_type": "code",
+      "source_file": "backend/src/features/commissions/infrastructure/commission.routes.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "commission.service.ts",
+      "norm_label": "commission.routes.ts",
+      "id": "backend_src_features_commissions_infrastructure_commission_routes"
+    },
+    {
+      "label": "getAuthUserId()",
+      "file_type": "code",
+      "source_file": "backend/src/features/commissions/infrastructure/commission.routes.ts",
+      "source_location": "L15",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "commission.service.ts",
+      "norm_label": "getauthuserid()",
+      "id": "backend_src_features_commissions_infrastructure_commission_routes_getauthuserid"
+    },
+    {
+      "label": "getUserContext()",
+      "file_type": "code",
+      "source_file": "backend/src/features/commissions/infrastructure/commission.routes.ts",
+      "source_location": "L27",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "commission.service.ts",
+      "norm_label": "getusercontext()",
+      "id": "backend_src_features_commissions_infrastructure_commission_routes_getusercontext"
+    },
+    {
+      "label": "commissionRoutes()",
+      "file_type": "code",
+      "source_file": "backend/src/features/commissions/infrastructure/commission.routes.ts",
+      "source_location": "L61",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "commission.service.ts",
+      "norm_label": "commissionroutes()",
+      "id": "backend_src_features_commissions_infrastructure_commission_routes_commissionroutes"
+    },
+    {
+      "label": "frontend/src/features/commissions/domain/commission.model.ts",
+      "file_type": "code",
+      "source_file": "frontend/src/features/commissions/domain/commission.model.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "ComisionesConfig.vue",
+      "norm_label": "frontend/src/features/commissions/domain/commission.model.ts",
+      "id": "frontend_src_features_commissions_domain_commission_model"
+    },
+    {
+      "label": "ComisionConfig",
+      "file_type": "code",
+      "source_file": "frontend/src/features/commissions/domain/commission.model.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "ComisionesConfig.vue",
+      "norm_label": "comisionconfig",
+      "id": "frontend_src_features_commissions_domain_commission_model_comisionconfig"
+    },
+    {
+      "label": "ComisionUsuarioConfig",
+      "file_type": "code",
+      "source_file": "frontend/src/features/commissions/domain/commission.model.ts",
+      "source_location": "L17",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "ComisionesConfig.vue",
+      "norm_label": "comisionusuarioconfig",
+      "id": "frontend_src_features_commissions_domain_commission_model_comisionusuarioconfig"
+    },
+    {
+      "label": "Comision",
+      "file_type": "code",
+      "source_file": "frontend/src/features/commissions/domain/commission.model.ts",
+      "source_location": "L30",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "ComisionesConfig.vue",
+      "norm_label": "comision",
+      "id": "frontend_src_features_commissions_domain_commission_model_comision"
+    },
+    {
+      "label": "ResumenComisiones",
+      "file_type": "code",
+      "source_file": "frontend/src/features/commissions/domain/commission.model.ts",
+      "source_location": "L53",
+      "_origin": "ast",
+      "community": 15,
+      "community_name": "ComisionesConfig.vue",
+      "norm_label": "resumencomisiones",
+      "id": "frontend_src_features_commissions_domain_commission_model_resumencomisiones"
+    },
+    {
       "label": "formatters.ts",
       "file_type": "code",
       "source_file": "frontend/src/shared/formatters.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_shared_formatters",
       "community": 77,
       "community_name": "formatters.ts",
-      "norm_label": "formatters.ts"
+      "norm_label": "formatters.ts",
+      "id": "frontend_src_shared_formatters"
     },
     {
       "label": "formatCurrency()",
@@ -460,10 +460,10 @@
       "source_file": "frontend/src/shared/formatters.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "frontend_src_shared_formatters_formatcurrency",
       "community": 77,
       "community_name": "formatters.ts",
-      "norm_label": "formatcurrency()"
+      "norm_label": "formatcurrency()",
+      "id": "frontend_src_shared_formatters_formatcurrency"
     },
     {
       "label": "formatMxn()",
@@ -471,10 +471,10 @@
       "source_file": "frontend/src/shared/formatters.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "frontend_src_shared_formatters_formatmxn",
       "community": 77,
       "community_name": "formatters.ts",
-      "norm_label": "formatmxn()"
+      "norm_label": "formatmxn()",
+      "id": "frontend_src_shared_formatters_formatmxn"
     },
     {
       "label": "goal.routes.ts",
@@ -15472,6 +15472,305 @@
   ],
   "links": [
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L92",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_availablecontableusers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L90",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionusuariofilter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_commissionstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contableareasummary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contablehotelsummary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_empleadocomisionresumen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L420",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getusuariossummaries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L302",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkapprove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L332",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkpay",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L290",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleselectionchange",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L363",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserapprove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L381",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserpay",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L399",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserresettopending",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L298",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_payableselectedcount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L294",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_pendingselectedcount",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_props",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L136",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_resumenusuarioscomision",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L288",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_selectedusuarios",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L80",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_storedtc",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L415",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_summarymethodprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_t",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L409",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablecolumnsummaryctx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tipocambiomxn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_userstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L287",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_usuariostableref",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
+      "target": "ref_vue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_home_ui_dashboards_contabledashboard",
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab"
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -15490,9 +15789,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_domain_commission_model",
-      "target": "backend_src_features_commissions_domain_commission_model_comisionconfigdto",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_domain_commission_model_comisionconfigdto"
     },
     {
       "relation": "contains",
@@ -15501,9 +15800,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_domain_commission_model",
-      "target": "backend_src_features_commissions_domain_commission_model_comisiondto",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_domain_commission_model_comisiondto"
     },
     {
       "relation": "contains",
@@ -15512,9 +15811,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_domain_commission_model",
-      "target": "backend_src_features_commissions_domain_commission_model_comisionusuarioconfigdto",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_domain_commission_model_comisionusuarioconfigdto"
     },
     {
       "relation": "contains",
@@ -15523,9 +15822,9 @@
       "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_domain_commission_model",
-      "target": "backend_src_features_commissions_domain_commission_model_resumencomisionesdto",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_domain_commission_model_resumencomisionesdto"
     },
     {
       "relation": "imports",
@@ -15571,9 +15870,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_application_commission_service",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_application_commission_service"
     },
     {
       "relation": "imports",
@@ -15583,9 +15882,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_application_commission_service_deleteusercommissionconfig",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_application_commission_service_deleteusercommissionconfig"
     },
     {
       "relation": "imports",
@@ -15595,9 +15894,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_application_commission_service_getallcommissionconfigs",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_application_commission_service_getallcommissionconfigs"
     },
     {
       "relation": "imports",
@@ -15607,9 +15906,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_application_commission_service_getallusercommissionconfigs",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_application_commission_service_getallusercommissionconfigs"
     },
     {
       "relation": "imports",
@@ -15619,9 +15918,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_application_commission_service_geteffectivecommissionconfig",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_application_commission_service_geteffectivecommissionconfig"
     },
     {
       "relation": "imports",
@@ -15631,9 +15930,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_application_commission_service_getresumencomisiones",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_application_commission_service_getresumencomisiones"
     },
     {
       "relation": "imports",
@@ -15643,9 +15942,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_application_commission_service_getusercommissionconfig",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_application_commission_service_getusercommissionconfig"
     },
     {
       "relation": "imports",
@@ -15655,9 +15954,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_application_commission_service_savecommissionconfig",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_application_commission_service_savecommissionconfig"
     },
     {
       "relation": "imports",
@@ -15667,9 +15966,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_application_commission_service_saveusercommissionconfig",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_application_commission_service_saveusercommissionconfig"
     },
     {
       "relation": "contains",
@@ -15678,9 +15977,9 @@
       "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_infrastructure_commission_routes_commissionroutes",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_infrastructure_commission_routes_commissionroutes"
     },
     {
       "relation": "contains",
@@ -15689,9 +15988,9 @@
       "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_infrastructure_commission_routes_getauthuserid",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_infrastructure_commission_routes_getauthuserid"
     },
     {
       "relation": "contains",
@@ -15700,9 +15999,9 @@
       "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_features_commissions_infrastructure_commission_routes_getusercontext",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_infrastructure_commission_routes_getusercontext"
     },
     {
       "relation": "imports_from",
@@ -15712,9 +16011,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_shared_db",
-      "confidence_score": 1.0
+      "target": "backend_src_shared_db"
     },
     {
       "relation": "imports",
@@ -15724,9 +16023,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_shared_db_prisma",
-      "confidence_score": 1.0
+      "target": "backend_src_shared_db_prisma"
     },
     {
       "relation": "imports_from",
@@ -15736,9 +16035,9 @@
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_shared_encryption",
-      "confidence_score": 1.0
+      "target": "backend_src_shared_encryption"
     },
     {
       "relation": "imports",
@@ -15748,9 +16047,9 @@
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
-      "target": "backend_src_shared_encryption_decrypt",
-      "confidence_score": 1.0
+      "target": "backend_src_shared_encryption_decrypt"
     },
     {
       "relation": "imports_from",
@@ -15772,9 +16071,9 @@
       "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes_commissionroutes",
-      "target": "backend_src_features_commissions_infrastructure_commission_routes_getauthuserid",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_infrastructure_commission_routes_getauthuserid"
     },
     {
       "relation": "calls",
@@ -15784,9 +16083,9 @@
       "source_location": "L104",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes_commissionroutes",
-      "target": "backend_src_features_commissions_infrastructure_commission_routes_getusercontext",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_infrastructure_commission_routes_getusercontext"
     },
     {
       "relation": "imports",
@@ -15807,9 +16106,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_commissions_domain_commission_model",
-      "target": "frontend_src_features_commissions_domain_commission_model_comision",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_commissions_domain_commission_model_comision"
     },
     {
       "relation": "contains",
@@ -15818,9 +16117,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_commissions_domain_commission_model",
-      "target": "frontend_src_features_commissions_domain_commission_model_comisionconfig",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_commissions_domain_commission_model_comisionconfig"
     },
     {
       "relation": "contains",
@@ -15829,9 +16128,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_commissions_domain_commission_model",
-      "target": "frontend_src_features_commissions_domain_commission_model_comisionusuarioconfig",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_commissions_domain_commission_model_comisionusuarioconfig"
     },
     {
       "relation": "contains",
@@ -15840,9 +16139,9 @@
       "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_commissions_domain_commission_model",
-      "target": "frontend_src_features_commissions_domain_commission_model_resumencomisiones",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_commissions_domain_commission_model_resumencomisiones"
     },
     {
       "relation": "imports_from",
@@ -15943,312 +16242,13 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L91",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_availablecontableusers",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L89",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionusuariofilter",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L75",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_commissionstore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contableareasummary",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L13",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contablehotelsummary",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L27",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_empleadocomisionresumen",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L411",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getusuariossummaries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L293",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkapprove",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L323",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkpay",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L281",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleselectionchange",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L354",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserapprove",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L372",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserpay",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L390",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserresettopending",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L289",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_payableselectedcount",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L285",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_pendingselectedcount",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L63",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_props",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L135",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_resumenusuarioscomision",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L279",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_selectedusuarios",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L79",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_storedtc",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L406",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_summarymethodprops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L73",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_t",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L400",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablecolumnsummaryctx",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L80",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tipocambiomxn",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L74",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_userstore",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L278",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_usuariostableref",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "ref_vue",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/ContableDashboard.vue",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_contabledashboard",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/shared/formatters.ts",
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_shared_formatters",
-      "target": "frontend_src_shared_formatters_formatcurrency",
-      "confidence_score": 1.0
+      "target": "frontend_src_shared_formatters_formatcurrency"
     },
     {
       "relation": "contains",
@@ -16257,9 +16257,9 @@
       "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_shared_formatters",
-      "target": "frontend_src_shared_formatters_formatmxn",
-      "confidence_score": 1.0
+      "target": "frontend_src_shared_formatters_formatmxn"
     },
     {
       "relation": "imports_from",
@@ -37110,5 +37110,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "c13fb8ca18c83e18e3e3a90137bb25ea49d0a274"
+  "built_at_commit": "e85672e234875fa39d5722228ed1228163be37e1"
 }

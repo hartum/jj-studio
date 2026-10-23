@@ -1,7 +1,7 @@
 # Graph Report - JJ Studio  (2026-10-23)
 
 ## Corpus Check
-- 155 files · ~266,246 words
+- 155 files · ~266,265 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c13fb8ca`
+- Built from commit: `e85672e2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -512,7 +512,7 @@ Cohesion: 0.53
 Nodes (5): escapeHtml(), getAppBaseUrl(), getMailTransporter(), sendPasswordResetEmail(), SendPasswordResetParams
 
 ## Knowledge Gaps
-- **740 isolated node(s):** `ComisionDTO`, `ContableHotelSummary`, `ContableAreaSummary`, `EmpleadoComisionResumen`, `props` (+735 more)
+- **740 isolated node(s):** `ContableHotelSummary`, `ContableAreaSummary`, `EmpleadoComisionResumen`, `props`, `{ t }` (+735 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -523,7 +523,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.397) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **What connects `ComisionDTO`, `ContableHotelSummary`, `ContableAreaSummary` to the rest of the system?**
+- **What connects `ContableHotelSummary`, `ContableAreaSummary`, `EmpleadoComisionResumen` to the rest of the system?**
   _740 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
