@@ -283,6 +283,13 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
   return Array.from(userMap.values()).sort((a, b) => b.totalComisionesUsd - a.totalComisionesUsd)
 })
 
+// --- Control de filas expandidas (preservar estado al recargar datos) ---
+const expandedRowKeys = ref<string[]>([])
+
+function handleExpandChange(_row: EmpleadoComisionResumen, expandedRows: EmpleadoComisionResumen[]) {
+  expandedRowKeys.value = expandedRows.map((r) => r.usuarioId)
+}
+
 // --- Selección y acciones masivas ---
 const usuariosTableRef = ref<TableInstance>()
 const selectedUsuarios = ref<EmpleadoComisionResumen[]>([])
@@ -489,6 +496,72 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
 
   return sums
 }
+
+interface DetalleSummaryMethodProps {
+  columns: TableColumnSummaryCtx[]
+  data: Comision[]
+}
+
+function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
+  const { columns, data } = param
+  const sums: string[] = []
+
+  columns.forEach((column, index) => {
+    if (index === 0) {
+      sums[index] = t('dashboard.table.total') || 'Total'
+      return
+    }
+
+    if (
+      column.property === 'totalVentaUsd' ||
+      column.label === t('dashboard.table.grossSales')
+    ) {
+      const sum = data.reduce((acc, row) => acc + (row.totalVentaUsd || 0), 0)
+      sums[index] = formatCurrency(sum, 2)
+      return
+    }
+
+    if (
+      column.property === 'impuestoMontoUsd' ||
+      column.label === t('dashboard.table.taxWithholding')
+    ) {
+      const sum = data.reduce((acc, row) => acc + (row.impuestoMontoUsd || 0), 0)
+      sums[index] = `-${formatCurrency(sum, 2)}`
+      return
+    }
+
+    if (
+      column.property === 'baseCalculoUsd' ||
+      column.label === t('dashboard.table.netBase')
+    ) {
+      const sum = data.reduce((acc, row) => acc + (row.baseCalculoUsd || 0), 0)
+      sums[index] = formatCurrency(sum, 2)
+      return
+    }
+
+    if (
+      column.property === 'importeComisionUsd' ||
+      column.label === t('dashboard.table.commissionAmountUsd')
+    ) {
+      const sum = data.reduce((acc, row) => acc + (row.importeComisionUsd || 0), 0)
+      sums[index] = formatCurrency(sum, 2)
+      return
+    }
+
+    if (column.label === t('dashboard.table.commissionAmountMxn')) {
+      const sum = data.reduce(
+        (acc, row) => acc + (row.importeComisionUsd || 0) * (tipoCambioMxn.value || 1),
+        0,
+      )
+      sums[index] = formatMxn(sum)
+      return
+    }
+
+    sums[index] = ''
+  })
+
+  return sums
+}
 </script>
 
 <template>
@@ -624,11 +697,14 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
         v-else
         ref="usuariosTableRef"
         :data="resumenUsuariosComision"
+        row-key="usuarioId"
+        :expand-row-keys="expandedRowKeys"
         stripe
         show-summary
         :summary-method="getUsuariosSummaries"
         style="width: 100%"
         @selection-change="handleSelectionChange"
+        @expand-change="handleExpandChange"
       >
         <el-table-column type="selection" width="36" align="center" fixed="left" />
 
@@ -642,7 +718,16 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                   ({{ row.comisiones.length }} registros en el periodo)
                 </span>
               </div>
-              <el-table :data="row.comisiones" size="small" border stripe class="nested-table">
+              <el-table
+                :data="row.comisiones"
+                row-key="id"
+                size="small"
+                border
+                stripe
+                show-summary
+                :summary-method="getDetalleVentasSummaries"
+                class="nested-table"
+              >
                 <el-table-column
                   prop="numeroMiscelaneo"
                   :label="$t('dashboard.table.voucherFolio')"
@@ -660,12 +745,14 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                 <el-table-column
                   prop="hotelNombre"
                   :label="$t('dashboard.table.hotel')"
-                  min-width="140"
+                  width="110"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   prop="clienteNombre"
                   :label="$t('dashboard.table.client')"
-                  min-width="140"
+                  width="160"
+                  show-overflow-tooltip
                 />
                 <el-table-column :label="$t('dashboard.table.role')" width="110" align="center">
                   <template #default="{ row: subRow }">
@@ -673,7 +760,7 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                       size="small"
                       :type="
                         subRow.rolEnVenta === 'FOTOGRAFO'
-                          ? 'success'
+                           ? 'success'
                           : subRow.rolEnVenta === 'VENDEDOR'
                             ? 'primary'
                             : 'warning'
@@ -689,6 +776,7 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                   </template>
                 </el-table-column>
                 <el-table-column
+                  prop="totalVentaUsd"
                   :label="$t('dashboard.table.grossSales')"
                   width="120"
                   align="right"
@@ -698,6 +786,7 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                   </template>
                 </el-table-column>
                 <el-table-column
+                  prop="impuestoMontoUsd"
                   :label="$t('dashboard.table.taxWithholding')"
                   width="115"
                   align="right"
@@ -708,15 +797,20 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                     </span>
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('dashboard.table.netBase')" width="120" align="right">
+                <el-table-column
+                  prop="baseCalculoUsd"
+                  :label="$t('dashboard.table.netBase')"
+                  width="120"
+                  align="right"
+                >
                   <template #default="{ row: subRow }">
                     <span>{{ formatCurrency(subRow.baseCalculoUsd, 2) }}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
                   prop="importeComisionUsd"
-                  :label="$t('dashboard.table.commissionAmount')"
-                  width="130"
+                  :label="$t('dashboard.table.commissionAmountUsd')"
+                  width="135"
                   align="right"
                 >
                   <template #default="{ row: subRow }">
@@ -725,10 +819,23 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                     </strong>
                   </template>
                 </el-table-column>
+                <el-table-column
+                  :label="$t('dashboard.table.commissionAmountMxn')"
+                  width="135"
+                  align="right"
+                >
+                  <template #default="{ row: subRow }">
+                    <strong class="text-primary font-medium">
+                      {{ formatMxn((subRow.importeComisionUsd || 0) * (tipoCambioMxn || 1)) }}
+                    </strong>
+                  </template>
+                </el-table-column>
                 <el-table-column :label="$t('dashboard.table.status')" width="110" align="center">
                   <template #default="{ row: subRow }">
                     <el-tag
                       size="small"
+                      round
+                      class="status-tag"
                       :type="
                         subRow.estado === 'PAGADA'
                           ? 'success'
@@ -741,14 +848,14 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                     </el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column :label="$t('dashboard.table.action')" width="100" align="center">
+                <el-table-column :label="$t('dashboard.table.action')" width="115" align="center">
                   <template #default="{ row: subRow }">
                     <el-button
                       v-if="subRow.estado === 'PENDIENTE'"
                       type="warning"
                       size="small"
-                      link
-                      @click="onUpdateCommissionStatus(subRow.id, 'APROBADA')"
+                      class="action-btn"
+                      @click.stop="onUpdateCommissionStatus(subRow.id, 'APROBADA')"
                     >
                       {{ $t('dashboard.approve') }}
                     </el-button>
@@ -756,17 +863,20 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                       v-else-if="subRow.estado === 'APROBADA'"
                       type="success"
                       size="small"
-                      link
-                      @click="onUpdateCommissionStatus(subRow.id, 'PAGADA')"
+                      class="action-btn"
+                      @click.stop="onUpdateCommissionStatus(subRow.id, 'PAGADA')"
                     >
                       {{ $t('dashboard.pay') }}
                     </el-button>
                     <el-button
                       v-else-if="subRow.estado === 'PAGADA'"
                       type="info"
+                      plain
                       size="small"
-                      link
-                      @click="onUpdateCommissionStatus(subRow.id, 'PENDIENTE')"
+                      class="action-btn"
+                      :icon="RotateCcw"
+                      :title="$t('dashboard.undoPayment')"
+                      @click.stop="onUpdateCommissionStatus(subRow.id, 'PENDIENTE')"
                     >
                       {{ $t('dashboard.undo') }}
                     </el-button>
@@ -983,12 +1093,14 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
         <el-table-column
           prop="estadoGeneral"
           :label="$t('dashboard.table.status')"
-          width="125"
+          min-width="140"
           align="center"
         >
           <template #default="{ row }">
             <el-tag
               size="small"
+              round
+              class="status-tag"
               :type="
                 row.estadoGeneral === 'PAGADA'
                   ? 'success'
@@ -1011,28 +1123,25 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
           </template>
         </el-table-column>
 
-        <!-- Columna 12: Acciones por Empleado -->
+        <!-- Columna 12: Acción por Empleado -->
         <el-table-column
-          :label="$t('dashboard.table.actions')"
-          width="180"
+          :label="$t('dashboard.table.action')"
+          width="115"
           align="center"
           fixed="right"
         >
           <template #default="{ row }">
             <div class="row-actions-group">
-              <!-- Si tiene comisiones pendientes: Aprobar y Pagar -->
+              <!-- Paso 1: Si tiene comisiones pendientes -> Botón Aprobar -->
               <template v-if="row.pendientesCount > 0">
-                <el-button type="warning" size="small" @click="handleUserApprove(row)">
+                <el-button type="warning" size="small" class="action-btn" @click="handleUserApprove(row)">
                   {{ $t('dashboard.approve') }}
-                </el-button>
-                <el-button type="success" size="small" @click="handleUserPay(row)">
-                  {{ $t('dashboard.pay') }}
                 </el-button>
               </template>
 
-              <!-- Si todas están aprobadas: Pagar y Deshacer -->
+              <!-- Paso 2: Si no tiene pendientes pero tiene comisiones aprobadas -> Botón Pagar + Deshacer -->
               <template v-else-if="row.aprobadasCount > 0">
-                <el-button type="success" size="small" @click="handleUserPay(row)">
+                <el-button type="success" size="small" class="action-btn" @click="handleUserPay(row)">
                   {{ $t('dashboard.pay') }}
                 </el-button>
                 <el-popconfirm
@@ -1048,6 +1157,7 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                       type="info"
                       plain
                       size="small"
+                      class="action-btn"
                       :icon="RotateCcw"
                       :title="$t('dashboard.undoApproval')"
                     >
@@ -1057,11 +1167,8 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                 </el-popconfirm>
               </template>
 
-              <!-- Si todas están pagadas: Liquidado y Deshacer -->
+              <!-- Paso 3: Si todas están pagadas -> Solo botón Deshacer -->
               <template v-else-if="row.pagadasCount > 0">
-                <span class="text-xs text-muted mr-1">
-                  {{ $t('dashboard.settled') }}
-                </span>
                 <el-popconfirm
                   :title="$t('dashboard.restorePendingConfirm')"
                   :confirm-button-text="$t('dashboard.restore')"
@@ -1075,6 +1182,7 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
                       type="info"
                       plain
                       size="small"
+                      class="action-btn"
                       :icon="RotateCcw"
                       :title="$t('dashboard.undoPayment')"
                     >
@@ -1213,6 +1321,24 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
   gap: 6px;
   justify-content: center;
   align-items: center;
+}
+
+.action-btn {
+  width: 82px !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.status-tag {
+  min-width: 84px !important;
+  width: auto !important;
+  justify-content: center !important;
+  text-align: center !important;
+  display: inline-flex !important;
+  padding: 0 10px !important;
+  white-space: nowrap !important;
 }
 
 .expand-table-wrapper {
