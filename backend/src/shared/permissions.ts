@@ -59,7 +59,7 @@ export const PERMISSION_MATRIX: Record<RoleCode, RoleConfig> = {
     scopeType: 'HOTELS',
   },
   CONTABLE: {
-    allowedNavRoutes: ['/inicio', '/configuracion'],
+    allowedNavRoutes: ['/inicio', '/agenda', '/ventas', '/configuracion'],
     visibleTargetRoles: [],
     assignableTargetRoles: [],
     canCreateUsers: false,

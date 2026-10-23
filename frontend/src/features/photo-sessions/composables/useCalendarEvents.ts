@@ -45,7 +45,7 @@ export interface EventTooltipInfo {
   telefono: string
   email: string
   agendadoPor: string
-  type: 'session' | 'sale'
+  type: 'session' | 'sale' | 'direct-sale'
   rawSession?: SesionFotografica
   rawSale?: CitaVenta
 }
@@ -506,18 +506,24 @@ export function useCalendarEvents(
     const currentUser = authStore.user
     if (!currentUser) return false
     const role = currentUser.roleCode?.toUpperCase() || ''
-    if (role === 'CONTABLE') return false
+
+    const isSale = props.type === 'sale' || (props.type as string) === 'direct-sale'
+
+    // El contable puede editar todas las citas de ventas (normales y ventas directas), incluso si están completadas
+    if (role === 'CONTABLE') {
+      return isSale
+    }
 
     // Estado del evento
     const estado =
-      (props.type === 'sale' ? props.rawSale?.estado : props.rawSession?.estado) || props.estado
+      (isSale ? props.rawSale?.estado : props.rawSession?.estado) || props.estado
     // Si no está PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW), solo GERENTE, ADMIN, SUPERUSUARIO pueden editar
     if (estado && estado !== 'PROGRAMADA') {
       return ['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
     }
 
-    // Si es un evento de Cita de Venta:
-    if (props.type === 'sale') {
+    // Si es un evento de Cita de Venta o Venta Directa:
+    if (isSale) {
       const fotografoId = props.rawSale?.fotografoId || null
       const vendedorId = props.rawSale?.vendedorId || null
 

@@ -92,7 +92,10 @@ export function useDirectSaleForm(): DirectSaleFormContext {
 
     if (roleCode === 'GERENTE' || roleCode === 'CONTABLE') {
       const areaIds = new Set(user.areaIds || [])
-      return hotelStore.hotels.filter((h) => areaIds.has(h.areaId) && !!h.ventaDirecta)
+      const directHotelIds = new Set(user.hotelIds || [])
+      return hotelStore.hotels.filter(
+        (h) => (areaIds.has(h.areaId) || directHotelIds.has(h.id)) && !!h.ventaDirecta,
+      )
     }
 
     const userHotelIds = new Set(user.hotelIds || [])

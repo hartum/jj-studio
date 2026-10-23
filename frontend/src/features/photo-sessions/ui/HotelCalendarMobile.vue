@@ -157,7 +157,7 @@ function handleDateNav(action: 'prev' | 'next' | 'today') {
 // 7. Permisos de Usuario y Creación de Sesiones/Ventas
 const isContable = computed(() => currentUser.value?.roleCode?.toUpperCase() === 'CONTABLE')
 const canCreateEvents = computed(() => !isContable.value)
-const canEditEvents = computed(() => !isContable.value)
+const canEditEvents = computed(() => true)
 
 const canCreateDirectSale = computed(() => {
   if (!canCreateEvents.value) return false
@@ -388,7 +388,7 @@ onUnmounted(() => {
     </el-collapse-transition>
 
     <!-- 3. Contenedor de Calendario Móvil -->
-    <div class="calendar-mobile-card" :class="{ 'read-only-calendar': isContable }">
+    <div class="calendar-mobile-card">
       <!-- Barra / Selector de Fecha Móvil (Colapsable según switch) -->
       <el-collapse-transition>
         <div v-show="showMiniCalendar">
@@ -838,17 +838,5 @@ onUnmounted(() => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-}
-
-/* ── Estilos para Modo Solo Lectura (CONTABLE) ── */
-.read-only-calendar :deep(.fc-event),
-.read-only-calendar :deep(.fc-list-event) {
-  cursor: default !important;
-}
-
-.read-only-calendar :deep(.fc-event:hover),
-.read-only-calendar :deep(.fc-event.fc-event-hovered) {
-  transform: none !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
 }
 </style>

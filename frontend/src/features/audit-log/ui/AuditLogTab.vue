@@ -164,6 +164,8 @@ function getEntityLabel(entidad: string): string {
       return t('auditLog.entities.area')
     case 'PAIS':
       return t('auditLog.entities.country')
+    case 'COMISION':
+      return t('auditLog.entities.commission')
     default:
       return entidad || t('auditLog.entities.record')
   }

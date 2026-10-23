@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ElMessageBox, ElMessage, type TableInstance } from 'element-plus'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { useCommissionStore } from '@/features/commissions/stores/commission.store'
 import { formatCurrency, formatMxn } from '@/shared/formatters'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
-import { Money, Wallet, Tickets, InfoFilled } from '@element-plus/icons-vue'
+import { Money, Wallet, Tickets, InfoFilled, Edit } from '@element-plus/icons-vue'
 import { RotateCcw, Award } from '@lucide/vue'
 import type { Comision } from '@/features/commissions/domain/commission.model'
 
@@ -72,8 +73,15 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const router = useRouter()
 const userStore = useUserStore()
 const commissionStore = useCommissionStore()
+
+function goToEditSale(citaVentaId: number) {
+  if (citaVentaId) {
+    router.push(`/ventas/${citaVentaId}/editar`)
+  }
+}
 
 // --- Tipo de Cambio USD -> MXN ---
 const LOCAL_STORAGE_KEY_TC = 'jj_studio_tipo_cambio_mxn'
@@ -731,10 +739,22 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                 <el-table-column
                   prop="numeroMiscelaneo"
                   :label="$t('dashboard.table.voucherFolio')"
-                  width="130"
+                  width="135"
                 >
                   <template #default="{ row: subRow }">
-                    <span class="font-mono text-xs">{{ subRow.numeroMiscelaneo || '—' }}</span>
+                    <el-button
+                      v-if="subRow.citaVentaId"
+                      type="primary"
+                      link
+                      size="small"
+                      class="folio-link-btn"
+                      :title="$t('common.edit') + ' ' + (subRow.numeroMiscelaneo || '')"
+                      @click.stop="goToEditSale(subRow.citaVentaId)"
+                    >
+                      <el-icon :size="13"><Edit /></el-icon>
+                      <span class="font-mono text-xs">{{ subRow.numeroMiscelaneo || $t('dashboard.table.noVoucherFolio') }}</span>
+                    </el-button>
+                    <span v-else class="font-mono text-xs">{{ subRow.numeroMiscelaneo || $t('dashboard.table.noVoucherFolio') }}</span>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -1390,6 +1410,18 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
 :deep(.el-table__footer-wrapper .cell) {
   font-weight: 700;
   color: var(--heading-color, #0f172a);
+}
+
+.folio-link-btn {
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.folio-link-btn:hover {
+  text-decoration: underline;
 }
 
 @keyframes fadeIn {

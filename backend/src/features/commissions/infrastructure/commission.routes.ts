@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { prisma } from '../../../shared/db.js'
-import { decrypt } from '../../../shared/encryption.js'
+import { decrypt, decryptUser } from '../../../shared/encryption.js'
+import { registrarAudit } from '../../audit-log/application/audit-log.service.js'
 import {
   getAllCommissionConfigs,
   getEffectiveCommissionConfig,
@@ -46,7 +47,9 @@ async function getUserContext(userId: string) {
       where: { areaId: { in: areaIds }, deletedAt: null },
       select: { id: true },
     })
-    allowedHotelIds = hotelsInAreas.map((h) => h.id)
+    const areaHotelIds = hotelsInAreas.map((h) => h.id)
+    const directHotelIds = user.hotelesAsignados.map((h) => h.hotelId)
+    allowedHotelIds = Array.from(new Set([...areaHotelIds, ...directHotelIds]))
   } else {
     allowedHotelIds = user.hotelesAsignados.map((h) => h.hotelId)
   }
@@ -505,17 +508,71 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ error: 'Estado de comisión no válido' })
       }
 
-      if (ctx.allowedHotelIds !== null) {
-        const comision = await prisma.comision.findUnique({ where: { id } })
-        if (!comision || !ctx.allowedHotelIds.includes(comision.hotelId)) {
-          return reply.status(403).send({ error: 'No tienes acceso a comisiones de este hotel' })
-        }
+      const existing = await prisma.comision.findUnique({
+        where: { id },
+        include: {
+          hotel: true,
+          usuario: true,
+          citaVenta: {
+            include: {
+              sesion: true,
+            },
+          },
+        },
+      })
+
+      if (!existing || existing.deletedAt) {
+        return reply.status(404).send({ error: 'Comisión no encontrada' })
       }
 
+      if (ctx.allowedHotelIds !== null && !ctx.allowedHotelIds.includes(existing.hotelId)) {
+        return reply.status(403).send({ error: 'No tienes acceso a comisiones de este hotel' })
+      }
+
+      const estadoAnterior = existing.estado
       const updated = await prisma.comision.update({
         where: { id },
         data: { estado },
       })
+
+      if (estadoAnterior !== estado) {
+        const beneficiario = decryptUser(existing.usuario)
+        const beneficiarioNombre = beneficiario
+          ? `${beneficiario.nombre} ${beneficiario.apellidos}`.trim()
+          : 'un usuario'
+        const clienteNombre = existing.citaVenta?.sesion?.clienteNombre
+          ? decrypt(existing.citaVenta.sesion.clienteNombre)
+          : (existing.citaVenta?.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : '')
+        const voucherFolio = existing.citaVenta?.numeroMiscelaneo || null
+
+        let descAccion = 'cambió el estado de una comisión'
+        if (estado === 'APROBADA') descAccion = 'aprobó una comisión'
+        else if (estado === 'PAGADA') descAccion = 'marcó como pagada una comisión'
+        else if (estado === 'PENDIENTE') descAccion = 'restableció a pendiente una comisión'
+
+        registrarAudit({
+          accion: 'MODIFICAR',
+          entidad: 'COMISION',
+          entidadId: updated.id,
+          usuarioId: userId,
+          hotelId: existing.hotelId,
+          clienteNombre: clienteNombre || undefined,
+          descripcion: `${descAccion} de ${beneficiarioNombre} ($${existing.importeComisionUsd.toFixed(2)} USD)`,
+          contexto: `Comisión #${existing.id} de rol ${existing.rolEnVenta} para ${beneficiarioNombre}${voucherFolio ? ` (Folio: ${voucherFolio})` : ''}`,
+          ipAddress: request.ip,
+          metadatos: {
+            estadoAnterior,
+            estadoNuevo: estado,
+            beneficiario: beneficiarioNombre,
+            rolEnVenta: existing.rolEnVenta,
+            importeComisionUsd: existing.importeComisionUsd,
+            porcentajeAplicado: `${existing.porcentajeAplicado}%`,
+            baseCalculoUsd: existing.baseCalculoUsd,
+            citaVentaId: existing.citaVentaId,
+            numeroMiscelaneo: voucherFolio,
+          },
+        })
+      }
 
       return reply.send(updated)
     } catch (err: unknown) {
@@ -563,9 +620,53 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         where.hotelId = { in: ctx.allowedHotelIds }
       }
 
-      const result = await prisma.comision.updateMany({
+      const comisionesAfectadas = await prisma.comision.findMany({
         where,
+        include: {
+          hotel: true,
+          usuario: true,
+        },
+      })
+
+      const comisionesToUpdate = comisionesAfectadas.filter((c) => c.estado !== estado)
+
+      if (comisionesToUpdate.length === 0) {
+        return reply.send({ success: true, count: 0 })
+      }
+
+      const idsToUpdate = comisionesToUpdate.map((c) => c.id)
+
+      const result = await prisma.comision.updateMany({
+        where: {
+          id: { in: idsToUpdate },
+        },
         data: { estado },
+      })
+
+      const totalUsd = comisionesToUpdate.reduce((sum, c) => sum + c.importeComisionUsd, 0)
+      const hotelNames = Array.from(new Set(comisionesToUpdate.map((c) => c.hotel?.nombre).filter(Boolean)))
+      const hotelIds = Array.from(new Set(comisionesToUpdate.map((c) => c.hotelId)))
+
+      let descAccion = 'actualizó masivamente el estado de comisiones'
+      if (estado === 'APROBADA') descAccion = 'aprobó un lote de comisiones'
+      else if (estado === 'PAGADA') descAccion = 'marcó como pagadas un lote de comisiones'
+      else if (estado === 'PENDIENTE') descAccion = 'restableció a pendiente un lote de comisiones'
+
+      registrarAudit({
+        accion: 'MODIFICAR',
+        entidad: 'COMISION',
+        usuarioId: userId,
+        hotelId: hotelIds.length === 1 ? hotelIds[0] : undefined,
+        descripcion: `${descAccion} (${result.count} registros, $${totalUsd.toFixed(2)} USD)`,
+        contexto: `Actualización en lote a estado ${estado} de ${result.count} comisiones en: ${hotelNames.join(', ') || 'Varios hoteles'}`,
+        ipAddress: request.ip,
+        metadatos: {
+          estadoNuevo: estado,
+          totalComisionesActualizadas: result.count,
+          totalImporteUsd: Math.round(totalUsd * 100) / 100,
+          hoteles: hotelNames.join(', '),
+          comisionesIds: idsToUpdate.slice(0, 50),
+        },
       })
 
       return reply.send({ success: true, count: result.count })

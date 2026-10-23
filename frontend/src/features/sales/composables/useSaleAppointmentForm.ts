@@ -132,7 +132,8 @@ export function useSaleAppointmentForm() {
 
     if (roleCode === 'GERENTE' || roleCode === 'CONTABLE') {
       const areaIds = new Set(user.areaIds || [])
-      return hotelStore.hotels.filter((h) => areaIds.has(h.areaId))
+      const directHotelIds = new Set(user.hotelIds || [])
+      return hotelStore.hotels.filter((h) => areaIds.has(h.areaId) || directHotelIds.has(h.id))
     }
 
     const userHotelIds = new Set(user.hotelIds || [])
@@ -156,7 +157,7 @@ export function useSaleAppointmentForm() {
     const isAssignedVendedor = Boolean(
       vendedorId && String(vendedorId) === String(currentUserId),
     )
-    const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+    const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role)
     return !isAssignedFotografo && !isAssignedVendedor && !isPrivileged
   })
 
@@ -165,17 +166,15 @@ export function useSaleAppointmentForm() {
     if (!isEditing.value || !loadedCita.value) return false
     const role = currentUser.value?.roleCode?.toUpperCase() || ''
 
-    // 1. If state is not PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW): only GERENTE, ADMIN, SUPERUSUARIO
+    // 1. If state is not PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW): only GERENTE, ADMIN, SUPERUSUARIO, CONTABLE
     if (loadedCita.value.estado !== 'PROGRAMADA') {
-      return !['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
+      return !['GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role)
     }
 
     // 2. If state is PROGRAMADA and associated session has an assigned photographer:
     if (isLockedByPhotographer.value) {
       return true
     }
-
-    if (role === 'CONTABLE') return true
 
     return false
   })
@@ -662,6 +661,7 @@ export function useSaleAppointmentForm() {
   }
 
   function disabledPastDates(time: Date): boolean {
+    if (isEditing.value) return false
     const today = new Date()
     today.setHours(0, 0, 0, 0)
     return time.getTime() < today.getTime()
@@ -819,7 +819,13 @@ export function useSaleAppointmentForm() {
   })
 
   function handleGoBack() {
-    router.push('/agenda')
+    if (window.history.length > 1) {
+      router.back()
+    } else if (currentUser.value?.roleCode?.toUpperCase() === 'CONTABLE') {
+      router.push('/inicio')
+    } else {
+      router.push('/agenda')
+    }
   }
 
   async function handleSave() {

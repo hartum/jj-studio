@@ -309,6 +309,7 @@
       "saleDetails": "Detalle de Ventas",
       "bonusAchieved": "Bono",
       "voucherFolio": "Folio / Misc.",
+      "noVoucherFolio": "Sin nº",
       "hotels": "Hoteles"
     },
     "trafficLightLabels": {
@@ -1088,6 +1089,7 @@
       "hotel": "Hotel",
       "area": "Zona / Área",
       "country": "País",
+      "commission": "Comisión",
       "record": "Registro"
     },
     "details": {

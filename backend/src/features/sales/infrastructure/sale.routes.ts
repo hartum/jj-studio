@@ -102,7 +102,9 @@ async function getAllowedHotelIds(userId: string): Promise<number[] | null> {
       where: { areaId: { in: areaIds }, deletedAt: null },
       select: { id: true },
     })
-    return hotelsInAreas.map((h) => h.id)
+    const areaHotelIds = hotelsInAreas.map((h) => h.id)
+    const directHotelIds = user.hotelesAsignados.map((h) => h.hotelId)
+    return Array.from(new Set([...areaHotelIds, ...directHotelIds]))
   }
 
   return user.hotelesAsignados.map((h) => h.hotelId)
@@ -356,6 +358,14 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       if (!cita || cita.deletedAt) {
         return reply.status(404).send({ error: 'Cita de venta no encontrada' })
+      }
+
+      const userId = getAuthUserId(request)
+      if (userId) {
+        const allowedHotels = await getAllowedHotelIds(userId)
+        if (allowedHotels !== null && !allowedHotels.includes(cita.hotelId)) {
+          return reply.status(403).send({ error: 'No tienes acceso al hotel de esta cita de venta' })
+        }
       }
 
       const v = decryptUser(cita.vendedor)
@@ -923,21 +933,28 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const userId = getAuthUserId(request)
       const role = userId ? await getUserRole(userId) : null
 
+      if (userId) {
+        const allowedHotels = await getAllowedHotelIds(userId)
+        if (allowedHotels !== null && !allowedHotels.includes(existing.hotelId)) {
+          return reply.status(403).send({ error: 'No tienes acceso al hotel de esta cita de venta' })
+        }
+      }
+
       // Role check:
-      // 1. If cita was NOT PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW), only GERENTE/ADMIN/SUPERUSUARIO can edit
+      // 1. If cita was NOT PROGRAMADA (COMPLETADA, CANCELADA, NO_SHOW), only GERENTE/ADMIN/SUPERUSUARIO/CONTABLE can edit
       if (existing.estado !== 'PROGRAMADA') {
         if (!userId) {
           return reply.status(403).send({ error: 'No autorizado para editar citas cerradas' })
         }
-        const canEdit = ['GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role || '')
+        const canEdit = ['GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role || '')
         if (!canEdit) {
           return reply
             .status(403)
-            .send({ error: 'Solo gerentes, administradores y superusuarios pueden editar citas cerradas' })
+            .send({ error: 'Solo gerentes, contables, administradores y superusuarios pueden editar citas cerradas' })
         }
       } else {
         // 2. If cita is PROGRAMADA and the associated session has an assigned photographer or the cita has an assigned seller:
-        // Only assigned photographer, assigned seller, supervisor, gerente, admin, and superusuario can edit.
+        // Only assigned photographer, assigned seller, supervisor, gerente, contable, admin, and superusuario can edit.
         const fotografoId = existing.fotografoId || existing.sesion?.fotografoId
         const vendedorId = existing.vendedorId
         if (fotografoId || vendedorId) {
@@ -946,11 +963,11 @@ export async function saleRoutes(fastify: FastifyInstance) {
           }
           const isAssignedFotografo = Boolean(fotografoId && userId === fotografoId)
           const isAssignedVendedor = Boolean(vendedorId && userId === vendedorId)
-          const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role || '')
+          const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role || '')
           if (!isAssignedFotografo && !isAssignedVendedor && !isPrivileged) {
             return reply.status(403).send({
               error:
-                'Esta cita ya tiene un fotógrafo o vendedor asignado. Solo el fotógrafo asignado, vendedor asignado, supervisores, gerentes o administradores pueden editarla.',
+                'Esta cita ya tiene un fotógrafo o vendedor asignado. Solo el fotógrafo asignado, vendedor asignado, supervisores, gerentes, contables o administradores pueden editarla.',
             })
           }
         }
@@ -1167,6 +1184,11 @@ export async function saleRoutes(fastify: FastifyInstance) {
       if (existing.modoCobro !== actualizada.modoCobro) {
         metadatos.modoCobroAnterior = existing.modoCobro || ''
         metadatos.modoCobroNuevo = actualizada.modoCobro || ''
+      }
+
+      if (existing.numeroMiscelaneo !== actualizada.numeroMiscelaneo) {
+        metadatos.numeroMiscelaneoAnterior = existing.numeroMiscelaneo || ''
+        metadatos.numeroMiscelaneoNuevo = actualizada.numeroMiscelaneo || ''
       }
 
       if (incomingPagos !== undefined) {
