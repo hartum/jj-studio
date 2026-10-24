@@ -504,7 +504,7 @@ export async function commissionRoutes(fastify: FastifyInstance) {
           .send({ error: 'No autorizado para cambiar el estado de las comisiones' })
       }
 
-      if (!['PENDIENTE', 'APROBADA', 'PAGADA'].includes(estado)) {
+      if (!['PENDIENTE', 'APROBADA', 'PAGADA', 'RECHAZADA'].includes(estado)) {
         return reply.status(400).send({ error: 'Estado de comisión no válido' })
       }
 
@@ -548,6 +548,7 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         let descAccion = 'cambió el estado de una comisión'
         if (estado === 'APROBADA') descAccion = 'aprobó una comisión'
         else if (estado === 'PAGADA') descAccion = 'marcó como pagada una comisión'
+        else if (estado === 'RECHAZADA') descAccion = 'rechazó una comisión'
         else if (estado === 'PENDIENTE') descAccion = 'restableció a pendiente una comisión'
 
         registrarAudit({
@@ -598,7 +599,7 @@ export async function commissionRoutes(fastify: FastifyInstance) {
           .send({ error: 'No autorizado para cambiar el estado de las comisiones' })
       }
 
-      if (!['PENDIENTE', 'APROBADA', 'PAGADA'].includes(estado)) {
+      if (!['PENDIENTE', 'APROBADA', 'PAGADA', 'RECHAZADA'].includes(estado)) {
         return reply.status(400).send({ error: 'Estado de comisión no válido' })
       }
 
@@ -650,6 +651,7 @@ export async function commissionRoutes(fastify: FastifyInstance) {
       let descAccion = 'actualizó masivamente el estado de comisiones'
       if (estado === 'APROBADA') descAccion = 'aprobó un lote de comisiones'
       else if (estado === 'PAGADA') descAccion = 'marcó como pagadas un lote de comisiones'
+      else if (estado === 'RECHAZADA') descAccion = 'rechazó un lote de comisiones'
       else if (estado === 'PENDIENTE') descAccion = 'restableció a pendiente un lote de comisiones'
 
       registrarAudit({

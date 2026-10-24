@@ -698,6 +698,7 @@ export async function getResumenComisiones(params: {
 
   const where: any = {
     deletedAt: null,
+    estado: { not: 'RECHAZADA' },
   }
 
   if (fechaDesde || fechaHasta) {

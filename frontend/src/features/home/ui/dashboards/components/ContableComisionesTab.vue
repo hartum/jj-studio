@@ -8,7 +8,7 @@ import { useCommissionStore } from '@/features/commissions/stores/commission.sto
 import { useGoalStore } from '@/features/goals/stores/goal.store'
 import { formatCurrency, formatMxn } from '@/shared/formatters'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
-import { Money, Wallet, Tickets, InfoFilled, Edit } from '@element-plus/icons-vue'
+import { InfoFilled, Edit } from '@element-plus/icons-vue'
 import { RotateCcw, Award } from '@lucide/vue'
 import type { Comision } from '@/features/commissions/domain/commission.model'
 import type { Meta } from '@/features/goals/domain/goal.model'
@@ -63,11 +63,13 @@ export interface EmpleadoComisionResumen {
   pendientesCount: number
   aprobadasCount: number
   pagadasCount: number
-  estadoGeneral: 'PENDIENTE' | 'APROBADA' | 'PAGADA' | 'MIXTO'
+  rechazadasCount: number
+  estadoGeneral: 'PENDIENTE' | 'APROBADA' | 'PAGADA' | 'RECHAZADA' | 'MIXTO'
   // IDs de comisiones
   comisionesIds: number[]
   pendientesIds: number[]
   payableIds: number[]
+  rechazadasIds: number[]
   comisiones: Comision[]
   // Meta individual / Bono
   cumpleBono: boolean
@@ -198,12 +200,12 @@ function getInitialSort(): TableSortState {
     const stored = localStorage.getItem(LOCAL_STORAGE_KEY_SORT)
     if (stored) {
       const parsed = JSON.parse(stored)
-      if (parsed && typeof parsed.prop === 'string') {
+      if (parsed && typeof parsed.prop === 'string' && parsed.order) {
         return parsed
       }
     }
   } catch {}
-  return { prop: 'totalComisionesUsd', order: 'descending' }
+  return { prop: '', order: null }
 }
 
 const currentSort = ref<TableSortState>(getInitialSort())
@@ -363,6 +365,61 @@ function calcularBonosEmpleado(
   item.cumpleBono = item.totalBonusUsd > 0
 }
 
+// --- Helpers de Inicialización y Estado ---
+function createInitialUserSummary(
+  usuarioId: string,
+  c: Comision,
+  uProfile?: (typeof userStore.usersWithProfile)[0],
+): EmpleadoComisionResumen {
+  const nombre = c.usuarioNombre || uProfile?.nombre || 'Usuario'
+  const apellidos = c.usuarioApellidos || uProfile?.apellidos || ''
+  return {
+    usuarioId,
+    nombre,
+    apellidos,
+    nombreCompleto: `${nombre} ${apellidos}`.trim(),
+    email: c.usuarioEmail || uProfile?.email || '',
+    imagen: uProfile?.imagen || null,
+    color: uProfile?.color || null,
+    roles: [],
+    tipoContrato: c.tipoContrato || uProfile?.tipoContrato || 'ASALARIADO',
+    hoteles: [],
+    totalVentasBrutasUsd: 0,
+    totalImpuestoUsd: 0,
+    impuestoPctCalculado: 16,
+    totalBaseNetaUsd: 0,
+    comisionFotografoUsd: 0,
+    comisionVendedorUsd: 0,
+    comisionOtrasUsd: 0,
+    totalComisionesUsd: 0,
+    totalComisionesMxn: 0,
+    comisionesCount: 0,
+    pendientesCount: 0,
+    aprobadasCount: 0,
+    pagadasCount: 0,
+    rechazadasCount: 0,
+    estadoGeneral: 'PENDIENTE',
+    comisionesIds: [],
+    pendientesIds: [],
+    payableIds: [],
+    rechazadasIds: [],
+    comisiones: [],
+    cumpleBono: false,
+    bonoIndividualUsd: 0,
+    bonoGrupalUsd: 0,
+    totalBonusUsd: 0,
+    bonusDetalles: [],
+  }
+}
+
+function resolveEstadoGeneral(item: EmpleadoComisionResumen): EmpleadoComisionResumen['estadoGeneral'] {
+  if (item.pagadasCount > 0 && item.pagadasCount === item.comisionesCount) return 'PAGADA'
+  if (item.aprobadasCount > 0 && item.aprobadasCount === item.comisionesCount) return 'APROBADA'
+  if (item.rechazadasCount > 0 && item.rechazadasCount === item.comisionesCount) return 'RECHAZADA'
+  if (item.pendientesCount > 0 && item.pendientesCount === item.comisionesCount) return 'PENDIENTE'
+  return 'MIXTO'
+}
+
 // --- Agrupación de comisiones por Usuario (Estilo Excel COMISIONES1) ---
 const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
   let list = commissionStore.comisiones
@@ -382,43 +439,7 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
   for (const c of list) {
     let item = userMap.get(c.usuarioId)
     if (!item) {
-      const uProfile = userProfileMap.get(c.usuarioId)
-      item = {
-        usuarioId: c.usuarioId,
-        nombre: c.usuarioNombre || uProfile?.nombre || 'Usuario',
-        apellidos: c.usuarioApellidos || uProfile?.apellidos || '',
-        nombreCompleto:
-          `${c.usuarioNombre || uProfile?.nombre || 'Usuario'} ${c.usuarioApellidos || uProfile?.apellidos || ''}`.trim(),
-        email: c.usuarioEmail || uProfile?.email || '',
-        imagen: uProfile?.imagen || null,
-        color: uProfile?.color || null,
-        roles: [],
-        tipoContrato: c.tipoContrato || uProfile?.tipoContrato || 'ASALARIADO',
-        hoteles: [],
-        totalVentasBrutasUsd: 0,
-        totalImpuestoUsd: 0,
-        impuestoPctCalculado: 16,
-        totalBaseNetaUsd: 0,
-        comisionFotografoUsd: 0,
-        comisionVendedorUsd: 0,
-        comisionOtrasUsd: 0,
-        totalComisionesUsd: 0,
-        totalComisionesMxn: 0,
-        comisionesCount: 0,
-        pendientesCount: 0,
-        aprobadasCount: 0,
-        pagadasCount: 0,
-        estadoGeneral: 'PENDIENTE',
-        comisionesIds: [],
-        pendientesIds: [],
-        payableIds: [],
-        comisiones: [],
-        cumpleBono: false,
-        bonoIndividualUsd: 0,
-        bonoGrupalUsd: 0,
-        totalBonusUsd: 0,
-        bonusDetalles: [],
-      }
+      item = createInitialUserSummary(c.usuarioId, c, userProfileMap.get(c.usuarioId))
       userMap.set(c.usuarioId, item)
     }
 
@@ -440,31 +461,35 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     if (c.estado === 'PENDIENTE') {
       item.pendientesCount++
       item.pendientesIds.push(c.id)
-      item.payableIds.push(c.id)
     } else if (c.estado === 'APROBADA') {
       item.aprobadasCount++
       item.payableIds.push(c.id)
     } else if (c.estado === 'PAGADA') {
       item.pagadasCount++
+    } else if (c.estado === 'RECHAZADA') {
+      item.rechazadasCount++
+      item.rechazadasIds.push(c.id)
     }
 
-    // Comisiones por rol
-    if (c.rolEnVenta === 'FOTOGRAFO') {
-      item.comisionFotografoUsd += c.importeComisionUsd || 0
-    } else if (c.rolEnVenta === 'VENDEDOR') {
-      item.comisionVendedorUsd += c.importeComisionUsd || 0
-    } else {
-      item.comisionOtrasUsd += c.importeComisionUsd || 0
-    }
+    // Comisiones por rol (excluye rechazadas de las cuentas)
+    if (c.estado !== 'RECHAZADA') {
+      if (c.rolEnVenta === 'FOTOGRAFO') {
+        item.comisionFotografoUsd += c.importeComisionUsd || 0
+      } else if (c.rolEnVenta === 'VENDEDOR') {
+        item.comisionVendedorUsd += c.importeComisionUsd || 0
+      } else {
+        item.comisionOtrasUsd += c.importeComisionUsd || 0
+      }
 
-    item.totalComisionesUsd += c.importeComisionUsd || 0
+      item.totalComisionesUsd += c.importeComisionUsd || 0
+    }
   }
 
-  // 2. Ventas únicas del periodo por hotel (para cálculo de bono grupal)
+  // 2. Ventas únicas del periodo por hotel (para cálculo de bono grupal, excluyendo rechazadas)
   const ventasUnicasPorHotel = new Map<number, number>()
   const ventasProcesadasGlobal = new Set<number>()
   for (const c of list) {
-    if (!ventasProcesadasGlobal.has(c.citaVentaId)) {
+    if (c.estado !== 'RECHAZADA' && !ventasProcesadasGlobal.has(c.citaVentaId)) {
       ventasProcesadasGlobal.add(c.citaVentaId)
       const { ventaBruta } = extractSaleMetrics(c)
       ventasUnicasPorHotel.set(c.hotelId, (ventasUnicasPorHotel.get(c.hotelId) || 0) + ventaBruta)
@@ -531,7 +556,7 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     const processedSaleIds = new Set<number>()
 
     for (const c of item.comisiones) {
-      if (!processedSaleIds.has(c.citaVentaId)) {
+      if (c.estado !== 'RECHAZADA' && !processedSaleIds.has(c.citaVentaId)) {
         processedSaleIds.add(c.citaVentaId)
         const { ventaBruta, impuesto, baseCalculoUsd } = extractSaleMetrics(c)
         item.totalVentasBrutasUsd += ventaBruta
@@ -561,18 +586,10 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     item.totalComisionesMxn = Number((item.totalComisionesUsd * tc).toFixed(2))
 
     // Estado general del usuario
-    if (item.pagadasCount === item.comisionesCount) {
-      item.estadoGeneral = 'PAGADA'
-    } else if (item.aprobadasCount === item.comisionesCount) {
-      item.estadoGeneral = 'APROBADA'
-    } else if (item.pendientesCount === item.comisionesCount) {
-      item.estadoGeneral = 'PENDIENTE'
-    } else {
-      item.estadoGeneral = 'MIXTO'
-    }
+    item.estadoGeneral = resolveEstadoGeneral(item)
   }
 
-  // 5. Ordenamiento
+  // 5. Ordenamiento (solo si el usuario ha seleccionado una columna)
   const result = Array.from(userMap.values())
   if (currentSort.value.prop && currentSort.value.order) {
     const { prop, order } = currentSort.value
@@ -587,8 +604,6 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
       const numB = typeof valB === 'number' ? valB : 0
       return isAsc ? numA - numB : numB - numA
     })
-  } else {
-    result.sort((a, b) => b.totalComisionesUsd - a.totalComisionesUsd)
   }
   return result
 })
@@ -623,6 +638,22 @@ function handleExpandChange(
   expandedRowKeys.value = expandedRows.map((r) => r.usuarioId)
 }
 
+function isRowExpanded(row: EmpleadoComisionResumen): boolean {
+  return expandedRowKeys.value.includes(row.usuarioId)
+}
+
+function toggleExpandRow(row: EmpleadoComisionResumen) {
+  const isExp = expandedRowKeys.value.includes(row.usuarioId)
+  if (isExp) {
+    expandedRowKeys.value = expandedRowKeys.value.filter((id) => id !== row.usuarioId)
+  } else {
+    expandedRowKeys.value = [...expandedRowKeys.value, row.usuarioId]
+  }
+  if (usuariosTableRef.value) {
+    usuariosTableRef.value.toggleRowExpansion(row, !isExp)
+  }
+}
+
 // --- Selección y acciones masivas ---
 const usuariosTableRef = ref<TableInstance>()
 const selectedUsuarios = ref<EmpleadoComisionResumen[]>([])
@@ -636,113 +667,213 @@ const pendingSelectedCount = computed(() =>
 )
 
 const payableSelectedCount = computed(() =>
-  selectedUsuarios.value.reduce((acc, u) => acc + (u.pendientesCount + u.aprobadasCount), 0),
+  selectedUsuarios.value.reduce((acc, u) => acc + u.aprobadasCount, 0),
 )
 
-async function handleBulkApprove() {
-  const ids: number[] = []
-  for (const u of selectedUsuarios.value) {
-    ids.push(...u.pendientesIds)
-  }
+// --- Helper de Confirmación Modal ---
+interface ConfirmActionOptions {
+  title: string
+  message: string
+  confirmButtonText: string
+  type?: 'warning' | 'success' | 'info' | 'error'
+  isDanger?: boolean
+}
 
+async function confirmAction(options: ConfirmActionOptions): Promise<boolean> {
+  try {
+    await ElMessageBox.confirm(options.message, options.title, {
+      confirmButtonText: options.confirmButtonText,
+      cancelButtonText: t('common.cancel'),
+      type: options.type || 'warning',
+      confirmButtonClass: options.isDanger ? 'el-button--danger' : undefined,
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
+async function handleBulkApprove() {
+  const ids = selectedUsuarios.value.flatMap((u) => u.pendientesIds)
   if (ids.length === 0) {
     ElMessage.warning(t('dashboard.noPendingSelected'))
     return
   }
 
-  try {
-    await ElMessageBox.confirm(
-      t('dashboard.confirmBulkApproveMsg', { count: ids.length }),
-      t('dashboard.confirmBulkApproveTitle'),
-      {
-        confirmButtonText: t('dashboard.approve'),
-        cancelButtonText: t('common.cancel'),
-        type: 'warning',
-      },
-    )
+  const ok = await confirmAction({
+    title: t('dashboard.confirmBulkApproveTitle'),
+    message: t('dashboard.confirmBulkApproveMsg', { count: ids.length }),
+    confirmButtonText: t('dashboard.approve'),
+    type: 'warning',
+  })
+  if (!ok) return
 
-    await props.onUpdateCommissionsStatusMasivo(ids, 'APROBADA')
-    usuariosTableRef.value?.clearSelection()
-    selectedUsuarios.value = []
-  } catch {
-    // Cancelado
+  await props.onUpdateCommissionsStatusMasivo(ids, 'APROBADA')
+  usuariosTableRef.value?.clearSelection()
+  selectedUsuarios.value = []
+}
+
+async function handleBulkReject() {
+  const ids = selectedUsuarios.value.flatMap((u) => u.pendientesIds)
+  if (ids.length === 0) {
+    ElMessage.warning(t('dashboard.noPendingSelected'))
+    return
   }
+
+  const ok = await confirmAction({
+    title: t('dashboard.confirmBulkRejectTitle'),
+    message: t('dashboard.confirmBulkRejectMsg', { count: ids.length }),
+    confirmButtonText: t('dashboard.reject'),
+    type: 'warning',
+    isDanger: true,
+  })
+  if (!ok) return
+
+  await props.onUpdateCommissionsStatusMasivo(ids, 'RECHAZADA')
+  usuariosTableRef.value?.clearSelection()
+  selectedUsuarios.value = []
 }
 
 async function handleBulkPay() {
-  const ids: number[] = []
-  for (const u of selectedUsuarios.value) {
-    ids.push(...u.payableIds)
-  }
-
+  const ids = selectedUsuarios.value.flatMap((u) => u.payableIds)
   if (ids.length === 0) {
     ElMessage.warning(t('dashboard.noApprovableSelected'))
     return
   }
 
-  try {
-    await ElMessageBox.confirm(
-      t('dashboard.confirmBulkPayMsg', { count: ids.length }),
-      t('dashboard.confirmBulkPayTitle'),
-      {
-        confirmButtonText: t('dashboard.pay'),
-        cancelButtonText: t('common.cancel'),
-        type: 'success',
-      },
-    )
+  const ok = await confirmAction({
+    title: t('dashboard.confirmBulkPayTitle'),
+    message: t('dashboard.confirmBulkPayMsg', { count: ids.length }),
+    confirmButtonText: t('dashboard.pay'),
+    type: 'success',
+  })
+  if (!ok) return
 
-    await props.onUpdateCommissionsStatusMasivo(ids, 'PAGADA')
-    usuariosTableRef.value?.clearSelection()
-    selectedUsuarios.value = []
-  } catch {
-    // Cancelado
-  }
+  await props.onUpdateCommissionsStatusMasivo(ids, 'PAGADA')
+  usuariosTableRef.value?.clearSelection()
+  selectedUsuarios.value = []
 }
 
 // --- Acciones individuales por empleado ---
 async function handleUserApprove(row: EmpleadoComisionResumen) {
   if (row.pendientesIds.length === 0) return
-  try {
-    await ElMessageBox.confirm(
-      t('dashboard.confirmBulkApproveMsg', { count: row.pendientesIds.length }),
-      t('dashboard.confirmBulkApproveTitle'),
-      {
-        confirmButtonText: t('dashboard.approve'),
-        cancelButtonText: t('common.cancel'),
-        type: 'warning',
-      },
-    )
+  const ok = await confirmAction({
+    title: t('dashboard.confirmBulkApproveTitle'),
+    message: t('dashboard.confirmBulkApproveMsg', { count: row.pendientesIds.length }),
+    confirmButtonText: t('dashboard.approve'),
+    type: 'warning',
+  })
+  if (ok) {
     await props.onUpdateCommissionsStatusMasivo(row.pendientesIds, 'APROBADA')
-  } catch {
-    // Cancelado
+  }
+}
+
+async function handleUserReject(row: EmpleadoComisionResumen) {
+  if (row.pendientesIds.length === 0) return
+  const ok = await confirmAction({
+    title: t('dashboard.confirmBulkRejectTitle'),
+    message: t('dashboard.confirmBulkRejectMsg', { count: row.pendientesIds.length }),
+    confirmButtonText: t('dashboard.reject'),
+    type: 'warning',
+    isDanger: true,
+  })
+  if (ok) {
+    await props.onUpdateCommissionsStatusMasivo(row.pendientesIds, 'RECHAZADA')
   }
 }
 
 async function handleUserPay(row: EmpleadoComisionResumen) {
   if (row.payableIds.length === 0) return
-  try {
-    await ElMessageBox.confirm(
-      t('dashboard.confirmBulkPayMsg', { count: row.payableIds.length }),
-      t('dashboard.confirmBulkPayTitle'),
-      {
-        confirmButtonText: t('dashboard.pay'),
-        cancelButtonText: t('common.cancel'),
-        type: 'success',
-      },
-    )
+  const ok = await confirmAction({
+    title: t('dashboard.confirmBulkPayTitle'),
+    message: t('dashboard.confirmBulkPayMsg', { count: row.payableIds.length }),
+    confirmButtonText: t('dashboard.pay'),
+    type: 'success',
+  })
+  if (ok) {
     await props.onUpdateCommissionsStatusMasivo(row.payableIds, 'PAGADA')
-  } catch {
-    // Cancelado
   }
 }
 
 async function handleUserResetToPending(row: EmpleadoComisionResumen) {
   const idsToReset = row.comisiones
-    .filter((c) => c.estado === 'APROBADA' || c.estado === 'PAGADA')
+    .filter((c) => c.estado === 'APROBADA' || c.estado === 'PAGADA' || c.estado === 'RECHAZADA')
     .map((c) => c.id)
 
   if (idsToReset.length === 0) return
   await props.onUpdateCommissionsStatusMasivo(idsToReset, 'PENDIENTE')
+}
+
+// --- Helpers para Etiquetas de Estado ---
+type TagType = '' | 'default' | 'success' | 'warning' | 'info' | 'danger'
+
+function getStatusTagType(estado: string): TagType {
+  switch (estado) {
+    case 'PAGADA':
+      return 'success'
+    case 'APROBADA':
+      return 'warning'
+    case 'RECHAZADA':
+      return 'danger'
+    default:
+      return 'info'
+  }
+}
+
+interface MixedStatusTag {
+  key: string
+  count: number
+  type: TagType
+  label: string
+}
+
+function getMixedStatusTags(row: EmpleadoComisionResumen): MixedStatusTag[] {
+  const tags: MixedStatusTag[] = []
+  if (row.pendientesCount > 0) {
+    tags.push({
+      key: 'pending',
+      count: row.pendientesCount,
+      type: 'info',
+      label:
+        row.pendientesCount === 1
+          ? t('dashboard.pendingSingle') || 'Pendiente'
+          : t('dashboard.pendingPlural') || 'Pendientes',
+    })
+  }
+  if (row.aprobadasCount > 0) {
+    tags.push({
+      key: 'approved',
+      count: row.aprobadasCount,
+      type: 'warning',
+      label:
+        row.aprobadasCount === 1
+          ? t('dashboard.approvedSingle') || 'Aprobada'
+          : t('dashboard.approvedPlural') || 'Aprobadas',
+    })
+  }
+  if (row.pagadasCount > 0) {
+    tags.push({
+      key: 'paid',
+      count: row.pagadasCount,
+      type: 'success',
+      label:
+        row.pagadasCount === 1
+          ? t('dashboard.paidSingle') || 'Pagada'
+          : t('dashboard.paidPlural') || 'Pagadas',
+    })
+  }
+  if (row.rechazadasCount > 0) {
+    tags.push({
+      key: 'rejected',
+      count: row.rechazadasCount,
+      type: 'danger',
+      label:
+        row.rechazadasCount === 1
+          ? t('dashboard.rejectedSingle') || 'Rechazada'
+          : t('dashboard.rejectedPlural') || 'Rechazadas',
+    })
+  }
+  return tags
 }
 
 // --- Sumatorias al pie de la tabla ---
@@ -757,14 +888,21 @@ interface SummaryMethodProps {
   data: EmpleadoComisionResumen[]
 }
 
+const CURRENCY_SUMMARY_PROPERTIES = new Set([
+  'totalVentasBrutasUsd',
+  'totalImpuestoUsd',
+  'totalBaseNetaUsd',
+  'comisionFotografoUsd',
+  'comisionVendedorUsd',
+  'comisionOtrasUsd',
+  'totalComisionesUsd',
+])
+
 function getUsuariosSummaries(param: SummaryMethodProps): string[] {
   const { columns, data } = param
-  const sums: string[] = []
-
-  columns.forEach((column, index) => {
+  return columns.map((column, index) => {
     if (index === 0 || column.type === 'selection' || column.type === 'expand') {
-      sums[index] = ''
-      return
+      return ''
     }
 
     if (
@@ -772,62 +910,24 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
       column.label === t('dashboard.table.employee') ||
       column.label === t('dashboard.table.beneficiary')
     ) {
-      sums[index] = t('dashboard.table.total') || 'Total'
-      return
+      return t('dashboard.table.total') || 'Total'
     }
 
-    if (column.property === 'totalVentasBrutasUsd') {
-      const sum = data.reduce((acc, row) => acc + (row.totalVentasBrutasUsd || 0), 0)
-      sums[index] = formatCurrency(sum, 2)
-      return
-    }
-
-    if (column.property === 'totalImpuestoUsd') {
-      const sum = data.reduce((acc, row) => acc + (row.totalImpuestoUsd || 0), 0)
-      sums[index] = formatCurrency(sum, 2)
-      return
-    }
-
-    if (column.property === 'totalBaseNetaUsd') {
-      const sum = data.reduce((acc, row) => acc + (row.totalBaseNetaUsd || 0), 0)
-      sums[index] = formatCurrency(sum, 2)
-      return
-    }
-
-    if (column.property === 'comisionFotografoUsd') {
-      const sum = data.reduce((acc, row) => acc + (row.comisionFotografoUsd || 0), 0)
-      sums[index] = formatCurrency(sum, 2)
-      return
-    }
-
-    if (column.property === 'comisionVendedorUsd') {
-      const sum = data.reduce((acc, row) => acc + (row.comisionVendedorUsd || 0), 0)
-      sums[index] = formatCurrency(sum, 2)
-      return
-    }
-
-    if (column.property === 'comisionOtrasUsd') {
-      const sum = data.reduce((acc, row) => acc + (row.comisionOtrasUsd || 0), 0)
-      sums[index] = formatCurrency(sum, 2)
-      return
-    }
-
-    if (column.property === 'totalComisionesUsd') {
-      const sum = data.reduce((acc, row) => acc + (row.totalComisionesUsd || 0), 0)
-      sums[index] = formatCurrency(sum, 2)
-      return
+    if (CURRENCY_SUMMARY_PROPERTIES.has(column.property)) {
+      const sum = data.reduce(
+        (acc, row) => acc + ((row as unknown as Record<string, number>)[column.property] || 0),
+        0,
+      )
+      return formatCurrency(sum, 2)
     }
 
     if (column.property === 'totalComisionesMxn') {
       const sum = data.reduce((acc, row) => acc + (row.totalComisionesMxn || 0), 0)
-      sums[index] = formatMxn(sum)
-      return
+      return formatMxn(sum)
     }
 
-    sums[index] = ''
+    return ''
   })
-
-  return sums
 }
 
 export interface DetalleVentaItem extends Omit<Partial<Comision>, 'id'> {
@@ -922,123 +1022,52 @@ interface DetalleSummaryMethodProps {
 
 function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
   const { columns, data } = param
-  const sums: string[] = []
+  const activeItems = data.filter((row) => !row.isSeparator && row.estado !== 'RECHAZADA')
+  const activeSales = activeItems.filter((row) => !row.isBonus)
 
-  columns.forEach((column, index) => {
-    if (index === 0) {
-      sums[index] = t('dashboard.table.total') || 'Total'
-      return
-    }
+  return columns.map((column, index) => {
+    if (index === 0) return t('dashboard.table.total') || 'Total'
 
     if (column.property === 'totalVentaUsd' || column.label === t('dashboard.table.grossSales')) {
-      const sum = data.reduce(
-        (acc, row) => acc + (row.isSeparator || row.isBonus ? 0 : row.totalVentaUsd || 0),
-        0,
-      )
-      sums[index] = formatCurrency(sum, 2)
-      return
+      const sum = activeSales.reduce((acc, row) => acc + (row.totalVentaUsd || 0), 0)
+      return formatCurrency(sum, 2)
     }
 
     if (
       column.property === 'impuestoMontoUsd' ||
       column.label === t('dashboard.table.taxWithholding')
     ) {
-      const sum = data.reduce(
-        (acc, row) => acc + (row.isSeparator || row.isBonus ? 0 : row.impuestoMontoUsd || 0),
-        0,
-      )
-      sums[index] = `-${formatCurrency(sum, 2)}`
-      return
+      const sum = activeSales.reduce((acc, row) => acc + (row.impuestoMontoUsd || 0), 0)
+      return `-${formatCurrency(sum, 2)}`
     }
 
     if (column.property === 'baseCalculoUsd' || column.label === t('dashboard.table.netBase')) {
-      const sum = data.reduce(
-        (acc, row) => acc + (row.isSeparator || row.isBonus ? 0 : row.baseCalculoUsd || 0),
-        0,
-      )
-      sums[index] = formatCurrency(sum, 2)
-      return
+      const sum = activeSales.reduce((acc, row) => acc + (row.baseCalculoUsd || 0), 0)
+      return formatCurrency(sum, 2)
     }
 
     if (
       column.property === 'importeComisionUsd' ||
       column.label === t('dashboard.table.commissionAmountUsd')
     ) {
-      // Suma ventas + importes de bonus
-      const sum = data.reduce(
-        (acc, row) => acc + (row.isSeparator ? 0 : row.importeComisionUsd || 0),
-        0,
-      )
-      sums[index] = formatCurrency(sum, 2)
-      return
+      const sum = activeItems.reduce((acc, row) => acc + (row.importeComisionUsd || 0), 0)
+      return formatCurrency(sum, 2)
     }
 
     if (column.label === t('dashboard.table.commissionAmountMxn')) {
-      const sum = data.reduce(
-        (acc, row) =>
-          acc + (row.isSeparator ? 0 : (row.importeComisionUsd || 0) * (tipoCambioMxn.value || 1)),
-        0,
-      )
-      sums[index] = formatMxn(sum)
-      return
+      const tc = tipoCambioMxn.value || 1
+      const sum = activeItems.reduce((acc, row) => acc + (row.importeComisionUsd || 0) * tc, 0)
+      return formatMxn(sum)
     }
 
-    sums[index] = ''
+    return ''
   })
-
-  return sums
 }
 
-const totalComisionesLiquidables = computed(() => {
-  return resumenUsuariosComision.value.reduce((acc, row) => acc + (row.totalComisionesUsd || 0), 0)
-})
 </script>
 
 <template>
   <div class="tab-content-fade">
-    <!-- Tarjetas KPIs para Contable -->
-    <el-row :gutter="20" class="stats-row mb-4">
-      <el-col :xs="24" :sm="8">
-        <el-card class="dashboard-card stat-card" shadow="hover">
-          <div class="card-icon bg-primary">
-            <el-icon><Wallet /></el-icon>
-          </div>
-          <div class="stat-content">
-            <span class="stat-label">{{ $t('dashboard.completedSales') }}</span>
-            <span class="stat-value">
-              {{ formatCurrency(commissionStore.resumen?.totalVentasUsd || 0) }}
-            </span>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="8">
-        <el-card class="dashboard-card stat-card" shadow="hover">
-          <div class="card-icon bg-success">
-            <el-icon><Money /></el-icon>
-          </div>
-          <div class="stat-content">
-            <span class="stat-label">{{ $t('dashboard.commissionsToSettle') }}</span>
-            <span class="stat-value text-success">
-              {{ formatCurrency(totalComisionesLiquidables, 2) }}
-            </span>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :sm="8">
-        <el-card class="dashboard-card stat-card" shadow="hover">
-          <div class="card-icon bg-warning">
-            <el-icon><Tickets /></el-icon>
-          </div>
-          <div class="stat-content">
-            <span class="stat-label">{{ $t('dashboard.pendingCommissions') }}</span>
-            <span class="stat-value text-warning">
-              {{ commissionStore.comisiones.filter((c) => c.estado === 'PENDIENTE').length }}
-            </span>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-
     <!-- Tabla de Liquidación y Control de Comisiones -->
     <el-card class="dashboard-card mb-4" shadow="hover">
       <template #header>
@@ -1057,6 +1086,14 @@ const totalComisionesLiquidables = computed(() => {
                   @click="handleBulkApprove"
                 >
                   {{ $t('dashboard.bulkApprove', { count: pendingSelectedCount }) }}
+                </el-button>
+                <el-button
+                  type="danger"
+                  size="small"
+                  :disabled="pendingSelectedCount === 0"
+                  @click="handleBulkReject"
+                >
+                  {{ $t('dashboard.bulkReject', { count: pendingSelectedCount }) }}
                 </el-button>
                 <el-button
                   type="success"
@@ -1129,8 +1166,9 @@ const totalComisionesLiquidables = computed(() => {
         border
         stripe
         show-summary
+        max-height="max(500px, calc(100vh - 360px))"
         :summary-method="getUsuariosSummaries"
-        style="width: 100%"
+        style="width: 100%; min-height: 500px"
         @selection-change="handleSelectionChange"
         @expand-change="handleExpandChange"
         @sort-change="handleSortChange"
@@ -1355,7 +1393,13 @@ const totalComisionesLiquidables = computed(() => {
                   align="right"
                 >
                   <template #default="{ row: subRow }">
-                    <strong class="text-success font-bold">
+                    <strong
+                      :class="[
+                        subRow.estado === 'RECHAZADA'
+                          ? 'text-muted text-line-through'
+                          : 'text-success font-bold',
+                      ]"
+                    >
                       {{ subRow.isBonus ? '+' : ''
                       }}{{ formatCurrency(subRow.importeComisionUsd, 2) }}
                     </strong>
@@ -1369,7 +1413,13 @@ const totalComisionesLiquidables = computed(() => {
                   align="right"
                 >
                   <template #default="{ row: subRow }">
-                    <strong class="text-primary font-medium">
+                    <strong
+                      :class="[
+                        subRow.estado === 'RECHAZADA'
+                          ? 'text-muted text-line-through'
+                          : 'text-primary font-medium',
+                      ]"
+                    >
                       {{ subRow.isBonus ? '+' : ''
                       }}{{ formatMxn((subRow.importeComisionUsd || 0) * (tipoCambioMxn || 1)) }}
                     </strong>
@@ -1383,13 +1433,7 @@ const totalComisionesLiquidables = computed(() => {
                       size="small"
                       round
                       class="status-tag"
-                      :type="
-                        subRow.estado === 'PAGADA'
-                          ? 'success'
-                          : subRow.estado === 'APROBADA'
-                            ? 'warning'
-                            : 'info'
-                      "
+                      :type="getStatusTagType(subRow.estado || 'PENDIENTE')"
                     >
                       {{ subRow.estado }}
                     </el-tag>
@@ -1401,15 +1445,24 @@ const totalComisionesLiquidables = computed(() => {
                   <template #default="{ row: subRow }">
                     <span v-if="subRow.isBonus" class="text-muted text-xs">—</span>
                     <template v-else>
-                      <el-button
-                        v-if="subRow.estado === 'PENDIENTE'"
-                        type="warning"
-                        size="small"
-                        class="action-btn"
-                        @click.stop="onUpdateCommissionStatus(subRow.id, 'APROBADA')"
-                      >
-                        {{ $t('dashboard.approve') }}
-                      </el-button>
+                      <div v-if="subRow.estado === 'PENDIENTE'" class="row-actions-group">
+                        <el-button
+                          type="warning"
+                          size="small"
+                          class="action-btn"
+                          @click.stop="onUpdateCommissionStatus(subRow.id, 'APROBADA')"
+                        >
+                          {{ $t('dashboard.approve') }}
+                        </el-button>
+                        <el-button
+                          type="danger"
+                          size="small"
+                          class="action-btn"
+                          @click.stop="onUpdateCommissionStatus(subRow.id, 'RECHAZADA')"
+                        >
+                          {{ $t('dashboard.reject') }}
+                        </el-button>
+                      </div>
                       <el-button
                         v-else-if="subRow.estado === 'APROBADA'"
                         type="success"
@@ -1420,13 +1473,13 @@ const totalComisionesLiquidables = computed(() => {
                         {{ $t('dashboard.pay') }}
                       </el-button>
                       <el-button
-                        v-else-if="subRow.estado === 'PAGADA'"
+                        v-else-if="subRow.estado === 'PAGADA' || subRow.estado === 'RECHAZADA'"
                         type="info"
                         plain
                         size="small"
                         class="action-btn"
                         :icon="RotateCcw"
-                        :title="$t('dashboard.undoPayment')"
+                        :title="subRow.estado === 'RECHAZADA' ? $t('dashboard.undoReject') : $t('dashboard.undoPayment')"
                         @click.stop="onUpdateCommissionStatus(subRow.id, 'PENDIENTE')"
                       >
                         {{ $t('dashboard.undo') }}
@@ -1674,32 +1727,30 @@ const totalComisionesLiquidables = computed(() => {
         <el-table-column
           prop="estadoGeneral"
           :label="$t('dashboard.table.status')"
-          min-width="140"
+          min-width="150"
           align="center"
         >
           <template #default="{ row }">
+            <div v-if="row.estadoGeneral === 'MIXTO'" class="status-tags-stack">
+              <el-tag
+                v-for="tag in getMixedStatusTags(row)"
+                :key="tag.key"
+                size="small"
+                round
+                :type="tag.type"
+                class="status-tag status-tag-item"
+              >
+                {{ tag.count }} {{ tag.label }}
+              </el-tag>
+            </div>
             <el-tag
+              v-else
               size="small"
               round
               class="status-tag"
-              :type="
-                row.estadoGeneral === 'PAGADA'
-                  ? 'success'
-                  : row.estadoGeneral === 'APROBADA'
-                    ? 'warning'
-                    : row.estadoGeneral === 'PENDIENTE'
-                      ? 'info'
-                      : 'warning'
-              "
+              :type="getStatusTagType(row.estadoGeneral)"
             >
-              <template v-if="row.estadoGeneral === 'MIXTO'">
-                {{ row.pendientesCount > 0 ? `${row.pendientesCount} Pend.` : '' }}
-                {{ row.aprobadasCount > 0 ? `${row.aprobadasCount} Aprob.` : '' }}
-                {{ row.pagadasCount > 0 ? `${row.pagadasCount} Pag.` : '' }}
-              </template>
-              <template v-else>
-                {{ row.estadoGeneral }}
-              </template>
+              {{ row.estadoGeneral }}
             </el-tag>
           </template>
         </el-table-column>
@@ -1707,14 +1758,25 @@ const totalComisionesLiquidables = computed(() => {
         <!-- Columna 12: Acción por Empleado -->
         <el-table-column
           :label="$t('dashboard.table.action')"
-          width="115"
+          width="135"
           align="center"
           fixed="right"
         >
           <template #default="{ row }">
             <div class="row-actions-group">
-              <!-- Paso 1: Si tiene comisiones pendientes -> Botón Aprobar -->
-              <template v-if="row.pendientesCount > 0">
+              <!-- Caso Mixto: Botón 'Ver detalles' (color primary) para expandir/contraer -->
+              <el-button
+                v-if="row.estadoGeneral === 'MIXTO'"
+                type="primary"
+                size="small"
+                class="action-btn action-btn-details"
+                @click.stop="toggleExpandRow(row)"
+              >
+                {{ isRowExpanded(row) ? ($t('dashboard.hideDetails') || 'Ocultar detalles') : ($t('dashboard.viewDetails') || 'Ver detalles') }}
+              </el-button>
+
+              <!-- Si todas son pendientes: Aprobar y Rechazar apilados verticalmente -->
+              <template v-else-if="row.pendientesCount > 0">
                 <el-button
                   type="warning"
                   size="small"
@@ -1723,65 +1785,50 @@ const totalComisionesLiquidables = computed(() => {
                 >
                   {{ $t('dashboard.approve') }}
                 </el-button>
-              </template>
-
-              <!-- Paso 2: Si no tiene pendientes pero tiene comisiones aprobadas -> Botón Pagar + Deshacer -->
-              <template v-else-if="row.aprobadasCount > 0">
                 <el-button
-                  type="success"
+                  type="danger"
                   size="small"
                   class="action-btn"
-                  @click="handleUserPay(row)"
+                  @click="handleUserReject(row)"
                 >
-                  {{ $t('dashboard.pay') }}
+                  {{ $t('dashboard.reject') }}
                 </el-button>
-                <el-popconfirm
-                  :title="$t('dashboard.restorePendingConfirm')"
-                  :confirm-button-text="$t('dashboard.restore')"
-                  :cancel-button-text="$t('common.cancel')"
-                  confirm-button-type="warning"
-                  :width="230"
-                  @confirm="handleUserResetToPending(row)"
-                >
-                  <template #reference>
-                    <el-button
-                      type="info"
-                      plain
-                      size="small"
-                      class="action-btn"
-                      :icon="RotateCcw"
-                      :title="$t('dashboard.undoApproval')"
-                    >
-                      {{ $t('dashboard.undo') }}
-                    </el-button>
-                  </template>
-                </el-popconfirm>
               </template>
 
-              <!-- Paso 3: Si todas están pagadas -> Solo botón Deshacer -->
-              <template v-else-if="row.pagadasCount > 0">
-                <el-popconfirm
-                  :title="$t('dashboard.restorePendingConfirm')"
-                  :confirm-button-text="$t('dashboard.restore')"
-                  :cancel-button-text="$t('common.cancel')"
-                  confirm-button-type="warning"
-                  :width="230"
-                  @confirm="handleUserResetToPending(row)"
-                >
-                  <template #reference>
-                    <el-button
-                      type="info"
-                      plain
-                      size="small"
-                      class="action-btn"
-                      :icon="RotateCcw"
-                      :title="$t('dashboard.undoPayment')"
-                    >
-                      {{ $t('dashboard.undo') }}
-                    </el-button>
-                  </template>
-                </el-popconfirm>
-              </template>
+              <!-- Si están aprobadas: Pagar -->
+              <el-button
+                v-else-if="row.aprobadasCount > 0"
+                type="success"
+                size="small"
+                class="action-btn"
+                @click="handleUserPay(row)"
+              >
+                {{ $t('dashboard.pay') }}
+              </el-button>
+
+              <!-- Si están pagadas o rechazadas: Deshacer -->
+              <el-popconfirm
+                v-else-if="row.pagadasCount > 0 || row.rechazadasCount > 0"
+                :title="$t('dashboard.restorePendingConfirm')"
+                :confirm-button-text="$t('dashboard.restore')"
+                :cancel-button-text="$t('common.cancel')"
+                confirm-button-type="warning"
+                :width="230"
+                @confirm="handleUserResetToPending(row)"
+              >
+                <template #reference>
+                  <el-button
+                    type="info"
+                    plain
+                    size="small"
+                    class="action-btn"
+                    :icon="RotateCcw"
+                    :title="row.rechazadasCount > 0 ? ($t('dashboard.undoReject') || 'Deshacer rechazo') : $t('dashboard.undoPayment')"
+                  >
+                    {{ $t('dashboard.undo') }}
+                  </el-button>
+                </template>
+              </el-popconfirm>
             </div>
           </template>
         </el-table-column>
@@ -1900,9 +1947,14 @@ const totalComisionesLiquidables = computed(() => {
 
 .row-actions-group {
   display: flex;
-  gap: 6px;
+  flex-direction: column;
+  gap: 4px;
   justify-content: center;
   align-items: center;
+}
+
+.row-actions-group .el-button + .el-button {
+  margin-left: 0 !important;
 }
 
 .action-btn {
@@ -1911,6 +1963,33 @@ const totalComisionesLiquidables = computed(() => {
   text-align: center !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.text-line-through {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.status-tags-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.status-tag-item {
+  width: 100% !important;
+  max-width: 115px !important;
+}
+
+.action-btn-details {
+  width: auto !important;
+  min-width: 96px !important;
+  padding: 0 10px !important;
+  white-space: nowrap !important;
 }
 
 .status-tag {

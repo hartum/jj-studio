@@ -41,7 +41,7 @@ export interface ComisionDTO {
   porcentajeAplicado: number
   baseCalculoUsd: number
   importeComisionUsd: number
-  estado: 'PENDIENTE' | 'APROBADA' | 'PAGADA' | string
+  estado: 'PENDIENTE' | 'APROBADA' | 'PAGADA' | 'RECHAZADA' | string
   fechaVenta: string
   clienteNombre?: string
   totalVentaUsd?: number
