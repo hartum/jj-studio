@@ -92,7 +92,6 @@
   "90": "LanguageSelector.vue",
   "91": "ContableComisionesTab.vue",
   "92": "CalendarEventCard.vue",
-  "93": "ForgotPasswordView.vue",
   "94": "reminder.service.ts",
   "95": "CalendarAlertsPanel.vue",
   "96": "src/index.ts",
@@ -101,13 +100,8 @@
   "99": "GoalProgressCard.vue",
   "100": "session.routes.ts",
   "101": "CalendarDeleteConfirmPopover.vue",
-  "102": "User",
-  "103": "AdminDashboard.vue",
   "104": "email.service.ts",
   "105": "calendario-laboral.routes.ts",
   "106": "ContableEstadisticasTab.vue",
-  "107": "GerenteDashboard.vue",
-  "108": "ContableDashboard.vue",
-  "109": "PhotoSessionFormView.vue",
-  "110": "HotelCalendarView.vue"
+  "108": "ContableDashboard.vue"
 }
