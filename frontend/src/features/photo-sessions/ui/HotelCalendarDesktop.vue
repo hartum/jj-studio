@@ -76,18 +76,31 @@ const {
 } = useCalendarDelete(selectedHotelIds)
 
 // 6. Vistas del Calendario y Título
-const CALENDAR_VIEW_STORAGE_KEY = 'jj_calendar_view'
+const CALENDAR_STATE_KEY = 'jj_agenda_state'
 
-function getInitialCalendarView(): string {
-  const savedView = localStorage.getItem(CALENDAR_VIEW_STORAGE_KEY)
-  const validViews = ['dayGridMonth', 'timeGridWeek', 'timeGridDay', 'listWeek']
-  if (savedView && validViews.includes(savedView)) {
-    return savedView
-  }
-  return 'timeGridWeek'
+interface AgendaSavedState {
+  view?: string
+  date?: string
 }
 
-const currentCalendarView = ref<string>(getInitialCalendarView())
+function getSavedAgendaState(): AgendaSavedState {
+  try {
+    const raw = localStorage.getItem(CALENDAR_STATE_KEY)
+    if (raw) return JSON.parse(raw)
+  } catch {
+    // Si no es un JSON válido, ignorar
+  }
+  return {}
+}
+
+const savedAgendaState = getSavedAgendaState()
+const validViews = ['dayGridMonth', 'timeGridWeek', 'timeGridDay', 'listWeek']
+const initialCalendarView =
+  savedAgendaState.view && validViews.includes(savedAgendaState.view)
+    ? savedAgendaState.view
+    : 'timeGridWeek'
+
+const currentCalendarView = ref<string>(initialCalendarView)
 const currentCalendarTitle = ref<string>('')
 const currentVisibleStart = ref<Date | null>(null)
 const currentVisibleEnd = ref<Date | null>(null)
@@ -147,17 +160,35 @@ function handleViewChange(viewName: string) {
   }
 }
 
+function formatLocalDate(d: Date): string {
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 function handleDatesSet(dateInfo: DatesSetArg) {
   clearEventHighlights()
   if (dateInfo.view?.type) {
     currentCalendarView.value = dateInfo.view.type
-    localStorage.setItem(CALENDAR_VIEW_STORAGE_KEY, dateInfo.view.type)
   }
   if (dateInfo.view?.title) {
     currentCalendarTitle.value = dateInfo.view.title
   }
   currentVisibleStart.value = dateInfo.view.currentStart || dateInfo.start
   currentVisibleEnd.value = dateInfo.view.currentEnd || dateInfo.end
+
+  const targetDate = dateInfo.view?.currentStart || dateInfo.start
+  const dateStr =
+    targetDate instanceof Date ? formatLocalDate(targetDate) : String(targetDate).slice(0, 10)
+
+  localStorage.setItem(
+    CALENDAR_STATE_KEY,
+    JSON.stringify({
+      view: dateInfo.view?.type || currentCalendarView.value,
+      date: dateStr,
+    }),
+  )
 }
 
 // 8. Permisos de Usuario y Creación de Sesiones/Ventas
@@ -251,7 +282,8 @@ function handleEventClick(clickInfo: EventClickArg) {
 
 const calendarOptions = computed<CalendarOptions>(() => ({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
-  initialView: getInitialCalendarView(),
+  initialView: initialCalendarView,
+  initialDate: savedAgendaState.date,
   locale: fullCalendarLocale.value,
   headerToolbar: false,
   eventDisplay: 'block',

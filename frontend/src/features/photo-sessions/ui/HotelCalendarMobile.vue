@@ -82,25 +82,49 @@ const {
 } = useCalendarDelete(selectedHotelIds)
 
 // 6. Estado y Navegación Móvil
-const CALENDAR_VIEW_STORAGE_KEY = 'jj_calendar_view_mobile'
+const CALENDAR_STATE_KEY = 'jj_agenda_mobile_state'
 
-function getInitialCalendarView(): string {
-  const savedView = localStorage.getItem(CALENDAR_VIEW_STORAGE_KEY)
-  const validViews = ['timeGridDay', 'listWeek']
-  if (savedView && validViews.includes(savedView)) {
-    return savedView
-  }
-  return 'listWeek'
+interface AgendaMobileSavedState {
+  view?: string
+  date?: string
 }
 
-const currentCalendarView = ref<string>(getInitialCalendarView())
+function getSavedMobileState(): AgendaMobileSavedState {
+  try {
+    const raw = localStorage.getItem(CALENDAR_STATE_KEY)
+    if (raw) return JSON.parse(raw)
+  } catch {
+    // Si no es un JSON válido, ignorar
+  }
+  return {}
+}
+
+const savedMobileState = getSavedMobileState()
+const validViews = ['timeGridDay', 'listWeek']
+const initialCalendarView =
+  savedMobileState.view && validViews.includes(savedMobileState.view)
+    ? savedMobileState.view
+    : 'listWeek'
+const initialMobileDate = savedMobileState.date || dayjs().format('YYYY-MM-DD')
+
+const currentCalendarView = ref<string>(initialCalendarView)
 const currentCalendarTitle = ref<string>('')
-const mobileSelectedDate = ref<string>(dayjs().format('YYYY-MM-DD'))
+const mobileSelectedDate = ref<string>(initialMobileDate)
 const showMiniCalendar = ref(false)
 
 const mobilePickerType = computed<'week' | 'date'>(() =>
   currentCalendarView.value === 'listWeek' ? 'week' : 'date',
 )
+
+function saveMobileState(view?: string, date?: string) {
+  localStorage.setItem(
+    CALENDAR_STATE_KEY,
+    JSON.stringify({
+      view: view || currentCalendarView.value,
+      date: date || mobileSelectedDate.value,
+    }),
+  )
+}
 
 function handleMobileViewChange(val: string | number | boolean | undefined) {
   if (typeof val === 'string') {
@@ -108,7 +132,7 @@ function handleMobileViewChange(val: string | number | boolean | undefined) {
     const calendarApi = calendarRef.value?.getApi()
     if (calendarApi) {
       calendarApi.changeView(val)
-      localStorage.setItem(CALENDAR_VIEW_STORAGE_KEY, val)
+      saveMobileState(val)
     }
   }
 }
@@ -118,26 +142,36 @@ watch(mobileSelectedDate, (newDateStr) => {
     const calendarApi = calendarRef.value?.getApi()
     if (calendarApi) {
       calendarApi.gotoDate(newDateStr)
+      saveMobileState(undefined, newDateStr)
     }
   }
 })
+
+function formatLocalDate(d: Date): string {
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 
 function handleDatesSet(dateInfo: DatesSetArg) {
   clearEventHighlights()
   if (dateInfo.view?.type) {
     currentCalendarView.value = dateInfo.view.type
-    localStorage.setItem(CALENDAR_VIEW_STORAGE_KEY, dateInfo.view.type)
   }
   if (dateInfo.view?.title) {
     currentCalendarTitle.value = dateInfo.view.title
   }
 
+  let viewDateStr = mobileSelectedDate.value
   if (dateInfo.view?.currentStart) {
-    const viewDateStr = dayjs(dateInfo.view.currentStart).format('YYYY-MM-DD')
+    viewDateStr = formatLocalDate(dateInfo.view.currentStart)
     if (mobileSelectedDate.value !== viewDateStr) {
       mobileSelectedDate.value = viewDateStr
     }
   }
+
+  saveMobileState(dateInfo.view?.type || currentCalendarView.value, viewDateStr)
 }
 
 function handleDateNav(action: 'prev' | 'next' | 'today') {
@@ -150,7 +184,9 @@ function handleDateNav(action: 'prev' | 'next' | 'today') {
     calendarApi.next()
   } else if (action === 'today') {
     calendarApi.today()
-    mobileSelectedDate.value = dayjs().format('YYYY-MM-DD')
+    const todayStr = dayjs().format('YYYY-MM-DD')
+    mobileSelectedDate.value = todayStr
+    saveMobileState(undefined, todayStr)
   }
 }
 
@@ -267,7 +303,8 @@ const { fullCalendarLocale, t } = useLocale()
 
 const calendarOptions = computed<CalendarOptions>(() => ({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin],
-  initialView: getInitialCalendarView(),
+  initialView: initialCalendarView,
+  initialDate: initialMobileDate,
   locale: fullCalendarLocale.value,
   headerToolbar: false,
   eventDisplay: 'block',
