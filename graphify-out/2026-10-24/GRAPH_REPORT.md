@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `10cc3c6b`
+- Built from commit: `4c6b56b9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -317,7 +317,6 @@ Nodes (15): AreaGroup, CountryGroup, {
   goalStore,
   commissionStore,
   selectedAnio,
-  selectedMes,
   selectedMonthDate,
   selectedMonthLabel,
   selectedHotelFilters,
@@ -340,7 +339,6 @@ Nodes (15): AreaGroup, CountryGroup, {
   globalMonthlyCommissions,
 }, groupedHotelsByCountry, {
   commissionStore,
-  selectedMes,
   selectedAnio,
   selectedMonthDate,
   selectedMonthLabel,
@@ -356,7 +354,6 @@ Nodes (15): AreaGroup, CountryGroup, {
   myCommissionTooltip,
 }, router, {
   commissionStore,
-  selectedMes,
   selectedMonthDate,
   selectedMonthLabel,
   photographerHotels,
@@ -552,7 +549,33 @@ Nodes (6): activeTab, AreaGroup, CountryGroup, {
 }, groupedContableHotelsByCountry, savedTab
 
 ## Knowledge Gaps
-- **770 isolated node(s):** `{ elementPlusLocale, t }`, `route`, `router`, `authStore`, `countryStore` (+765 more)
+- **770 isolated node(s):** `{
+  countryStore,
+  hotelStore,
+  goalStore,
+  commissionStore,
+  selectedAnio,
+  selectedMonthDate,
+  selectedMonthLabel,
+  selectedHotelFilters,
+  totalUsers,
+  activeUsers,
+  totalCountries,
+  totalAreas,
+  totalHotels,
+  currentHotelProgreso,
+  filteredProgresoHoteles,
+  globalProgresoTotals,
+  selectedHotelsSummary,
+  getSemaforoTagType,
+  getSemaforoText,
+  getProgressColor,
+  goToConfig,
+  goToUsers,
+  formatCurrency,
+  handleNavigateToGoalForm,
+  globalMonthlyCommissions,
+}`, `AreaGroup`, `CountryGroup`, `groupedHotelsByCountry`, `router` (+765 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -561,11 +584,35 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `AvatarCropperDialog.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `usePhotoSessionForm.ts`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `SaleAppointmentFormView.vue`, `SupervisorHotelGoalCard.vue`, `InicioView.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `AgendadorHotelGoalCard.vue`, `LoginView.vue`, `useSaleAppointmentForm.ts`, `DirectSaleFormDesktop.vue`, `CalendarHeader.vue`, `ConfiguracionView.vue`, `DirectSaleFormMobile.vue`, `useDashboard.ts`, `ContableComisionesTab.vue`, `CalendarEventCard.vue`, `CalendarAlertsPanel.vue`, `GoalProgressCard.vue`, `ContableEstadisticasTab.vue`, `ContableDashboard.vue`?**
   _High betweenness centrality (0.377) - this node is a cross-community bridge._
-- **Why does `useDashboard()` connect `SupervisorHotelGoalCard.vue` to `useDashboard.ts`?**
-  _High betweenness centrality (0.008) - this node is a cross-community bridge._
-- **Why does `formatCurrency()` connect `useDashboard.ts` to `SupervisorHotelGoalCard.vue`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **What connects `{ elementPlusLocale, t }`, `route`, `router` to the rest of the system?**
+- **Why does `plugins` connect `plugins` to `vue`?**
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
+- **What connects `{
+  countryStore,
+  hotelStore,
+  goalStore,
+  commissionStore,
+  selectedAnio,
+  selectedMonthDate,
+  selectedMonthLabel,
+  selectedHotelFilters,
+  totalUsers,
+  activeUsers,
+  totalCountries,
+  totalAreas,
+  totalHotels,
+  currentHotelProgreso,
+  filteredProgresoHoteles,
+  globalProgresoTotals,
+  selectedHotelsSummary,
+  getSemaforoTagType,
+  getSemaforoText,
+  getProgressColor,
+  goToConfig,
+  goToUsers,
+  formatCurrency,
+  handleNavigateToGoalForm,
+  globalMonthlyCommissions,
+}`, `AreaGroup`, `CountryGroup` to the rest of the system?**
   _770 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
@@ -573,3 +620,5 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
 - **Should `HotelCalendarMobile.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.05668016194331984 - nodes in this community are weakly interconnected._
+- **Should `PhotoSessionFormMobile.vue` be split into smaller, more focused modules?**
+  _Cohesion score 0.06050420168067227 - nodes in this community are weakly interconnected._

@@ -92,6 +92,7 @@
   "90": "LanguageSelector.vue",
   "91": "ContableComisionesTab.vue",
   "92": "CalendarEventCard.vue",
+  "93": "ForgotPasswordView.vue",
   "94": "reminder.service.ts",
   "95": "CalendarAlertsPanel.vue",
   "96": "src/index.ts",
