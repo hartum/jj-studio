@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "frontend/src/App.vue": {
-    "mtime": 1790007469.5744267,
-    "ast_hash": "1668149a5aebf6a7844c40a3bef58ce4",
+    "mtime": 1792857655.9144323,
+    "ast_hash": "f43d8de0a9aa5250e5f02f98c2789670",
     "semantic_hash": ""
   },
   "frontend/src/main.ts": {
@@ -250,8 +250,8 @@
     "semantic_hash": "6158b0df9c31763e0329d4eae18ab891"
   },
   "frontend/src/components/SidebarNav.vue": {
-    "mtime": 1789712328.4857693,
-    "ast_hash": "fd7c042a00b2df17f79670c40b60802f",
+    "mtime": 1792858022.6175196,
+    "ast_hash": "41439095f7e5dbb82172cbdaf6eb9722",
     "semantic_hash": ""
   },
   "frontend/src/features/audit-log/domain/audit-log.model.ts": {
@@ -1005,8 +1005,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/LanguageSelector.vue": {
-    "mtime": 1789813730.6647317,
-    "ast_hash": "4969669a270fb405a930ac7735326bb4",
+    "mtime": 1792856704.130306,
+    "ast_hash": "23c251bb1ff9032b462849ff7a0a8b19",
     "semantic_hash": ""
   },
   "frontend/src/i18n/index.ts": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792849946.81307,
-    "ast_hash": "cde5780370eba11f303fd9034414bb29",
+    "mtime": 1792856626.968045,
+    "ast_hash": "0ae119ddeaab5f612c8cbf6704bff1ff",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792849941.893623,
-    "ast_hash": "e75dada8efbbfb155d9d114e7f947bee",
+    "mtime": 1792856619.7678714,
+    "ast_hash": "c2b728a84237f819be7ff10bfdd2fa57",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1075,8 +1075,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1792852935.0001137,
-    "ast_hash": "eeb4002dc5a55dc650e319c945133b83",
+    "mtime": 1792856358.0834692,
+    "ast_hash": "d554060fcbd6276322174546a92e6f7c",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {

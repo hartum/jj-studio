@@ -380,13 +380,13 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/AdminDashboard.vue": {
-    "mtime": 1789714370.668126,
-    "ast_hash": "8d0bbda21e914e191c71484bb5088d63",
+    "mtime": 1792858685.7496414,
+    "ast_hash": "e8ccb6e1c5f4e0bd483659f961d0cd90",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue": {
-    "mtime": 1789714402.2315526,
-    "ast_hash": "b23ff05e9a10f06f23432f964e1c40e0",
+    "mtime": 1792858655.440846,
+    "ast_hash": "dca31ca56e93122ca4d16257b17b91d7",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
@@ -395,18 +395,18 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
-    "mtime": 1789714394.9040673,
-    "ast_hash": "56ae5bbf578d268def23d87edf5712f4",
+    "mtime": 1792858661.821744,
+    "ast_hash": "ee443c95593c991ffb4dae3dfd6a04bb",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue": {
-    "mtime": 1789714381.215178,
-    "ast_hash": "ecbbde2d8b3ae9d974a67d91bccbb89a",
+    "mtime": 1792858676.5317185,
+    "ast_hash": "f729604c8c874aec071474c99186591f",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/SupervisorDashboard.vue": {
-    "mtime": 1789714387.4286816,
-    "ast_hash": "dd9ab039f0aaf3cbfad559540d783fdf",
+    "mtime": 1792858668.6133018,
+    "ast_hash": "350a91e090f2fe8443f8ca0096ed3a1e",
     "semantic_hash": ""
   },
   "frontend/src/features/hotels/domain/hotel.model.ts": {

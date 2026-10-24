@@ -4,15 +4,213 @@
   "graph": {},
   "nodes": [
     {
+      "label": "AdminDashboard.vue",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_admindashboard",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "admindashboard.vue"
+    },
+    {
+      "label": "{\n  countryStore,\n  hotelStore,\n  goalStore,\n  commissionStore,\n  selectedAnio,\n  selectedMonthDate,\n  selectedMonthLabel,\n  selectedHotelFilters,\n  totalUsers,\n  activeUsers,\n  totalCountries,\n  totalAreas,\n  totalHotels,\n  currentHotelProgreso,\n  filteredProgresoHoteles,\n  globalProgresoTotals,\n  selectedHotelsSummary,\n  getSemaforoTagType,\n  getSemaforoText,\n  getProgressColor,\n  goToConfig,\n  goToUsers,\n  formatCurrency,\n  handleNavigateToGoalForm,\n  globalMonthlyCommissions,\n}",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_admindashboard_countrystore_hotelstore_goalstore_commissionstore_selectedanio_selectedmonthdate_selectedmonthlabel_selectedhotelfilters_totalusers_activeusers_totalcountries_totalareas_totalhotels_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_getsemaforotagtype_getsemaforotext_getprogresscolor_gotoconfig_gotousers_formatcurrency_handlenavigatetogoalform_globalmonthlycommissions",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "{\n  countrystore,\n  hotelstore,\n  goalstore,\n  commissionstore,\n  selectedanio,\n  selectedmonthdate,\n  selectedmonthlabel,\n  selectedhotelfilters,\n  totalusers,\n  activeusers,\n  totalcountries,\n  totalareas,\n  totalhotels,\n  currenthotelprogreso,\n  filteredprogresohoteles,\n  globalprogresototals,\n  selectedhotelssummary,\n  getsemaforotagtype,\n  getsemaforotext,\n  getprogresscolor,\n  gotoconfig,\n  gotousers,\n  formatcurrency,\n  handlenavigatetogoalform,\n  globalmonthlycommissions,\n}"
+    },
+    {
+      "label": "AreaGroup",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_admindashboard_areagroup",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "areagroup"
+    },
+    {
+      "label": "CountryGroup",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_admindashboard_countrygroup",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "countrygroup"
+    },
+    {
+      "label": "groupedHotelsByCountry",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_admindashboard_groupedhotelsbycountry",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "groupedhotelsbycountry"
+    },
+    {
+      "label": "semaforoSortMethod()",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L93",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_admindashboard_semaforosortmethod",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "semaforosortmethod()"
+    },
+    {
+      "label": "AgendadorDashboard.vue",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_agendadordashboard",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "agendadordashboard.vue"
+    },
+    {
+      "label": "router",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_agendadordashboard_router",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "router"
+    },
+    {
+      "label": "{\n  commissionStore,\n  selectedAnio,\n  selectedMonthDate,\n  selectedMonthLabel,\n  agendadorHotels,\n  agendadorHotelGoals,\n  getTodaySessionsForHotel,\n  getTodaySalesForHotel,\n  formatTime,\n  goToAgenda,\n  formatCurrency,\n  myMonthlyCommissions,\n  myCommissionFormula,\n  myCommissionTooltip,\n}",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_agendadordashboard_commissionstore_selectedanio_selectedmonthdate_selectedmonthlabel_agendadorhotels_agendadorhotelgoals_gettodaysessionsforhotel_gettodaysalesforhotel_formattime_gotoagenda_formatcurrency_mymonthlycommissions_mycommissionformula_mycommissiontooltip",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "{\n  commissionstore,\n  selectedanio,\n  selectedmonthdate,\n  selectedmonthlabel,\n  agendadorhotels,\n  agendadorhotelgoals,\n  gettodaysessionsforhotel,\n  gettodaysalesforhotel,\n  formattime,\n  gotoagenda,\n  formatcurrency,\n  mymonthlycommissions,\n  mycommissionformula,\n  mycommissiontooltip,\n}"
+    },
+    {
+      "label": "FotografoDashboard.vue",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_fotografodashboard",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "fotografodashboard.vue"
+    },
+    {
+      "label": "{\n  commissionStore,\n  selectedMonthDate,\n  selectedMonthLabel,\n  photographerHotels,\n  photographerPersonalGoals,\n  getTodaySessionsForHotel,\n  getTodaySalesForHotel,\n  formatTime,\n  goToAgenda,\n  formatCurrency,\n  myMonthlyCommissions,\n  myCommissionFormula,\n  myCommissionTooltip,\n}",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_fotografodashboard_commissionstore_selectedmonthdate_selectedmonthlabel_photographerhotels_photographerpersonalgoals_gettodaysessionsforhotel_gettodaysalesforhotel_formattime_gotoagenda_formatcurrency_mymonthlycommissions_mycommissionformula_mycommissiontooltip",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "{\n  commissionstore,\n  selectedmonthdate,\n  selectedmonthlabel,\n  photographerhotels,\n  photographerpersonalgoals,\n  gettodaysessionsforhotel,\n  gettodaysalesforhotel,\n  formattime,\n  gotoagenda,\n  formatcurrency,\n  mymonthlycommissions,\n  mycommissionformula,\n  mycommissiontooltip,\n}"
+    },
+    {
+      "label": "GerenteDashboard.vue",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_gerentedashboard",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "gerentedashboard.vue"
+    },
+    {
+      "label": "{\n  countryStore,\n  goalStore,\n  commissionStore,\n  selectedAnio,\n  selectedMonthDate,\n  selectedMonthLabel,\n  selectedHotelFilters,\n  currentHotelProgreso,\n  filteredProgresoHoteles,\n  globalProgresoTotals,\n  selectedHotelsSummary,\n  getSemaforoTagType,\n  getSemaforoText,\n  getProgressColor,\n  formatCurrency,\n  handleNavigateToGoalForm,\n  managerAreas,\n  managerHotels,\n  managerTeam,\n  gerenteMonthlyCommissions,\n  myCommissionFormula,\n  myCommissionTooltip,\n}",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_gerentedashboard_countrystore_goalstore_commissionstore_selectedanio_selectedmonthdate_selectedmonthlabel_selectedhotelfilters_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_getsemaforotagtype_getsemaforotext_getprogresscolor_formatcurrency_handlenavigatetogoalform_managerareas_managerhotels_managerteam_gerentemonthlycommissions_mycommissionformula_mycommissiontooltip",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "{\n  countrystore,\n  goalstore,\n  commissionstore,\n  selectedanio,\n  selectedmonthdate,\n  selectedmonthlabel,\n  selectedhotelfilters,\n  currenthotelprogreso,\n  filteredprogresohoteles,\n  globalprogresototals,\n  selectedhotelssummary,\n  getsemaforotagtype,\n  getsemaforotext,\n  getprogresscolor,\n  formatcurrency,\n  handlenavigatetogoalform,\n  managerareas,\n  managerhotels,\n  managerteam,\n  gerentemonthlycommissions,\n  mycommissionformula,\n  mycommissiontooltip,\n}"
+    },
+    {
+      "label": "AreaGroup",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_gerentedashboard_areagroup",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "areagroup"
+    },
+    {
+      "label": "CountryGroup",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_gerentedashboard_countrygroup",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "countrygroup"
+    },
+    {
+      "label": "groupedManagerHotelsByCountry",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_gerentedashboard_groupedmanagerhotelsbycountry",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "groupedmanagerhotelsbycountry"
+    },
+    {
+      "label": "SupervisorDashboard.vue",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/SupervisorDashboard.vue",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_supervisordashboard",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "supervisordashboard.vue"
+    },
+    {
+      "label": "{\n  goalStore,\n  commissionStore,\n  selectedAnio,\n  selectedMonthDate,\n  selectedMonthLabel,\n  selectedHotelFilter,\n  formatCurrency,\n  supervisorHotels,\n  supervisorMonthlyCommissions,\n  myCommissionFormula,\n  myCommissionTooltip,\n}",
+      "file_type": "code",
+      "source_file": "frontend/src/features/home/ui/dashboards/SupervisorDashboard.vue",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "frontend_src_features_home_ui_dashboards_supervisordashboard_goalstore_commissionstore_selectedanio_selectedmonthdate_selectedmonthlabel_selectedhotelfilter_formatcurrency_supervisorhotels_supervisormonthlycommissions_mycommissionformula_mycommissiontooltip",
+      "community": 39,
+      "community_name": "InicioView.vue",
+      "norm_label": "{\n  goalstore,\n  commissionstore,\n  selectedanio,\n  selectedmonthdate,\n  selectedmonthlabel,\n  selectedhotelfilter,\n  formatcurrency,\n  supervisorhotels,\n  supervisormonthlycommissions,\n  mycommissionformula,\n  mycommissiontooltip,\n}"
+    },
+    {
       "label": "App.vue",
       "file_type": "code",
       "source_file": "frontend/src/App.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_app",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "app.vue"
+      "norm_label": "app.vue",
+      "id": "frontend_src_app"
     },
     {
       "label": "{ elementPlusLocale, t }",
@@ -20,10 +218,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "frontend_src_app_elementpluslocale_t",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "{ elementpluslocale, t }"
+      "norm_label": "{ elementpluslocale, t }",
+      "id": "frontend_src_app_elementpluslocale_t"
     },
     {
       "label": "route",
@@ -31,10 +229,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L29",
       "_origin": "ast",
-      "id": "frontend_src_app_route",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "frontend_src_app_route"
     },
     {
       "label": "router",
@@ -42,10 +240,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L30",
       "_origin": "ast",
-      "id": "frontend_src_app_router",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "router"
+      "norm_label": "router",
+      "id": "frontend_src_app_router"
     },
     {
       "label": "authStore",
@@ -53,10 +251,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "frontend_src_app_authstore",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "authstore"
+      "norm_label": "authstore",
+      "id": "frontend_src_app_authstore"
     },
     {
       "label": "countryStore",
@@ -64,10 +262,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L32",
       "_origin": "ast",
-      "id": "frontend_src_app_countrystore",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "countrystore"
+      "norm_label": "countrystore",
+      "id": "frontend_src_app_countrystore"
     },
     {
       "label": "userStore",
@@ -75,10 +273,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L33",
       "_origin": "ast",
-      "id": "frontend_src_app_userstore",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "userstore"
+      "norm_label": "userstore",
+      "id": "frontend_src_app_userstore"
     },
     {
       "label": "isFullScreenAuthPage",
@@ -86,10 +284,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "frontend_src_app_isfullscreenauthpage",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "isfullscreenauthpage"
+      "norm_label": "isfullscreenauthpage",
+      "id": "frontend_src_app_isfullscreenauthpage"
     },
     {
       "label": "isDark",
@@ -97,10 +295,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "frontend_src_app_isdark",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "isdark"
+      "norm_label": "isdark",
+      "id": "frontend_src_app_isdark"
     },
     {
       "label": "isMobileDrawerOpen",
@@ -108,10 +306,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L39",
       "_origin": "ast",
-      "id": "frontend_src_app_ismobiledraweropen",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "ismobiledraweropen"
+      "norm_label": "ismobiledraweropen",
+      "id": "frontend_src_app_ismobiledraweropen"
     },
     {
       "label": "isSidebarCollapsed",
@@ -119,10 +317,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "frontend_src_app_issidebarcollapsed",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "issidebarcollapsed"
+      "norm_label": "issidebarcollapsed",
+      "id": "frontend_src_app_issidebarcollapsed"
     },
     {
       "label": "toggleSidebar()",
@@ -130,10 +328,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "frontend_src_app_togglesidebar",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "togglesidebar()"
+      "norm_label": "togglesidebar()",
+      "id": "frontend_src_app_togglesidebar"
     },
     {
       "label": "avatarFileInput",
@@ -141,10 +339,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L48",
       "_origin": "ast",
-      "id": "frontend_src_app_avatarfileinput",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "avatarfileinput"
+      "norm_label": "avatarfileinput",
+      "id": "frontend_src_app_avatarfileinput"
     },
     {
       "label": "cropperDialogVisible",
@@ -152,10 +350,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L49",
       "_origin": "ast",
-      "id": "frontend_src_app_cropperdialogvisible",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "cropperdialogvisible"
+      "norm_label": "cropperdialogvisible",
+      "id": "frontend_src_app_cropperdialogvisible"
     },
     {
       "label": "imageToCrop",
@@ -163,10 +361,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L50",
       "_origin": "ast",
-      "id": "frontend_src_app_imagetocrop",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "imagetocrop"
+      "norm_label": "imagetocrop",
+      "id": "frontend_src_app_imagetocrop"
     },
     {
       "label": "isUpdatingAvatar",
@@ -174,10 +372,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L51",
       "_origin": "ast",
-      "id": "frontend_src_app_isupdatingavatar",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "isupdatingavatar"
+      "norm_label": "isupdatingavatar",
+      "id": "frontend_src_app_isupdatingavatar"
     },
     {
       "label": "triggerAvatarUpload()",
@@ -185,10 +383,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L53",
       "_origin": "ast",
-      "id": "frontend_src_app_triggeravatarupload",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "triggeravatarupload()"
+      "norm_label": "triggeravatarupload()",
+      "id": "frontend_src_app_triggeravatarupload"
     },
     {
       "label": "onAvatarFileSelected()",
@@ -196,10 +394,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L57",
       "_origin": "ast",
-      "id": "frontend_src_app_onavatarfileselected",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "onavatarfileselected()"
+      "norm_label": "onavatarfileselected()",
+      "id": "frontend_src_app_onavatarfileselected"
     },
     {
       "label": "handleCropSave()",
@@ -207,10 +405,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L76",
       "_origin": "ast",
-      "id": "frontend_src_app_handlecropsave",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "handlecropsave()"
+      "norm_label": "handlecropsave()",
+      "id": "frontend_src_app_handlecropsave"
     },
     {
       "label": "handleRemoveAvatar()",
@@ -218,10 +416,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L95",
       "_origin": "ast",
-      "id": "frontend_src_app_handleremoveavatar",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "handleremoveavatar()"
+      "norm_label": "handleremoveavatar()",
+      "id": "frontend_src_app_handleremoveavatar"
     },
     {
       "label": "canSeeAgenda",
@@ -229,10 +427,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L112",
       "_origin": "ast",
-      "id": "frontend_src_app_canseeagenda",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "canseeagenda"
+      "norm_label": "canseeagenda",
+      "id": "frontend_src_app_canseeagenda"
     },
     {
       "label": "canSeeConfig",
@@ -240,10 +438,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L113",
       "_origin": "ast",
-      "id": "frontend_src_app_canseeconfig",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "canseeconfig"
+      "norm_label": "canseeconfig",
+      "id": "frontend_src_app_canseeconfig"
     },
     {
       "label": "canSeeUsers",
@@ -251,10 +449,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L114",
       "_origin": "ast",
-      "id": "frontend_src_app_canseeusers",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "canseeusers"
+      "norm_label": "canseeusers",
+      "id": "frontend_src_app_canseeusers"
     },
     {
       "label": "handleSelectHotelNode()",
@@ -262,10 +460,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L116",
       "_origin": "ast",
-      "id": "frontend_src_app_handleselecthotelnode",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "handleselecthotelnode()"
+      "norm_label": "handleselecthotelnode()",
+      "id": "frontend_src_app_handleselecthotelnode"
     },
     {
       "label": "filteredCountriesTree",
@@ -273,10 +471,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L121",
       "_origin": "ast",
-      "id": "frontend_src_app_filteredcountriestree",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "filteredcountriestree"
+      "norm_label": "filteredcountriestree",
+      "id": "frontend_src_app_filteredcountriestree"
     },
     {
       "label": "toggleTheme()",
@@ -284,10 +482,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L169",
       "_origin": "ast",
-      "id": "frontend_src_app_toggletheme",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "toggletheme()"
+      "norm_label": "toggletheme()",
+      "id": "frontend_src_app_toggletheme"
     },
     {
       "label": "handleLogout()",
@@ -295,10 +493,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L177",
       "_origin": "ast",
-      "id": "frontend_src_app_handlelogout",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "handlelogout()"
+      "norm_label": "handlelogout()",
+      "id": "frontend_src_app_handlelogout"
     },
     {
       "label": "closeMobileDrawer()",
@@ -306,10 +504,10 @@
       "source_file": "frontend/src/App.vue",
       "source_location": "L182",
       "_origin": "ast",
-      "id": "frontend_src_app_closemobiledrawer",
       "community": 16,
       "community_name": "App.vue",
-      "norm_label": "closemobiledrawer()"
+      "norm_label": "closemobiledrawer()",
+      "id": "frontend_src_app_closemobiledrawer"
     },
     {
       "label": "LanguageSelector.vue",
@@ -317,10 +515,10 @@
       "source_file": "frontend/src/components/LanguageSelector.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_components_languageselector",
       "community": 90,
       "community_name": "LanguageSelector.vue",
-      "norm_label": "languageselector.vue"
+      "norm_label": "languageselector.vue",
+      "id": "frontend_src_components_languageselector"
     },
     {
       "label": "{ locale, setLocale }",
@@ -328,10 +526,10 @@
       "source_file": "frontend/src/components/LanguageSelector.vue",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "frontend_src_components_languageselector_locale_setlocale",
       "community": 90,
       "community_name": "LanguageSelector.vue",
-      "norm_label": "{ locale, setlocale }"
+      "norm_label": "{ locale, setlocale }",
+      "id": "frontend_src_components_languageselector_locale_setlocale"
     },
     {
       "label": "SidebarNav.vue",
@@ -339,10 +537,10 @@
       "source_file": "frontend/src/components/SidebarNav.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_components_sidebarnav",
       "community": 54,
       "community_name": "SidebarNav.vue",
-      "norm_label": "sidebarnav.vue"
+      "norm_label": "sidebarnav.vue",
+      "id": "frontend_src_components_sidebarnav"
     },
     {
       "label": "HotelNode",
@@ -350,10 +548,10 @@
       "source_file": "frontend/src/components/SidebarNav.vue",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "frontend_src_components_sidebarnav_hotelnode",
       "community": 54,
       "community_name": "SidebarNav.vue",
-      "norm_label": "hotelnode"
+      "norm_label": "hotelnode",
+      "id": "frontend_src_components_sidebarnav_hotelnode"
     },
     {
       "label": "AreaNode",
@@ -361,10 +559,10 @@
       "source_file": "frontend/src/components/SidebarNav.vue",
       "source_location": "L11",
       "_origin": "ast",
-      "id": "frontend_src_components_sidebarnav_areanode",
       "community": 54,
       "community_name": "SidebarNav.vue",
-      "norm_label": "areanode"
+      "norm_label": "areanode",
+      "id": "frontend_src_components_sidebarnav_areanode"
     },
     {
       "label": "CountryNode",
@@ -372,10 +570,10 @@
       "source_file": "frontend/src/components/SidebarNav.vue",
       "source_location": "L17",
       "_origin": "ast",
-      "id": "frontend_src_components_sidebarnav_countrynode",
       "community": 54,
       "community_name": "SidebarNav.vue",
-      "norm_label": "countrynode"
+      "norm_label": "countrynode",
+      "id": "frontend_src_components_sidebarnav_countrynode"
     },
     {
       "label": "emit",
@@ -383,10 +581,10 @@
       "source_file": "frontend/src/components/SidebarNav.vue",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "frontend_src_components_sidebarnav_emit",
       "community": 54,
       "community_name": "SidebarNav.vue",
-      "norm_label": "emit"
+      "norm_label": "emit",
+      "id": "frontend_src_components_sidebarnav_emit"
     },
     {
       "label": "handleNavClick()",
@@ -394,10 +592,10 @@
       "source_file": "frontend/src/components/SidebarNav.vue",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "frontend_src_components_sidebarnav_handlenavclick",
       "community": 54,
       "community_name": "SidebarNav.vue",
-      "norm_label": "handlenavclick()"
+      "norm_label": "handlenavclick()",
+      "id": "frontend_src_components_sidebarnav_handlenavclick"
     },
     {
       "label": "handleHotelClick()",
@@ -405,10 +603,10 @@
       "source_file": "frontend/src/components/SidebarNav.vue",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "frontend_src_components_sidebarnav_handlehotelclick",
       "community": 54,
       "community_name": "SidebarNav.vue",
-      "norm_label": "handlehotelclick()"
+      "norm_label": "handlehotelclick()",
+      "id": "frontend_src_components_sidebarnav_handlehotelclick"
     },
     {
       "label": "ContableComisionesTab.vue",
@@ -416,10 +614,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "contablecomisionestab.vue"
+      "norm_label": "contablecomisionestab.vue",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab"
     },
     {
       "label": "ContableHotelSummary",
@@ -427,10 +625,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contablehotelsummary",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "contablehotelsummary"
+      "norm_label": "contablehotelsummary",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contablehotelsummary"
     },
     {
       "label": "ContableAreaSummary",
@@ -438,10 +636,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contableareasummary",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "contableareasummary"
+      "norm_label": "contableareasummary",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contableareasummary"
     },
     {
       "label": "BonusDetalle",
@@ -449,10 +647,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L30",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_bonusdetalle",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "bonusdetalle"
+      "norm_label": "bonusdetalle",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_bonusdetalle"
     },
     {
       "label": "EmpleadoComisionResumen",
@@ -460,10 +658,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L39",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_empleadocomisionresumen",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "empleadocomisionresumen"
+      "norm_label": "empleadocomisionresumen",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_empleadocomisionresumen"
     },
     {
       "label": "props",
@@ -471,10 +669,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L80",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_props",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "props"
+      "norm_label": "props",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_props"
     },
     {
       "label": "{ t }",
@@ -482,10 +680,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L90",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_t",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "{ t }"
+      "norm_label": "{ t }",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_t"
     },
     {
       "label": "router",
@@ -493,10 +691,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L91",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_router",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "router"
+      "norm_label": "router",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_router"
     },
     {
       "label": "userStore",
@@ -504,10 +702,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L92",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_userstore",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "userstore"
+      "norm_label": "userstore",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_userstore"
     },
     {
       "label": "commissionStore",
@@ -515,10 +713,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L93",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_commissionstore",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "commissionstore"
+      "norm_label": "commissionstore",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_commissionstore"
     },
     {
       "label": "goalStore",
@@ -526,10 +724,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L94",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_goalstore",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "goalstore"
+      "norm_label": "goalstore",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_goalstore"
     },
     {
       "label": "goToEditSale()",
@@ -537,10 +735,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L115",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_gotoeditsale",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "gotoeditsale()"
+      "norm_label": "gotoeditsale()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_gotoeditsale"
     },
     {
       "label": "storedTc",
@@ -548,10 +746,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L123",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_storedtc",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "storedtc"
+      "norm_label": "storedtc",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_storedtc"
     },
     {
       "label": "tipoCambioMxn",
@@ -559,10 +757,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L124",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tipocambiomxn",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "tipocambiomxn"
+      "norm_label": "tipocambiomxn",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tipocambiomxn"
     },
     {
       "label": "comisionUsuarioFilter",
@@ -570,10 +768,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L134",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionusuariofilter",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "comisionusuariofilter"
+      "norm_label": "comisionusuariofilter",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionusuariofilter"
     },
     {
       "label": "availableContableUsers",
@@ -581,10 +779,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L146",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_availablecontableusers",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "availablecontableusers"
+      "norm_label": "availablecontableusers",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_availablecontableusers"
     },
     {
       "label": "TableSortState",
@@ -592,10 +790,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L190",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablesortstate",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "tablesortstate"
+      "norm_label": "tablesortstate",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablesortstate"
     },
     {
       "label": "getInitialSort()",
@@ -603,10 +801,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L196",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getinitialsort",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "getinitialsort()"
+      "norm_label": "getinitialsort()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getinitialsort"
     },
     {
       "label": "currentSort",
@@ -614,10 +812,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L209",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_currentsort",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "currentsort"
+      "norm_label": "currentsort",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_currentsort"
     },
     {
       "label": "handleSortChange()",
@@ -625,10 +823,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L211",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlesortchange",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "handlesortchange()"
+      "norm_label": "handlesortchange()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlesortchange"
     },
     {
       "label": "extractSaleMetrics()",
@@ -636,10 +834,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L227",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_extractsalemetrics",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "extractsalemetrics()"
+      "norm_label": "extractsalemetrics()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_extractsalemetrics"
     },
     {
       "label": "BonusCalculationContext",
@@ -647,10 +845,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L247",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_bonuscalculationcontext",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "bonuscalculationcontext"
+      "norm_label": "bonuscalculationcontext",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_bonuscalculationcontext"
     },
     {
       "label": "calcularBonosEmpleado()",
@@ -658,10 +856,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L256",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_calcularbonosempleado",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "calcularbonosempleado()"
+      "norm_label": "calcularbonosempleado()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_calcularbonosempleado"
     },
     {
       "label": "resumenUsuariosComision",
@@ -669,10 +867,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L367",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_resumenusuarioscomision",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "resumenusuarioscomision"
+      "norm_label": "resumenusuarioscomision",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_resumenusuarioscomision"
     },
     {
       "label": "getInitialExpandedRows()",
@@ -680,10 +878,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L598",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getinitialexpandedrows",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "getinitialexpandedrows()"
+      "norm_label": "getinitialexpandedrows()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getinitialexpandedrows"
     },
     {
       "label": "expandedRowKeys",
@@ -691,10 +889,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L609",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_expandedrowkeys",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "expandedrowkeys"
+      "norm_label": "expandedrowkeys",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_expandedrowkeys"
     },
     {
       "label": "handleExpandChange()",
@@ -702,10 +900,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L619",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleexpandchange",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "handleexpandchange()"
+      "norm_label": "handleexpandchange()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleexpandchange"
     },
     {
       "label": "usuariosTableRef",
@@ -713,10 +911,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L627",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_usuariostableref",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "usuariostableref"
+      "norm_label": "usuariostableref",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_usuariostableref"
     },
     {
       "label": "selectedUsuarios",
@@ -724,10 +922,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L628",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_selectedusuarios",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "selectedusuarios"
+      "norm_label": "selectedusuarios",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_selectedusuarios"
     },
     {
       "label": "handleSelectionChange()",
@@ -735,10 +933,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L630",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleselectionchange",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "handleselectionchange()"
+      "norm_label": "handleselectionchange()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleselectionchange"
     },
     {
       "label": "pendingSelectedCount",
@@ -746,10 +944,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L634",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_pendingselectedcount",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "pendingselectedcount"
+      "norm_label": "pendingselectedcount",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_pendingselectedcount"
     },
     {
       "label": "payableSelectedCount",
@@ -757,10 +955,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L638",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_payableselectedcount",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "payableselectedcount"
+      "norm_label": "payableselectedcount",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_payableselectedcount"
     },
     {
       "label": "handleBulkApprove()",
@@ -768,10 +966,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L642",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkapprove",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "handlebulkapprove()"
+      "norm_label": "handlebulkapprove()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkapprove"
     },
     {
       "label": "handleBulkPay()",
@@ -779,10 +977,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L672",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkpay",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "handlebulkpay()"
+      "norm_label": "handlebulkpay()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkpay"
     },
     {
       "label": "handleUserApprove()",
@@ -790,10 +988,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L703",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserapprove",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "handleuserapprove()"
+      "norm_label": "handleuserapprove()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserapprove"
     },
     {
       "label": "handleUserPay()",
@@ -801,10 +999,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L721",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserpay",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "handleuserpay()"
+      "norm_label": "handleuserpay()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserpay"
     },
     {
       "label": "handleUserResetToPending()",
@@ -812,10 +1010,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L739",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserresettopending",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "handleuserresettopending()"
+      "norm_label": "handleuserresettopending()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserresettopending"
     },
     {
       "label": "TableColumnSummaryCtx",
@@ -823,10 +1021,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L749",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablecolumnsummaryctx",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "tablecolumnsummaryctx"
+      "norm_label": "tablecolumnsummaryctx",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablecolumnsummaryctx"
     },
     {
       "label": "SummaryMethodProps",
@@ -834,10 +1032,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L755",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_summarymethodprops",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "summarymethodprops"
+      "norm_label": "summarymethodprops",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_summarymethodprops"
     },
     {
       "label": "getUsuariosSummaries()",
@@ -845,10 +1043,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L760",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getusuariossummaries",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "getusuariossummaries()"
+      "norm_label": "getusuariossummaries()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getusuariossummaries"
     },
     {
       "label": "DetalleVentaItem",
@@ -856,10 +1054,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L833",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_detalleventaitem",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "detalleventaitem"
+      "norm_label": "detalleventaitem",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_detalleventaitem"
     },
     {
       "label": "getDetalleTableData()",
@@ -867,10 +1065,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L843",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getdetalletabledata",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "getdetalletabledata()"
+      "norm_label": "getdetalletabledata()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getdetalletabledata"
     },
     {
       "label": "getNestedSpanMethod()",
@@ -878,10 +1076,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L902",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getnestedspanmethod",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "getnestedspanmethod()"
+      "norm_label": "getnestedspanmethod()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getnestedspanmethod"
     },
     {
       "label": "getNestedRowClassName()",
@@ -889,10 +1087,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L912",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getnestedrowclassname",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "getnestedrowclassname()"
+      "norm_label": "getnestedrowclassname()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getnestedrowclassname"
     },
     {
       "label": "DetalleSummaryMethodProps",
@@ -900,10 +1098,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L918",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_detallesummarymethodprops",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "detallesummarymethodprops"
+      "norm_label": "detallesummarymethodprops",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_detallesummarymethodprops"
     },
     {
       "label": "getDetalleVentasSummaries()",
@@ -911,10 +1109,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L923",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getdetalleventassummaries",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "getdetalleventassummaries()"
+      "norm_label": "getdetalleventassummaries()",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getdetalleventassummaries"
     },
     {
       "label": "totalComisionesLiquidables",
@@ -922,10 +1120,10 @@
       "source_file": "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue",
       "source_location": "L992",
       "_origin": "ast",
-      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_totalcomisionesliquidables",
       "community": 91,
       "community_name": "ContableComisionesTab.vue",
-      "norm_label": "totalcomisionesliquidables"
+      "norm_label": "totalcomisionesliquidables",
+      "id": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_totalcomisionesliquidables"
     },
     {
       "label": "backend/src/features/goals/domain/goal.model.ts",
@@ -9937,204 +10135,6 @@
       "id": "frontend_src_features_home_ui_inicioview_userrole"
     },
     {
-      "label": "AdminDashboard.vue",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "admindashboard.vue",
-      "id": "frontend_src_features_home_ui_dashboards_admindashboard"
-    },
-    {
-      "label": "{\n  countryStore,\n  hotelStore,\n  goalStore,\n  commissionStore,\n  selectedAnio,\n  selectedMes,\n  selectedMonthDate,\n  selectedMonthLabel,\n  selectedHotelFilters,\n  totalUsers,\n  activeUsers,\n  totalCountries,\n  totalAreas,\n  totalHotels,\n  currentHotelProgreso,\n  filteredProgresoHoteles,\n  globalProgresoTotals,\n  selectedHotelsSummary,\n  getSemaforoTagType,\n  getSemaforoText,\n  getProgressColor,\n  goToConfig,\n  goToUsers,\n  formatCurrency,\n  handleNavigateToGoalForm,\n  globalMonthlyCommissions,\n}",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L11",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "{\n  countrystore,\n  hotelstore,\n  goalstore,\n  commissionstore,\n  selectedanio,\n  selectedmes,\n  selectedmonthdate,\n  selectedmonthlabel,\n  selectedhotelfilters,\n  totalusers,\n  activeusers,\n  totalcountries,\n  totalareas,\n  totalhotels,\n  currenthotelprogreso,\n  filteredprogresohoteles,\n  globalprogresototals,\n  selectedhotelssummary,\n  getsemaforotagtype,\n  getsemaforotext,\n  getprogresscolor,\n  gotoconfig,\n  gotousers,\n  formatcurrency,\n  handlenavigatetogoalform,\n  globalmonthlycommissions,\n}",
-      "id": "frontend_src_features_home_ui_dashboards_admindashboard_countrystore_hotelstore_goalstore_commissionstore_selectedanio_selectedmes_selectedmonthdate_selectedmonthlabel_selectedhotelfilters_totalusers_activeusers_totalcountries_totalareas_totalhotels_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_getsemaforotagtype_getsemaforotext_getprogresscolor_gotoconfig_gotousers_formatcurrency_handlenavigatetogoalform_globalmonthlycommissions"
-    },
-    {
-      "label": "AreaGroup",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L40",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "areagroup",
-      "id": "frontend_src_features_home_ui_dashboards_admindashboard_areagroup"
-    },
-    {
-      "label": "CountryGroup",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L46",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "countrygroup",
-      "id": "frontend_src_features_home_ui_dashboards_admindashboard_countrygroup"
-    },
-    {
-      "label": "groupedHotelsByCountry",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L53",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "groupedhotelsbycountry",
-      "id": "frontend_src_features_home_ui_dashboards_admindashboard_groupedhotelsbycountry"
-    },
-    {
-      "label": "semaforoSortMethod()",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L94",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "semaforosortmethod()",
-      "id": "frontend_src_features_home_ui_dashboards_admindashboard_semaforosortmethod"
-    },
-    {
-      "label": "AgendadorDashboard.vue",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "agendadordashboard.vue",
-      "id": "frontend_src_features_home_ui_dashboards_agendadordashboard"
-    },
-    {
-      "label": "router",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue",
-      "source_location": "L8",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "router",
-      "id": "frontend_src_features_home_ui_dashboards_agendadordashboard_router"
-    },
-    {
-      "label": "{\n  commissionStore,\n  selectedMes,\n  selectedAnio,\n  selectedMonthDate,\n  selectedMonthLabel,\n  agendadorHotels,\n  agendadorHotelGoals,\n  getTodaySessionsForHotel,\n  getTodaySalesForHotel,\n  formatTime,\n  goToAgenda,\n  formatCurrency,\n  myMonthlyCommissions,\n  myCommissionFormula,\n  myCommissionTooltip,\n}",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue",
-      "source_location": "L10",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "{\n  commissionstore,\n  selectedmes,\n  selectedanio,\n  selectedmonthdate,\n  selectedmonthlabel,\n  agendadorhotels,\n  agendadorhotelgoals,\n  gettodaysessionsforhotel,\n  gettodaysalesforhotel,\n  formattime,\n  gotoagenda,\n  formatcurrency,\n  mymonthlycommissions,\n  mycommissionformula,\n  mycommissiontooltip,\n}",
-      "id": "frontend_src_features_home_ui_dashboards_agendadordashboard_commissionstore_selectedmes_selectedanio_selectedmonthdate_selectedmonthlabel_agendadorhotels_agendadorhotelgoals_gettodaysessionsforhotel_gettodaysalesforhotel_formattime_gotoagenda_formatcurrency_mymonthlycommissions_mycommissionformula_mycommissiontooltip"
-    },
-    {
-      "label": "FotografoDashboard.vue",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "fotografodashboard.vue",
-      "id": "frontend_src_features_home_ui_dashboards_fotografodashboard"
-    },
-    {
-      "label": "{\n  commissionStore,\n  selectedMes,\n  selectedMonthDate,\n  selectedMonthLabel,\n  photographerHotels,\n  photographerPersonalGoals,\n  getTodaySessionsForHotel,\n  getTodaySalesForHotel,\n  formatTime,\n  goToAgenda,\n  formatCurrency,\n  myMonthlyCommissions,\n  myCommissionFormula,\n  myCommissionTooltip,\n}",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "{\n  commissionstore,\n  selectedmes,\n  selectedmonthdate,\n  selectedmonthlabel,\n  photographerhotels,\n  photographerpersonalgoals,\n  gettodaysessionsforhotel,\n  gettodaysalesforhotel,\n  formattime,\n  gotoagenda,\n  formatcurrency,\n  mymonthlycommissions,\n  mycommissionformula,\n  mycommissiontooltip,\n}",
-      "id": "frontend_src_features_home_ui_dashboards_fotografodashboard_commissionstore_selectedmes_selectedmonthdate_selectedmonthlabel_photographerhotels_photographerpersonalgoals_gettodaysessionsforhotel_gettodaysalesforhotel_formattime_gotoagenda_formatcurrency_mymonthlycommissions_mycommissionformula_mycommissiontooltip"
-    },
-    {
-      "label": "GerenteDashboard.vue",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "gerentedashboard.vue",
-      "id": "frontend_src_features_home_ui_dashboards_gerentedashboard"
-    },
-    {
-      "label": "{\n  countryStore,\n  goalStore,\n  commissionStore,\n  selectedAnio,\n  selectedMes,\n  selectedMonthDate,\n  selectedMonthLabel,\n  selectedHotelFilters,\n  currentHotelProgreso,\n  filteredProgresoHoteles,\n  globalProgresoTotals,\n  selectedHotelsSummary,\n  getSemaforoTagType,\n  getSemaforoText,\n  getProgressColor,\n  formatCurrency,\n  handleNavigateToGoalForm,\n  managerAreas,\n  managerHotels,\n  managerTeam,\n  gerenteMonthlyCommissions,\n  myCommissionFormula,\n  myCommissionTooltip,\n}",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
-      "source_location": "L14",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "{\n  countrystore,\n  goalstore,\n  commissionstore,\n  selectedanio,\n  selectedmes,\n  selectedmonthdate,\n  selectedmonthlabel,\n  selectedhotelfilters,\n  currenthotelprogreso,\n  filteredprogresohoteles,\n  globalprogresototals,\n  selectedhotelssummary,\n  getsemaforotagtype,\n  getsemaforotext,\n  getprogresscolor,\n  formatcurrency,\n  handlenavigatetogoalform,\n  managerareas,\n  managerhotels,\n  managerteam,\n  gerentemonthlycommissions,\n  mycommissionformula,\n  mycommissiontooltip,\n}",
-      "id": "frontend_src_features_home_ui_dashboards_gerentedashboard_countrystore_goalstore_commissionstore_selectedanio_selectedmes_selectedmonthdate_selectedmonthlabel_selectedhotelfilters_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_getsemaforotagtype_getsemaforotext_getprogresscolor_formatcurrency_handlenavigatetogoalform_managerareas_managerhotels_managerteam_gerentemonthlycommissions_mycommissionformula_mycommissiontooltip"
-    },
-    {
-      "label": "AreaGroup",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
-      "source_location": "L40",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "areagroup",
-      "id": "frontend_src_features_home_ui_dashboards_gerentedashboard_areagroup"
-    },
-    {
-      "label": "CountryGroup",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
-      "source_location": "L46",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "countrygroup",
-      "id": "frontend_src_features_home_ui_dashboards_gerentedashboard_countrygroup"
-    },
-    {
-      "label": "groupedManagerHotelsByCountry",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
-      "source_location": "L53",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "groupedmanagerhotelsbycountry",
-      "id": "frontend_src_features_home_ui_dashboards_gerentedashboard_groupedmanagerhotelsbycountry"
-    },
-    {
-      "label": "SupervisorDashboard.vue",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/SupervisorDashboard.vue",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "supervisordashboard.vue",
-      "id": "frontend_src_features_home_ui_dashboards_supervisordashboard"
-    },
-    {
-      "label": "{\n  goalStore,\n  commissionStore,\n  selectedAnio,\n  selectedMes,\n  selectedMonthDate,\n  selectedMonthLabel,\n  selectedHotelFilter,\n  formatCurrency,\n  supervisorHotels,\n  supervisorMonthlyCommissions,\n  myCommissionFormula,\n  myCommissionTooltip,\n}",
-      "file_type": "code",
-      "source_file": "frontend/src/features/home/ui/dashboards/SupervisorDashboard.vue",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 39,
-      "community_name": "InicioView.vue",
-      "norm_label": "{\n  goalstore,\n  commissionstore,\n  selectedanio,\n  selectedmes,\n  selectedmonthdate,\n  selectedmonthlabel,\n  selectedhotelfilter,\n  formatcurrency,\n  supervisorhotels,\n  supervisormonthlycommissions,\n  mycommissionformula,\n  mycommissiontooltip,\n}",
-      "id": "frontend_src_features_home_ui_dashboards_supervisordashboard_goalstore_commissionstore_selectedanio_selectedmes_selectedmonthdate_selectedmonthlabel_selectedhotelfilter_formatcurrency_supervisorhotels_supervisormonthlycommissions_mycommissionformula_mycommissiontooltip"
-    },
-    {
       "label": "frontend/package.json",
       "file_type": "code",
       "source_file": "frontend/package.json",
@@ -15936,13 +15936,240 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
+      "target": "frontend_src_features_home_ui_dashboards_admindashboard_areagroup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
+      "target": "frontend_src_features_home_ui_dashboards_admindashboard_countrygroup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
+      "target": "frontend_src_features_home_ui_dashboards_admindashboard_countrystore_hotelstore_goalstore_commissionstore_selectedanio_selectedmonthdate_selectedmonthlabel_selectedhotelfilters_totalusers_activeusers_totalcountries_totalareas_totalhotels_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_getsemaforotagtype_getsemaforotext_getprogresscolor_gotoconfig_gotousers_formatcurrency_handlenavigatetogoalform_globalmonthlycommissions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
+      "target": "frontend_src_features_home_ui_dashboards_admindashboard_groupedhotelsbycountry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
+      "target": "frontend_src_features_home_ui_dashboards_admindashboard_semaforosortmethod",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
+      "target": "ref_vue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/InicioView.vue",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_home_ui_inicioview",
+      "target": "frontend_src_features_home_ui_dashboards_admindashboard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_agendadordashboard",
+      "target": "frontend_src_features_home_ui_dashboards_agendadordashboard_commissionstore_selectedanio_selectedmonthdate_selectedmonthlabel_agendadorhotels_agendadorhotelgoals_gettodaysessionsforhotel_gettodaysalesforhotel_formattime_gotoagenda_formatcurrency_mymonthlycommissions_mycommissionformula_mycommissiontooltip",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_agendadordashboard",
+      "target": "frontend_src_features_home_ui_dashboards_agendadordashboard_router",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/InicioView.vue",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_home_ui_inicioview",
+      "target": "frontend_src_features_home_ui_dashboards_agendadordashboard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_fotografodashboard",
+      "target": "frontend_src_features_home_ui_dashboards_fotografodashboard_commissionstore_selectedmonthdate_selectedmonthlabel_photographerhotels_photographerpersonalgoals_gettodaysessionsforhotel_gettodaysalesforhotel_formattime_gotoagenda_formatcurrency_mymonthlycommissions_mycommissionformula_mycommissiontooltip",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/InicioView.vue",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_home_ui_inicioview",
+      "target": "frontend_src_features_home_ui_dashboards_fotografodashboard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_gerentedashboard",
+      "target": "frontend_src_features_home_ui_dashboards_gerentedashboard_areagroup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_gerentedashboard",
+      "target": "frontend_src_features_home_ui_dashboards_gerentedashboard_countrygroup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_gerentedashboard",
+      "target": "frontend_src_features_home_ui_dashboards_gerentedashboard_countrystore_goalstore_commissionstore_selectedanio_selectedmonthdate_selectedmonthlabel_selectedhotelfilters_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_getsemaforotagtype_getsemaforotext_getprogresscolor_formatcurrency_handlenavigatetogoalform_managerareas_managerhotels_managerteam_gerentemonthlycommissions_mycommissionformula_mycommissiontooltip",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_gerentedashboard",
+      "target": "frontend_src_features_home_ui_dashboards_gerentedashboard_groupedmanagerhotelsbycountry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_gerentedashboard",
+      "target": "ref_vue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/InicioView.vue",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_home_ui_inicioview",
+      "target": "frontend_src_features_home_ui_dashboards_gerentedashboard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/dashboards/SupervisorDashboard.vue",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "frontend_src_features_home_ui_dashboards_supervisordashboard",
+      "target": "frontend_src_features_home_ui_dashboards_supervisordashboard_goalstore_commissionstore_selectedanio_selectedmonthdate_selectedmonthlabel_selectedhotelfilter_formatcurrency_supervisorhotels_supervisormonthlycommissions_mycommissionformula_mycommissiontooltip",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/features/home/ui/InicioView.vue",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "frontend_src_features_home_ui_inicioview",
+      "target": "frontend_src_features_home_ui_dashboards_supervisordashboard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/App.vue",
       "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_authstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_authstore"
     },
     {
       "relation": "contains",
@@ -15951,9 +16178,9 @@
       "source_location": "L48",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_avatarfileinput",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_avatarfileinput"
     },
     {
       "relation": "contains",
@@ -15962,9 +16189,9 @@
       "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_canseeagenda",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_canseeagenda"
     },
     {
       "relation": "contains",
@@ -15973,9 +16200,9 @@
       "source_location": "L113",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_canseeconfig",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_canseeconfig"
     },
     {
       "relation": "contains",
@@ -15984,9 +16211,9 @@
       "source_location": "L114",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_canseeusers",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_canseeusers"
     },
     {
       "relation": "contains",
@@ -15995,9 +16222,9 @@
       "source_location": "L182",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_closemobiledrawer",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_closemobiledrawer"
     },
     {
       "relation": "contains",
@@ -16006,9 +16233,9 @@
       "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_countrystore",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_countrystore"
     },
     {
       "relation": "contains",
@@ -16017,9 +16244,9 @@
       "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_cropperdialogvisible",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_cropperdialogvisible"
     },
     {
       "relation": "contains",
@@ -16028,9 +16255,9 @@
       "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_elementpluslocale_t",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_elementpluslocale_t"
     },
     {
       "relation": "contains",
@@ -16039,9 +16266,9 @@
       "source_location": "L121",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_filteredcountriestree",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_filteredcountriestree"
     },
     {
       "relation": "contains",
@@ -16050,9 +16277,9 @@
       "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_handlecropsave",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_handlecropsave"
     },
     {
       "relation": "contains",
@@ -16061,9 +16288,9 @@
       "source_location": "L177",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_handlelogout",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_handlelogout"
     },
     {
       "relation": "contains",
@@ -16072,9 +16299,9 @@
       "source_location": "L95",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_handleremoveavatar",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_handleremoveavatar"
     },
     {
       "relation": "contains",
@@ -16083,9 +16310,9 @@
       "source_location": "L116",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_handleselecthotelnode",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_handleselecthotelnode"
     },
     {
       "relation": "contains",
@@ -16094,9 +16321,9 @@
       "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_imagetocrop",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_imagetocrop"
     },
     {
       "relation": "contains",
@@ -16105,9 +16332,9 @@
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_isdark",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_isdark"
     },
     {
       "relation": "contains",
@@ -16116,9 +16343,9 @@
       "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_isfullscreenauthpage",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_isfullscreenauthpage"
     },
     {
       "relation": "contains",
@@ -16127,9 +16354,9 @@
       "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_ismobiledraweropen",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_ismobiledraweropen"
     },
     {
       "relation": "contains",
@@ -16138,9 +16365,9 @@
       "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_issidebarcollapsed",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_issidebarcollapsed"
     },
     {
       "relation": "contains",
@@ -16149,9 +16376,9 @@
       "source_location": "L51",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_isupdatingavatar",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_isupdatingavatar"
     },
     {
       "relation": "contains",
@@ -16160,9 +16387,9 @@
       "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_onavatarfileselected",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_onavatarfileselected"
     },
     {
       "relation": "contains",
@@ -16171,9 +16398,9 @@
       "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_route",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_route"
     },
     {
       "relation": "contains",
@@ -16182,9 +16409,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_router",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_router"
     },
     {
       "relation": "contains",
@@ -16193,9 +16420,9 @@
       "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_togglesidebar",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_togglesidebar"
     },
     {
       "relation": "contains",
@@ -16204,9 +16431,9 @@
       "source_location": "L169",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_toggletheme",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_toggletheme"
     },
     {
       "relation": "contains",
@@ -16215,9 +16442,9 @@
       "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_triggeravatarupload",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_triggeravatarupload"
     },
     {
       "relation": "contains",
@@ -16226,9 +16453,9 @@
       "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "frontend_src_app_userstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_userstore"
     },
     {
       "relation": "imports_from",
@@ -16238,9 +16465,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app",
-      "target": "ref_vue",
-      "confidence_score": 1.0
+      "target": "ref_vue"
     },
     {
       "relation": "imports_from",
@@ -16262,9 +16489,9 @@
       "source_location": "L117",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_app_handleselecthotelnode",
-      "target": "frontend_src_app_closemobiledrawer",
-      "confidence_score": 1.0
+      "target": "frontend_src_app_closemobiledrawer"
     },
     {
       "relation": "contains",
@@ -16273,9 +16500,9 @@
       "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_components_languageselector",
-      "target": "frontend_src_components_languageselector_locale_setlocale",
-      "confidence_score": 1.0
+      "target": "frontend_src_components_languageselector_locale_setlocale"
     },
     {
       "relation": "contains",
@@ -16284,9 +16511,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_components_sidebarnav",
-      "target": "frontend_src_components_sidebarnav_areanode",
-      "confidence_score": 1.0
+      "target": "frontend_src_components_sidebarnav_areanode"
     },
     {
       "relation": "contains",
@@ -16295,9 +16522,9 @@
       "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_components_sidebarnav",
-      "target": "frontend_src_components_sidebarnav_countrynode",
-      "confidence_score": 1.0
+      "target": "frontend_src_components_sidebarnav_countrynode"
     },
     {
       "relation": "contains",
@@ -16306,9 +16533,9 @@
       "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_components_sidebarnav",
-      "target": "frontend_src_components_sidebarnav_emit",
-      "confidence_score": 1.0
+      "target": "frontend_src_components_sidebarnav_emit"
     },
     {
       "relation": "contains",
@@ -16317,9 +16544,9 @@
       "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_components_sidebarnav",
-      "target": "frontend_src_components_sidebarnav_handlehotelclick",
-      "confidence_score": 1.0
+      "target": "frontend_src_components_sidebarnav_handlehotelclick"
     },
     {
       "relation": "contains",
@@ -16328,9 +16555,9 @@
       "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_components_sidebarnav",
-      "target": "frontend_src_components_sidebarnav_handlenavclick",
-      "confidence_score": 1.0
+      "target": "frontend_src_components_sidebarnav_handlenavclick"
     },
     {
       "relation": "contains",
@@ -16339,9 +16566,9 @@
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_components_sidebarnav",
-      "target": "frontend_src_components_sidebarnav_hotelnode",
-      "confidence_score": 1.0
+      "target": "frontend_src_components_sidebarnav_hotelnode"
     },
     {
       "relation": "calls",
@@ -16351,9 +16578,9 @@
       "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_components_sidebarnav_handlehotelclick",
-      "target": "frontend_src_components_sidebarnav_emit",
-      "confidence_score": 1.0
+      "target": "frontend_src_components_sidebarnav_emit"
     },
     {
       "relation": "calls",
@@ -16363,9 +16590,9 @@
       "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_components_sidebarnav_handlenavclick",
-      "target": "frontend_src_components_sidebarnav_emit",
-      "confidence_score": 1.0
+      "target": "frontend_src_components_sidebarnav_emit"
     },
     {
       "relation": "contains",
@@ -16374,9 +16601,9 @@
       "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_availablecontableusers",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_availablecontableusers"
     },
     {
       "relation": "contains",
@@ -16385,9 +16612,9 @@
       "source_location": "L247",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_bonuscalculationcontext",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_bonuscalculationcontext"
     },
     {
       "relation": "contains",
@@ -16396,9 +16623,9 @@
       "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_bonusdetalle",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_bonusdetalle"
     },
     {
       "relation": "contains",
@@ -16407,9 +16634,9 @@
       "source_location": "L256",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_calcularbonosempleado",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_calcularbonosempleado"
     },
     {
       "relation": "contains",
@@ -16418,9 +16645,9 @@
       "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionusuariofilter",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_comisionusuariofilter"
     },
     {
       "relation": "contains",
@@ -16429,9 +16656,9 @@
       "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_commissionstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_commissionstore"
     },
     {
       "relation": "contains",
@@ -16440,9 +16667,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contableareasummary",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contableareasummary"
     },
     {
       "relation": "contains",
@@ -16451,9 +16678,9 @@
       "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contablehotelsummary",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_contablehotelsummary"
     },
     {
       "relation": "contains",
@@ -16462,9 +16689,9 @@
       "source_location": "L209",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_currentsort",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_currentsort"
     },
     {
       "relation": "contains",
@@ -16473,9 +16700,9 @@
       "source_location": "L918",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_detallesummarymethodprops",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_detallesummarymethodprops"
     },
     {
       "relation": "contains",
@@ -16484,9 +16711,9 @@
       "source_location": "L833",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_detalleventaitem",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_detalleventaitem"
     },
     {
       "relation": "contains",
@@ -16495,9 +16722,9 @@
       "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_empleadocomisionresumen",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_empleadocomisionresumen"
     },
     {
       "relation": "contains",
@@ -16506,9 +16733,9 @@
       "source_location": "L609",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_expandedrowkeys",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_expandedrowkeys"
     },
     {
       "relation": "contains",
@@ -16517,9 +16744,9 @@
       "source_location": "L227",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_extractsalemetrics",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_extractsalemetrics"
     },
     {
       "relation": "contains",
@@ -16528,9 +16755,9 @@
       "source_location": "L843",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getdetalletabledata",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getdetalletabledata"
     },
     {
       "relation": "contains",
@@ -16539,9 +16766,9 @@
       "source_location": "L923",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getdetalleventassummaries",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getdetalleventassummaries"
     },
     {
       "relation": "contains",
@@ -16550,9 +16777,9 @@
       "source_location": "L598",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getinitialexpandedrows",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getinitialexpandedrows"
     },
     {
       "relation": "contains",
@@ -16561,9 +16788,9 @@
       "source_location": "L196",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getinitialsort",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getinitialsort"
     },
     {
       "relation": "contains",
@@ -16572,9 +16799,9 @@
       "source_location": "L912",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getnestedrowclassname",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getnestedrowclassname"
     },
     {
       "relation": "contains",
@@ -16583,9 +16810,9 @@
       "source_location": "L902",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getnestedspanmethod",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getnestedspanmethod"
     },
     {
       "relation": "contains",
@@ -16594,9 +16821,9 @@
       "source_location": "L760",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getusuariossummaries",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_getusuariossummaries"
     },
     {
       "relation": "contains",
@@ -16605,9 +16832,9 @@
       "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_goalstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_goalstore"
     },
     {
       "relation": "contains",
@@ -16616,9 +16843,9 @@
       "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_gotoeditsale",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_gotoeditsale"
     },
     {
       "relation": "contains",
@@ -16627,9 +16854,9 @@
       "source_location": "L642",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkapprove",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkapprove"
     },
     {
       "relation": "contains",
@@ -16638,9 +16865,9 @@
       "source_location": "L672",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkpay",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlebulkpay"
     },
     {
       "relation": "contains",
@@ -16649,9 +16876,9 @@
       "source_location": "L619",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleexpandchange",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleexpandchange"
     },
     {
       "relation": "contains",
@@ -16660,9 +16887,9 @@
       "source_location": "L630",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleselectionchange",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleselectionchange"
     },
     {
       "relation": "contains",
@@ -16671,9 +16898,9 @@
       "source_location": "L211",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlesortchange",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handlesortchange"
     },
     {
       "relation": "contains",
@@ -16682,9 +16909,9 @@
       "source_location": "L703",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserapprove",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserapprove"
     },
     {
       "relation": "contains",
@@ -16693,9 +16920,9 @@
       "source_location": "L721",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserpay",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserpay"
     },
     {
       "relation": "contains",
@@ -16704,9 +16931,9 @@
       "source_location": "L739",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserresettopending",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_handleuserresettopending"
     },
     {
       "relation": "contains",
@@ -16715,9 +16942,9 @@
       "source_location": "L638",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_payableselectedcount",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_payableselectedcount"
     },
     {
       "relation": "contains",
@@ -16726,9 +16953,9 @@
       "source_location": "L634",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_pendingselectedcount",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_pendingselectedcount"
     },
     {
       "relation": "contains",
@@ -16737,9 +16964,9 @@
       "source_location": "L80",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_props",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_props"
     },
     {
       "relation": "contains",
@@ -16748,9 +16975,9 @@
       "source_location": "L367",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_resumenusuarioscomision",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_resumenusuarioscomision"
     },
     {
       "relation": "contains",
@@ -16759,9 +16986,9 @@
       "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_router",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_router"
     },
     {
       "relation": "contains",
@@ -16770,9 +16997,9 @@
       "source_location": "L628",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_selectedusuarios",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_selectedusuarios"
     },
     {
       "relation": "contains",
@@ -16781,9 +17008,9 @@
       "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_storedtc",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_storedtc"
     },
     {
       "relation": "contains",
@@ -16792,9 +17019,9 @@
       "source_location": "L755",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_summarymethodprops",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_summarymethodprops"
     },
     {
       "relation": "contains",
@@ -16803,9 +17030,9 @@
       "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_t",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_t"
     },
     {
       "relation": "contains",
@@ -16814,9 +17041,9 @@
       "source_location": "L749",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablecolumnsummaryctx",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablecolumnsummaryctx"
     },
     {
       "relation": "contains",
@@ -16825,9 +17052,9 @@
       "source_location": "L190",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablesortstate",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tablesortstate"
     },
     {
       "relation": "contains",
@@ -16836,9 +17063,9 @@
       "source_location": "L124",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tipocambiomxn",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_tipocambiomxn"
     },
     {
       "relation": "contains",
@@ -16847,9 +17074,9 @@
       "source_location": "L992",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_totalcomisionesliquidables",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_totalcomisionesliquidables"
     },
     {
       "relation": "contains",
@@ -16858,9 +17085,9 @@
       "source_location": "L92",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_userstore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_userstore"
     },
     {
       "relation": "contains",
@@ -16869,9 +17096,9 @@
       "source_location": "L627",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_usuariostableref",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab_usuariostableref"
     },
     {
       "relation": "imports_from",
@@ -16881,9 +17108,9 @@
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_dashboards_components_contablecomisionestab",
-      "target": "ref_vue",
-      "confidence_score": 1.0
+      "target": "ref_vue"
     },
     {
       "relation": "imports_from",
@@ -30340,66 +30567,6 @@
       "target": "ref_vue"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/InicioView.vue",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_inicioview",
-      "target": "frontend_src_features_home_ui_dashboards_admindashboard"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/InicioView.vue",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_inicioview",
-      "target": "frontend_src_features_home_ui_dashboards_agendadordashboard"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/InicioView.vue",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_inicioview",
-      "target": "frontend_src_features_home_ui_dashboards_fotografodashboard"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/InicioView.vue",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_inicioview",
-      "target": "frontend_src_features_home_ui_dashboards_gerentedashboard"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/InicioView.vue",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_inicioview",
-      "target": "frontend_src_features_home_ui_dashboards_supervisordashboard"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/features/home/ui/InicioView.vue",
@@ -30443,173 +30610,6 @@
       "confidence_score": 1.0,
       "source": "frontend_src_features_home_ui_inicioview",
       "target": "ref_vue"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
-      "target": "frontend_src_features_home_ui_dashboards_admindashboard_areagroup"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L46",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
-      "target": "frontend_src_features_home_ui_dashboards_admindashboard_countrygroup"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
-      "target": "frontend_src_features_home_ui_dashboards_admindashboard_countrystore_hotelstore_goalstore_commissionstore_selectedanio_selectedmes_selectedmonthdate_selectedmonthlabel_selectedhotelfilters_totalusers_activeusers_totalcountries_totalareas_totalhotels_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_getsemaforotagtype_getsemaforotext_getprogresscolor_gotoconfig_gotousers_formatcurrency_handlenavigatetogoalform_globalmonthlycommissions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L53",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
-      "target": "frontend_src_features_home_ui_dashboards_admindashboard_groupedhotelsbycountry"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L94",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
-      "target": "frontend_src_features_home_ui_dashboards_admindashboard_semaforosortmethod"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/AdminDashboard.vue",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_admindashboard",
-      "target": "ref_vue"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_agendadordashboard",
-      "target": "frontend_src_features_home_ui_dashboards_agendadordashboard_commissionstore_selectedmes_selectedanio_selectedmonthdate_selectedmonthlabel_agendadorhotels_agendadorhotelgoals_gettodaysessionsforhotel_gettodaysalesforhotel_formattime_gotoagenda_formatcurrency_mymonthlycommissions_mycommissionformula_mycommissiontooltip"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/AgendadorDashboard.vue",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_agendadordashboard",
-      "target": "frontend_src_features_home_ui_dashboards_agendadordashboard_router"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_fotografodashboard",
-      "target": "frontend_src_features_home_ui_dashboards_fotografodashboard_commissionstore_selectedmes_selectedmonthdate_selectedmonthlabel_photographerhotels_photographerpersonalgoals_gettodaysessionsforhotel_gettodaysalesforhotel_formattime_gotoagenda_formatcurrency_mymonthlycommissions_mycommissionformula_mycommissiontooltip"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_gerentedashboard",
-      "target": "frontend_src_features_home_ui_dashboards_gerentedashboard_areagroup"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
-      "source_location": "L46",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_gerentedashboard",
-      "target": "frontend_src_features_home_ui_dashboards_gerentedashboard_countrygroup"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_gerentedashboard",
-      "target": "frontend_src_features_home_ui_dashboards_gerentedashboard_countrystore_goalstore_commissionstore_selectedanio_selectedmes_selectedmonthdate_selectedmonthlabel_selectedhotelfilters_currenthotelprogreso_filteredprogresohoteles_globalprogresototals_selectedhotelssummary_getsemaforotagtype_getsemaforotext_getprogresscolor_formatcurrency_handlenavigatetogoalform_managerareas_managerhotels_managerteam_gerentemonthlycommissions_mycommissionformula_mycommissiontooltip"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
-      "source_location": "L53",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_gerentedashboard",
-      "target": "frontend_src_features_home_ui_dashboards_gerentedashboard_groupedmanagerhotelsbycountry"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/GerenteDashboard.vue",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_gerentedashboard",
-      "target": "ref_vue"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/features/home/ui/dashboards/SupervisorDashboard.vue",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "frontend_src_features_home_ui_dashboards_supervisordashboard",
-      "target": "frontend_src_features_home_ui_dashboards_supervisordashboard_goalstore_commissionstore_selectedanio_selectedmes_selectedmonthdate_selectedmonthlabel_selectedhotelfilter_formatcurrency_supervisorhotels_supervisormonthlycommissions_mycommissionformula_mycommissiontooltip"
     },
     {
       "relation": "contains",
@@ -38118,5 +38118,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "10cc3c6b70b5e8beb5d0096756343ff1ff6e6349"
+  "built_at_commit": "4c6b56b95da46059046a60d3c3fb95d97d31a806"
 }
