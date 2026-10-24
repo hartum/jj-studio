@@ -9,7 +9,7 @@ import { useGoalStore } from '@/features/goals/stores/goal.store'
 import { formatCurrency, formatMxn } from '@/shared/formatters'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 import { InfoFilled, Edit } from '@element-plus/icons-vue'
-import { RotateCcw, Award } from '@lucide/vue'
+import { RotateCcw, Award, Lock } from '@lucide/vue'
 import type { Comision } from '@/features/commissions/domain/commission.model'
 import type { Meta } from '@/features/goals/domain/goal.model'
 
@@ -77,6 +77,9 @@ export interface EmpleadoComisionResumen {
   bonoGrupalUsd: number
   totalBonusUsd: number
   bonusDetalles: BonusDetalle[]
+  // Congelamiento de precios
+  isFullyFrozen?: boolean
+  frozenTcTooltip?: string | null
 }
 
 const props = defineProps<{
@@ -85,8 +88,16 @@ const props = defineProps<{
   contableAreas: ContableAreaSummary[]
   commissionDateRange: [string, string]
   globalMonthlyCommissions: number
-  onUpdateCommissionStatus: (id: number, nuevoEstado: string) => Promise<void>
-  onUpdateCommissionsStatusMasivo: (ids: number[], nuevoEstado: string) => Promise<void>
+  onUpdateCommissionStatus: (
+    id: number,
+    nuevoEstado: string,
+    tipoCambio?: number,
+  ) => Promise<void>
+  onUpdateCommissionsStatusMasivo: (
+    ids: number[],
+    nuevoEstado: string,
+    tipoCambio?: number,
+  ) => Promise<void>
 }>()
 
 const { t } = useI18n()
@@ -409,6 +420,8 @@ function createInitialUserSummary(
     bonoGrupalUsd: 0,
     totalBonusUsd: 0,
     bonusDetalles: [],
+    isFullyFrozen: false,
+    frozenTcTooltip: null,
   }
 }
 
@@ -582,8 +595,40 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     // Cálculo optimizado de bonos
     calcularBonosEmpleado(item, bonusCtx)
 
-    // Conversión a Pesos MXN
-    item.totalComisionesMxn = Number((item.totalComisionesUsd * tc).toFixed(2))
+    // Conversión a Pesos MXN (utilizando tipo de cambio congelado para comisiones fijadas)
+    let totalMxn = 0
+    const nonRejected = item.comisiones.filter((c) => c.estado !== 'RECHAZADA')
+    const frozenCommissions = nonRejected.filter((c) => c.tipoCambio != null)
+    const isFullyFrozen =
+      nonRejected.length > 0 &&
+      frozenCommissions.length === nonRejected.length &&
+      item.totalBonusUsd === 0
+
+    let frozenTcTooltip: string | null = null
+    if (isFullyFrozen) {
+      const distinctTc = Array.from(new Set(frozenCommissions.map((c) => c.tipoCambio)))
+      if (distinctTc.length === 1 && distinctTc[0] != null) {
+        frozenTcTooltip = t('dashboard.table.exchangeRateUsed', {
+          rate: Number(distinctTc[0]).toFixed(2),
+        })
+      } else {
+        frozenTcTooltip = t('dashboard.table.frozenRateMultiple') || 'Tipo de cambio fijado'
+      }
+    }
+    item.isFullyFrozen = isFullyFrozen
+    item.frozenTcTooltip = frozenTcTooltip
+
+    for (const c of nonRejected) {
+      const cMxn =
+        c.importeComisionMxn != null
+          ? c.importeComisionMxn
+          : (c.importeComisionUsd || 0) * (c.tipoCambio || tc)
+      totalMxn += cMxn
+    }
+    if (item.totalBonusUsd > 0) {
+      totalMxn += item.totalBonusUsd * tc
+    }
+    item.totalComisionesMxn = Number(totalMxn.toFixed(2))
 
     // Estado general del usuario
     item.estadoGeneral = resolveEstadoGeneral(item)
@@ -729,7 +774,7 @@ async function handleBulkReject() {
   })
   if (!ok) return
 
-  await props.onUpdateCommissionsStatusMasivo(ids, 'RECHAZADA')
+  await props.onUpdateCommissionsStatusMasivo(ids, 'RECHAZADA', tipoCambioMxn.value)
   usuariosTableRef.value?.clearSelection()
   selectedUsuarios.value = []
 }
@@ -749,7 +794,7 @@ async function handleBulkPay() {
   })
   if (!ok) return
 
-  await props.onUpdateCommissionsStatusMasivo(ids, 'PAGADA')
+  await props.onUpdateCommissionsStatusMasivo(ids, 'PAGADA', tipoCambioMxn.value)
   usuariosTableRef.value?.clearSelection()
   selectedUsuarios.value = []
 }
@@ -778,7 +823,7 @@ async function handleUserReject(row: EmpleadoComisionResumen) {
     isDanger: true,
   })
   if (ok) {
-    await props.onUpdateCommissionsStatusMasivo(row.pendientesIds, 'RECHAZADA')
+    await props.onUpdateCommissionsStatusMasivo(row.pendientesIds, 'RECHAZADA', tipoCambioMxn.value)
   }
 }
 
@@ -791,7 +836,7 @@ async function handleUserPay(row: EmpleadoComisionResumen) {
     type: 'success',
   })
   if (ok) {
-    await props.onUpdateCommissionsStatusMasivo(row.payableIds, 'PAGADA')
+    await props.onUpdateCommissionsStatusMasivo(row.payableIds, 'PAGADA', tipoCambioMxn.value)
   }
 }
 
@@ -1056,7 +1101,13 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
 
     if (column.label === t('dashboard.table.commissionAmountMxn')) {
       const tc = tipoCambioMxn.value || 1
-      const sum = activeItems.reduce((acc, row) => acc + (row.importeComisionUsd || 0) * tc, 0)
+      const sum = activeItems.reduce((acc, row) => {
+        const mxn =
+          row.importeComisionMxn != null
+            ? row.importeComisionMxn
+            : (row.importeComisionUsd || 0) * (row.tipoCambio || tc)
+        return acc + mxn
+      }, 0)
       return formatMxn(sum)
     }
 
@@ -1413,16 +1464,36 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                   align="right"
                 >
                   <template #default="{ row: subRow }">
-                    <strong
-                      :class="[
-                        subRow.estado === 'RECHAZADA'
-                          ? 'text-muted text-line-through'
-                          : 'text-primary font-medium',
-                      ]"
-                    >
-                      {{ subRow.isBonus ? '+' : ''
-                      }}{{ formatMxn((subRow.importeComisionUsd || 0) * (tipoCambioMxn || 1)) }}
-                    </strong>
+                    <div class="frozen-price-cell">
+                      <el-tooltip
+                        v-if="subRow.tipoCambio"
+                        placement="top"
+                        effect="dark"
+                        :content="$t('dashboard.table.exchangeRateUsed', { rate: Number(subRow.tipoCambio).toFixed(2) })"
+                      >
+                        <span class="frozen-lock-btn">
+                          <el-icon class="lock-icon">
+                            <Lock :size="13" />
+                          </el-icon>
+                        </span>
+                      </el-tooltip>
+                      <strong
+                        :class="[
+                          subRow.estado === 'RECHAZADA'
+                            ? 'text-muted text-line-through'
+                            : 'text-primary font-medium',
+                        ]"
+                      >
+                        {{ subRow.isBonus ? '+' : ''
+                        }}{{
+                          formatMxn(
+                            subRow.importeComisionMxn != null
+                              ? subRow.importeComisionMxn
+                              : (subRow.importeComisionUsd || 0) * (subRow.tipoCambio || tipoCambioMxn || 1)
+                          )
+                        }}
+                      </strong>
+                    </div>
                   </template>
                 </el-table-column>
 
@@ -1458,7 +1529,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                           type="danger"
                           size="small"
                           class="action-btn"
-                          @click.stop="onUpdateCommissionStatus(subRow.id, 'RECHAZADA')"
+                          @click.stop="onUpdateCommissionStatus(subRow.id, 'RECHAZADA', tipoCambioMxn)"
                         >
                           {{ $t('dashboard.reject') }}
                         </el-button>
@@ -1468,7 +1539,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                         type="success"
                         size="small"
                         class="action-btn"
-                        @click.stop="onUpdateCommissionStatus(subRow.id, 'PAGADA')"
+                        @click.stop="onUpdateCommissionStatus(subRow.id, 'PAGADA', tipoCambioMxn)"
                       >
                         {{ $t('dashboard.pay') }}
                       </el-button>
@@ -1717,9 +1788,23 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
           class-name="col-highlighted"
         >
           <template #default="{ row }">
-            <strong class="text-primary font-bold">
-              {{ formatMxn(row.totalComisionesMxn) }}
-            </strong>
+            <div class="frozen-price-cell">
+              <el-tooltip
+                v-if="row.isFullyFrozen && row.frozenTcTooltip"
+                placement="top"
+                effect="dark"
+                :content="row.frozenTcTooltip"
+              >
+                <span class="frozen-lock-btn">
+                  <el-icon class="lock-icon">
+                    <Lock :size="14" />
+                  </el-icon>
+                </span>
+              </el-tooltip>
+              <strong class="text-primary font-bold">
+                {{ formatMxn(row.totalComisionesMxn) }}
+              </strong>
+            </div>
           </template>
         </el-table-column>
 
@@ -2070,6 +2155,31 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
   align-items: center;
   justify-content: flex-end;
   gap: 6px;
+}
+
+.frozen-price-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.frozen-lock-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: auto;
+  cursor: pointer;
+  color: var(--el-color-info, #909399);
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+}
+
+.frozen-lock-btn:hover {
+  color: var(--el-color-primary, #409eff);
+  background-color: var(--el-color-primary-light-9, rgba(64, 158, 255, 0.1));
+  transform: scale(1.1);
 }
 
 /* Fila de Separador y Filas de Bonus en Tabla Anidada */

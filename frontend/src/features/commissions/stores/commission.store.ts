@@ -184,18 +184,25 @@ export const useCommissionStore = defineStore('commission', () => {
     }
   }
 
-  async function updateEstadoComision(id: number, estado: string) {
+  async function updateEstadoComision(id: number, estado: string, tipoCambio?: number) {
     try {
+      const payload: { estado: string; tipoCambio?: number } = { estado }
+      if (typeof tipoCambio === 'number' && tipoCambio > 0) {
+        payload.tipoCambio = tipoCambio
+      }
+
       const res = await fetch(`${API_URL}/comisiones/${id}/estado`, {
         method: 'PATCH',
         headers: getHeaders(true),
-        body: JSON.stringify({ estado }),
+        body: JSON.stringify(payload),
       })
       if (!res.ok) throw new Error('Error al actualizar el estado de la comisión')
       const updated = await res.json()
       const index = comisiones.value.findIndex((c) => c.id === id)
       if (index !== -1 && comisiones.value[index]) {
-        comisiones.value[index]!.estado = estado
+        comisiones.value[index]!.estado = updated.estado ?? estado
+        comisiones.value[index]!.tipoCambio = updated.tipoCambio ?? null
+        comisiones.value[index]!.importeComisionMxn = updated.importeComisionMxn ?? null
       }
       return updated
     } catch (err: unknown) {
@@ -204,12 +211,17 @@ export const useCommissionStore = defineStore('commission', () => {
     }
   }
 
-  async function updateEstadoMasivo(ids: number[], estado: string) {
+  async function updateEstadoMasivo(ids: number[], estado: string, tipoCambio?: number) {
     try {
+      const payload: { ids: number[]; estado: string; tipoCambio?: number } = { ids, estado }
+      if (typeof tipoCambio === 'number' && tipoCambio > 0) {
+        payload.tipoCambio = tipoCambio
+      }
+
       const res = await fetch(`${API_URL}/comisiones/estado-masivo`, {
         method: 'PATCH',
         headers: getHeaders(true),
-        body: JSON.stringify({ ids, estado }),
+        body: JSON.stringify(payload),
       })
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}))
@@ -222,6 +234,14 @@ export const useCommissionStore = defineStore('commission', () => {
       for (const c of comisiones.value) {
         if (idSet.has(c.id)) {
           c.estado = estado
+          if (['PAGADA', 'RECHAZADA'].includes(estado)) {
+            const tc = typeof tipoCambio === 'number' && tipoCambio > 0 ? tipoCambio : c.tipoCambio || 18.0
+            c.tipoCambio = tc
+            c.importeComisionMxn = Math.round((c.importeComisionUsd || 0) * tc * 100) / 100
+          } else {
+            c.tipoCambio = null
+            c.importeComisionMxn = null
+          }
         }
       }
       return data

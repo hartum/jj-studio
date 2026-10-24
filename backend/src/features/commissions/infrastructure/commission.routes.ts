@@ -466,6 +466,8 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         porcentajeAplicado: c.porcentajeAplicado,
         baseCalculoUsd: c.baseCalculoUsd,
         importeComisionUsd: c.importeComisionUsd,
+        tipoCambio: c.tipoCambio,
+        importeComisionMxn: c.importeComisionMxn,
         estado: c.estado,
         fechaVenta: c.fechaVenta.toISOString().slice(0, 10),
         clienteNombre:
@@ -492,7 +494,7 @@ export async function commissionRoutes(fastify: FastifyInstance) {
   fastify.patch('/api/comisiones/:id/estado', async (request, reply) => {
     try {
       const id = Number((request.params as any).id)
-      const { estado } = request.body as { estado: string }
+      const { estado, tipoCambio } = request.body as { estado: string; tipoCambio?: number }
 
       const userId = getAuthUserId(request)
       if (!userId) return reply.status(401).send({ error: 'No autenticado' })
@@ -530,9 +532,29 @@ export async function commissionRoutes(fastify: FastifyInstance) {
       }
 
       const estadoAnterior = existing.estado
+      let updateData: any = { estado }
+      if (['PAGADA', 'RECHAZADA'].includes(estado)) {
+        const tc =
+          typeof tipoCambio === 'number' && tipoCambio > 0
+            ? tipoCambio
+            : existing.tipoCambio || 18.0
+        const importeMxn = Math.round(existing.importeComisionUsd * tc * 100) / 100
+        updateData = {
+          estado,
+          tipoCambio: tc,
+          importeComisionMxn: importeMxn,
+        }
+      } else {
+        updateData = {
+          estado,
+          tipoCambio: null,
+          importeComisionMxn: null,
+        }
+      }
+
       const updated = await prisma.comision.update({
         where: { id },
-        data: { estado },
+        data: updateData,
       })
 
       if (estadoAnterior !== estado) {
@@ -587,7 +609,11 @@ export async function commissionRoutes(fastify: FastifyInstance) {
   // PATCH /api/comisiones/estado-masivo - Actualización masiva de estado de comisiones
   fastify.patch('/api/comisiones/estado-masivo', async (request, reply) => {
     try {
-      const { ids, estado } = request.body as { ids?: number[]; estado: string }
+      const { ids, estado, tipoCambio } = request.body as {
+        ids?: number[]
+        estado: string
+        tipoCambio?: number
+      }
 
       const userId = getAuthUserId(request)
       if (!userId) return reply.status(401).send({ error: 'No autenticado' })
@@ -637,12 +663,34 @@ export async function commissionRoutes(fastify: FastifyInstance) {
 
       const idsToUpdate = comisionesToUpdate.map((c) => c.id)
 
-      const result = await prisma.comision.updateMany({
-        where: {
-          id: { in: idsToUpdate },
-        },
-        data: { estado },
-      })
+      if (['PAGADA', 'RECHAZADA'].includes(estado)) {
+        const tc = typeof tipoCambio === 'number' && tipoCambio > 0 ? tipoCambio : 18.0
+        await Promise.all(
+          comisionesToUpdate.map((c) =>
+            prisma.comision.update({
+              where: { id: c.id },
+              data: {
+                estado,
+                tipoCambio: tc,
+                importeComisionMxn: Math.round(c.importeComisionUsd * tc * 100) / 100,
+              },
+            }),
+          ),
+        )
+      } else {
+        await prisma.comision.updateMany({
+          where: {
+            id: { in: idsToUpdate },
+          },
+          data: {
+            estado,
+            tipoCambio: null,
+            importeComisionMxn: null,
+          },
+        })
+      }
+
+      const count = idsToUpdate.length
 
       const totalUsd = comisionesToUpdate.reduce((sum, c) => sum + c.importeComisionUsd, 0)
       const hotelNames = Array.from(new Set(comisionesToUpdate.map((c) => c.hotel?.nombre).filter(Boolean)))
@@ -659,19 +707,19 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         entidad: 'COMISION',
         usuarioId: userId,
         hotelId: hotelIds.length === 1 ? hotelIds[0] : undefined,
-        descripcion: `${descAccion} (${result.count} registros, $${totalUsd.toFixed(2)} USD)`,
-        contexto: `Actualización en lote a estado ${estado} de ${result.count} comisiones en: ${hotelNames.join(', ') || 'Varios hoteles'}`,
+        descripcion: `${descAccion} (${count} registros, $${totalUsd.toFixed(2)} USD)`,
+        contexto: `Actualización en lote a estado ${estado} de ${count} comisiones en: ${hotelNames.join(', ') || 'Varios hoteles'}`,
         ipAddress: request.ip,
         metadatos: {
           estadoNuevo: estado,
-          totalComisionesActualizadas: result.count,
+          totalComisionesActualizadas: count,
           totalImporteUsd: Math.round(totalUsd * 100) / 100,
           hoteles: hotelNames.join(', '),
           comisionesIds: idsToUpdate.slice(0, 50),
         },
       })
 
-      return reply.send({ success: true, count: result.count })
+      return reply.send({ success: true, count })
     } catch (err: unknown) {
       fastify.log.error(err)
       const message =

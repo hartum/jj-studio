@@ -336,7 +336,9 @@
       "includedInOtherCommissions": "Included in Other Commissions column",
       "voucherFolio": "Folio / Misc.",
       "noVoucherFolio": "No #",
-      "hotels": "Hotels"
+      "hotels": "Hotels",
+      "exchangeRateUsed": "Exchange rate used: ${rate} MXN",
+      "frozenRateMultiple": "Settled commissions with frozen exchange rate"
     },
     "trafficLightLabels": {
       "noGoal": "Goal not set",

@@ -41,6 +41,8 @@ export interface Comision {
   porcentajeAplicado: number
   baseCalculoUsd: number
   importeComisionUsd: number
+  tipoCambio?: number | null
+  importeComisionMxn?: number | null
   estado: 'PENDIENTE' | 'APROBADA' | 'PAGADA' | 'RECHAZADA' | string
   fechaVenta: string
   clienteNombre?: string

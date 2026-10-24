@@ -1070,9 +1070,9 @@ export function useDashboard() {
 
   const globalMonthlyCommissions = computed(() => commissionStore.resumen?.totalComisionesUsd || 0)
 
-  async function handleUpdateCommissionStatus(id: number, nuevoEstado: string) {
+  async function handleUpdateCommissionStatus(id: number, nuevoEstado: string, tipoCambio?: number) {
     try {
-      await commissionStore.updateEstadoComision(id, nuevoEstado)
+      await commissionStore.updateEstadoComision(id, nuevoEstado, tipoCambio)
       if (nuevoEstado === 'PENDIENTE') {
         ElMessage.success(t('dashboard.commissionRestoredSuccess'))
       } else {
@@ -1089,10 +1089,14 @@ export function useDashboard() {
     }
   }
 
-  async function handleUpdateCommissionsStatusMasivo(ids: number[], nuevoEstado: string) {
+  async function handleUpdateCommissionsStatusMasivo(
+    ids: number[],
+    nuevoEstado: string,
+    tipoCambio?: number,
+  ) {
     if (!ids || ids.length === 0) return
     try {
-      await commissionStore.updateEstadoMasivo(ids, nuevoEstado)
+      await commissionStore.updateEstadoMasivo(ids, nuevoEstado, tipoCambio)
       ElMessage.success(
         t('dashboard.bulkUpdateSuccess', {
           count: ids.length,

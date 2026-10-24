@@ -299,7 +299,9 @@ model Comision {
   porcentajeAplicado Float     @map("porcentaje_aplicado")
   baseCalculoUsd     Float     @map("base_calculo_usd")
   importeComisionUsd Float     @map("importe_comision_usd")
-  estado             String    @default("PENDIENTE") // "PENDIENTE" | "APROBADA" | "PAGADA"
+  tipoCambio         Float?    @map("tipo_cambio")
+  importeComisionMxn Float?    @map("importe_comision_mxn")
+  estado             String    @default("PENDIENTE") // "PENDIENTE" | "APROBADA" | "PAGADA" | "RECHAZADA"
   fechaVenta         DateTime  @map("fecha_venta")
   createdAt          DateTime  @default(now()) @map("created_at")
   updatedAt          DateTime  @updatedAt @map("updated_at")

@@ -336,7 +336,9 @@
       "includedInOtherCommissions": "Incluido en columna Otras Comisiones",
       "voucherFolio": "Folio / Misc.",
       "noVoucherFolio": "Sin nº",
-      "hotels": "Hoteles"
+      "hotels": "Hoteles",
+      "exchangeRateUsed": "Tipo de cambio usado: ${rate} MXN",
+      "frozenRateMultiple": "Comisiones liquidadas con tipo de cambio fijado"
     },
     "trafficLightLabels": {
       "noGoal": "Meta no definida",
