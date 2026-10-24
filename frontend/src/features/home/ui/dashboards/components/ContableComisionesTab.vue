@@ -80,6 +80,7 @@ export interface EmpleadoComisionResumen {
   // Congelamiento de precios
   isFullyFrozen?: boolean
   frozenTcTooltip?: string | null
+  frozenSingleRate?: number | null
 }
 
 const props = defineProps<{
@@ -422,6 +423,7 @@ function createInitialUserSummary(
     bonusDetalles: [],
     isFullyFrozen: false,
     frozenTcTooltip: null,
+    frozenSingleRate: null,
   }
 }
 
@@ -624,9 +626,11 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
       frozenCommissions.length === nonRejected.length
 
     let frozenTcTooltip: string | null = null
+    let frozenSingleRate: number | null = null
     if (isFullyFrozen) {
       const distinctTc = Array.from(new Set(frozenCommissions.map((c) => c.tipoCambio)))
       if (distinctTc.length === 1 && distinctTc[0] != null) {
+        frozenSingleRate = Number(distinctTc[0])
         frozenTcTooltip = t('dashboard.table.exchangeRateUsed', {
           rate: Number(distinctTc[0]).toFixed(2),
         })
@@ -636,6 +640,7 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     }
     item.isFullyFrozen = isFullyFrozen
     item.frozenTcTooltip = frozenTcTooltip
+    item.frozenSingleRate = frozenSingleRate
 
     for (const c of nonRejected) {
       const cMxn =
@@ -1534,8 +1539,14 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                         v-if="subRow.tipoCambio"
                         placement="top"
                         effect="dark"
-                        :content="$t('dashboard.table.exchangeRateUsed', { rate: Number(subRow.tipoCambio).toFixed(2) })"
+                        popper-class="lock-rate-popper"
                       >
+                        <template #content>
+                          <div class="lock-tooltip-content">
+                            <div class="lock-tooltip-title">{{ $t('dashboard.table.exchangeRateUsedTitle') }}</div>
+                            <div class="lock-tooltip-rate">${{ Number(subRow.tipoCambio).toFixed(2) }} MXN</div>
+                          </div>
+                        </template>
                         <span class="frozen-lock-btn">
                           <el-icon class="lock-icon">
                             <Lock :size="13" />
@@ -1858,8 +1869,17 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                 v-if="row.isFullyFrozen && row.frozenTcTooltip"
                 placement="top"
                 effect="dark"
-                :content="row.frozenTcTooltip"
+                popper-class="lock-rate-popper"
               >
+                <template #content>
+                  <div v-if="row.frozenSingleRate" class="lock-tooltip-content">
+                    <div class="lock-tooltip-title">{{ $t('dashboard.table.exchangeRateUsedTitle') }}</div>
+                    <div class="lock-tooltip-rate">${{ row.frozenSingleRate.toFixed(2) }} MXN</div>
+                  </div>
+                  <div v-else class="lock-tooltip-content">
+                    {{ row.frozenTcTooltip }}
+                  </div>
+                </template>
                 <span class="frozen-lock-btn">
                   <el-icon class="lock-icon">
                     <Lock :size="14" />
@@ -2359,6 +2379,34 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
 .el-popper.award-bonus-popper .award-bonus-amount {
   font-size: 13px;
   font-weight: 700;
+  white-space: nowrap !important;
+  margin-top: 2px;
+}
+
+.el-popper.lock-rate-popper {
+  min-width: 160px !important;
+  width: max-content !important;
+  max-width: 220px !important;
+  text-align: center !important;
+  padding: 6px 10px !important;
+}
+
+.el-popper.lock-rate-popper .lock-tooltip-content {
+  text-align: center;
+  line-height: 1.35;
+}
+
+.el-popper.lock-rate-popper .lock-tooltip-title {
+  font-size: 11px;
+  font-weight: 500;
+  color: #cbd5e1;
+  white-space: nowrap !important;
+}
+
+.el-popper.lock-rate-popper .lock-tooltip-rate {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
   white-space: nowrap !important;
   margin-top: 2px;
 }

@@ -338,6 +338,7 @@
       "noVoucherFolio": "No #",
       "hotels": "Hotels",
       "exchangeRateUsed": "Exchange rate used: ${rate} MXN",
+      "exchangeRateUsedTitle": "Exchange rate used:",
       "frozenRateMultiple": "Settled commissions with frozen exchange rate"
     },
     "trafficLightLabels": {

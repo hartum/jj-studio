@@ -338,6 +338,7 @@
       "noVoucherFolio": "Sin nº",
       "hotels": "Hoteles",
       "exchangeRateUsed": "Tipo de cambio usado: ${rate} MXN",
+      "exchangeRateUsedTitle": "Tipo de cambio usado:",
       "frozenRateMultiple": "Comisiones liquidadas con tipo de cambio fijado"
     },
     "trafficLightLabels": {
