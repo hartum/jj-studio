@@ -85,18 +85,18 @@
     "semantic_hash": "cf8cd866d45ae3dfd5e008bbbeef80d5"
   },
   "backend/src/features/commissions/application/commission.service.ts": {
-    "mtime": 1792876649.2750397,
-    "ast_hash": "b77fad148a4f44ff5ce478851fa9632b",
+    "mtime": 1792882058.6744804,
+    "ast_hash": "260f0e22af648f4b43d6e15c1ca8f6f8",
     "semantic_hash": ""
   },
   "backend/src/features/commissions/domain/commission.model.ts": {
-    "mtime": 1792876588.2446568,
-    "ast_hash": "a88e59be9889fc955b6eb59411759e68",
+    "mtime": 1792882071.3414207,
+    "ast_hash": "6415804cd05e7561492393b5bafb3047",
     "semantic_hash": ""
   },
   "backend/src/features/commissions/infrastructure/commission.routes.ts": {
-    "mtime": 1792880691.075603,
-    "ast_hash": "51b9e04a520b5435284127efa3cf427c",
+    "mtime": 1792881992.2058744,
+    "ast_hash": "dcd72889dd918cda54be344b5195da9a",
     "semantic_hash": ""
   },
   "backend/src/features/countries/infrastructure/country.routes.ts": {
@@ -290,8 +290,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/commissions/domain/commission.model.ts": {
-    "mtime": 1792880721.1181557,
-    "ast_hash": "d1be774214745ec566b3b0edc4e81a2e",
+    "mtime": 1792882114.706742,
+    "ast_hash": "ebdc12b85dbab352b44b5199a62264c3",
     "semantic_hash": ""
   },
   "frontend/src/features/commissions/stores/commission.store.ts": {
@@ -1075,13 +1075,18 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1792881329.2987287,
-    "ast_hash": "594b269921cec6d1452e0592d6931f0b",
+    "mtime": 1792882392.9388635,
+    "ast_hash": "2c620e49fa3ee10b51575af0478d8847",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {
     "mtime": 1792708837.0032055,
     "ast_hash": "6787bacd425882243c2f460e3365f121",
+    "semantic_hash": ""
+  },
+  "backend/src/features/commissions/application/bonus-sync.service.ts": {
+    "mtime": 1792883603.3517432,
+    "ast_hash": "8ba0ed22d52417b91ffa09d8940c19c0",
     "semantic_hash": ""
   }
 }
