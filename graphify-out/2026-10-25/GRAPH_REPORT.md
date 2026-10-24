@@ -1,16 +1,16 @@
 # Graph Report - JJ Studio  (2026-10-25)
 
 ## Corpus Check
-- 155 files · ~273,011 words
+- 156 files · ~274,110 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1481 nodes · 1991 edges · 107 communities (86 shown, 21 thin omitted)
+- 1483 nodes · 2005 edges · 106 communities (85 shown, 21 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e26d27ff`
+- Built from commit: `28454396`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -112,20 +112,19 @@
 - useLocale.ts
 - calendario-laboral.routes.ts
 - auth.store.ts
-- email.service.ts
 - HotelCalendarView.vue
 
 ## God Nodes (most connected - your core abstractions)
 1. `vue` - 66 edges
-2. `prisma` - 25 edges
+2. `prisma` - 26 edges
 3. `decryptUser()` - 22 edges
 4. `encrypt()` - 20 edges
 5. `decrypt()` - 18 edges
 6. `Detalles Acordados sobre el Perfil de Fotógrafos y Reglas de Comisiones` - 15 edges
 7. `blindIndex()` - 14 edges
-8. `syncSesionToGoogle()` - 13 edges
-9. `syncCitaVentaToGoogle()` - 11 edges
-10. `compilerOptions` - 11 edges
+8. `commissionRoutes()` - 13 edges
+9. `syncSesionToGoogle()` - 13 edges
+10. `syncCitaVentaToGoogle()` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `sessionRoutes()` --calls--> `syncSesionToGoogle()`  [EXTRACTED]
@@ -142,10 +141,10 @@
 ## Import Cycles
 - None detected.
 
-## Communities (107 total, 21 thin omitted)
+## Communities (106 total, 21 thin omitted)
 
 ### Community 0 - "encryption.ts"
-Cohesion: 0.21
+Cohesion: 0.20
 Nodes (18): main(), prisma, seedUser(), migrateAll(), migrateSessions(), migrateUsers(), testCrypto(), testPasswordResetFlow() (+10 more)
 
 ### Community 1 - "dependencies"
@@ -356,8 +355,8 @@ Nodes (30): AreaGroup, CountryGroup, {
 }, router, commissionStore, ContableHotelSummary (+22 more)
 
 ### Community 41 - "commission.service.ts"
-Cohesion: 0.17
-Nodes (19): calculateAndSaveCommissionsForSale(), calculateUserCommission(), DEFAULT_GLOBAL_CONFIG, deleteUserCommissionConfig(), getAllCommissionConfigs(), getAllUserCommissionConfigs(), getEffectiveCommissionConfig(), getResumenComisiones() (+11 more)
+Cohesion: 0.19
+Nodes (20): syncMonthlyBonuses(), calculateAndSaveCommissionsForSale(), calculateUserCommission(), DEFAULT_GLOBAL_CONFIG, deleteUserCommissionConfig(), getAllCommissionConfigs(), getAllUserCommissionConfigs(), getEffectiveCommissionConfig() (+12 more)
 
 ### Community 42 - "frontend/src/features/goals/domain/goal.model.ts"
 Cohesion: 0.25
@@ -484,8 +483,8 @@ Cohesion: 0.36
 Nodes (9): deriveModoCobro(), findConflicts(), getAllowedHotelIds(), getAuthUserId(), getUserRole(), PagoInput, parseDateOnly(), parseLocalDateTime() (+1 more)
 
 ### Community 98 - "user.routes.ts"
-Cohesion: 0.33
-Nodes (8): getAuthUser(), userRoutes(), canDeleteUser(), canEditUser(), getRolePermissions(), PERMISSION_MATRIX, RoleCode, RoleConfig
+Cohesion: 0.21
+Nodes (13): getAuthUser(), userRoutes(), escapeHtml(), getAppBaseUrl(), getMailTransporter(), sendPasswordResetEmail(), SendPasswordResetParams, canDeleteUser() (+5 more)
 
 ### Community 99 - "GoalProgressCard.vue"
 Cohesion: 0.20
@@ -503,12 +502,8 @@ Nodes (3): EP_LOCALES, FC_LOCALES, SupportedLocale
 Cohesion: 0.83
 Nodes (3): calendarioLaboralRoutes(), formatDateToIsoString(), parseDateOnly()
 
-### Community 104 - "email.service.ts"
-Cohesion: 0.53
-Nodes (5): escapeHtml(), getAppBaseUrl(), getMailTransporter(), sendPasswordResetEmail(), SendPasswordResetParams
-
 ## Knowledge Gaps
-- **778 isolated node(s):** `PhotographerHotelData`, `MONTH_KEYS`, `ContableHotelSummary`, `ContableAreaSummary`, `BonusDetalle` (+773 more)
+- **778 isolated node(s):** `DEFAULT_GLOBAL_CONFIG`, `ComisionDTO`, `ContableHotelSummary`, `ContableAreaSummary`, `BonusDetalle` (+773 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -519,7 +514,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.402) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
   _High betweenness centrality (0.011) - this node is a cross-community bridge._
-- **What connects `PhotographerHotelData`, `MONTH_KEYS`, `ContableHotelSummary` to the rest of the system?**
+- **What connects `DEFAULT_GLOBAL_CONFIG`, `ComisionDTO`, `ContableHotelSummary` to the rest of the system?**
   _778 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
