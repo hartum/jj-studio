@@ -285,42 +285,71 @@ function calcularBonosEmpleado(
   }
 
   // 2. Bono Grupal (Meta colectiva del hotel para este año y mes)
+  // Se reparte exclusivamente entre fotógrafos, agendadores/vendedores y supervisores.
+  // Gerentes, administradores, superusuarios y contables NO participan en el bono grupal.
+  const ROLES_ELEGIBLES_BONO_GRUPAL = ['FOTOGRAFO', 'AGENDADOR', 'VENDEDOR', 'SUPERVISOR']
+  const ROLES_EXCLUIDOS_BONO_GRUPAL = [
+    'GERENTE',
+    'ADMIN',
+    'ADMINISTRADOR',
+    'SUPERUSUARIO',
+    'SUPERUSER',
+    'CONTABLE',
+  ]
+
   const uProfile = ctx.userProfileMap.get(item.usuarioId)
-  const userHotelSet = new Set(uProfile?.hotelIds || [])
+  const userRoleCode = (uProfile?.perfil?.code || '').toUpperCase()
+  const userRoleName = (uProfile?.perfil?.name || '').toUpperCase()
 
-  for (const metaHotel of ctx.hotelMetasConBono) {
-    const userAssignedHotel = userHotelSet.has(metaHotel.hotelId)
-    const userHasSalesInHotel = item.comisiones.some((c) => c.hotelId === metaHotel.hotelId)
+  const tieneRolExcluido =
+    ROLES_EXCLUIDOS_BONO_GRUPAL.includes(userRoleCode) ||
+    ROLES_EXCLUIDOS_BONO_GRUPAL.includes(userRoleName) ||
+    (item.roles.length > 0 &&
+      item.roles.every((r) => ROLES_EXCLUIDOS_BONO_GRUPAL.includes(r.toUpperCase())))
 
-    if (userAssignedHotel || userHasSalesInHotel) {
-      const metaImporte = Number(metaHotel.importeObjetivo) || 0
-      const valorBonoTotal = Number(metaHotel.valorBonus) || 0
-      const ventasHotel = ctx.ventasUnicasPorHotel.get(metaHotel.hotelId) || 0
-      const hotelProg = goalStore.progresoHoteles.find((p) => p.hotelId === metaHotel.hotelId)
+  const esElegibleBonoGrupal =
+    !tieneRolExcluido &&
+    (ROLES_ELEGIBLES_BONO_GRUPAL.includes(userRoleCode) ||
+      ROLES_ELEGIBLES_BONO_GRUPAL.includes(userRoleName) ||
+      item.roles.some((r) => ROLES_ELEGIBLES_BONO_GRUPAL.includes(r.toUpperCase())))
 
-      const alcanzoBono =
-        (metaImporte > 0 && ventasHotel >= metaImporte) ||
-        Boolean(hotelProg?.alcanzoBonoGrupal) ||
-        (props.selectedHotelFilters.length === 0 &&
-          metaImporte > 0 &&
-          ctx.totalVentasPeriodo >= metaImporte)
+  if (esElegibleBonoGrupal) {
+    const userHotelSet = new Set(uProfile?.hotelIds || [])
 
-      if (alcanzoBono && valorBonoTotal > 0) {
-        const teamCount = ctx.teamCountPorHotel.get(metaHotel.hotelId) || 2
-        const share = Number((valorBonoTotal / teamCount).toFixed(2))
-        item.bonoGrupalUsd += share
-        const hotelNom =
-          metaHotel.hotelNombre ||
-          props.contableHotels.find((h) => h.id === metaHotel.hotelId)?.nombre ||
-          `Hotel #${metaHotel.hotelId}`
-        item.bonusDetalles.push({
-          tipo: 'GRUPAL',
-          hotelNombre: hotelNom,
-          metaObjetivo: metaImporte,
-          ventasAlcanzadas: Math.max(ventasHotel, ctx.totalVentasPeriodo),
-          montoBonus: share,
-          descripcion: `${t('dashboard.table.groupBonus')} (${hotelNom}): Meta de ${formatCurrency(metaImporte, 2)} alcanzada (${formatCurrency(valorBonoTotal, 2)} ÷ ${teamCount} colaboradores)`,
-        })
+    for (const metaHotel of ctx.hotelMetasConBono) {
+      const userAssignedHotel = userHotelSet.has(metaHotel.hotelId)
+      const userHasSalesInHotel = item.comisiones.some((c) => c.hotelId === metaHotel.hotelId)
+
+      if (userAssignedHotel || userHasSalesInHotel) {
+        const metaImporte = Number(metaHotel.importeObjetivo) || 0
+        const valorBonoTotal = Number(metaHotel.valorBonus) || 0
+        const ventasHotel = ctx.ventasUnicasPorHotel.get(metaHotel.hotelId) || 0
+        const hotelProg = goalStore.progresoHoteles.find((p) => p.hotelId === metaHotel.hotelId)
+
+        const alcanzoBono =
+          (metaImporte > 0 && ventasHotel >= metaImporte) ||
+          Boolean(hotelProg?.alcanzoBonoGrupal) ||
+          (props.selectedHotelFilters.length === 0 &&
+            metaImporte > 0 &&
+            ctx.totalVentasPeriodo >= metaImporte)
+
+        if (alcanzoBono && valorBonoTotal > 0) {
+          const teamCount = ctx.teamCountPorHotel.get(metaHotel.hotelId) || 2
+          const share = Number((valorBonoTotal / teamCount).toFixed(2))
+          item.bonoGrupalUsd += share
+          const hotelNom =
+            metaHotel.hotelNombre ||
+            props.contableHotels.find((h) => h.id === metaHotel.hotelId)?.nombre ||
+            `Hotel #${metaHotel.hotelId}`
+          item.bonusDetalles.push({
+            tipo: 'GRUPAL',
+            hotelNombre: hotelNom,
+            metaObjetivo: metaImporte,
+            ventasAlcanzadas: Math.max(ventasHotel, ctx.totalVentasPeriodo),
+            montoBonus: share,
+            descripcion: `${t('dashboard.table.groupBonus')} (${hotelNom}): Meta de ${formatCurrency(metaImporte, 2)} alcanzada (${formatCurrency(valorBonoTotal, 2)} ÷ ${teamCount} colaboradores)`,
+          })
+        }
       }
     }
   }
@@ -478,7 +507,7 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
             u.status === 'Activo' &&
             (u.hotelIds || []).includes(metaHotel.hotelId) &&
             ['FOTOGRAFO', 'SUPERVISOR', 'AGENDADOR', 'VENDEDOR'].includes(
-              u.perfil?.code || u.perfil?.name || '',
+              (u.perfil?.code || u.perfil?.name || '').toUpperCase(),
             ),
         ).length ||
         2,
@@ -988,13 +1017,7 @@ const totalComisionesLiquidables = computed(() => {
             <el-icon><Money /></el-icon>
           </div>
           <div class="stat-content">
-            <span class="stat-label">
-              {{
-                $t('dashboard.commissionsToSettle', {
-                  period: `${commissionDateRange[0]} a ${commissionDateRange[1]}`,
-                })
-              }}
-            </span>
+            <span class="stat-label">{{ $t('dashboard.commissionsToSettle') }}</span>
             <span class="stat-value text-success">
               {{ formatCurrency(totalComisionesLiquidables, 2) }}
             </span>

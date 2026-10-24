@@ -193,3 +193,15 @@ body {
     overflow-x: auto;
   }
 }
+
+/* Tooltip más ancho y legible para el menú lateral colapsado */
+.el-popper.is-dark.sidebar-nav-popper,
+.el-popper.sidebar-nav-popper {
+  max-width: 280px !important;
+  min-width: 140px;
+  padding: 8px 14px !important;
+  font-size: 0.88rem !important;
+  line-height: 1.35 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+}

@@ -11,7 +11,17 @@ import LanguageSelector from '@/components/LanguageSelector.vue'
 import AvatarCropperDialog from '@/features/users/ui/AvatarCropperDialog.vue'
 import logoJJ from '@/assets/logoJJ.png'
 import { useLocale } from '@/i18n/useLocale'
-import { Sunny, Moon, SwitchButton, Menu, Close, Camera, Upload, Delete } from '@element-plus/icons-vue'
+import {
+  Sunny,
+  Moon,
+  SwitchButton,
+  Menu,
+  Close,
+  Camera,
+  Upload,
+  Delete,
+  Expand,
+} from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
 const { elementPlusLocale, t } = useLocale()
@@ -27,6 +37,12 @@ const isFullScreenAuthPage = computed(
 )
 const isDark = ref(false)
 const isMobileDrawerOpen = ref(false)
+const isSidebarCollapsed = ref(localStorage.getItem('jj_sidebar_collapsed') === 'true')
+
+function toggleSidebar() {
+  isSidebarCollapsed.value = !isSidebarCollapsed.value
+  localStorage.setItem('jj_sidebar_collapsed', String(isSidebarCollapsed.value))
+}
 
 // Estados para cambio de foto de perfil
 const avatarFileInput = ref<HTMLInputElement | null>(null)
@@ -201,16 +217,34 @@ onMounted(async () => {
     <!-- Vista Principal de la App con Sidebar y Toolbar -->
     <div v-else class="app-container">
       <!-- Menú lateral izquierdo (Desktop) -->
-      <aside class="sidebar desktop-sidebar">
+      <aside class="sidebar desktop-sidebar" :class="{ 'is-collapsed': isSidebarCollapsed }">
         <div class="brand">
-          <div class="brand-info">
+          <div class="brand-info" v-if="!isSidebarCollapsed">
             <img :src="logoJJ" alt="Logo JJ Studio" class="brand-logo" />
             <span class="brand-title">JJ Studio</span>
           </div>
+          <div v-else class="brand-logo-only" :title="'JJ Studio'">
+            <img :src="logoJJ" alt="Logo JJ Studio" class="brand-logo" />
+          </div>
+
+          <el-tooltip
+            :content="isSidebarCollapsed ? t('nav.expandMenu') : t('nav.collapseMenu')"
+            placement="right"
+            popper-class="sidebar-nav-popper"
+          >
+            <el-button
+              circle
+              size="small"
+              class="collapse-btn"
+              :icon="isSidebarCollapsed ? Expand : Close"
+              @click="toggleSidebar"
+              :aria-label="isSidebarCollapsed ? t('nav.expandMenu') : t('nav.collapseMenu')"
+            />
+          </el-tooltip>
         </div>
 
-        <div class="sidebar-lang-wrapper">
-          <LanguageSelector full-width />
+        <div class="sidebar-lang-wrapper" :class="{ 'is-collapsed': isSidebarCollapsed }">
+          <LanguageSelector :full-width="!isSidebarCollapsed" :compact="isSidebarCollapsed" />
         </div>
 
         <SidebarNav
@@ -218,6 +252,7 @@ onMounted(async () => {
           :can-see-config="canSeeConfig"
           :can-see-users="canSeeUsers"
           :filtered-countries-tree="filteredCountriesTree"
+          :collapsed="isSidebarCollapsed"
           @select-hotel="handleSelectHotelNode"
         />
       </aside>
@@ -377,16 +412,52 @@ onMounted(async () => {
 .sidebar {
   width: 250px;
   min-width: 250px;
+  height: 100%;
   background-color: var(--sidebar-bg, #ffffff);
   border-right: 1px solid var(--sidebar-border, #e2e8f0);
   display: flex;
   flex-direction: column;
   padding: 1.5rem 1rem;
   z-index: 10;
-  overflow-y: auto;
+  overflow: hidden;
   transition:
+    width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.25s cubic-bezier(0.4, 0, 0.2, 1),
     background-color 0.2s ease,
     border-color 0.2s ease;
+}
+
+.desktop-sidebar.is-collapsed {
+  width: 72px;
+  min-width: 72px;
+  padding: 1.25rem 0.5rem;
+}
+
+.desktop-sidebar.is-collapsed .brand {
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 0 1rem 0;
+  align-items: center;
+}
+
+.desktop-sidebar.is-collapsed .brand-logo-only {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.collapse-btn {
+  border: 1px solid var(--sidebar-border, #e2e8f0);
+  background: var(--toolbar-bg, #ffffff);
+  color: var(--nav-link-color, #64748b);
+  transition: all 0.2s ease;
+}
+
+.collapse-btn:hover {
+  color: var(--color-primary, #409eff);
+  border-color: var(--color-primary, #409eff);
+  background-color: var(--nav-link-hover-bg, #f1f5f9);
 }
 
 .brand {
@@ -403,6 +474,11 @@ onMounted(async () => {
 .sidebar-lang-wrapper {
   margin-bottom: 1.25rem;
   width: 100%;
+}
+
+.sidebar-lang-wrapper.is-collapsed {
+  display: flex;
+  justify-content: center;
 }
 
 .brand-info {

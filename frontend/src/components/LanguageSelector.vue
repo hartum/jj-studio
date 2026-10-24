@@ -4,9 +4,11 @@ import { useLocale } from '@/i18n/useLocale'
 withDefaults(
   defineProps<{
     fullWidth?: boolean
+    compact?: boolean
   }>(),
   {
     fullWidth: false,
+    compact: false,
   },
 )
 
@@ -16,7 +18,7 @@ const { locale, setLocale } = useLocale()
 <template>
   <div
     class="lang-selector-group"
-    :class="{ 'full-width': fullWidth }"
+    :class="{ 'full-width': fullWidth, 'compact': compact }"
     role="group"
     aria-label="Seleccionar idioma"
   >
@@ -29,7 +31,7 @@ const { locale, setLocale } = useLocale()
       @click="setLocale('es')"
     >
       <span class="flag-icon">🇪🇸</span>
-      <span class="lang-code">ES</span>
+      <span v-if="!compact" class="lang-code">ES</span>
     </button>
     <button
       type="button"
@@ -40,7 +42,7 @@ const { locale, setLocale } = useLocale()
       @click="setLocale('en')"
     >
       <span class="flag-icon">🇬🇧</span>
-      <span class="lang-code">EN</span>
+      <span v-if="!compact" class="lang-code">EN</span>
     </button>
   </div>
 </template>
@@ -66,6 +68,20 @@ const { locale, setLocale } = useLocale()
   flex: 1;
   padding: 6px 10px;
   font-size: 0.8rem;
+}
+
+.lang-selector-group.compact {
+  flex-direction: column;
+  padding: 4px;
+  border-radius: 14px;
+  gap: 4px;
+}
+
+.lang-selector-group.compact .lang-pill-btn {
+  padding: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
 }
 
 .lang-pill-btn {
