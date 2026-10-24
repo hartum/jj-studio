@@ -328,16 +328,14 @@ const groupedContableHotelsByCountry = computed<CountryGroup[]>(() => {
   color: var(--el-color-primary, #409eff) !important;
 }
 
-/* Separadores punteados entre grupos de atajos (Grupo 1: Meses | Grupo 2: Bloques | Grupo 3: Quincenas) */
-:global(.commission-date-range-popper .el-picker-panel__shortcut:nth-child(2)),
-:global(.commission-date-range-popper .el-picker-panel__shortcut:nth-child(5)) {
+/* Separador punteado entre grupos de atajos (Grupo 1: Meses | Grupo 2: Quincenas) */
+:global(.commission-date-range-popper .el-picker-panel__shortcut:nth-child(2)) {
   margin-bottom: 12px !important;
   position: relative !important;
   overflow: visible !important;
 }
 
-:global(.commission-date-range-popper .el-picker-panel__shortcut:nth-child(2)::after),
-:global(.commission-date-range-popper .el-picker-panel__shortcut:nth-child(5)::after) {
+:global(.commission-date-range-popper .el-picker-panel__shortcut:nth-child(2)::after) {
   content: '' !important;
   position: absolute !important;
   bottom: -6px !important;
@@ -348,8 +346,7 @@ const groupedContableHotelsByCountry = computed<CountryGroup[]>(() => {
   pointer-events: none !important;
 }
 
-:global(html.dark .commission-date-range-popper .el-picker-panel__shortcut:nth-child(2)::after),
-:global(html.dark .commission-date-range-popper .el-picker-panel__shortcut:nth-child(5)::after) {
+:global(html.dark .commission-date-range-popper .el-picker-panel__shortcut:nth-child(2)::after) {
   border-top-color: var(--el-border-color, #4c4d4f) !important;
 }
 </style>

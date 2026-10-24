@@ -181,34 +181,9 @@ export function useDashboard() {
           return [formatLocalDateIso(start), formatLocalDateIso(end)]
         },
       },
-      // Grupo 2: Bloques
+      // Grupo 2: Quincenas
       {
-        text: 'Bloque 1 (1 - 12)',
-        value: () => {
-          const start = new Date(cYear, cMonth, 1)
-          const end = new Date(cYear, cMonth, 12)
-          return [formatLocalDateIso(start), formatLocalDateIso(end)]
-        },
-      },
-      {
-        text: 'Bloque 2 (13 - 27)',
-        value: () => {
-          const start = new Date(cYear, cMonth, 13)
-          const end = new Date(cYear, cMonth, 27)
-          return [formatLocalDateIso(start), formatLocalDateIso(end)]
-        },
-      },
-      {
-        text: 'Bloque 3 (28 - Fin)',
-        value: () => {
-          const start = new Date(cYear, cMonth, 28)
-          const end = new Date(cYear, cMonth + 1, 0)
-          return [formatLocalDateIso(start), formatLocalDateIso(end)]
-        },
-      },
-      // Grupo 3: Quincenas
-      {
-        text: '1ª Quincena (1 - 15)',
+        text: 'Primera quincena',
         value: () => {
           const start = new Date(cYear, cMonth, 1)
           const end = new Date(cYear, cMonth, 15)
@@ -216,7 +191,7 @@ export function useDashboard() {
         },
       },
       {
-        text: '2ª Quincena (16 - Fin)',
+        text: 'Segunda Quincena',
         value: () => {
           const start = new Date(cYear, cMonth, 16)
           const end = new Date(cYear, cMonth + 1, 0)
