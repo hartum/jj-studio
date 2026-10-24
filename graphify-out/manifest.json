@@ -105,13 +105,13 @@
     "semantic_hash": "8fe41a1d168d8c5cb19219cd0c35de3f"
   },
   "backend/src/features/goals/domain/goal.model.ts": {
-    "mtime": 1786698358.7448003,
-    "ast_hash": "bc40081e430bbca34e5564d307c98855",
-    "semantic_hash": "bc40081e430bbca34e5564d307c98855"
+    "mtime": 1792795688.751983,
+    "ast_hash": "1bbc16aa53c31457ccda296d5384efa5",
+    "semantic_hash": ""
   },
   "backend/src/features/goals/infrastructure/goal.routes.ts": {
-    "mtime": 1792708371.998723,
-    "ast_hash": "243a6bffa90387b263a39bfef8a2f967",
+    "mtime": 1792795716.2557995,
+    "ast_hash": "f04ec881bf54a437c14c2f0679c2dc30",
     "semantic_hash": ""
   },
   "backend/src/features/hotels/infrastructure/hotel.routes.ts": {
@@ -330,9 +330,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/goals/domain/goal.model.ts": {
-    "mtime": 1786698366.8248823,
-    "ast_hash": "ba55c216b24b388c8ddb9bc85bf8666a",
-    "semantic_hash": "ba55c216b24b388c8ddb9bc85bf8666a"
+    "mtime": 1792795702.3509452,
+    "ast_hash": "a42dd9b5bf2f9b96e605c76ac71575fb",
+    "semantic_hash": ""
   },
   "frontend/src/features/goals/stores/goal.store.ts": {
     "mtime": 1788191049.7250962,
@@ -340,8 +340,8 @@
     "semantic_hash": "133a204a20676b489e29df99ba95228c"
   },
   "frontend/src/features/goals/ui/AgendadorHotelGoalCard.vue": {
-    "mtime": 1789713814.9591458,
-    "ast_hash": "dd333aa6b732b7d142b88c088387ee57",
+    "mtime": 1792843088.3091824,
+    "ast_hash": "5a6b9a85adb085664bd0bdbf66e5ee7a",
     "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/GoalEvolutionChart.vue": {
@@ -350,28 +350,28 @@
     "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/GoalFormView.vue": {
-    "mtime": 1789717872.3298445,
-    "ast_hash": "12414ac4ee4e1153b30e8de1eadbdb81",
+    "mtime": 1792796916.6178775,
+    "ast_hash": "71251dfe57eebc0fdb8a99a4b88eb081",
     "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/GoalProgressCard.vue": {
-    "mtime": 1789713736.9000053,
-    "ast_hash": "d7ba0e06b81450d3e5fd17595127ebac",
+    "mtime": 1792845640.6421988,
+    "ast_hash": "aaf8f9d87e0888e563ac72f6edf6678f",
     "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/PhotographerHotelGoalCard.vue": {
-    "mtime": 1789713779.8818245,
-    "ast_hash": "bd30571d9378b62d1258aa31f4989c58",
+    "mtime": 1792843877.8528454,
+    "ast_hash": "053978357cde17f4e01b51798dbe40f2",
     "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/SupervisorHotelGoalCard.vue": {
-    "mtime": 1789713800.1624284,
-    "ast_hash": "2d2719cfe263a54949fc12fd45ca5a95",
+    "mtime": 1792843116.3832543,
+    "ast_hash": "305248ea434bfbfe2a07b5c06ccc76f7",
     "semantic_hash": ""
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1792706890.793336,
-    "ast_hash": "5b9551a6919569da7dec174ef9030e19",
+    "mtime": 1792847958.079163,
+    "ast_hash": "423ffb3d64191b95f373c614ddcecbf5",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/InicioView.vue": {
@@ -630,8 +630,8 @@
     "semantic_hash": "6c17c7053d0e7c5b72142f8030dbf7ba"
   },
   "frontend/src/shared/formatters.ts": {
-    "mtime": 1792710595.9807615,
-    "ast_hash": "24233aaf99cfc7d2c6a1c47e3b9d167e",
+    "mtime": 1792845617.2807064,
+    "ast_hash": "127a461beb3979c697c5f20f263732f2",
     "semantic_hash": ""
   },
   "frontend/src/shared/permissions.ts": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792770994.164666,
-    "ast_hash": "006b5b72256e9ab2449165563c3ddc8e",
+    "mtime": 1792849946.81307,
+    "ast_hash": "cde5780370eba11f303fd9034414bb29",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792770981.569096,
-    "ast_hash": "d78849a325031d7666f35f26d2639a37",
+    "mtime": 1792849941.893623,
+    "ast_hash": "e75dada8efbbfb155d9d114e7f947bee",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1075,8 +1075,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1792773851.439206,
-    "ast_hash": "22a93e572d96508925fa27f59b21d9fe",
+    "mtime": 1792852935.0001137,
+    "ast_hash": "eeb4002dc5a55dc650e319c945133b83",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {
