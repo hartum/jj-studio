@@ -31,10 +31,15 @@ const selectedHotelId = ref<number | null>(null)
 
 const isSaving = ref(false)
 const hotelTargetAmount = ref<number>(0)
+const hotelGroupBonusAmount = ref<number | null>(null)
 const defaultHotelTarget = ref<number | null>(null)
 
-// Personal goals per photographer edit map: userId -> custom amount
+// Personal goals per user edit map: userId -> custom amount
 const customPhotographerGoals = ref<Record<string, number>>({})
+// Bonus threshold per user edit map: userId -> bonus sales threshold
+const customTeamBonus = ref<Record<string, number | null>>({})
+// Bonus payout value per user edit map: userId -> bonus money amount
+const customBonusValue = ref<Record<string, number | null>>({})
 
 const selectedMonthDate = computed<string>({
   get: () => `${selectedAnio.value}-${String(selectedMes.value).padStart(2, '0')}`,
@@ -151,22 +156,46 @@ const currentHotel = computed(() => {
   return hotelStore.hotels.find((h) => h.id === selectedHotelId.value) || null
 })
 
-// Fotógrafos asignados a este hotel
-const assignedPhotographers = computed(() => {
+// Equipo asignado a este hotel (Fotógrafos, Supervisores y Vendedores/Agendadores)
+const assignedTeamMembers = computed(() => {
   if (!selectedHotelId.value) return []
-  return userStore.usersWithProfile.filter((u) => {
-    const isFoto = u.perfil?.code?.toUpperCase() === 'FOTOGRAFO'
-    const isAssigned = u.hotelIds?.includes(selectedHotelId.value!)
-    return isFoto && isAssigned && u.status === 'Activo'
-  })
+  const allowedRoles = new Set(['FOTOGRAFO', 'SUPERVISOR', 'AGENDADOR', 'VENDEDOR'])
+  return userStore.usersWithProfile
+    .filter((u) => {
+      const isAllowed = allowedRoles.has(u.perfil?.code?.toUpperCase() || '')
+      const isAssigned = u.hotelIds?.includes(selectedHotelId.value!)
+      return isAllowed && isAssigned && u.status === 'Activo'
+    })
+    .sort((a, b) => {
+      const roleOrder: Record<string, number> = { FOTOGRAFO: 1, SUPERVISOR: 2, VENDEDOR: 3, AGENDADOR: 4 }
+      const rA = roleOrder[a.perfil?.code?.toUpperCase() || ''] || 99
+      const rB = roleOrder[b.perfil?.code?.toUpperCase() || ''] || 99
+      if (rA !== rB) return rA - rB
+      return `${a.nombre} ${a.apellidos}`.localeCompare(`${b.nombre} ${b.apellidos}`)
+    })
+})
+
+// Fotógrafos activos para la cuota sugerida
+const activePhotographersCount = computed(() => {
+  return assignedTeamMembers.value.filter(
+    (u) => u.perfil?.code?.toUpperCase() === 'FOTOGRAFO',
+  ).length
 })
 
 // Suggested quota per photographer
 const suggestedQuotaPerPhotographer = computed(() => {
-  const count = assignedPhotographers.value.length
+  const count = activePhotographersCount.value
   if (count === 0 || !hotelTargetAmount.value) return 0
   return Math.round((hotelTargetAmount.value / count) * 100) / 100
 })
+
+function getRoleTagType(roleCode?: string): 'success' | 'warning' | 'primary' | 'info' {
+  const code = roleCode?.toUpperCase()
+  if (code === 'FOTOGRAFO') return 'success'
+  if (code === 'SUPERVISOR') return 'warning'
+  if (code === 'AGENDADOR' || code === 'VENDEDOR') return 'primary'
+  return 'info'
+}
 
 async function loadHotelGoals() {
   if (!selectedHotelId.value) return
@@ -189,30 +218,40 @@ async function loadHotelGoals() {
 
   if (hotelMeta) {
     hotelTargetAmount.value = hotelMeta.importeObjetivo
+    hotelGroupBonusAmount.value = hotelMeta.valorBonus ?? null
   } else {
     hotelTargetAmount.value = currentHotel.value?.metaMensualDefault || 0
+    hotelGroupBonusAmount.value = null
   }
 
   defaultHotelTarget.value = currentHotel.value?.metaMensualDefault ?? null
 
-  // Fill photographers custom goals
+  // Fill team custom goals & bonus
   const map: Record<string, number> = {}
-  for (const foto of assignedPhotographers.value) {
+  const bonusMap: Record<string, number | null> = {}
+  const bonusValueMap: Record<string, number | null> = {}
+  for (const member of assignedTeamMembers.value) {
     const userMeta = goalStore.metas.find(
       (m) =>
         m.hotelId === selectedHotelId.value &&
-        m.usuarioId === foto.id &&
+        m.usuarioId === member.id &&
         m.anio === selectedAnio.value &&
         m.mes === selectedMes.value &&
         m.alcanceTipo === 'USUARIO',
     )
     if (userMeta) {
-      map[foto.id] = userMeta.importeObjetivo
+      map[member.id] = userMeta.importeObjetivo
+      bonusMap[member.id] = userMeta.importeBonus ?? null
+      bonusValueMap[member.id] = userMeta.valorBonus ?? null
     } else {
-      map[foto.id] = suggestedQuotaPerPhotographer.value
+      map[member.id] = suggestedQuotaPerPhotographer.value
+      bonusMap[member.id] = null
+      bonusValueMap[member.id] = null
     }
   }
   customPhotographerGoals.value = map
+  customTeamBonus.value = bonusMap
+  customBonusValue.value = bonusValueMap
 }
 
 watch([selectedHotelId, selectedAnio, selectedMes], async () => {
@@ -234,19 +273,27 @@ async function handleSaveHotelGoal() {
       anio: selectedAnio.value,
       mes: selectedMes.value,
       importeObjetivo: Number(hotelTargetAmount.value) || 0,
+      valorBonus:
+        hotelGroupBonusAmount.value != null && Number(hotelGroupBonusAmount.value) > 0
+          ? Number(hotelGroupBonusAmount.value)
+          : null,
     })
 
-    // 2. Guardar o actualizar metas de fotógrafos si son personalizadas
-    for (const foto of assignedPhotographers.value) {
-      const customVal = customPhotographerGoals.value[foto.id]
-      if (customVal !== undefined) {
+    // 2. Guardar o actualizar metas y bonos del equipo si son personalizados
+    for (const member of assignedTeamMembers.value) {
+      const customVal = customPhotographerGoals.value[member.id]
+      const bonusVal = customTeamBonus.value[member.id]
+      const bonusValue = customBonusValue.value[member.id]
+      if (customVal !== undefined || bonusVal !== undefined || bonusValue !== undefined) {
         await goalStore.saveMeta({
           alcanceTipo: 'USUARIO',
           hotelId: selectedHotelId.value,
-          usuarioId: foto.id,
+          usuarioId: member.id,
           anio: selectedAnio.value,
           mes: selectedMes.value,
           importeObjetivo: Number(customVal) || 0,
+          importeBonus: bonusVal != null && Number(bonusVal) > 0 ? Number(bonusVal) : null,
+          valorBonus: bonusValue != null && Number(bonusValue) > 0 ? Number(bonusValue) : null,
         })
       }
     }
@@ -263,11 +310,9 @@ async function handleSaveHotelGoal() {
 
 function applySuggestedDivisionToAll() {
   const quota = suggestedQuotaPerPhotographer.value
-  const map: Record<string, number> = {}
-  for (const foto of assignedPhotographers.value) {
-    map[foto.id] = quota
+  for (const member of assignedTeamMembers.value) {
+    customPhotographerGoals.value[member.id] = quota
   }
-  customPhotographerGoals.value = map
   ElMessage.info(t('goalsConfig.suggestedAppliedInfo'))
 }
 
@@ -312,7 +357,7 @@ onMounted(async () => {
 })
 
 watch(
-  () => assignedPhotographers.value.length,
+  () => assignedTeamMembers.value.length,
   async () => {
     await loadHotelGoals()
   },
@@ -381,7 +426,7 @@ watch(
         <el-date-picker
           v-model="selectedMonthDate"
           type="month"
-          format="YYYY-MM"
+          format="MMMM YYYY"
           value-format="YYYY-MM"
           size="large"
           class="full-width"
@@ -432,6 +477,23 @@ watch(
                 <span class="help-text" v-if="defaultHotelTarget">
                   {{ $t('goalsConfig.defaultHotelTarget', { amount: formatCurrency(defaultHotelTarget) }) }}
                 </span>
+
+                <div class="group-bonus-field">
+                  <label class="input-goal-label">{{ $t('goalsConfig.groupBonusValue') }}</label>
+                  <el-input-number
+                    v-model="hotelGroupBonusAmount"
+                    :min="0"
+                    :step="100"
+                    :precision="0"
+                    size="large"
+                    class="target-input-number"
+                    :placeholder="$t('goalsConfig.noBonusConfigured')"
+                  >
+                    <template #suffix>
+                      <span>$ (USD)</span>
+                    </template>
+                  </el-input-number>
+                </div>
               </div>
             </el-col>
 
@@ -442,7 +504,7 @@ watch(
                   <span class="division-title">{{ $t('goalsConfig.suggestedEquitableDistribution') }}</span>
                 </div>
                 <p class="division-description">
-                  {{ $t('goalsConfig.suggestedDescription', { count: assignedPhotographers.length }) }}
+                  {{ $t('goalsConfig.suggestedDescription', { count: activePhotographersCount }) }}
                 </p>
                 <div class="suggested-quota-badge">
                   {{ formatCurrency(suggestedQuotaPerPhotographer) }} <small>{{ $t('goalsConfig.perPhotographer') }}</small>
@@ -454,13 +516,13 @@ watch(
 
         <el-divider style="margin: 1.75rem 0 1.25rem 0" />
 
-        <!-- 2. Asignación Individual de Metas a Fotógrafos -->
+        <!-- 2. Asignación Individual de Metas y Bonos al Equipo -->
         <div class="photographers-section">
           <div class="card-subheader-flex">
             <div class="header-left-title">
               <el-icon class="user-icon"><User /></el-icon>
               <span>{{
-                $t('goalsConfig.individualGoalsTeam', { count: assignedPhotographers.length })
+                $t('goalsConfig.individualGoalsTeam', { count: assignedTeamMembers.length })
               }}</span>
             </div>
             <el-button
@@ -468,13 +530,13 @@ watch(
               link
               :icon="Share"
               @click="applySuggestedDivisionToAll"
-              :disabled="assignedPhotographers.length === 0"
+              :disabled="activePhotographersCount === 0"
             >
               {{ $t('goalsConfig.applySuggestedToAll') }}
             </el-button>
           </div>
 
-          <div v-if="assignedPhotographers.length === 0" class="no-photographers">
+          <div v-if="assignedTeamMembers.length === 0" class="no-photographers">
             <el-empty
               :description="$t('goalsConfig.noPhotographers')"
               :image-size="70"
@@ -482,7 +544,7 @@ watch(
           </div>
 
           <div v-else class="photographers-table-wrapper">
-            <el-table :data="assignedPhotographers" style="width: 100%" stripe>
+            <el-table :data="assignedTeamMembers" style="width: 100%" stripe>
               <el-table-column :label="$t('goalsConfig.photographer')" min-width="240">
                 <template #default="{ row }">
                   <div class="foto-cell">
@@ -500,29 +562,76 @@ watch(
                     </el-avatar>
                     <div class="foto-info">
                       <span class="foto-name">{{ row.nombre }} {{ row.apellidos }}</span>
-                      <span class="foto-email">{{ row.email }}</span>
+                      <div v-if="row.perfil?.name || row.perfil?.code" class="foto-role-badge">
+                        <el-tag
+                          size="small"
+                          :type="getRoleTagType(row.perfil?.code)"
+                          effect="plain"
+                          round
+                        >
+                          {{ row.perfil?.name || row.perfil?.code }}
+                        </el-tag>
+                      </div>
                     </div>
                   </div>
                 </template>
               </el-table-column>
 
-              <el-table-column :label="$t('goalsConfig.suggestedGoal')" width="160" align="center">
+              <el-table-column :label="$t('goalsConfig.suggestedGoal')" width="150" align="right" header-align="right">
                 <template #default>
-                  <span class="text-muted">{{
-                    formatCurrency(suggestedQuotaPerPhotographer)
-                  }}</span>
+                  <span class="text-muted font-medium">
+                    {{ formatCurrency(suggestedQuotaPerPhotographer) }}
+                  </span>
                 </template>
               </el-table-column>
 
-              <el-table-column :label="$t('goalsConfig.assignedGoalUsd')" min-width="220">
+              <el-table-column :label="$t('goalsConfig.assignedGoalUsd')" min-width="190">
                 <template #default="{ row }">
                   <el-input-number
                     v-model="customPhotographerGoals[row.id]"
                     :min="0"
-                    :step="200"
+                    :step="100"
                     :precision="0"
                     size="default"
                     class="user-target-input"
+                  >
+                    <template #suffix>
+                      <span>$ (USD)</span>
+                    </template>
+                  </el-input-number>
+                </template>
+              </el-table-column>
+
+              <!-- 4ª Columna: Meta para obtener bonus (cantidad de ventas requerida) -->
+              <el-table-column :label="$t('goalsConfig.bonusGoalUsd')" min-width="190">
+                <template #default="{ row }">
+                  <el-input-number
+                    v-model="customTeamBonus[row.id]"
+                    :min="0"
+                    :step="100"
+                    :precision="0"
+                    size="default"
+                    class="user-target-input"
+                    :placeholder="$t('goalsConfig.noBonusConfigured')"
+                  >
+                    <template #suffix>
+                      <span>$ (USD)</span>
+                    </template>
+                  </el-input-number>
+                </template>
+              </el-table-column>
+
+              <!-- 5ª Columna: Valor del bonus (de cuánto dinero es el bonus) -->
+              <el-table-column :label="$t('goalsConfig.bonusValueUsd')" min-width="190">
+                <template #default="{ row }">
+                  <el-input-number
+                    v-model="customBonusValue[row.id]"
+                    :min="0"
+                    :step="50"
+                    :precision="0"
+                    size="default"
+                    class="user-target-input"
+                    :placeholder="$t('goalsConfig.noBonusConfigured')"
                   >
                     <template #suffix>
                       <span>$ (USD)</span>
@@ -581,6 +690,10 @@ watch(
 
 .full-width {
   width: 100%;
+}
+
+.month-field :deep(.el-input__inner) {
+  text-transform: capitalize;
 }
 
 .metas-work-area {
@@ -647,6 +760,13 @@ watch(
   max-width: 320px;
 }
 
+.group-bonus-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 .help-text {
   font-size: 0.8rem;
   color: var(--nav-link-color, #64748b);
@@ -697,6 +817,7 @@ watch(
 .foto-info {
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
 }
 
 .foto-name {
@@ -704,9 +825,9 @@ watch(
   color: var(--heading-color, #0f172a);
 }
 
-.foto-email {
-  font-size: 0.75rem;
-  color: var(--nav-link-color, #64748b);
+.foto-role-badge {
+  display: flex;
+  align-items: center;
 }
 
 .user-target-input {

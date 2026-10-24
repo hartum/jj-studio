@@ -235,6 +235,8 @@ model Meta {
   anio             Int       @map("anio")
   mes              Int       @map("mes") // 1-12
   importeObjetivo  Float     @map("importe_objetivo")
+  importeBonus     Float?    @map("importe_bonus")
+  valorBonus       Float?    @map("valor_bonus")
   sesionesObjetivo Int?      @map("sesiones_objetivo")
   ventasObjetivo   Int?      @map("ventas_objetivo")
   activo           Boolean   @default(true)

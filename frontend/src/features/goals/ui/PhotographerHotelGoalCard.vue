@@ -12,7 +12,7 @@ import {
   TrendCharts,
   Calendar,
 } from '@element-plus/icons-vue'
-import { Building2 } from '@lucide/vue'
+import { Building2, Award, Sparkles, Check } from '@lucide/vue'
 
 const { t } = useI18n()
 
@@ -66,6 +66,26 @@ const displayHotelTitle = computed(() => {
   }
   return `${t('dashboard.table.hotel')} ${name}`
 })
+
+const hasIndividualBonus = computed(() => {
+  return Boolean(props.personalProgreso?.metaBonus && props.personalProgreso.metaBonus > 0)
+})
+
+const hasGroupBonus = computed(() => {
+  if (!props.hotelProgreso || props.hotelProgreso.metaImporte <= 0) return false
+  if (props.hotelProgreso.valorBonoGrupal !== undefined) {
+    return props.hotelProgreso.valorBonoGrupal !== null && props.hotelProgreso.valorBonoGrupal > 0
+  }
+  return true
+})
+
+const teamMemberCount = computed(() => Math.max(1, props.hotelProgreso.fotografos?.length || 1))
+
+const groupBonusShare = computed(() => {
+  const total = props.hotelProgreso.valorBonoGrupal || 0
+  if (total <= 0) return 0
+  return Math.round((total / teamMemberCount.value) * 100) / 100
+})
 </script>
 
 <template>
@@ -83,9 +103,12 @@ const displayHotelTitle = computed(() => {
       <!-- Header -->
       <div class="goal-section-header">
         <div class="header-titles">
-          <h3 class="goal-title">
-            {{ $t('dashboard.goalCard.hotelGoalAmount', { amount: formatCurrency(hotelProgreso.metaImporte) }) }}
-          </h3>
+          <div class="title-with-theme-icon">
+            <el-icon class="section-theme-icon text-primary"><Building2 :size="18" /></el-icon>
+            <h3 class="goal-title">
+              {{ $t('dashboard.goalCard.hotelGoalAmount', { amount: formatCurrency(hotelProgreso.metaImporte) }) }}
+            </h3>
+          </div>
           <p class="goal-subtitle">{{ fotografoSubtitle }}</p>
         </div>
 
@@ -136,6 +159,43 @@ const displayHotelTitle = computed(() => {
         </div>
       </div>
 
+      <!-- Notificación Bono Grupal del Hotel -->
+      <div v-if="hasGroupBonus" class="section-bonus-notice">
+        <div class="bonus-footer-item-header">
+          <el-icon class="text-primary"><Sparkles :size="15" /></el-icon>
+          <span class="bonus-footer-label">{{ $t('goalsConfig.groupBonusLabel') }}</span>
+        </div>
+        <div class="bonus-footer-item-content">
+          <el-tag
+            v-if="hotelProgreso.alcanzoBonoGrupal"
+            type="success"
+            effect="plain"
+            round
+            size="small"
+          >
+            <el-icon class="mr-1"><Check :size="13" /></el-icon>
+            {{ $t('goalsConfig.groupBonusAchieved') }}
+          </el-tag>
+          <div v-else class="bonus-missing-inline">
+            <span class="bonus-missing-highlight text-primary">
+              {{
+                groupBonusShare > 0
+                  ? $t('goalsConfig.remainingForGroupBonus', {
+                      amount: formatCurrency(hotelProgreso.faltanteBonoGrupal || 0),
+                      share: formatCurrency(groupBonusShare),
+                    })
+                  : $t('goalsConfig.remainingForGroupBonusSimple', {
+                      amount: formatCurrency(hotelProgreso.faltanteBonoGrupal || 0),
+                    })
+              }}
+            </span>
+            <span class="bonus-fraction">
+              ({{ formatCurrency(hotelProgreso.ventasRealesUsd) }} / {{ formatCurrency(hotelProgreso.metaImporte) }})
+            </span>
+          </div>
+        </div>
+      </div>
+
       <!-- Pacing Metrics -->
       <div class="pacing-metrics-row">
         <div class="pacing-item">
@@ -179,9 +239,12 @@ const displayHotelTitle = computed(() => {
       <!-- Header -->
       <div class="goal-section-header">
         <div class="header-titles">
-          <h3 class="goal-title">
-            {{ $t('dashboard.goalCard.yourPersonalGoal', { amount: formatCurrency(personalProgreso.metaImporte) }) }}
-          </h3>
+          <div class="title-with-theme-icon">
+            <el-icon class="section-theme-icon text-success"><Money :size="18" /></el-icon>
+            <h3 class="goal-title">
+              {{ $t('dashboard.goalCard.yourPersonalGoal', { amount: formatCurrency(personalProgreso.metaImporte) }) }}
+            </h3>
+          </div>
           <p class="goal-subtitle">{{ $t('dashboard.goalCard.individualProgress', { month: monthLabel }) }}</p>
         </div>
 
@@ -234,6 +297,43 @@ const displayHotelTitle = computed(() => {
               boxShadow: `0 0 12px ${getSemaforoColor(personalProgreso.semaforo)}66`,
             }"
           ></div>
+        </div>
+      </div>
+
+      <!-- Notificación Bono Individual -->
+      <div v-if="hasIndividualBonus" class="section-bonus-notice">
+        <div class="bonus-footer-item-header">
+          <el-icon class="text-warning"><Award :size="16" /></el-icon>
+          <span class="bonus-footer-label">{{ $t('goalsConfig.bonusGoalUsd') }}:</span>
+        </div>
+        <div class="bonus-footer-item-content">
+          <el-tag
+            v-if="personalProgreso.alcanzoBonus"
+            type="success"
+            effect="dark"
+            round
+            size="small"
+          >
+            <el-icon class="mr-1"><Award :size="13" /></el-icon>
+            {{ $t('goalsConfig.individualBonusAchieved') }}
+          </el-tag>
+          <div v-else class="bonus-missing-inline">
+            <span class="bonus-missing-highlight text-warning">
+              {{
+                personalProgreso.valorBonus && personalProgreso.valorBonus > 0
+                  ? $t('goalsConfig.remainingForBonus', {
+                      amount: formatCurrency(personalProgreso.faltanteBonus || 0),
+                      bonusValue: formatCurrency(personalProgreso.valorBonus),
+                    })
+                  : $t('goalsConfig.remainingForBonusSimple', {
+                      amount: formatCurrency(personalProgreso.faltanteBonus || 0),
+                    })
+              }}
+            </span>
+            <span class="bonus-fraction">
+              ({{ formatCurrency(personalProgreso.ventasRealesUsd) }} / {{ formatCurrency(personalProgreso.metaBonus) }})
+            </span>
+          </div>
         </div>
       </div>
 
@@ -401,7 +501,7 @@ const displayHotelTitle = computed(() => {
 
 /* Progress Track */
 .progress-track-wrapper {
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.65rem;
 }
 
 .progress-track {
@@ -461,5 +561,60 @@ const displayHotelTitle = computed(() => {
 
 .font-semibold {
   font-weight: 600;
+}
+
+.title-with-theme-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.section-theme-icon {
+  vertical-align: middle;
+}
+
+/* Notificación de Bonus bajo barra de progreso */
+.section-bonus-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+  padding: 0.15rem 0;
+}
+
+.bonus-footer-item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.bonus-footer-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--heading-color, #0f172a);
+}
+
+.bonus-footer-item-content {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.bonus-missing-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+}
+
+.bonus-missing-highlight {
+  font-weight: 700;
+}
+
+.bonus-fraction {
+  font-size: 0.72rem;
+  color: var(--nav-link-color, #94a3b8);
 }
 </style>

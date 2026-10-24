@@ -12,9 +12,11 @@ import {
   TrendCharts,
   Calendar,
 } from '@element-plus/icons-vue'
-import { Building2 } from '@lucide/vue'
+import { Building2, Award, Sparkles, Check } from '@lucide/vue'
+import { useAuthStore } from '@/features/auth/stores/auth.store'
 
 const { t } = useI18n()
+const authStore = useAuthStore()
 
 const props = defineProps<{
   hotelNombre: string
@@ -22,6 +24,12 @@ const props = defineProps<{
   monthLabel: string
   selectedAnio?: number
 }>()
+
+const myPersonalProgreso = computed(() => {
+  const myId = authStore.user?.id
+  if (!myId) return null
+  return props.hotelProgreso.fotografos?.find((f) => f.usuarioId === myId) || null
+})
 
 function isSinMeta(estado?: SemaforoEstado, metaImporte?: number): boolean {
   return estado === 'SIN_META' || !metaImporte || metaImporte <= 0
@@ -66,6 +74,28 @@ const displayHotelTitle = computed(() => {
     return name
   }
   return `${t('dashboard.table.hotel')} ${name}`
+})
+
+const hasIndividualBonus = computed(() => {
+  return Boolean(myPersonalProgreso.value?.metaBonus && myPersonalProgreso.value.metaBonus > 0)
+})
+
+const hasGroupBonus = computed(() => {
+  if (!props.hotelProgreso || props.hotelProgreso.metaImporte <= 0) return false
+  if (props.hotelProgreso.valorBonoGrupal !== undefined) {
+    return props.hotelProgreso.valorBonoGrupal !== null && props.hotelProgreso.valorBonoGrupal > 0
+  }
+  return true
+})
+
+const hasAnyBonus = computed(() => hasIndividualBonus.value || hasGroupBonus.value)
+
+const teamMemberCount = computed(() => Math.max(1, props.hotelProgreso.fotografos?.length || 1))
+
+const groupBonusShare = computed(() => {
+  const total = props.hotelProgreso.valorBonoGrupal || 0
+  if (total <= 0) return 0
+  return Math.round((total / teamMemberCount.value) * 100) / 100
 })
 </script>
 
@@ -167,6 +197,87 @@ const displayHotelTitle = computed(() => {
         <el-icon :size="14" class="pacing-icon"><Calendar /></el-icon>
         <span class="pacing-label">{{ $t('dashboard.goalCard.sessions') }}</span>
         <span class="pacing-val">{{ hotelProgreso.numSesiones }}</span>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SECCIÓN BONUS (AL FINAL DE LA TARJETA) -->
+    <!-- ============================================== -->
+    <div v-if="hasAnyBonus" class="bonus-card-footer">
+      <div class="bonus-footer-grid">
+        <!-- Bono Individual del Agendador/Vendedor (si tiene configurado) -->
+        <div v-if="hasIndividualBonus && myPersonalProgreso" class="bonus-footer-item">
+          <div class="bonus-footer-item-header">
+            <el-icon class="text-warning"><Award :size="16" /></el-icon>
+            <span class="bonus-footer-label">{{ $t('goalsConfig.bonusGoalUsd') }}:</span>
+          </div>
+          <div class="bonus-footer-item-content">
+            <el-tag
+              v-if="myPersonalProgreso.alcanzoBonus"
+              type="success"
+              effect="dark"
+              round
+              size="small"
+            >
+              <el-icon class="mr-1"><Award :size="13" /></el-icon>
+              {{ $t('goalsConfig.individualBonusAchieved') }}
+            </el-tag>
+            <div v-else class="bonus-missing-inline">
+              <span class="bonus-missing-highlight text-warning">
+                {{
+                  myPersonalProgreso.valorBonus && myPersonalProgreso.valorBonus > 0
+                    ? $t('goalsConfig.remainingForBonus', {
+                        amount: formatCurrency(myPersonalProgreso.faltanteBonus || 0),
+                        bonusValue: formatCurrency(myPersonalProgreso.valorBonus),
+                      })
+                    : $t('goalsConfig.remainingForBonusSimple', {
+                        amount: formatCurrency(myPersonalProgreso.faltanteBonus || 0),
+                      })
+                }}
+              </span>
+              <span class="bonus-fraction">
+                ({{ formatCurrency(myPersonalProgreso.ventasRealesUsd) }} / {{ formatCurrency(myPersonalProgreso.metaBonus) }})
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bono Grupal del Hotel -->
+        <div v-if="hasGroupBonus" class="bonus-footer-item">
+          <div class="bonus-footer-item-header">
+            <el-icon class="text-primary"><Sparkles :size="15" /></el-icon>
+            <span class="bonus-footer-label">{{ $t('goalsConfig.groupBonusLabel') }}</span>
+          </div>
+          <div class="bonus-footer-item-content">
+            <el-tag
+              v-if="hotelProgreso.alcanzoBonoGrupal"
+              type="success"
+              effect="plain"
+              round
+              size="small"
+            >
+              <el-icon class="mr-1"><Check :size="13" /></el-icon>
+              {{ $t('goalsConfig.groupBonusAchieved') }}
+            </el-tag>
+            <div v-else class="bonus-missing-inline">
+              <span class="bonus-missing-highlight text-primary">
+                {{
+                  groupBonusShare > 0
+                    ? $t('goalsConfig.remainingForGroupBonus', {
+                        amount: formatCurrency(hotelProgreso.faltanteBonoGrupal || 0),
+                        share: formatCurrency(groupBonusShare),
+                      })
+                    : $t('goalsConfig.remainingForGroupBonusSimple', {
+                        amount: formatCurrency(hotelProgreso.faltanteBonoGrupal || 0),
+                      })
+                }}
+              </span>
+              <span class="bonus-fraction">
+                ({{ formatCurrency(hotelProgreso.ventasRealesUsd) }} / {{ formatCurrency(hotelProgreso.metaImporte) }})
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </el-card>
@@ -332,5 +443,61 @@ const displayHotelTitle = computed(() => {
   .pacing-metrics-row {
     gap: 0.75rem;
   }
+}
+
+/* Bonus Card Footer */
+.bonus-card-footer {
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--el-border-color-lighter, #f1f5f9);
+}
+
+.bonus-footer-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bonus-footer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.bonus-footer-item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.bonus-footer-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--heading-color, #0f172a);
+}
+
+.bonus-footer-item-content {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.bonus-missing-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+}
+
+.bonus-missing-highlight {
+  font-weight: 700;
+}
+
+.bonus-fraction {
+  font-size: 0.72rem;
+  color: var(--nav-link-color, #94a3b8);
 }
 </style>

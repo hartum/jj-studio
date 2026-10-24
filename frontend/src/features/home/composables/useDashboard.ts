@@ -237,6 +237,8 @@ export function useDashboard() {
       commissionDateRange.value[1]
     ) {
       const [fechaDesde, fechaHasta] = commissionDateRange.value
+      const targetAnio = Number(fechaDesde.split('-')[0]) || initialYear
+      const targetMes = Number(fechaDesde.split('-')[1]) || initialMonth
       commissionStore.isLoading = true
       try {
         await Promise.all([
@@ -249,6 +251,15 @@ export function useDashboard() {
             hotelIds: hotelIdsParam,
             fechaDesde,
             fechaHasta,
+          }),
+          goalStore.fetchMetas({
+            anio: targetAnio,
+            mes: targetMes,
+          }),
+          goalStore.fetchProgreso({
+            hotelIds: hotelIdsParam,
+            anio: targetAnio,
+            mes: targetMes,
           }),
         ])
       } finally {

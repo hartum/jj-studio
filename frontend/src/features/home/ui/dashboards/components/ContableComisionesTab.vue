@@ -5,11 +5,13 @@ import { useI18n } from 'vue-i18n'
 import { ElMessageBox, ElMessage, type TableInstance } from 'element-plus'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { useCommissionStore } from '@/features/commissions/stores/commission.store'
+import { useGoalStore } from '@/features/goals/stores/goal.store'
 import { formatCurrency, formatMxn } from '@/shared/formatters'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 import { Money, Wallet, Tickets, InfoFilled, Edit } from '@element-plus/icons-vue'
 import { RotateCcw, Award } from '@lucide/vue'
 import type { Comision } from '@/features/commissions/domain/commission.model'
+import type { Meta } from '@/features/goals/domain/goal.model'
 
 export interface ContableHotelSummary {
   id: number
@@ -23,6 +25,15 @@ export interface ContableAreaSummary {
   nombre: string
   paisNombre: string
   hotelesCount: number
+}
+
+export interface BonusDetalle {
+  tipo: 'INDIVIDUAL' | 'GRUPAL'
+  hotelNombre: string
+  metaObjetivo: number
+  ventasAlcanzadas: number
+  montoBonus: number
+  descripcion: string
 }
 
 export interface EmpleadoComisionResumen {
@@ -58,8 +69,12 @@ export interface EmpleadoComisionResumen {
   pendientesIds: number[]
   payableIds: number[]
   comisiones: Comision[]
-  // Meta individual / Bono ($500+)
+  // Meta individual / Bono
   cumpleBono: boolean
+  bonoIndividualUsd: number
+  bonoGrupalUsd: number
+  totalBonusUsd: number
+  bonusDetalles: BonusDetalle[]
 }
 
 const props = defineProps<{
@@ -76,6 +91,26 @@ const { t } = useI18n()
 const router = useRouter()
 const userStore = useUserStore()
 const commissionStore = useCommissionStore()
+const goalStore = useGoalStore()
+
+// Asegurar carga de metas cuando cambia el rango de fechas
+watch(
+  () => props.commissionDateRange,
+  async (range) => {
+    if (range && range[0]) {
+      const parts = range[0].split('-').map(Number)
+      const anio = parts[0] || new Date().getFullYear()
+      const mes = parts[1] || new Date().getMonth() + 1
+      const hotelIdsParam =
+        props.selectedHotelFilters.length > 0 ? props.selectedHotelFilters : undefined
+      await Promise.all([
+        goalStore.fetchMetas({ anio, mes }).catch(() => {}),
+        goalStore.fetchProgreso({ hotelIds: hotelIdsParam, anio, mes }).catch(() => {}),
+      ])
+    }
+  },
+  { immediate: true },
+)
 
 function goToEditSale(citaVentaId: number) {
   if (citaVentaId) {
@@ -96,7 +131,9 @@ watch(tipoCambioMxn, (newVal) => {
 
 // --- Filtro de usuario ---
 const LOCAL_STORAGE_KEY_USER_FILTER = 'jj_studio_contable_user_filter'
-const comisionUsuarioFilter = ref<string | null>(localStorage.getItem(LOCAL_STORAGE_KEY_USER_FILTER) || null)
+const comisionUsuarioFilter = ref<string | null>(
+  localStorage.getItem(LOCAL_STORAGE_KEY_USER_FILTER) || null,
+)
 
 watch(comisionUsuarioFilter, (newVal) => {
   if (newVal) {
@@ -171,13 +208,130 @@ function getInitialSort(): TableSortState {
 
 const currentSort = ref<TableSortState>(getInitialSort())
 
-function handleSortChange({ prop, order }: { prop: string; order: 'ascending' | 'descending' | null }) {
+function handleSortChange({
+  prop,
+  order,
+}: {
+  prop: string
+  order: 'ascending' | 'descending' | null
+}) {
   currentSort.value = { prop: prop || '', order }
   if (order) {
     localStorage.setItem(LOCAL_STORAGE_KEY_SORT, JSON.stringify({ prop, order }))
   } else {
     localStorage.removeItem(LOCAL_STORAGE_KEY_SORT)
   }
+}
+
+// --- Helpers puros para cálculo y optimización de rendimiento ---
+function extractSaleMetrics(c: Comision) {
+  const ventaBruta =
+    c.totalVentaUsd && c.totalVentaUsd > 0
+      ? c.totalVentaUsd
+      : c.baseCalculoUsd > 0
+        ? Number((c.baseCalculoUsd / 0.84).toFixed(2))
+        : 0
+
+  const impuesto =
+    c.impuestoMontoUsd !== undefined
+      ? c.impuestoMontoUsd
+      : Number(Math.max(0, ventaBruta - (c.baseCalculoUsd || 0)).toFixed(2))
+
+  return {
+    ventaBruta,
+    impuesto,
+    baseCalculoUsd: c.baseCalculoUsd || 0,
+  }
+}
+
+interface BonusCalculationContext {
+  userProfileMap: Map<string, (typeof userStore.usersWithProfile)[0]>
+  userMetasMap: Map<string, Meta[]>
+  hotelMetasConBono: Meta[]
+  ventasUnicasPorHotel: Map<number, number>
+  totalVentasPeriodo: number
+  teamCountPorHotel: Map<number, number>
+}
+
+function calcularBonosEmpleado(
+  item: EmpleadoComisionResumen,
+  ctx: BonusCalculationContext,
+) {
+  item.bonoIndividualUsd = 0
+  item.bonoGrupalUsd = 0
+  item.totalBonusUsd = 0
+  item.bonusDetalles = []
+
+  // 1. Bono Individual (Meta personal del colaborador para este año y mes)
+  const userMetas = ctx.userMetasMap.get(item.usuarioId) || []
+  for (const meta of userMetas) {
+    const umbralBonus = Number(meta.importeBonus) || 0
+    const montoPremio = Number(meta.valorBonus) || 0
+    if (item.totalVentasBrutasUsd >= umbralBonus && umbralBonus > 0 && montoPremio > 0) {
+      item.bonoIndividualUsd += montoPremio
+      const hotelNom =
+        meta.hotelNombre ||
+        props.contableHotels.find((h) => h.id === meta.hotelId)?.nombre ||
+        `Hotel #${meta.hotelId}`
+      item.bonusDetalles.push({
+        tipo: 'INDIVIDUAL',
+        hotelNombre: hotelNom,
+        metaObjetivo: umbralBonus,
+        ventasAlcanzadas: item.totalVentasBrutasUsd,
+        montoBonus: montoPremio,
+        descripcion: `${t('dashboard.table.individualBonus')} (${hotelNom}): Ventas de ${formatCurrency(item.totalVentasBrutasUsd, 2)} superan meta de ${formatCurrency(umbralBonus, 2)}`,
+      })
+    }
+  }
+
+  // 2. Bono Grupal (Meta colectiva del hotel para este año y mes)
+  const uProfile = ctx.userProfileMap.get(item.usuarioId)
+  const userHotelSet = new Set(uProfile?.hotelIds || [])
+
+  for (const metaHotel of ctx.hotelMetasConBono) {
+    const userAssignedHotel = userHotelSet.has(metaHotel.hotelId)
+    const userHasSalesInHotel = item.comisiones.some((c) => c.hotelId === metaHotel.hotelId)
+
+    if (userAssignedHotel || userHasSalesInHotel) {
+      const metaImporte = Number(metaHotel.importeObjetivo) || 0
+      const valorBonoTotal = Number(metaHotel.valorBonus) || 0
+      const ventasHotel = ctx.ventasUnicasPorHotel.get(metaHotel.hotelId) || 0
+      const hotelProg = goalStore.progresoHoteles.find((p) => p.hotelId === metaHotel.hotelId)
+
+      const alcanzoBono =
+        (metaImporte > 0 && ventasHotel >= metaImporte) ||
+        Boolean(hotelProg?.alcanzoBonoGrupal) ||
+        (props.selectedHotelFilters.length === 0 &&
+          metaImporte > 0 &&
+          ctx.totalVentasPeriodo >= metaImporte)
+
+      if (alcanzoBono && valorBonoTotal > 0) {
+        const teamCount = ctx.teamCountPorHotel.get(metaHotel.hotelId) || 2
+        const share = Number((valorBonoTotal / teamCount).toFixed(2))
+        item.bonoGrupalUsd += share
+        const hotelNom =
+          metaHotel.hotelNombre ||
+          props.contableHotels.find((h) => h.id === metaHotel.hotelId)?.nombre ||
+          `Hotel #${metaHotel.hotelId}`
+        item.bonusDetalles.push({
+          tipo: 'GRUPAL',
+          hotelNombre: hotelNom,
+          metaObjetivo: metaImporte,
+          ventasAlcanzadas: Math.max(ventasHotel, ctx.totalVentasPeriodo),
+          montoBonus: share,
+          descripcion: `${t('dashboard.table.groupBonus')} (${hotelNom}): Meta de ${formatCurrency(metaImporte, 2)} alcanzada (${formatCurrency(valorBonoTotal, 2)} ÷ ${teamCount} colaboradores)`,
+        })
+      }
+    }
+  }
+
+  // Reflejar bonus en "Otras Comisiones" y Total Comisiones
+  item.totalBonusUsd = Number((item.bonoIndividualUsd + item.bonoGrupalUsd).toFixed(2))
+  item.comisionOtrasUsd = Number((item.comisionOtrasUsd + item.totalBonusUsd).toFixed(2))
+  item.totalComisionesUsd = Number(
+    (item.comisionFotografoUsd + item.comisionVendedorUsd + item.comisionOtrasUsd).toFixed(2),
+  )
+  item.cumpleBono = item.totalBonusUsd > 0
 }
 
 // --- Agrupación de comisiones por Usuario (Estilo Excel COMISIONES1) ---
@@ -187,12 +341,19 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     list = list.filter((c) => c.usuarioId === comisionUsuarioFilter.value)
   }
 
+  // Pre-indexar perfiles de usuario en O(1)
+  const userProfileMap = new Map<string, (typeof userStore.usersWithProfile)[0]>()
+  for (const u of userStore.usersWithProfile) {
+    userProfileMap.set(u.id, u)
+  }
+
+  // 1. Agrupar registros de comisiones por usuario
   const userMap = new Map<string, EmpleadoComisionResumen>()
 
   for (const c of list) {
     let item = userMap.get(c.usuarioId)
     if (!item) {
-      const uProfile = userStore.usersWithProfile.find((u) => u.id === c.usuarioId)
+      const uProfile = userProfileMap.get(c.usuarioId)
       item = {
         usuarioId: c.usuarioId,
         nombre: c.usuarioNombre || uProfile?.nombre || 'Usuario',
@@ -224,6 +385,10 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
         payableIds: [],
         comisiones: [],
         cumpleBono: false,
+        bonoIndividualUsd: 0,
+        bonoGrupalUsd: 0,
+        totalBonusUsd: 0,
+        bonusDetalles: [],
       }
       userMap.set(c.usuarioId, item)
     }
@@ -266,37 +431,85 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     item.totalComisionesUsd += c.importeComisionUsd || 0
   }
 
-  // Segundo pase: cálculo preciso de ventas brutas, impuestos y bases netas sin duplicar ventas
+  // 2. Ventas únicas del periodo por hotel (para cálculo de bono grupal)
+  const ventasUnicasPorHotel = new Map<number, number>()
+  const ventasProcesadasGlobal = new Set<number>()
+  for (const c of list) {
+    if (!ventasProcesadasGlobal.has(c.citaVentaId)) {
+      ventasProcesadasGlobal.add(c.citaVentaId)
+      const { ventaBruta } = extractSaleMetrics(c)
+      ventasUnicasPorHotel.set(c.hotelId, (ventasUnicasPorHotel.get(c.hotelId) || 0) + ventaBruta)
+    }
+  }
+  let totalVentasPeriodo = 0
+  for (const v of ventasUnicasPorHotel.values()) {
+    totalVentasPeriodo += v
+  }
+
+  // 3. Pre-indexación de contexto para cálculo de bonos O(1)
+  const [fechaDesde] = props.commissionDateRange || []
+  const targetAnio = Number(fechaDesde?.split('-')[0]) || new Date().getFullYear()
+  const targetMes = Number(fechaDesde?.split('-')[1]) || new Date().getMonth() + 1
+
+  const userMetasMap = new Map<string, Meta[]>()
+  const hotelMetasConBono: Meta[] = []
+
+  for (const m of goalStore.metas) {
+    if (m.anio !== targetAnio || m.mes !== targetMes) continue
+
+    if (m.alcanceTipo === 'USUARIO' && m.usuarioId && m.importeBonus && m.valorBonus) {
+      const metas = userMetasMap.get(m.usuarioId) || []
+      metas.push(m)
+      userMetasMap.set(m.usuarioId, metas)
+    } else if (m.alcanceTipo === 'HOTEL' && !m.usuarioId && m.valorBonus && m.valorBonus > 0) {
+      hotelMetasConBono.push(m)
+    }
+  }
+
+  // Pre-cálculo de integrantes por hotel (evita bucles anidados por usuario)
+  const teamCountPorHotel = new Map<number, number>()
+  for (const metaHotel of hotelMetasConBono) {
+    const hotelProg = goalStore.progresoHoteles.find((p) => p.hotelId === metaHotel.hotelId)
+    const count = Math.max(
+      1,
+      hotelProg?.fotografos?.length ||
+        userStore.usersWithProfile.filter(
+          (u) =>
+            u.status === 'Activo' &&
+            (u.hotelIds || []).includes(metaHotel.hotelId) &&
+            ['FOTOGRAFO', 'SUPERVISOR', 'AGENDADOR', 'VENDEDOR'].includes(
+              u.perfil?.code || u.perfil?.name || '',
+            ),
+        ).length ||
+        2,
+    )
+    teamCountPorHotel.set(metaHotel.hotelId, count)
+  }
+
+  const bonusCtx: BonusCalculationContext = {
+    userProfileMap,
+    userMetasMap,
+    hotelMetasConBono,
+    ventasUnicasPorHotel,
+    totalVentasPeriodo,
+    teamCountPorHotel,
+  }
+
+  // 4. Segundo pase por usuario: métricas deduplicadas de venta, impuestos y bonos
+  const tc = tipoCambioMxn.value > 0 ? tipoCambioMxn.value : 1
+
   for (const item of userMap.values()) {
     const processedSaleIds = new Set<number>()
 
     for (const c of item.comisiones) {
       if (!processedSaleIds.has(c.citaVentaId)) {
         processedSaleIds.add(c.citaVentaId)
-
-        // Venta bruta
-        const ventaBruta =
-          c.totalVentaUsd && c.totalVentaUsd > 0
-            ? c.totalVentaUsd
-            : c.baseCalculoUsd > 0
-              ? Number((c.baseCalculoUsd / 0.84).toFixed(2))
-              : 0
-
-        // Impuesto deducido exacto
-        const impuesto =
-          c.impuestoMontoUsd !== undefined
-            ? c.impuestoMontoUsd
-            : Number(Math.max(0, ventaBruta - c.baseCalculoUsd).toFixed(2))
-
+        const { ventaBruta, impuesto, baseCalculoUsd } = extractSaleMetrics(c)
         item.totalVentasBrutasUsd += ventaBruta
         item.totalImpuestoUsd += impuesto
-        item.totalBaseNetaUsd += c.baseCalculoUsd || 0
+        item.totalBaseNetaUsd += baseCalculoUsd
       }
     }
-
-    // Conversión a Pesos MXN
-    const tc = tipoCambioMxn.value > 0 ? tipoCambioMxn.value : 1
-    item.totalComisionesMxn = Number((item.totalComisionesUsd * tc).toFixed(2))
 
     // Porcentaje de impuesto efectivo aplicado
     item.impuestoPctCalculado =
@@ -304,14 +517,19 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
         ? Math.round((item.totalImpuestoUsd / item.totalVentasBrutasUsd) * 100)
         : 16
 
-    // Redondeos limpios
+    // Redondeos limpios de ventas
     item.totalVentasBrutasUsd = Number(item.totalVentasBrutasUsd.toFixed(2))
     item.totalImpuestoUsd = Number(item.totalImpuestoUsd.toFixed(2))
     item.totalBaseNetaUsd = Number(item.totalBaseNetaUsd.toFixed(2))
     item.comisionFotografoUsd = Number(item.comisionFotografoUsd.toFixed(2))
     item.comisionVendedorUsd = Number(item.comisionVendedorUsd.toFixed(2))
     item.comisionOtrasUsd = Number(item.comisionOtrasUsd.toFixed(2))
-    item.totalComisionesUsd = Number(item.totalComisionesUsd.toFixed(2))
+
+    // Cálculo optimizado de bonos
+    calcularBonosEmpleado(item, bonusCtx)
+
+    // Conversión a Pesos MXN
+    item.totalComisionesMxn = Number((item.totalComisionesUsd * tc).toFixed(2))
 
     // Estado general del usuario
     if (item.pagadasCount === item.comisionesCount) {
@@ -323,11 +541,9 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     } else {
       item.estadoGeneral = 'MIXTO'
     }
-
-    // Umbral de Bono de productividad acordado ($500+)
-    item.cumpleBono = item.totalVentasBrutasUsd >= 500
   }
 
+  // 5. Ordenamiento
   const result = Array.from(userMap.values())
   if (currentSort.value.prop && currentSort.value.order) {
     const { prop, order } = currentSort.value
@@ -371,7 +587,10 @@ watch(
   { deep: true },
 )
 
-function handleExpandChange(_row: EmpleadoComisionResumen, expandedRows: EmpleadoComisionResumen[]) {
+function handleExpandChange(
+  _row: EmpleadoComisionResumen,
+  expandedRows: EmpleadoComisionResumen[],
+) {
   expandedRowKeys.value = expandedRows.map((r) => r.usuarioId)
 }
 
@@ -582,9 +801,94 @@ function getUsuariosSummaries(param: SummaryMethodProps): string[] {
   return sums
 }
 
+export interface DetalleVentaItem extends Omit<Partial<Comision>, 'id'> {
+  id: string | number
+  isSeparator?: boolean
+  isBonus?: boolean
+  esVentaDuplicada?: boolean
+  bonusTipo?: 'INDIVIDUAL' | 'GRUPAL'
+  bonusDescripcion?: string
+  totalBonusUsd?: number
+}
+
+function getDetalleTableData(row: EmpleadoComisionResumen): DetalleVentaItem[] {
+  const items: DetalleVentaItem[] = []
+  const seenSaleIds = new Set<number>()
+
+  for (const c of row.comisiones) {
+    const isDuplicate = c.citaVentaId ? seenSaleIds.has(c.citaVentaId) : false
+    if (c.citaVentaId) {
+      seenSaleIds.add(c.citaVentaId)
+    }
+
+    items.push({
+      ...c,
+      esVentaDuplicada: isDuplicate,
+      totalVentaUsd: isDuplicate ? 0 : c.totalVentaUsd,
+      impuestoMontoUsd: isDuplicate ? 0 : c.impuestoMontoUsd,
+      baseCalculoUsd: isDuplicate ? 0 : c.baseCalculoUsd,
+    })
+  }
+  if (row.totalBonusUsd > 0 && row.bonusDetalles.length > 0) {
+    // 1. Fila de separación
+    items.push({
+      id: `sep-${row.usuarioId}`,
+      isSeparator: true,
+      isBonus: false,
+      totalBonusUsd: row.totalBonusUsd,
+      totalVentaUsd: 0,
+      impuestoMontoUsd: 0,
+      baseCalculoUsd: 0,
+      importeComisionUsd: 0,
+    })
+
+    // 2. Filas de cada bonus
+    row.bonusDetalles.forEach((b, idx) => {
+      items.push({
+        id: `bonus-${row.usuarioId}-${idx}`,
+        isSeparator: false,
+        isBonus: true,
+        bonusTipo: b.tipo,
+        bonusDescripcion: b.descripcion,
+        numeroMiscelaneo:
+          b.tipo === 'INDIVIDUAL'
+            ? t('dashboard.table.individualBonus')
+            : t('dashboard.table.groupBonus'),
+        fechaVenta: props.commissionDateRange[0]?.slice(0, 7) || '—',
+        hotelNombre: b.hotelNombre,
+        clienteNombre: b.descripcion,
+        rolEnVenta: 'BONO',
+        porcentajeAplicado: 0,
+        totalVentaUsd: 0,
+        impuestoMontoUsd: 0,
+        baseCalculoUsd: 0,
+        importeComisionUsd: b.montoBonus,
+        estado: row.estadoGeneral === 'MIXTO' ? 'APROBADA' : row.estadoGeneral,
+      })
+    })
+  }
+  return items
+}
+
+function getNestedSpanMethod({ row, columnIndex }: { row: DetalleVentaItem; columnIndex: number }) {
+  if (row.isSeparator) {
+    if (columnIndex === 0) {
+      return { rowspan: 1, colspan: 13 }
+    }
+    return { rowspan: 0, colspan: 0 }
+  }
+  return { rowspan: 1, colspan: 1 }
+}
+
+function getNestedRowClassName({ row }: { row: DetalleVentaItem }) {
+  if (row.isSeparator) return 'nested-separator-tr'
+  if (row.isBonus) return 'nested-bonus-tr'
+  return ''
+}
+
 interface DetalleSummaryMethodProps {
   columns: TableColumnSummaryCtx[]
-  data: Comision[]
+  data: DetalleVentaItem[]
 }
 
 function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
@@ -597,11 +901,11 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
       return
     }
 
-    if (
-      column.property === 'totalVentaUsd' ||
-      column.label === t('dashboard.table.grossSales')
-    ) {
-      const sum = data.reduce((acc, row) => acc + (row.totalVentaUsd || 0), 0)
+    if (column.property === 'totalVentaUsd' || column.label === t('dashboard.table.grossSales')) {
+      const sum = data.reduce(
+        (acc, row) => acc + (row.isSeparator || row.isBonus ? 0 : row.totalVentaUsd || 0),
+        0,
+      )
       sums[index] = formatCurrency(sum, 2)
       return
     }
@@ -610,16 +914,19 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
       column.property === 'impuestoMontoUsd' ||
       column.label === t('dashboard.table.taxWithholding')
     ) {
-      const sum = data.reduce((acc, row) => acc + (row.impuestoMontoUsd || 0), 0)
+      const sum = data.reduce(
+        (acc, row) => acc + (row.isSeparator || row.isBonus ? 0 : row.impuestoMontoUsd || 0),
+        0,
+      )
       sums[index] = `-${formatCurrency(sum, 2)}`
       return
     }
 
-    if (
-      column.property === 'baseCalculoUsd' ||
-      column.label === t('dashboard.table.netBase')
-    ) {
-      const sum = data.reduce((acc, row) => acc + (row.baseCalculoUsd || 0), 0)
+    if (column.property === 'baseCalculoUsd' || column.label === t('dashboard.table.netBase')) {
+      const sum = data.reduce(
+        (acc, row) => acc + (row.isSeparator || row.isBonus ? 0 : row.baseCalculoUsd || 0),
+        0,
+      )
       sums[index] = formatCurrency(sum, 2)
       return
     }
@@ -628,14 +935,19 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
       column.property === 'importeComisionUsd' ||
       column.label === t('dashboard.table.commissionAmountUsd')
     ) {
-      const sum = data.reduce((acc, row) => acc + (row.importeComisionUsd || 0), 0)
+      // Suma ventas + importes de bonus
+      const sum = data.reduce(
+        (acc, row) => acc + (row.isSeparator ? 0 : row.importeComisionUsd || 0),
+        0,
+      )
       sums[index] = formatCurrency(sum, 2)
       return
     }
 
     if (column.label === t('dashboard.table.commissionAmountMxn')) {
       const sum = data.reduce(
-        (acc, row) => acc + (row.importeComisionUsd || 0) * (tipoCambioMxn.value || 1),
+        (acc, row) =>
+          acc + (row.isSeparator ? 0 : (row.importeComisionUsd || 0) * (tipoCambioMxn.value || 1)),
         0,
       )
       sums[index] = formatMxn(sum)
@@ -647,6 +959,10 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
 
   return sums
 }
+
+const totalComisionesLiquidables = computed(() => {
+  return resumenUsuariosComision.value.reduce((acc, row) => acc + (row.totalComisionesUsd || 0), 0)
+})
 </script>
 
 <template>
@@ -680,7 +996,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
               }}
             </span>
             <span class="stat-value text-success">
-              {{ formatCurrency(globalMonthlyCommissions, 2) }}
+              {{ formatCurrency(totalComisionesLiquidables, 2) }}
             </span>
           </div>
         </el-card>
@@ -784,7 +1100,10 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
         :data="resumenUsuariosComision"
         row-key="usuarioId"
         :expand-row-keys="expandedRowKeys"
-        :default-sort="currentSort.order ? { prop: currentSort.prop, order: currentSort.order } : undefined"
+        :default-sort="
+          currentSort.order ? { prop: currentSort.prop, order: currentSort.order } : undefined
+        "
+        border
         stripe
         show-summary
         :summary-method="getUsuariosSummaries"
@@ -802,27 +1121,60 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
               <div class="expand-header">
                 <strong>{{ $t('dashboard.table.saleDetails') }}</strong>
                 <span class="text-xs text-muted">
-                  ({{ row.comisiones.length }} registros en el periodo)
+                  ({{ row.comisiones.length }} {{ $t('dashboard.table.salesCount') || 'ventas'
+                  }}{{
+                    row.totalBonusUsd > 0
+                      ? ` + ${row.bonusDetalles.length} ${$t('dashboard.table.bonusesCount') || 'bonos'}`
+                      : ''
+                  }})
                 </span>
               </div>
               <el-table
-                :data="row.comisiones"
+                :data="getDetalleTableData(row)"
                 row-key="id"
                 size="small"
                 border
                 stripe
                 show-summary
+                :span-method="getNestedSpanMethod"
+                :row-class-name="getNestedRowClassName"
                 :summary-method="getDetalleVentasSummaries"
                 class="nested-table"
               >
+                <!-- Columna 0: Folio / Misc. o Separador / Nombre de Bono -->
                 <el-table-column
                   prop="numeroMiscelaneo"
                   :label="$t('dashboard.table.voucherFolio')"
-                  width="135"
+                  width="155"
                 >
                   <template #default="{ row: subRow }">
+                    <!-- Fila de Separación -->
+                    <div v-if="subRow.isSeparator" class="nested-separator-content">
+                      <div class="separator-badge-title">
+                        <el-icon class="text-warning mr-1"><Award :size="15" /></el-icon>
+                        <span class="separator-title">
+                          {{ $t('dashboard.table.bonusesEarnedPeriod') }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Fila de Bono -->
+                    <div v-else-if="subRow.isBonus" class="bonus-row-folio">
+                      <el-tag
+                        size="small"
+                        :type="subRow.bonusTipo === 'INDIVIDUAL' ? 'warning' : 'primary'"
+                        effect="plain"
+                        round
+                        class="bonus-tag-pill"
+                      >
+                        <el-icon class="mr-1"><Award :size="12" /></el-icon>
+                        {{ subRow.numeroMiscelaneo }}
+                      </el-tag>
+                    </div>
+
+                    <!-- Cita de Venta normal -->
                     <el-button
-                      v-if="subRow.citaVentaId"
+                      v-else-if="subRow.citaVentaId"
                       type="primary"
                       link
                       size="small"
@@ -831,35 +1183,82 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                       @click.stop="goToEditSale(subRow.citaVentaId)"
                     >
                       <el-icon :size="13"><Edit /></el-icon>
-                      <span class="font-mono text-xs">{{ subRow.numeroMiscelaneo || $t('dashboard.table.noVoucherFolio') }}</span>
+                      <span class="font-mono text-xs">
+                        {{ subRow.numeroMiscelaneo || $t('dashboard.table.noVoucherFolio') }}
+                      </span>
                     </el-button>
-                    <span v-else class="font-mono text-xs">{{ subRow.numeroMiscelaneo || $t('dashboard.table.noVoucherFolio') }}</span>
+                    <span v-else class="font-mono text-xs">
+                      {{ subRow.numeroMiscelaneo || $t('dashboard.table.noVoucherFolio') }}
+                    </span>
                   </template>
                 </el-table-column>
-                <el-table-column
-                  prop="fechaVenta"
-                  :label="$t('dashboard.table.date')"
-                  width="110"
-                />
+
+                <!-- Columna 1: Fecha -->
+                <el-table-column prop="fechaVenta" :label="$t('dashboard.table.date')" width="110">
+                  <template #default="{ row: subRow }">
+                    <span :class="{ 'text-muted text-xs': subRow.isBonus }">
+                      {{ subRow.fechaVenta }}
+                    </span>
+                  </template>
+                </el-table-column>
+
+                <!-- Columna 2: Hotel -->
                 <el-table-column
                   prop="hotelNombre"
                   :label="$t('dashboard.table.hotel')"
                   width="110"
                   show-overflow-tooltip
                 />
+
+                <!-- Columna 3: Cliente / Descripción de Bono -->
                 <el-table-column
                   prop="clienteNombre"
                   :label="$t('dashboard.table.client')"
-                  width="160"
+                  width="110"
                   show-overflow-tooltip
-                />
+                >
+                  <template #default="{ row: subRow }">
+                    <div v-if="subRow.isBonus" class="bonus-info-wrapper">
+                      <el-tooltip
+                        placement="top"
+                        effect="dark"
+                        :teleported="true"
+                        popper-class="vat-info-popper"
+                      >
+                        <template #content>
+                          <div class="vat-tooltip-content">
+                            {{ subRow.clienteNombre }}
+                          </div>
+                        </template>
+                        <el-icon class="cursor-pointer text-muted hover:text-primary" :size="14">
+                          <InfoFilled />
+                        </el-icon>
+                      </el-tooltip>
+                    </div>
+                    <span v-else>{{ subRow.clienteNombre }}</span>
+                  </template>
+                </el-table-column>
+
+                <!-- Columna 4: Rol -->
                 <el-table-column :label="$t('dashboard.table.role')" width="110" align="center">
                   <template #default="{ row: subRow }">
                     <el-tag
+                      v-if="subRow.isBonus"
+                      size="small"
+                      type="warning"
+                      effect="dark"
+                      round
+                      class="font-bold bono-table-tag"
+                    >
+                      <el-icon class="mr-1"><Award :size="11" /></el-icon>
+                      BONO
+                    </el-tag>
+                    <el-tag
+                      v-else
                       size="small"
                       :type="
                         subRow.rolEnVenta === 'FOTOGRAFO'
-                           ? 'success'
+                          ? 'success'
                           : subRow.rolEnVenta === 'VENDEDOR'
                             ? 'primary'
                             : 'warning'
@@ -869,11 +1268,16 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                     </el-tag>
                   </template>
                 </el-table-column>
+
+                <!-- Columna 5: Tasa -->
                 <el-table-column :label="$t('dashboard.table.rate')" width="80" align="center">
                   <template #default="{ row: subRow }">
-                    <span>{{ subRow.porcentajeAplicado }}%</span>
+                    <span v-if="subRow.isBonus" class="text-muted">—</span>
+                    <span v-else>{{ subRow.porcentajeAplicado }}%</span>
                   </template>
                 </el-table-column>
+
+                <!-- Columna 6: Ventas Brutas -->
                 <el-table-column
                   prop="totalVentaUsd"
                   :label="$t('dashboard.table.grossSales')"
@@ -881,9 +1285,14 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                   align="right"
                 >
                   <template #default="{ row: subRow }">
-                    <span>{{ formatCurrency(subRow.totalVentaUsd, 2) }}</span>
+                    <span v-if="subRow.isBonus || subRow.esVentaDuplicada" class="text-muted">
+                      —
+                    </span>
+                    <span v-else>{{ formatCurrency(subRow.totalVentaUsd, 2) }}</span>
                   </template>
                 </el-table-column>
+
+                <!-- Columna 7: Retención / IVA -->
                 <el-table-column
                   prop="impuestoMontoUsd"
                   :label="$t('dashboard.table.taxWithholding')"
@@ -891,11 +1300,16 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                   align="right"
                 >
                   <template #default="{ row: subRow }">
-                    <span class="text-danger">
+                    <span v-if="subRow.isBonus || subRow.esVentaDuplicada" class="text-muted">
+                      —
+                    </span>
+                    <span v-else class="text-danger">
                       -{{ formatCurrency(subRow.impuestoMontoUsd, 2) }}
                     </span>
                   </template>
                 </el-table-column>
+
+                <!-- Columna 8: Base Neta -->
                 <el-table-column
                   prop="baseCalculoUsd"
                   :label="$t('dashboard.table.netBase')"
@@ -903,9 +1317,14 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                   align="right"
                 >
                   <template #default="{ row: subRow }">
-                    <span>{{ formatCurrency(subRow.baseCalculoUsd, 2) }}</span>
+                    <span v-if="subRow.isBonus || subRow.esVentaDuplicada" class="text-muted">
+                      —
+                    </span>
+                    <span v-else>{{ formatCurrency(subRow.baseCalculoUsd, 2) }}</span>
                   </template>
                 </el-table-column>
+
+                <!-- Columna 9: Comisión USD -->
                 <el-table-column
                   prop="importeComisionUsd"
                   :label="$t('dashboard.table.commissionAmountUsd')"
@@ -913,11 +1332,14 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                   align="right"
                 >
                   <template #default="{ row: subRow }">
-                    <strong class="text-success">
-                      {{ formatCurrency(subRow.importeComisionUsd, 2) }}
+                    <strong class="text-success font-bold">
+                      {{ subRow.isBonus ? '+' : ''
+                      }}{{ formatCurrency(subRow.importeComisionUsd, 2) }}
                     </strong>
                   </template>
                 </el-table-column>
+
+                <!-- Columna 10: Comisión MXN -->
                 <el-table-column
                   :label="$t('dashboard.table.commissionAmountMxn')"
                   width="135"
@@ -925,10 +1347,13 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                 >
                   <template #default="{ row: subRow }">
                     <strong class="text-primary font-medium">
-                      {{ formatMxn((subRow.importeComisionUsd || 0) * (tipoCambioMxn || 1)) }}
+                      {{ subRow.isBonus ? '+' : ''
+                      }}{{ formatMxn((subRow.importeComisionUsd || 0) * (tipoCambioMxn || 1)) }}
                     </strong>
                   </template>
                 </el-table-column>
+
+                <!-- Columna 11: Estado -->
                 <el-table-column :label="$t('dashboard.table.status')" width="110" align="center">
                   <template #default="{ row: subRow }">
                     <el-tag
@@ -947,38 +1372,43 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                     </el-tag>
                   </template>
                 </el-table-column>
+
+                <!-- Columna 12: Acción -->
                 <el-table-column :label="$t('dashboard.table.action')" width="115" align="center">
                   <template #default="{ row: subRow }">
-                    <el-button
-                      v-if="subRow.estado === 'PENDIENTE'"
-                      type="warning"
-                      size="small"
-                      class="action-btn"
-                      @click.stop="onUpdateCommissionStatus(subRow.id, 'APROBADA')"
-                    >
-                      {{ $t('dashboard.approve') }}
-                    </el-button>
-                    <el-button
-                      v-else-if="subRow.estado === 'APROBADA'"
-                      type="success"
-                      size="small"
-                      class="action-btn"
-                      @click.stop="onUpdateCommissionStatus(subRow.id, 'PAGADA')"
-                    >
-                      {{ $t('dashboard.pay') }}
-                    </el-button>
-                    <el-button
-                      v-else-if="subRow.estado === 'PAGADA'"
-                      type="info"
-                      plain
-                      size="small"
-                      class="action-btn"
-                      :icon="RotateCcw"
-                      :title="$t('dashboard.undoPayment')"
-                      @click.stop="onUpdateCommissionStatus(subRow.id, 'PENDIENTE')"
-                    >
-                      {{ $t('dashboard.undo') }}
-                    </el-button>
+                    <span v-if="subRow.isBonus" class="text-muted text-xs">—</span>
+                    <template v-else>
+                      <el-button
+                        v-if="subRow.estado === 'PENDIENTE'"
+                        type="warning"
+                        size="small"
+                        class="action-btn"
+                        @click.stop="onUpdateCommissionStatus(subRow.id, 'APROBADA')"
+                      >
+                        {{ $t('dashboard.approve') }}
+                      </el-button>
+                      <el-button
+                        v-else-if="subRow.estado === 'APROBADA'"
+                        type="success"
+                        size="small"
+                        class="action-btn"
+                        @click.stop="onUpdateCommissionStatus(subRow.id, 'PAGADA')"
+                      >
+                        {{ $t('dashboard.pay') }}
+                      </el-button>
+                      <el-button
+                        v-else-if="subRow.estado === 'PAGADA'"
+                        type="info"
+                        plain
+                        size="small"
+                        class="action-btn"
+                        :icon="RotateCcw"
+                        :title="$t('dashboard.undoPayment')"
+                        @click.stop="onUpdateCommissionStatus(subRow.id, 'PENDIENTE')"
+                      >
+                        {{ $t('dashboard.undo') }}
+                      </el-button>
+                    </template>
                   </template>
                 </el-table-column>
               </el-table>
@@ -1014,17 +1444,6 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
               <div class="employee-info">
                 <div class="employee-name-line">
                   <strong class="employee-name">{{ row.nombreCompleto }}</strong>
-                  <el-tag
-                    v-if="row.cumpleBono"
-                    size="small"
-                    type="warning"
-                    effect="light"
-                    class="bono-badge"
-                    round
-                  >
-                    <el-icon class="mr-1"><Award /></el-icon>
-                    {{ $t('dashboard.table.bonusAchieved') }}
-                  </el-tag>
                 </div>
               </div>
             </div>
@@ -1141,18 +1560,57 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
           </template>
         </el-table-column>
 
-        <!-- Columna 8: Otras Comisiones (Supervisor / Gerente) -->
+        <!-- Columna 8: Otras Comisiones (Supervisor / Gerente / Bonos) -->
         <el-table-column
           prop="comisionOtrasUsd"
           :label="$t('dashboard.table.otherCommission')"
-          width="145"
+          width="155"
           align="right"
           sortable="custom"
         >
           <template #default="{ row }">
-            <span v-if="row.comisionOtrasUsd > 0">
-              {{ formatCurrency(row.comisionOtrasUsd, 2) }}
-            </span>
+            <div v-if="row.comisionOtrasUsd > 0" class="other-comm-cell">
+              <!-- Icono Naranja para Bono Personal / Individual (al principio) -->
+              <el-tooltip
+                v-if="row.bonoIndividualUsd > 0"
+                placement="top"
+                effect="dark"
+                popper-class="award-bonus-popper"
+              >
+                <template #content>
+                  <div class="award-bonus-tooltip">
+                    <div class="award-bonus-title">{{ $t('dashboard.table.individualBonus') }}:</div>
+                    <div class="award-bonus-amount text-warning">+{{ formatCurrency(row.bonoIndividualUsd, 2) }}</div>
+                  </div>
+                </template>
+                <el-icon class="text-warning cursor-pointer hover:scale-110 transition-transform">
+                  <Award :size="15" />
+                </el-icon>
+              </el-tooltip>
+
+              <!-- Icono Azul para Bono Grupal (al principio) -->
+              <el-tooltip
+                v-if="row.bonoGrupalUsd > 0"
+                placement="top"
+                effect="dark"
+                popper-class="award-bonus-popper"
+              >
+                <template #content>
+                  <div class="award-bonus-tooltip">
+                    <div class="award-bonus-title">{{ $t('dashboard.table.groupBonus') }}:</div>
+                    <div class="award-bonus-amount text-primary">+{{ formatCurrency(row.bonoGrupalUsd, 2) }}</div>
+                  </div>
+                </template>
+                <el-icon class="text-primary cursor-pointer hover:scale-110 transition-transform">
+                  <Award :size="15" />
+                </el-icon>
+              </el-tooltip>
+
+              <!-- Cantidad monetaria -->
+              <span class="font-medium">
+                {{ formatCurrency(row.comisionOtrasUsd, 2) }}
+              </span>
+            </div>
             <span v-else class="text-muted">—</span>
           </template>
         </el-table-column>
@@ -1234,14 +1692,24 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
             <div class="row-actions-group">
               <!-- Paso 1: Si tiene comisiones pendientes -> Botón Aprobar -->
               <template v-if="row.pendientesCount > 0">
-                <el-button type="warning" size="small" class="action-btn" @click="handleUserApprove(row)">
+                <el-button
+                  type="warning"
+                  size="small"
+                  class="action-btn"
+                  @click="handleUserApprove(row)"
+                >
                   {{ $t('dashboard.approve') }}
                 </el-button>
               </template>
 
               <!-- Paso 2: Si no tiene pendientes pero tiene comisiones aprobadas -> Botón Pagar + Deshacer -->
               <template v-else-if="row.aprobadasCount > 0">
-                <el-button type="success" size="small" class="action-btn" @click="handleUserPay(row)">
+                <el-button
+                  type="success"
+                  size="small"
+                  class="action-btn"
+                  @click="handleUserPay(row)"
+                >
                   {{ $t('dashboard.pay') }}
                 </el-button>
                 <el-popconfirm
@@ -1407,15 +1875,6 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
   text-overflow: ellipsis;
 }
 
-.bono-badge {
-  font-size: 0.68rem;
-  padding: 0 6px;
-  height: 20px;
-  line-height: 20px;
-  display: inline-flex;
-  align-items: center;
-}
-
 .row-actions-group {
   display: flex;
   gap: 6px;
@@ -1504,6 +1963,76 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
   text-decoration: underline;
 }
 
+.other-comm-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+/* Fila de Separador y Filas de Bonus en Tabla Anidada */
+:deep(.nested-table .nested-separator-tr) {
+  background: linear-gradient(
+    90deg,
+    rgba(245, 158, 11, 0.08) 0%,
+    rgba(241, 245, 249, 0.8) 100%
+  ) !important;
+}
+
+:deep(.nested-table .nested-separator-tr td) {
+  padding: 8px 12px !important;
+  border-top: 1px solid var(--toolbar-border, #e2e8f0) !important;
+  border-bottom: 1px solid var(--toolbar-border, #e2e8f0) !important;
+}
+
+.nested-separator-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.separator-badge-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #b45309;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+:deep(.nested-table .nested-bonus-tr) {
+  background-color: rgba(245, 158, 11, 0.035) !important;
+}
+
+:deep(.nested-table .nested-bonus-tr:hover > td) {
+  background-color: rgba(245, 158, 11, 0.07) !important;
+}
+
+.bonus-info-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.bonus-row-folio {
+  display: flex;
+  align-items: center;
+}
+
+.bonus-tag-pill {
+  width: 122px;
+  justify-content: center;
+  text-align: center;
+  font-weight: 600;
+  display: inline-flex;
+}
+
+.bono-table-tag {
+  letter-spacing: 0.03em;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -1529,5 +2058,31 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
   font-size: 12px !important;
   text-align: center !important;
   padding: 2px 4px !important;
+}
+
+.el-popper.award-bonus-popper {
+  min-width: 130px !important;
+  width: max-content !important;
+  max-width: 200px !important;
+  text-align: center !important;
+  padding: 6px 10px !important;
+}
+
+.el-popper.award-bonus-popper .award-bonus-tooltip {
+  text-align: center;
+  line-height: 1.35;
+}
+
+.el-popper.award-bonus-popper .award-bonus-title {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap !important;
+}
+
+.el-popper.award-bonus-popper .award-bonus-amount {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap !important;
+  margin-top: 2px;
 }
 </style>

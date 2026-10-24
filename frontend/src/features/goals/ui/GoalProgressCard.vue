@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { formatCurrency } from '@/shared/formatters'
 import type { SemaforoEstado } from '../domain/goal.model'
 import {
   SuccessFilled,
@@ -76,14 +77,6 @@ const semaforoIcon = computed(() => {
 const cappedPercentage = computed(() => {
   return Math.min(Math.max(0, props.porcentajeCumplimiento), 100)
 })
-
-function formatCurrency(val: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(val)
-}
 </script>
 
 <template>

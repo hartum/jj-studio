@@ -12,6 +12,8 @@ export interface MetaDTO {
   anio: number
   mes: number
   importeObjetivo: number
+  importeBonus?: number | null
+  valorBonus?: number | null
   sesionesObjetivo?: number | null
   ventasObjetivo?: number | null
   activo: boolean
@@ -26,6 +28,8 @@ export interface CreateOrUpdateMetaInput {
   anio: number
   mes: number
   importeObjetivo: number
+  importeBonus?: number | null
+  valorBonus?: number | null
   sesionesObjetivo?: number | null
   ventasObjetivo?: number | null
   activo?: boolean
@@ -35,7 +39,12 @@ export interface FotografoProgreso {
   usuarioId: string
   nombreCompleto: string
   email: string
+  rolCodigo?: string
   metaImporte: number
+  metaBonus?: number | null
+  valorBonus?: number | null
+  faltanteBonus?: number | null
+  alcanzoBonus?: boolean
   esMetaPersonalizada: boolean
   ventasRealesUsd: number
   numVentas: number
@@ -65,6 +74,9 @@ export interface HotelProgresoResumen {
   metaEsperadaHoy: number
   desviacionMonetaria: number
   semaforo: SemaforoEstado
+  faltanteBonoGrupal?: number
+  alcanzoBonoGrupal?: boolean
+  valorBonoGrupal?: number | null
   fotografos: FotografoProgreso[]
 }
 

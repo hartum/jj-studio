@@ -153,6 +153,8 @@ export async function goalRoutes(fastify: FastifyInstance) {
           anio: m.anio,
           mes: m.mes,
           importeObjetivo: m.importeObjetivo,
+          importeBonus: m.importeBonus ?? null,
+          valorBonus: m.valorBonus ?? null,
           sesionesObjetivo: m.sesionesObjetivo,
           ventasObjetivo: m.ventasObjetivo,
           activo: m.activo,
@@ -195,6 +197,8 @@ export async function goalRoutes(fastify: FastifyInstance) {
         anio: number
         mes: number
         importeObjetivo: number
+        importeBonus?: number | null
+        valorBonus?: number | null
         sesionesObjetivo?: number | null
         ventasObjetivo?: number | null
         activo?: boolean
@@ -230,12 +234,28 @@ export async function goalRoutes(fastify: FastifyInstance) {
         },
       })
 
+      const importeBonus =
+        body.importeBonus !== undefined
+          ? body.importeBonus != null && Number(body.importeBonus) > 0
+            ? Number(body.importeBonus)
+            : null
+          : undefined
+
+      const valorBonus =
+        body.valorBonus !== undefined
+          ? body.valorBonus != null && Number(body.valorBonus) > 0
+            ? Number(body.valorBonus)
+            : null
+          : undefined
+
       let result
       if (existing) {
         result = await prisma.meta.update({
           where: { id: existing.id },
           data: {
             importeObjetivo,
+            ...(importeBonus !== undefined ? { importeBonus } : {}),
+            ...(valorBonus !== undefined ? { valorBonus } : {}),
             sesionesObjetivo:
               body.sesionesObjetivo !== undefined
                 ? body.sesionesObjetivo != null
@@ -262,6 +282,8 @@ export async function goalRoutes(fastify: FastifyInstance) {
             anio,
             mes,
             importeObjetivo,
+            importeBonus: importeBonus !== undefined ? importeBonus : null,
+            valorBonus: valorBonus !== undefined ? valorBonus : null,
             sesionesObjetivo: body.sesionesObjetivo != null ? Number(body.sesionesObjetivo) : null,
             ventasObjetivo: body.ventasObjetivo != null ? Number(body.ventasObjetivo) : null,
             activo: body.activo !== undefined ? Boolean(body.activo) : true,
@@ -281,6 +303,8 @@ export async function goalRoutes(fastify: FastifyInstance) {
         anio: result.anio,
         mes: result.mes,
         importeObjetivo: result.importeObjetivo,
+        importeBonus: result.importeBonus ?? null,
+        valorBonus: result.valorBonus ?? null,
         sesionesObjetivo: result.sesionesObjetivo,
         ventasObjetivo: result.ventasObjetivo,
         activo: result.activo,
@@ -481,12 +505,12 @@ export async function goalRoutes(fastify: FastifyInstance) {
           usuariosAsignados: {
             where: {
               usuario: {
-                role: { codigo: { in: ['FOTOGRAFO', 'SUPERVISOR'] } },
+                role: { codigo: { in: ['FOTOGRAFO', 'SUPERVISOR', 'AGENDADOR', 'VENDEDOR'] } },
                 activo: true,
                 deletedAt: null,
               },
             },
-            include: { usuario: true },
+            include: { usuario: { include: { role: true } } },
           },
         },
         orderBy: { nombre: 'asc' },
@@ -586,11 +610,23 @@ export async function goalRoutes(fastify: FastifyInstance) {
             diaActual,
           )
 
+          const metaBonus = metaPersonal?.importeBonus ?? null
+          const faltanteBonus =
+            metaBonus && metaBonus > 0
+              ? Math.max(0, Math.round((metaBonus - ventasRealesFoto) * 100) / 100)
+              : null
+          const alcanzoBonus = Boolean(metaBonus && metaBonus > 0 && ventasRealesFoto >= metaBonus)
+
           fotografosProgreso.push({
             usuarioId: fotografo.id,
             nombreCompleto: `${fotografo.nombre} ${fotografo.apellidos}`,
             email: fotografo.email,
+            rolCodigo: rawFotografo.role?.codigo || '',
             metaImporte: Math.round(metaImporteFoto * 100) / 100,
+            metaBonus: metaBonus ? Math.round(metaBonus * 100) / 100 : null,
+            valorBonus: metaPersonal?.valorBonus != null ? Math.round(metaPersonal.valorBonus * 100) / 100 : null,
+            faltanteBonus,
+            alcanzoBonus,
             esMetaPersonalizada,
             ventasRealesUsd: Math.round(ventasRealesFoto * 100) / 100,
             numVentas: numVentasFoto,
@@ -621,6 +657,13 @@ export async function goalRoutes(fastify: FastifyInstance) {
           metaEsperadaHoy: Math.round(metaEsperadaHoy * 100) / 100,
           desviacionMonetaria: Math.round(desviacionMonetaria * 100) / 100,
           semaforo,
+          faltanteBonoGrupal:
+            metaImporteHotel > 0
+              ? Math.max(0, Math.round((metaImporteHotel - ventasRealesUsd) * 100) / 100)
+              : 0,
+          alcanzoBonoGrupal: metaImporteHotel > 0 && ventasRealesUsd >= metaImporteHotel,
+          valorBonoGrupal:
+            metaHotelObj?.valorBonus != null ? Math.round(metaHotelObj.valorBonus * 100) / 100 : null,
           fotografos: fotografosProgreso,
         })
       }

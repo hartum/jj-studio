@@ -13,7 +13,7 @@ import {
   Calendar,
   User,
 } from '@element-plus/icons-vue'
-import { Users } from '@lucide/vue'
+import { Users, Award, Sparkles, Check } from '@lucide/vue'
 
 const { t } = useI18n()
 
@@ -83,6 +83,22 @@ function getCappedPercentage(val?: number): number {
 
 const numFotografos = computed(() => {
   return props.hotelProgreso.fotografos?.length || 0
+})
+
+const hasGroupBonus = computed(() => {
+  if (!props.hotelProgreso || props.hotelProgreso.metaImporte <= 0) return false
+  if (props.hotelProgreso.valorBonoGrupal !== undefined) {
+    return props.hotelProgreso.valorBonoGrupal !== null && props.hotelProgreso.valorBonoGrupal > 0
+  }
+  return true
+})
+
+const teamMemberCount = computed(() => Math.max(1, props.hotelProgreso.fotografos?.length || 1))
+
+const groupBonusShare = computed(() => {
+  const total = props.hotelProgreso.valorBonoGrupal || 0
+  if (total <= 0) return 0
+  return Math.round((total / teamMemberCount.value) * 100) / 100
 })
 </script>
 
@@ -190,6 +206,43 @@ const numFotografos = computed(() => {
           <span class="pacing-val">{{ hotelProgreso.numSesiones }}</span>
         </div>
       </div>
+
+      <!-- Bono Grupal del Hotel (al final de la tarjeta de hotel) -->
+      <div v-if="hasGroupBonus" class="hotel-group-bonus-banner">
+        <div class="bonus-indicator-left">
+          <el-icon class="bonus-badge-icon text-primary"><Sparkles :size="16" /></el-icon>
+          <span class="bonus-tag-label font-bold">{{ $t('goalsConfig.groupBonusLabel') }}</span>
+        </div>
+        <div class="bonus-indicator-right">
+          <el-tag
+            v-if="hotelProgreso.alcanzoBonoGrupal"
+            type="success"
+            effect="dark"
+            round
+            size="small"
+          >
+            <el-icon class="mr-1"><Check :size="13" /></el-icon>
+            {{ $t('goalsConfig.groupBonusAchieved') }}
+          </el-tag>
+          <div v-else class="bonus-missing-inline">
+            <span class="bonus-missing-highlight text-primary font-semibold text-xs">
+              {{
+                groupBonusShare > 0
+                  ? $t('goalsConfig.remainingForGroupBonus', {
+                      amount: formatCurrency(hotelProgreso.faltanteBonoGrupal || 0),
+                      share: formatCurrency(groupBonusShare),
+                    })
+                  : $t('goalsConfig.remainingForGroupBonusSimple', {
+                      amount: formatCurrency(hotelProgreso.faltanteBonoGrupal || 0),
+                    })
+              }}
+            </span>
+            <span class="text-xs text-muted ml-1">
+              ({{ formatCurrency(hotelProgreso.ventasRealesUsd) }} / {{ formatCurrency(hotelProgreso.metaImporte) }})
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ============================================== -->
@@ -260,6 +313,42 @@ const numFotografos = computed(() => {
               >
                 {{ getSemaforoText(row.semaforo, row.metaImporte) }}
               </el-tag>
+            </template>
+          </el-table-column>
+
+          <!-- Columna Meta y Estado de Bonus Individual -->
+          <el-table-column :label="$t('goalsConfig.bonusGoalUsd')" min-width="160" align="center">
+            <template #default="{ row }">
+              <template v-if="row.metaBonus && row.metaBonus > 0">
+                <el-tag
+                  v-if="row.alcanzoBonus"
+                  type="success"
+                  effect="dark"
+                  round
+                  size="small"
+                >
+                  <el-icon class="mr-1"><Award :size="12" /></el-icon>
+                  {{ $t('goalsConfig.individualBonusAchieved') }}
+                </el-tag>
+                <div v-else class="bonus-table-cell">
+                  <span class="text-xs text-warning font-semibold block">
+                    {{
+                      row.valorBonus && row.valorBonus > 0
+                        ? $t('goalsConfig.remainingForBonus', {
+                            amount: formatCurrency(row.faltanteBonus || 0),
+                            bonusValue: formatCurrency(row.valorBonus),
+                          })
+                        : $t('goalsConfig.remainingForBonusSimple', {
+                            amount: formatCurrency(row.faltanteBonus || 0),
+                          })
+                    }}
+                  </span>
+                  <span class="text-xs text-muted">
+                    ({{ formatCurrency(row.ventasRealesUsd) }} / {{ formatCurrency(row.metaBonus) }})
+                  </span>
+                </div>
+              </template>
+              <span v-else class="text-muted text-xs">—</span>
             </template>
           </el-table-column>
         </el-table>
@@ -531,5 +620,48 @@ const numFotografos = computed(() => {
 
 .text-muted {
   color: #94a3b8;
+}
+
+/* Hotel Group Bonus Banner */
+.hotel-group-bonus-banner {
+  margin-top: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(59, 130, 246, 0.04);
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.bonus-indicator-left {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.bonus-tag-label {
+  font-size: 0.82rem;
+  color: var(--heading-color, #0f172a);
+}
+
+.bonus-indicator-right {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.bonus-missing-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.bonus-table-cell {
+  line-height: 1.25;
+  text-align: center;
 }
 </style>
