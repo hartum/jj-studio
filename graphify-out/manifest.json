@@ -85,18 +85,18 @@
     "semantic_hash": "cf8cd866d45ae3dfd5e008bbbeef80d5"
   },
   "backend/src/features/commissions/application/commission.service.ts": {
-    "mtime": 1792690667.0852368,
-    "ast_hash": "f3dc0fe07ff26ccb1bcf38997666b6c7",
+    "mtime": 1792876649.2750397,
+    "ast_hash": "b77fad148a4f44ff5ce478851fa9632b",
     "semantic_hash": ""
   },
   "backend/src/features/commissions/domain/commission.model.ts": {
-    "mtime": 1792710525.6851041,
-    "ast_hash": "4c84766bc136444532960d69630addbc",
+    "mtime": 1792876588.2446568,
+    "ast_hash": "a88e59be9889fc955b6eb59411759e68",
     "semantic_hash": ""
   },
   "backend/src/features/commissions/infrastructure/commission.routes.ts": {
-    "mtime": 1792770969.6718006,
-    "ast_hash": "e4853b61c2973680c210f84fe4953aeb",
+    "mtime": 1792876638.292864,
+    "ast_hash": "697fb140fc4a3e33eaaddc42d6535447",
     "semantic_hash": ""
   },
   "backend/src/features/countries/infrastructure/country.routes.ts": {
@@ -290,8 +290,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/commissions/domain/commission.model.ts": {
-    "mtime": 1792710550.0375383,
-    "ast_hash": "ff3b23ea104e65cbe4dd511d8983753b",
+    "mtime": 1792876656.4180324,
+    "ast_hash": "d69cb5478b55c54c9bad2bb635f008aa",
     "semantic_hash": ""
   },
   "frontend/src/features/commissions/stores/commission.store.ts": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792856626.968045,
-    "ast_hash": "0ae119ddeaab5f612c8cbf6704bff1ff",
+    "mtime": 1792878224.71548,
+    "ast_hash": "393ae99e8a8d3344dbf7af41890da9c5",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792856619.7678714,
-    "ast_hash": "c2b728a84237f819be7ff10bfdd2fa57",
+    "mtime": 1792878210.798085,
+    "ast_hash": "4c7027a51e86d84dcbefd9b2b9567b48",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1075,8 +1075,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1792856358.0834692,
-    "ast_hash": "d554060fcbd6276322174546a92e6f7c",
+    "mtime": 1792879615.341368,
+    "ast_hash": "9664738efa5ea0c371fb90a5273fe1bc",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {
