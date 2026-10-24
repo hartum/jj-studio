@@ -16,7 +16,6 @@ const {
   goalStore,
   commissionStore,
   selectedAnio,
-  selectedMes,
   selectedMonthDate,
   selectedMonthLabel,
   selectedHotelFilters,
@@ -131,10 +130,10 @@ const groupedManagerHotelsByCountry = computed<CountryGroup[]>(() => {
           v-model="selectedMonthDate"
           type="month"
           :placeholder="$t('dashboard.selectMonth')"
-          format="YYYY-MM"
+          format="MMMM YYYY"
           value-format="YYYY-MM"
           size="default"
-          style="width: 140px"
+          style="width: 160px"
           :clearable="false"
         />
       </div>

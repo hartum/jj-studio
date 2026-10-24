@@ -9,7 +9,6 @@ const router = useRouter()
 
 const {
   commissionStore,
-  selectedMes,
   selectedAnio,
   selectedMonthDate,
   selectedMonthLabel,
@@ -36,10 +35,10 @@ const {
           v-model="selectedMonthDate"
           type="month"
           :placeholder="$t('dashboard.selectMonth')"
-          format="YYYY-MM"
+          format="MMMM YYYY"
           value-format="YYYY-MM"
           size="default"
-          style="width: 140px"
+          style="width: 160px"
           :clearable="false"
         />
         <el-button
