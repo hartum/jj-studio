@@ -12,6 +12,7 @@ import {
   saveUserCommissionConfig,
   deleteUserCommissionConfig,
 } from '../application/commission.service.js'
+import { syncMonthlyBonuses } from '../application/bonus-sync.service.js'
 
 function getAuthUserId(request: any): string | null {
   try {
@@ -347,6 +348,15 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         }
       }
 
+      if (targetAnio && targetMes) {
+        await syncMonthlyBonuses(targetAnio, targetMes, effectiveHotelIds)
+      } else if (fechaDesde) {
+        const parts = fechaDesde.split('-').map(Number)
+        if (parts[0] && parts[1]) {
+          await syncMonthlyBonuses(parts[0], parts[1], effectiveHotelIds)
+        }
+      }
+
       const resumen = await getResumenComisiones({
         hotelIds: effectiveHotelIds,
         usuarioId: filterUserId,
@@ -438,6 +448,15 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         where.fechaVenta = { gte: startDate, lt: endDate }
       }
 
+      if (anio && mes) {
+        await syncMonthlyBonuses(Number(anio), Number(mes), reqIds || allowedHotelIds)
+      } else if (fechaDesde) {
+        const parts = fechaDesde.split('-').map(Number)
+        if (parts[0] && parts[1]) {
+          await syncMonthlyBonuses(parts[0], parts[1], reqIds || allowedHotelIds)
+        }
+      }
+
       const comisiones = await prisma.comision.findMany({
         where,
         include: {
@@ -462,6 +481,8 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         usuarioApellidos: decrypt(c.usuario?.apellidos) || '',
         usuarioEmail: decrypt(c.usuario?.email) || '',
         rolEnVenta: c.rolEnVenta,
+        tipoBonus: c.tipoBonus || null,
+        descripcion: c.descripcion || null,
         tipoContrato: c.tipoContrato || c.usuario?.tipoContrato || 'ASALARIADO',
         porcentajeAplicado: c.porcentajeAplicado,
         baseCalculoUsd: c.baseCalculoUsd,
@@ -471,14 +492,21 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         estado: c.estado,
         fechaVenta: c.fechaVenta.toISOString().slice(0, 10),
         clienteNombre:
-          decrypt(c.citaVenta?.sesion?.clienteNombre) ||
+          c.descripcion ||
+          (c.citaVenta?.sesion?.clienteNombre ? decrypt(c.citaVenta.sesion.clienteNombre) : '') ||
           (c.citaVenta?.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : ''),
         numFotosVendidas: c.citaVenta?.numFotosVendidas || null,
         totalVentaUsd: c.citaVenta?.totalVentaUsd ?? c.baseCalculoUsd,
         impuestoMontoUsd: Number(
           Math.max(0, (c.citaVenta?.totalVentaUsd ?? c.baseCalculoUsd) - c.baseCalculoUsd).toFixed(2),
         ),
-        numeroMiscelaneo: c.citaVenta?.numeroMiscelaneo || null,
+        numeroMiscelaneo:
+          c.citaVenta?.numeroMiscelaneo ||
+          (c.tipoBonus === 'INDIVIDUAL'
+            ? 'Bono Individual'
+            : c.tipoBonus === 'GRUPAL'
+              ? 'Bono Grupal'
+              : null),
         createdAt: c.createdAt.toISOString(),
       }))
 
@@ -562,10 +590,17 @@ export async function commissionRoutes(fastify: FastifyInstance) {
         const beneficiarioNombre = beneficiario
           ? `${beneficiario.nombre} ${beneficiario.apellidos}`.trim()
           : 'un usuario'
-        const clienteNombre = existing.citaVenta?.sesion?.clienteNombre
-          ? decrypt(existing.citaVenta.sesion.clienteNombre)
-          : (existing.citaVenta?.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : '')
-        const voucherFolio = existing.citaVenta?.numeroMiscelaneo || null
+        const clienteNombre =
+          existing.descripcion ||
+          (existing.citaVenta?.sesion?.clienteNombre ? decrypt(existing.citaVenta.sesion.clienteNombre) : '') ||
+          (existing.citaVenta?.tipo === 'VENTA_DIRECTA' ? 'Venta directa' : '')
+        const voucherFolio =
+          existing.citaVenta?.numeroMiscelaneo ||
+          (existing.tipoBonus === 'INDIVIDUAL'
+            ? 'Bono Individual'
+            : existing.tipoBonus === 'GRUPAL'
+              ? 'Bono Grupal'
+              : null)
 
         let descAccion = 'cambió el estado de una comisión'
         if (estado === 'APROBADA') descAccion = 'aprobó una comisión'

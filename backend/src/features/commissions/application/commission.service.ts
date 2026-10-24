@@ -674,7 +674,7 @@ export async function recalculateCommissionsForUser(usuarioId: string): Promise<
   })
 
   const allCitaIds = new Set<number>([
-    ...userCommissions.map((c) => c.citaVentaId),
+    ...userCommissions.map((c) => c.citaVentaId).filter((id): id is number => id !== null),
     ...salesAsFotografo.map((s) => s.id),
     ...salesAsVendedor.map((s) => s.id),
     ...salesAsSupervisor.map((s) => s.id),
@@ -772,7 +772,7 @@ export async function getResumenComisiones(params: {
   for (const c of comisiones) {
     totalComisionesUsd += c.importeComisionUsd
 
-    if (!uniqueSales.has(c.citaVentaId)) {
+    if (c.citaVentaId && !uniqueSales.has(c.citaVentaId)) {
       uniqueSales.add(c.citaVentaId)
       totalVentasUsd += c.baseCalculoUsd
     }

@@ -29,14 +29,16 @@ export interface ComisionUsuarioConfig {
 
 export interface Comision {
   id: number
-  citaVentaId: number
+  citaVentaId?: number | null
   hotelId: number
   hotelNombre?: string
   usuarioId: string
   usuarioNombre?: string
   usuarioApellidos?: string
   usuarioEmail?: string
-  rolEnVenta: 'FOTOGRAFO' | 'VENDEDOR' | 'SUPERVISOR' | 'GERENTE' | string
+  rolEnVenta: 'FOTOGRAFO' | 'VENDEDOR' | 'SUPERVISOR' | 'GERENTE' | 'BONO' | string
+  tipoBonus?: 'INDIVIDUAL' | 'GRUPAL' | string | null
+  descripcion?: string | null
   tipoContrato: 'ASALARIADO' | 'SIN_SALARIO' | string | null
   porcentajeAplicado: number
   baseCalculoUsd: number

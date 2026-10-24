@@ -244,8 +244,9 @@ model Meta {
   updatedAt        DateTime  @updatedAt @map("updated_at")
   deletedAt        DateTime? @map("deleted_at")
 
-  hotel   Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
-  usuario Usuario? @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  hotel      Hotel      @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  usuario    Usuario?   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  comisiones Comision[]
 
   @@unique([hotelId, usuarioId, anio, mes, alcanceTipo])
   @@map("metas")
@@ -291,10 +292,10 @@ model ComisionUsuarioConfig {
 
 model Comision {
   id                 Int       @id @default(autoincrement())
-  citaVentaId        Int       @map("cita_venta_id")
+  citaVentaId        Int?      @map("cita_venta_id")
   hotelId            Int       @map("hotel_id")
   usuarioId          String    @map("usuario_id")
-  rolEnVenta         String    @map("rol_en_venta") // "FOTOGRAFO" | "VENDEDOR" | "SUPERVISOR" | "GERENTE"
+  rolEnVenta         String    @map("rol_en_venta") // "FOTOGRAFO" | "VENDEDOR" | "SUPERVISOR" | "GERENTE" | "BONO"
   tipoContrato       String?   @map("tipo_contrato") // "ASALARIADO" | "SIN_SALARIO"
   porcentajeAplicado Float     @map("porcentaje_aplicado")
   baseCalculoUsd     Float     @map("base_calculo_usd")
@@ -303,13 +304,17 @@ model Comision {
   importeComisionMxn Float?    @map("importe_comision_mxn")
   estado             String    @default("PENDIENTE") // "PENDIENTE" | "APROBADA" | "PAGADA" | "RECHAZADA"
   fechaVenta         DateTime  @map("fecha_venta")
+  tipoBonus          String?   @map("tipo_bonus") // "INDIVIDUAL" | "GRUPAL"
+  descripcion        String?   @db.VarChar(512)
+  metaId             Int?      @map("meta_id")
   createdAt          DateTime  @default(now()) @map("created_at")
   updatedAt          DateTime  @updatedAt @map("updated_at")
   deletedAt          DateTime? @map("deleted_at")
 
-  citaVenta CitaVenta @relation(fields: [citaVentaId], references: [id], onDelete: Cascade)
-  hotel     Hotel     @relation(fields: [hotelId], references: [id], onDelete: Cascade)
-  usuario   Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  citaVenta CitaVenta? @relation(fields: [citaVentaId], references: [id], onDelete: Cascade)
+  hotel     Hotel      @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  usuario   Usuario    @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  meta      Meta?      @relation(fields: [metaId], references: [id], onDelete: SetNull)
 
   @@unique([citaVentaId, usuarioId, rolEnVenta])
   @@map("comisiones")

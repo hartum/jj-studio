@@ -460,8 +460,8 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     item.comisionesIds.push(c.id)
     item.comisionesCount++
 
-    // Roles únicos del empleado
-    if (c.rolEnVenta && !item.roles.includes(c.rolEnVenta)) {
+    // Roles únicos del empleado (excluyendo el concepto BONO de las etiquetas de rol)
+    if (c.rolEnVenta && c.rolEnVenta !== 'BONO' && !item.roles.includes(c.rolEnVenta)) {
       item.roles.push(c.rolEnVenta)
     }
 
@@ -490,6 +490,23 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
         item.comisionFotografoUsd += c.importeComisionUsd || 0
       } else if (c.rolEnVenta === 'VENDEDOR') {
         item.comisionVendedorUsd += c.importeComisionUsd || 0
+      } else if (c.rolEnVenta === 'BONO') {
+        item.comisionOtrasUsd += c.importeComisionUsd || 0
+        if (c.tipoBonus === 'INDIVIDUAL') {
+          item.bonoIndividualUsd += c.importeComisionUsd || 0
+        } else if (c.tipoBonus === 'GRUPAL') {
+          item.bonoGrupalUsd += c.importeComisionUsd || 0
+        }
+        item.totalBonusUsd = Number((item.bonoIndividualUsd + item.bonoGrupalUsd).toFixed(2))
+        item.cumpleBono = item.totalBonusUsd > 0
+        item.bonusDetalles.push({
+          tipo: (c.tipoBonus as 'INDIVIDUAL' | 'GRUPAL') || 'INDIVIDUAL',
+          hotelNombre: c.hotelNombre || '',
+          metaObjetivo: 0,
+          ventasAlcanzadas: 0,
+          montoBonus: c.importeComisionUsd || 0,
+          descripcion: c.descripcion || c.clienteNombre || 'Bono',
+        })
       } else {
         item.comisionOtrasUsd += c.importeComisionUsd || 0
       }
@@ -502,7 +519,7 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
   const ventasUnicasPorHotel = new Map<number, number>()
   const ventasProcesadasGlobal = new Set<number>()
   for (const c of list) {
-    if (c.estado !== 'RECHAZADA' && !ventasProcesadasGlobal.has(c.citaVentaId)) {
+    if (c.citaVentaId && c.estado !== 'RECHAZADA' && !ventasProcesadasGlobal.has(c.citaVentaId)) {
       ventasProcesadasGlobal.add(c.citaVentaId)
       const { ventaBruta } = extractSaleMetrics(c)
       ventasUnicasPorHotel.set(c.hotelId, (ventasUnicasPorHotel.get(c.hotelId) || 0) + ventaBruta)
@@ -569,7 +586,7 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     const processedSaleIds = new Set<number>()
 
     for (const c of item.comisiones) {
-      if (c.estado !== 'RECHAZADA' && !processedSaleIds.has(c.citaVentaId)) {
+      if (c.citaVentaId && c.estado !== 'RECHAZADA' && !processedSaleIds.has(c.citaVentaId)) {
         processedSaleIds.add(c.citaVentaId)
         const { ventaBruta, impuesto, baseCalculoUsd } = extractSaleMetrics(c)
         item.totalVentasBrutasUsd += ventaBruta
@@ -592,8 +609,11 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     item.comisionVendedorUsd = Number(item.comisionVendedorUsd.toFixed(2))
     item.comisionOtrasUsd = Number(item.comisionOtrasUsd.toFixed(2))
 
-    // Cálculo optimizado de bonos
-    calcularBonosEmpleado(item, bonusCtx)
+    // Cálculo optimizado de bonos (solo si no existen comisiones de bono registradas en BD)
+    const hasDbBonuses = item.comisiones.some((c) => c.rolEnVenta === 'BONO')
+    if (!hasDbBonuses) {
+      calcularBonosEmpleado(item, bonusCtx)
+    }
 
     // Conversión a Pesos MXN (utilizando tipo de cambio congelado para comisiones fijadas)
     let totalMxn = 0
@@ -601,8 +621,7 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
     const frozenCommissions = nonRejected.filter((c) => c.tipoCambio != null)
     const isFullyFrozen =
       nonRejected.length > 0 &&
-      frozenCommissions.length === nonRejected.length &&
-      item.totalBonusUsd === 0
+      frozenCommissions.length === nonRejected.length
 
     let frozenTcTooltip: string | null = null
     if (isFullyFrozen) {
@@ -625,7 +644,7 @@ const resumenUsuariosComision = computed<EmpleadoComisionResumen[]>(() => {
           : (c.importeComisionUsd || 0) * (c.tipoCambio || tc)
       totalMxn += cMxn
     }
-    if (item.totalBonusUsd > 0) {
+    if (!hasDbBonuses && item.totalBonusUsd > 0) {
       totalMxn += item.totalBonusUsd * tc
     }
     item.totalComisionesMxn = Number(totalMxn.toFixed(2))
@@ -989,7 +1008,10 @@ function getDetalleTableData(row: EmpleadoComisionResumen): DetalleVentaItem[] {
   const items: DetalleVentaItem[] = []
   const seenSaleIds = new Set<number>()
 
-  for (const c of row.comisiones) {
+  const sales = row.comisiones.filter((c) => c.rolEnVenta !== 'BONO')
+  const bonuses = row.comisiones.filter((c) => c.rolEnVenta === 'BONO')
+
+  for (const c of sales) {
     const isDuplicate = c.citaVentaId ? seenSaleIds.has(c.citaVentaId) : false
     if (c.citaVentaId) {
       seenSaleIds.add(c.citaVentaId)
@@ -997,14 +1019,57 @@ function getDetalleTableData(row: EmpleadoComisionResumen): DetalleVentaItem[] {
 
     items.push({
       ...c,
+      isBonus: false,
       esVentaDuplicada: isDuplicate,
       totalVentaUsd: isDuplicate ? 0 : c.totalVentaUsd,
       impuestoMontoUsd: isDuplicate ? 0 : c.impuestoMontoUsd,
       baseCalculoUsd: isDuplicate ? 0 : c.baseCalculoUsd,
     })
   }
-  if (row.totalBonusUsd > 0 && row.bonusDetalles.length > 0) {
+
+  // Si hay comisiones de bono reales en BD
+  if (bonuses.length > 0) {
     // 1. Fila de separación
+    items.push({
+      id: `sep-${row.usuarioId}`,
+      isSeparator: true,
+      isBonus: false,
+      totalBonusUsd: row.totalBonusUsd,
+      totalVentaUsd: 0,
+      impuestoMontoUsd: 0,
+      baseCalculoUsd: 0,
+      importeComisionUsd: 0,
+    })
+
+    // 2. Filas de cada bonus real
+    for (const b of bonuses) {
+      items.push({
+        ...b,
+        id: b.id,
+        isSeparator: false,
+        isBonus: true,
+        bonusTipo: (b.tipoBonus as 'INDIVIDUAL' | 'GRUPAL') || 'INDIVIDUAL',
+        bonusDescripcion: b.descripcion || b.clienteNombre,
+        numeroMiscelaneo:
+          b.tipoBonus === 'INDIVIDUAL'
+            ? t('dashboard.table.individualBonus')
+            : t('dashboard.table.groupBonus'),
+        fechaVenta: b.fechaVenta ? b.fechaVenta.slice(0, 10) : (props.commissionDateRange[0]?.slice(0, 7) || '—'),
+        hotelNombre: b.hotelNombre,
+        clienteNombre: b.descripcion || b.clienteNombre,
+        rolEnVenta: 'BONO',
+        porcentajeAplicado: 0,
+        totalVentaUsd: 0,
+        impuestoMontoUsd: 0,
+        baseCalculoUsd: 0,
+        importeComisionUsd: b.importeComisionUsd,
+        estado: b.estado,
+        tipoCambio: b.tipoCambio,
+        importeComisionMxn: b.importeComisionMxn,
+      })
+    }
+  } else if (row.totalBonusUsd > 0 && row.bonusDetalles.length > 0) {
+    // 1. Fila de separación (fallback sintetizado)
     items.push({
       id: `sep-${row.usuarioId}`,
       isSeparator: true,
@@ -1037,7 +1102,7 @@ function getDetalleTableData(row: EmpleadoComisionResumen): DetalleVentaItem[] {
         impuestoMontoUsd: 0,
         baseCalculoUsd: 0,
         importeComisionUsd: b.montoBonus,
-        estado: row.estadoGeneral === 'MIXTO' ? 'APROBADA' : row.estadoGeneral,
+        estado: 'PENDIENTE',
       })
     })
   }
@@ -1514,7 +1579,7 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                 <!-- Columna 12: Acción -->
                 <el-table-column :label="$t('dashboard.table.action')" width="115" align="center">
                   <template #default="{ row: subRow }">
-                    <span v-if="subRow.isBonus" class="text-muted text-xs">—</span>
+                    <span v-if="subRow.isSeparator || typeof subRow.id !== 'number'" class="text-muted text-xs">—</span>
                     <template v-else>
                       <div v-if="subRow.estado === 'PENDIENTE'" class="row-actions-group">
                         <el-button

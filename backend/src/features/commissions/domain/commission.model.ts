@@ -29,18 +29,22 @@ export interface ComisionUsuarioConfigDTO {
 
 export interface ComisionDTO {
   id: number
-  citaVentaId: number
+  citaVentaId?: number | null
   hotelId: number
   hotelNombre?: string
   usuarioId: string
   usuarioNombre?: string
   usuarioApellidos?: string
   usuarioEmail?: string
-  rolEnVenta: 'FOTOGRAFO' | 'VENDEDOR' | 'SUPERVISOR' | 'GERENTE' | string
+  rolEnVenta: 'FOTOGRAFO' | 'VENDEDOR' | 'SUPERVISOR' | 'GERENTE' | 'BONO' | string
+  tipoBonus?: 'INDIVIDUAL' | 'GRUPAL' | string | null
+  descripcion?: string | null
   tipoContrato: 'ASALARIADO' | 'SIN_SALARIO' | string | null
   porcentajeAplicado: number
   baseCalculoUsd: number
   importeComisionUsd: number
+  tipoCambio?: number | null
+  importeComisionMxn?: number | null
   estado: 'PENDIENTE' | 'APROBADA' | 'PAGADA' | 'RECHAZADA' | string
   fechaVenta: string
   clienteNombre?: string
