@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import { prisma } from '../../../shared/db.js'
 import { decrypt, decryptUser } from '../../../shared/encryption.js'
 import { registrarAudit } from '../../audit-log/application/audit-log.service.js'
+import { registrarAlerta } from '../../alerts/application/alert.service.js'
 import {
   getAllCommissionConfigs,
   getEffectiveCommissionConfig,
@@ -630,6 +631,32 @@ export async function commissionRoutes(fastify: FastifyInstance) {
             numeroMiscelaneo: voucherFolio,
           },
         })
+
+        // CASO 3: Modificación de apuntes contables cerrados (PAGADA o RECHAZADA)
+        if (['PAGADA', 'RECHAZADA'].includes(estadoAnterior)) {
+          registrarAlerta({
+            tipoCaso: 3,
+            titulo: 'Alerta Crítica: Modificación de apunte contable cerrado',
+            descripcion: `Se modificó el estado de un apunte contable cerrado (${estadoAnterior} ➔ ${estado}) perteneciente a ${beneficiarioNombre} ($${existing.importeComisionUsd.toFixed(2)} USD) en ${existing.hotel?.nombre || 'Hotel'}.`,
+            gravedad: 'CRITICA',
+            usuarioOrigenId: userId,
+            usuarioAfectadoId: existing.usuarioId,
+            usuarioAfectadoNombre: beneficiarioNombre,
+            hotelId: existing.hotelId,
+            hotelNombre: existing.hotel?.nombre,
+            entidad: 'COMISION',
+            entidadId: updated.id,
+            metadatos: {
+              comisionId: existing.id,
+              estadoAnterior,
+              estadoNuevo: estado,
+              importeUsd: existing.importeComisionUsd,
+              beneficiario: beneficiarioNombre,
+              hotel: existing.hotel?.nombre,
+              numeroMiscelaneo: voucherFolio,
+            },
+          })
+        }
       }
 
       return reply.send(updated)
@@ -753,6 +780,34 @@ export async function commissionRoutes(fastify: FastifyInstance) {
           comisionesIds: idsToUpdate.slice(0, 50),
         },
       })
+
+      // CASO 3: Si se modificaron comisiones que ya estaban PAGADA o RECHAZADA en lote
+      const cerradasEnLote = comisionesToUpdate.filter((c) => ['PAGADA', 'RECHAZADA'].includes(c.estado))
+      for (const cerrada of cerradasEnLote) {
+        const ben = decryptUser(cerrada.usuario)
+        const benNombre = ben ? `${ben.nombre} ${ben.apellidos}`.trim() : 'Usuario'
+        registrarAlerta({
+          tipoCaso: 3,
+          titulo: 'Alerta Crítica: Modificación de apunte contable cerrado (Lote)',
+          descripcion: `En una acción por lote, se modificó el estado de una comisión cerrada (${cerrada.estado} ➔ ${estado}) de ${benNombre} ($${cerrada.importeComisionUsd.toFixed(2)} USD) en ${cerrada.hotel?.nombre || 'Hotel'}.`,
+          gravedad: 'CRITICA',
+          usuarioOrigenId: userId,
+          usuarioAfectadoId: cerrada.usuarioId,
+          usuarioAfectadoNombre: benNombre,
+          hotelId: cerrada.hotelId,
+          hotelNombre: cerrada.hotel?.nombre,
+          entidad: 'COMISION',
+          entidadId: cerrada.id,
+          metadatos: {
+            comisionId: cerrada.id,
+            estadoAnterior: cerrada.estado,
+            estadoNuevo: estado,
+            importeUsd: cerrada.importeComisionUsd,
+            beneficiario: benNombre,
+            hotel: cerrada.hotel?.nombre,
+          },
+        })
+      }
 
       return reply.send({ success: true, count })
     } catch (err: unknown) {

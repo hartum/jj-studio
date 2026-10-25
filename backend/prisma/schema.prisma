@@ -124,6 +124,7 @@ model Hotel {
   comisiones         Comision[]
   comisionConfigs    ComisionConfig[]
   auditLogs          AuditLog[]
+  alertas            AlertaSeguridad[]
 
   @@map("hoteles")
 }
@@ -390,5 +391,37 @@ model AuditLog {
   @@index([createdAt])
   @@index([clienteNombre])
   @@map("audit_log")
+}
+
+model AlertaSeguridad {
+  id                    Int       @id @default(autoincrement())
+  tipoCaso              Int       @map("tipo_caso") // 1: Sospecha venta externa, 2: Cita cerrada modificada, 3: Comisión cerrada modificada, 4: Metas modificadas
+  titulo                String    @db.VarChar(255)
+  descripcion           String    @db.Text
+  gravedad              String    @default("ALTA") // "CRITICA" | "ALTA" | "MEDIA" | "BAJA"
+  usuarioOrigenId       String?   @map("usuario_origen_id")
+  usuarioOrigenNombre   String?   @map("usuario_origen_nombre")
+  usuarioOrigenRol      String?   @map("usuario_origen_rol")
+  usuarioAfectadoId     String?   @map("usuario_afectado_id")
+  usuarioAfectadoNombre String?   @map("usuario_afectado_nombre")
+  hotelId               Int?      @map("hotel_id")
+  hotelNombre           String?   @map("hotel_nombre")
+  entidad               String?   @map("entidad") // "SESION" | "CITA_VENTA" | "COMISION" | "META"
+  entidadId             String?   @map("entidad_id")
+  metadatos             String?   @db.Text
+  hashUnico             String?   @unique @map("hash_unico")
+  leida                 Boolean   @default(false)
+  leidaAt               DateTime? @map("leida_at")
+  leidaPorId            String?   @map("leida_por_id")
+  createdAt             DateTime  @default(now()) @map("created_at")
+
+  hotel                 Hotel?    @relation(fields: [hotelId], references: [id], onDelete: SetNull)
+
+  @@index([tipoCaso])
+  @@index([leida])
+  @@index([createdAt])
+  @@index([hotelId])
+  @@index([usuarioOrigenId])
+  @@map("alertas_seguridad")
 }
 

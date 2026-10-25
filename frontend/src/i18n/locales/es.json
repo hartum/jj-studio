@@ -1082,7 +1082,86 @@
       "goalsAndObjectives": "Metas y Objetivos",
       "commissions": "Comisiones",
       "emailTemplates": "Plantillas de Email",
-      "activity": "Actividad"
+      "activity": "Actividad",
+      "alerts": "Alertas"
+    },
+    "alerts": {
+      "title": "Alertas de Seguridad y Control Operativo",
+      "subtitle": "Detección automática de anomalías, modificaciones en registros cerrados y sospechas de fraude.",
+      "cases": {
+        "allCases": "Todos los tipos de alertas",
+        "case1": "Caso 1: Sesiones sin venta (Sospecha venta externa)",
+        "case2": "Caso 2: Cita de venta cerrada modificada",
+        "case3": "Caso 3: Apunte contable cerrado modificado",
+        "case4": "Caso 4: Metas mensuales alteradas"
+      },
+      "caseTags": {
+        "case1": "Venta Externa",
+        "case2": "Cita Cerrada",
+        "case3": "Comisión Cerrada",
+        "case4": "Metas Alteradas"
+      },
+      "filters": {
+        "searchPlaceholder": "Buscar por título, usuario, cliente o descripción...",
+        "readStatus": "Estado de lectura",
+        "allStatus": "Todas las alertas",
+        "unread": "Solo no leídas",
+        "read": "Solo leídas",
+        "allHotels": "Todos los hoteles",
+        "markAllRead": "Marcar todas como leídas",
+        "evaluate": "Re-evaluar anomalías"
+      },
+      "stats": {
+        "total": "Total Alertas",
+        "unread": "No Leídas",
+        "critical": "Críticas",
+        "read": "Leídas"
+      },
+      "table": {
+        "status": "Estado",
+        "case": "Tipo / Caso",
+        "whatHappened": "¿Qué pasó?",
+        "whoDidIt": "¿Quién lo hizo?",
+        "whoIsAffected": "¿A quién afecta?",
+        "hotel": "Hotel",
+        "date": "Fecha y hora",
+        "actions": "Acciones",
+        "viewDetails": "Detalles",
+        "markRead": "Marcar como leída",
+        "markUnread": "Marcar no leída",
+        "unreadBadge": "No leída",
+        "readBadge": "Leída",
+        "critical": "Crítica",
+        "high": "Alta",
+        "medium": "Media",
+        "system": "Sistema",
+        "notApplicable": "No aplica",
+        "readAt": "Leída el"
+      },
+      "dialog": {
+        "title": "Detalle de Alerta de Seguridad",
+        "eventDetails": "Información del Suceso",
+        "changes": "Cambios Realizados",
+        "field": "Campo",
+        "previousValue": "Valor Anterior",
+        "newValue": "Valor Nuevo",
+        "involvedSessions": "Sesiones Involucradas en la Sospecha",
+        "sessionDate": "Fecha Sesión",
+        "client": "Cliente",
+        "room": "Habitación",
+        "hotel": "Hotel",
+        "saleState": "Cita de Ventas"
+      },
+      "empty": {
+        "title": "Sin anomalías ni alertas registradas",
+        "description": "No se encontraron situaciones sospechosas o todas las alertas han sido atendidas correctamente."
+      },
+      "messages": {
+        "markedRead": "Alerta marcada como leída",
+        "markedUnread": "Alerta marcada como no leída",
+        "allMarkedRead": "Todas las alertas marcadas como leídas",
+        "evaluated": "Evaluación de anomalías completada"
+      }
     }
   },
   "auditLog": {

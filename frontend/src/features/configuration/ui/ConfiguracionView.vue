@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
+import { useAlertStore } from '@/features/alerts/stores/alert.store'
 import { useLocale } from '@/i18n/useLocale'
 import PaisesConfig from '@/features/countries/ui/PaisesConfig.vue'
 import HotelesConfig from '@/features/hotels/ui/HotelesConfig.vue'
@@ -9,14 +10,17 @@ import GoalFormView from '@/features/goals/ui/GoalFormView.vue'
 import ComisionesConfig from '@/features/commissions/ui/ComisionesConfig.vue'
 import EmailTemplatesView from '@/features/notifications/ui/EmailTemplatesView.vue'
 import AuditLogTab from '@/features/audit-log/ui/AuditLogTab.vue'
+import AlertConfigTab from './AlertConfigTab.vue'
 
 const { t } = useLocale()
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const alertStore = useAlertStore()
 
 const userRole = computed(() => authStore.user?.roleCode?.toUpperCase())
 const isSuperOrAdmin = computed(() => userRole.value === 'SUPERUSUARIO' || userRole.value === 'ADMIN')
+const unreadAlertsCount = computed(() => alertStore.unreadCount)
 const canManageGoals = computed(
   () => isSuperOrAdmin.value || userRole.value === 'GERENTE' || userRole.value === 'SUPERVISOR',
 )
@@ -67,6 +71,12 @@ watch(
 function handleTabChange(paneName: string | number) {
   router.replace({ query: { ...route.query, tab: String(paneName) } })
 }
+
+onMounted(async () => {
+  if (isSuperOrAdmin.value) {
+    await alertStore.fetchUnreadCount()
+  }
+})
 </script>
 
 <template>
@@ -113,11 +123,40 @@ function handleTabChange(paneName: string | number) {
         <!-- Componente modular de auditoría y registro de actividad -->
         <AuditLogTab />
       </el-tab-pane>
+
+      <el-tab-pane v-if="isSuperOrAdmin" name="alertas" lazy>
+        <template #label>
+          <div class="tab-label-badge-wrap">
+            <span>{{ t('configuration.tabs.alerts') }}</span>
+            <el-badge
+              v-if="unreadAlertsCount > 0"
+              :value="unreadAlertsCount"
+              :max="99"
+              class="tab-badge"
+              type="danger"
+            />
+          </div>
+        </template>
+        <!-- Componente modular de alertas para administradores y superusuarios -->
+        <AlertConfigTab />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <style scoped>
+.tab-label-badge-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tab-badge :deep(.el-badge__content) {
+  font-size: 0.7rem;
+  height: 16px;
+  line-height: 16px;
+  padding: 0 5px;
+}
 .config-tabs {
   margin-top: 1rem;
 }

@@ -8,6 +8,7 @@ import {
 } from '../../integrations/google-calendar/google-calendar.service.js'
 import { registrarAudit, formatCreadorOriginal } from '../../audit-log/application/audit-log.service.js'
 import { calculateAndSaveCommissionsForSale } from '../../commissions/application/commission.service.js'
+import { evaluarCaso1SesionesSospechosas } from '../../alerts/application/alert.service.js'
 
 function parseLocalDateTime(dateStr: string): Date {
   if (!dateStr) return new Date()
@@ -476,6 +477,10 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         fastify.log.error(gErr, 'Error al sincronizar sesión con Google Calendar')
       }
 
+      if (nueva.estado === 'COMPLETADA' && nueva.fotografoId) {
+        evaluarCaso1SesionesSospechosas(nueva.fotografoId)
+      }
+
       const decNueva = decryptSesion(nueva)!
 
       return reply.status(201).send({
@@ -741,6 +746,10 @@ export async function sessionRoutes(fastify: FastifyInstance) {
             fastify.log.error(cErr, 'Error al recalcular comisiones de la venta tras cambio de sesión')
           })
         }
+      }
+
+      if (actualizada.estado === 'COMPLETADA' && actualizada.fotografoId) {
+        evaluarCaso1SesionesSospechosas(actualizada.fotografoId)
       }
 
       const decActualizada = decryptSesion(actualizada)!

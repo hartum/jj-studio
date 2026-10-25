@@ -14,6 +14,7 @@ import { googleCalendarRoutes } from './features/integrations/google-calendar/go
 import { templateRoutes } from './features/notifications/infrastructure/template.routes.js'
 import { startReminderCron } from './features/notifications/infrastructure/reminder.cron.js'
 import { auditLogRoutes } from './features/audit-log/infrastructure/audit-log.routes.js'
+import { alertRoutes } from './features/alerts/infrastructure/alert.routes.js'
 import { migrateLegacyPayments } from './features/sales/infrastructure/sale.migration.js'
 
 const fastify = Fastify({
@@ -42,6 +43,7 @@ await fastify.register(calendarioLaboralRoutes)
 await fastify.register(googleCalendarRoutes)
 await fastify.register(templateRoutes)
 await fastify.register(auditLogRoutes)
+await fastify.register(alertRoutes)
 
 fastify.get('/health', async () => {
   return { status: 'ok', timestamp: new Date().toISOString() }

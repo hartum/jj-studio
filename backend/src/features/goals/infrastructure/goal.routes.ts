@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { prisma } from '../../../shared/db.js'
 import { decryptUser } from '../../../shared/encryption.js'
+import { registrarAlerta } from '../../alerts/application/alert.service.js'
 import type {
   AlcanceTipo,
   SemaforoEstado,
@@ -250,6 +251,51 @@ export async function goalRoutes(fastify: FastifyInstance) {
 
       let result
       if (existing) {
+        // CASO 4: Verificar si se modifican objetivos mensuales ya establecidos
+        const cambiosCaso4: string[] = []
+        const valoresAnteriores: Record<string, any> = {}
+        const valoresNuevos: Record<string, any> = {}
+
+        // 1. Importe Objetivo del Mes (HOTEL) ó Meta personal Asignada (USUARIO)
+        if (
+          existing.importeObjetivo != null &&
+          existing.importeObjetivo > 0 &&
+          body.importeObjetivo !== undefined &&
+          Number(body.importeObjetivo) !== existing.importeObjetivo
+        ) {
+          const campoNombre = alcanceTipo === 'HOTEL' ? 'Importe Objetivo del Mes' : 'Meta personal Asignada'
+          cambiosCaso4.push(`${campoNombre} ($${existing.importeObjetivo} ➔ $${body.importeObjetivo})`)
+          valoresAnteriores[campoNombre] = existing.importeObjetivo
+          valoresNuevos[campoNombre] = Number(body.importeObjetivo)
+        }
+
+        // 2. Importe bonus grupal (HOTEL) ó Importe del bonus (USUARIO)
+        if (
+          existing.valorBonus != null &&
+          existing.valorBonus > 0 &&
+          body.valorBonus !== undefined &&
+          (Number(body.valorBonus) || null) !== existing.valorBonus
+        ) {
+          const campoNombre = alcanceTipo === 'HOTEL' ? 'Importe bonus grupal' : 'Importe del bonus'
+          cambiosCaso4.push(`${campoNombre} ($${existing.valorBonus} ➔ $${Number(body.valorBonus) || 0})`)
+          valoresAnteriores[campoNombre] = existing.valorBonus
+          valoresNuevos[campoNombre] = Number(body.valorBonus) || 0
+        }
+
+        // 3. Meta personal para obtener bonus (USUARIO)
+        if (
+          alcanceTipo === 'USUARIO' &&
+          existing.importeBonus != null &&
+          existing.importeBonus > 0 &&
+          body.importeBonus !== undefined &&
+          (Number(body.importeBonus) || null) !== existing.importeBonus
+        ) {
+          const campoNombre = 'Meta personal para obtener bonus'
+          cambiosCaso4.push(`${campoNombre} ($${existing.importeBonus} ➔ $${Number(body.importeBonus) || 0})`)
+          valoresAnteriores[campoNombre] = existing.importeBonus
+          valoresNuevos[campoNombre] = Number(body.importeBonus) || 0
+        }
+
         result = await prisma.meta.update({
           where: { id: existing.id },
           data: {
@@ -273,6 +319,36 @@ export async function goalRoutes(fastify: FastifyInstance) {
           },
           include: { hotel: true, usuario: true },
         })
+
+        if (cambiosCaso4.length > 0) {
+          const uAfectado = result.usuario ? decryptUser(result.usuario) : null
+          const afectadoNombre = uAfectado
+            ? `${uAfectado.nombre} ${uAfectado.apellidos}`.trim()
+            : `Equipo del hotel ${result.hotel.nombre}`
+          const mesNombre = MESES_NOMBRES[mes - 1] || String(mes)
+
+          registrarAlerta({
+            tipoCaso: 4,
+            titulo: 'Alerta: Modificación de objetivos mensuales establecidos',
+            descripcion: `Se modificaron los objetivos comerciales ya establecidos para ${alcanceTipo === 'HOTEL' ? 'el Hotel' : afectadoNombre} (${mesNombre} ${anio}) en ${result.hotel.nombre}. Cambios: ${cambiosCaso4.join(', ')}.`,
+            gravedad: 'ALTA',
+            usuarioOrigenId: userId,
+            usuarioAfectadoId: targetUserId,
+            usuarioAfectadoNombre: afectadoNombre,
+            hotelId: result.hotelId,
+            hotelNombre: result.hotel.nombre,
+            entidad: 'META',
+            entidadId: result.id,
+            metadatos: {
+              alcanceTipo,
+              anio,
+              mes,
+              cambios: cambiosCaso4,
+              valoresAnteriores,
+              valoresNuevos,
+            },
+          })
+        }
       } else {
         result = await prisma.meta.create({
           data: {
@@ -364,6 +440,42 @@ export async function goalRoutes(fastify: FastifyInstance) {
         data,
         include: { hotel: true, usuario: true },
       })
+
+      if (
+        existing.importeObjetivo != null &&
+        existing.importeObjetivo > 0 &&
+        body.importeObjetivo !== undefined &&
+        Number(body.importeObjetivo) !== existing.importeObjetivo
+      ) {
+        const uAfectado = updated.usuario ? decryptUser(updated.usuario) : null
+        const afectadoNombre = uAfectado
+          ? `${uAfectado.nombre} ${uAfectado.apellidos}`.trim()
+          : `Equipo del hotel ${updated.hotel.nombre}`
+        const mesNombre = MESES_NOMBRES[updated.mes - 1] || String(updated.mes)
+        const campoNombre = updated.alcanceTipo === 'HOTEL' ? 'Importe Objetivo del Mes' : 'Meta personal Asignada'
+
+        registrarAlerta({
+          tipoCaso: 4,
+          titulo: 'Alerta: Modificación de objetivos mensuales establecidos',
+          descripcion: `Se modificó el ${campoNombre} ($${existing.importeObjetivo} ➔ $${body.importeObjetivo}) para ${updated.alcanceTipo === 'HOTEL' ? 'el Hotel' : afectadoNombre} (${mesNombre} ${updated.anio}) en ${updated.hotel.nombre}.`,
+          gravedad: 'ALTA',
+          usuarioOrigenId: userId,
+          usuarioAfectadoId: updated.usuarioId,
+          usuarioAfectadoNombre: afectadoNombre,
+          hotelId: updated.hotelId,
+          hotelNombre: updated.hotel.nombre,
+          entidad: 'META',
+          entidadId: updated.id,
+          metadatos: {
+            alcanceTipo: updated.alcanceTipo,
+            anio: updated.anio,
+            mes: updated.mes,
+            cambio: `${campoNombre} ($${existing.importeObjetivo} ➔ $${body.importeObjetivo})`,
+            valorAnterior: existing.importeObjetivo,
+            valorNuevo: Number(body.importeObjetivo),
+          },
+        })
+      }
 
       const u = decryptUser(updated.usuario)
       return reply.send({

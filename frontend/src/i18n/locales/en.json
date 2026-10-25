@@ -1082,7 +1082,86 @@
       "goalsAndObjectives": "Goals & Objectives",
       "commissions": "Commissions",
       "emailTemplates": "Email Templates",
-      "activity": "Activity Log"
+      "activity": "Activity Log",
+      "alerts": "Alerts"
+    },
+    "alerts": {
+      "title": "Security & Operational Control Alerts",
+      "subtitle": "Automatic anomaly detection, closed records modifications, and fraud warnings.",
+      "cases": {
+        "allCases": "All alert types",
+        "case1": "Case 1: Sessions without sale (Suspected external sale)",
+        "case2": "Case 2: Closed sales appointment modified",
+        "case3": "Case 3: Closed commission entry modified",
+        "case4": "Case 4: Monthly goals altered"
+      },
+      "caseTags": {
+        "case1": "External Sale",
+        "case2": "Closed Sale",
+        "case3": "Closed Commission",
+        "case4": "Altered Goals"
+      },
+      "filters": {
+        "searchPlaceholder": "Search by title, user, client or description...",
+        "readStatus": "Read status",
+        "allStatus": "All alerts",
+        "unread": "Unread only",
+        "read": "Read only",
+        "allHotels": "All hotels",
+        "markAllRead": "Mark all as read",
+        "evaluate": "Re-evaluate anomalies"
+      },
+      "stats": {
+        "total": "Total Alerts",
+        "unread": "Unread",
+        "critical": "Critical",
+        "read": "Read"
+      },
+      "table": {
+        "status": "Status",
+        "case": "Type / Case",
+        "whatHappened": "What happened?",
+        "whoDidIt": "Who did it?",
+        "whoIsAffected": "Who is affected?",
+        "hotel": "Hotel",
+        "date": "Date & time",
+        "actions": "Actions",
+        "viewDetails": "Details",
+        "markRead": "Mark as read",
+        "markUnread": "Mark as unread",
+        "unreadBadge": "Unread",
+        "readBadge": "Read",
+        "critical": "Critical",
+        "high": "High",
+        "medium": "Medium",
+        "system": "System",
+        "notApplicable": "N/A",
+        "readAt": "Read on"
+      },
+      "dialog": {
+        "title": "Security Alert Details",
+        "eventDetails": "Event Information",
+        "changes": "Changes Made",
+        "field": "Field",
+        "previousValue": "Previous Value",
+        "newValue": "New Value",
+        "involvedSessions": "Sessions Involved in Suspicion",
+        "sessionDate": "Session Date",
+        "client": "Client",
+        "room": "Room",
+        "hotel": "Hotel",
+        "saleState": "Sales Appt"
+      },
+      "empty": {
+        "title": "No anomalies or alerts found",
+        "description": "No suspicious situations found or all alerts have been resolved."
+      },
+      "messages": {
+        "markedRead": "Alert marked as read",
+        "markedUnread": "Alert marked as unread",
+        "allMarkedRead": "All alerts marked as read",
+        "evaluated": "Anomaly evaluation finished"
+      }
     }
   },
   "auditLog": {

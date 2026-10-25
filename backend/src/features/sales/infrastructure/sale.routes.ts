@@ -9,6 +9,7 @@ import {
   deleteSesionFromGoogle,
 } from '../../integrations/google-calendar/google-calendar.service.js'
 import { registrarAudit, formatCreadorOriginal } from '../../audit-log/application/audit-log.service.js'
+import { registrarAlerta, evaluarCaso1SesionesSospechosas } from '../../alerts/application/alert.service.js'
 
 const SALES_APPOINTMENT_DURATION_MS = 60 * 60 * 1000 // 1 hour
 
@@ -1209,6 +1210,46 @@ export async function saleRoutes(fastify: FastifyInstance) {
         metadatos: Object.keys(metadatos).length > 0 ? metadatos : undefined,
       })
 
+      // CASO 2: Se modifica una cita de ventas que ya estaba cerrada (COMPLETADA, NO_SHOW, CANCELADA)
+      if (['COMPLETADA', 'NO_SHOW', 'CANCELADA'].includes(existing.estado) && Object.keys(metadatos).length > 0) {
+        const esDineroModificado = metadatos.totalVentaUsdAnterior !== undefined
+        const gravedad = esDineroModificado ? 'CRITICA' : 'ALTA'
+        const titulo = esDineroModificado
+          ? 'Alerta Crítica: Modificación de importe en cita de venta cerrada'
+          : `Alerta: Modificación de cita de venta cerrada (${existing.estado})`
+
+        const descripcion = esDineroModificado
+          ? `Se modificó el importe de una cita cerrada (${existing.estado}, ID #${actualizada.id}) de $${existing.totalVentaUsd ?? 0} a $${actualizada.totalVentaUsd ?? 0} USD en ${existing.hotel?.nombre || 'Hotel'}.`
+          : `Se modificaron datos de una cita cerrada (${existing.estado}, ID #${actualizada.id}) en ${existing.hotel?.nombre || 'Hotel'}.`
+
+        registrarAlerta({
+          tipoCaso: 2,
+          titulo,
+          descripcion,
+          gravedad,
+          usuarioOrigenId: updateAuthUserId || null,
+          usuarioAfectadoId: actualizada.vendedorId || actualizada.fotografoId || null,
+          usuarioAfectadoNombre: `Vendedor: ${actualVendedorNombre}`,
+          hotelId: actualizada.hotelId,
+          hotelNombre: existing.hotel?.nombre,
+          entidad: 'CITA_VENTA',
+          entidadId: actualizada.id,
+          metadatos: {
+            clienteNombre: updateClientePlano,
+            estadoPrevio: existing.estado,
+            estadoNuevo: actualizada.estado,
+            totalVentaUsdAnterior: existing.totalVentaUsd,
+            totalVentaUsdNuevo: actualizada.totalVentaUsd,
+            cambios: metadatos,
+          },
+        })
+      }
+
+      // Evaluar Caso 1 si el estado nuevo es NO_SHOW o CANCELADA
+      if (['NO_SHOW', 'CANCELADA'].includes(actualizada.estado)) {
+        evaluarCaso1SesionesSospechosas(actualizada.fotografoId || undefined)
+      }
+
       const v = decryptUser(actualizada.vendedor)
       const fot = decryptUser(actualizada.fotografo)
       const response: any = {
@@ -1306,6 +1347,28 @@ export async function saleRoutes(fastify: FastifyInstance) {
           numFotosVendidas: cita.numFotosVendidas,
         },
       })
+
+      if (['COMPLETADA', 'NO_SHOW', 'CANCELADA'].includes(cita.estado)) {
+        registrarAlerta({
+          tipoCaso: 2,
+          titulo: 'Alerta Crítica: Eliminación de cita de ventas cerrada',
+          descripcion: `Se eliminó una cita de ventas que ya estaba cerrada en estado ${cita.estado}${cita.totalVentaUsd ? ` con un importe de $${cita.totalVentaUsd} USD` : ''} en ${cita.hotel?.nombre || 'Hotel'}.`,
+          gravedad: 'CRITICA',
+          usuarioOrigenId: delAuthUserId || null,
+          usuarioAfectadoId: cita.vendedorId || null,
+          usuarioAfectadoNombre: `Vendedor: ${vendedorNombre}`,
+          hotelId: cita.hotelId,
+          hotelNombre: cita.hotel?.nombre,
+          entidad: 'CITA_VENTA',
+          entidadId: cita.id,
+          metadatos: {
+            accion: 'ELIMINAR_CITA_CERRADA',
+            estadoPrevio: cita.estado,
+            totalVentaUsd: cita.totalVentaUsd,
+            clienteNombre: delClienteNombre,
+          },
+        })
+      }
 
       // Limpiar comisiones asociadas a la venta eliminada
       await prisma.comision.deleteMany({
