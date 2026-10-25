@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1792880750.8379323,
-    "ast_hash": "cd3b605e84a1598ad8ed98ad97ea6a64",
+    "mtime": 1792885622.4394045,
+    "ast_hash": "442f5d9e457104ca9d3842dfebafd62b",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/InicioView.vue": {
@@ -390,8 +390,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
-    "mtime": 1792773732.2231603,
-    "ast_hash": "e60a7d127965e7978c1ded7de16373b7",
+    "mtime": 1792885635.5683465,
+    "ast_hash": "06e5edecdf1be2a785f458890a9904fd",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792881231.8568177,
-    "ast_hash": "e63b837b8999daee7e7c0aa88a36ad4d",
+    "mtime": 1792885147.7734888,
+    "ast_hash": "7eb51cb4c28ab0fcb39c8921a2d4988b",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792881225.466837,
-    "ast_hash": "5ca9859a290cb604886ba960e3b80619",
+    "mtime": 1792885134.2426548,
+    "ast_hash": "14fbcdd83689a650fd186428721681d6",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1075,8 +1075,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1792882392.9388635,
-    "ast_hash": "2c620e49fa3ee10b51575af0478d8847",
+    "mtime": 1792885188.8125598,
+    "ast_hash": "2b71f20d35a65687283acbd905c9cd9f",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {

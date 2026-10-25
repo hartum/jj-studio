@@ -1,16 +1,16 @@
 # Graph Report - JJ Studio  (2026-10-25)
 
 ## Corpus Check
-- 156 files · ~274,110 words
+- 156 files · ~274,227 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1483 nodes · 2005 edges · 106 communities (85 shown, 21 thin omitted)
+- 1483 nodes · 2004 edges · 105 communities (85 shown, 20 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `28454396`
+- Built from commit: `e9496cc6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -75,7 +75,6 @@
 - DirectSaleFormDesktop.vue
 - scripts
 - CalendarHeader.vue
-- CURRENCY_SUMMARY_PROPERTIES
 - ConfiguracionView.vue
 - DirectSaleFormMobile.vue
 - .prettierrc.json
@@ -141,7 +140,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (106 total, 21 thin omitted)
+## Communities (105 total, 20 thin omitted)
 
 ### Community 0 - "encryption.ts"
 Cohesion: 0.20
@@ -226,12 +225,12 @@ Cohesion: 0.11
 Nodes (18): 1. Requisitos Funcionales, 2. Requisitos Técnicos y de Arquitectura, 3. Diseño de Base de Datos (Propuesta de Entidades), 4. Flujos de Usuario Detallados, 5. Plan de Trabajo por Fases, 6. Consideraciones Especiales de Negocio, A. Gestión de Estructura Organizativa, Análisis de Requisitos y Plan de Trabajo - Proyecto JJ Studio (+10 more)
 
 ### Community 18 - "vue"
-Cohesion: 0.12
-Nodes (20): useCalendarAlerts(), DeletableCalendarEvent, useCalendarDelete(), EventTooltipInfo, ExtendedEventProps, useCalendarEvents(), HotelDisponibilidad, usePhotoSessionForm() (+12 more)
+Cohesion: 0.11
+Nodes (21): useCalendarAlerts(), DeletableCalendarEvent, useCalendarDelete(), EventTooltipInfo, ExtendedEventProps, useCalendarEvents(), HotelDisponibilidad, PhotoSessionFormContext (+13 more)
 
 ### Community 19 - "PhotoSessionFormDesktop.vue"
-Cohesion: 0.10
-Nodes (11): PhotoSessionFormContext, minuteSlots, motivoOptions, props, salesCountByHour, selectedCitaVentaHourOnly, selectedCitaVentaMinuteOnly, selectedHourOnly (+3 more)
+Cohesion: 0.11
+Nodes (10): minuteSlots, motivoOptions, props, salesCountByHour, selectedCitaVentaHourOnly, selectedCitaVentaMinuteOnly, selectedHourOnly, selectedMinuteOnly (+2 more)
 
 ### Community 20 - "CalendarioLaboral.vue"
 Cohesion: 0.14
@@ -456,7 +455,7 @@ Nodes (6): engines, node, name, private, type, version
 
 ### Community 91 - "ContableComisionesTab.vue"
 Cohesion: 0.04
-Nodes (30): availableContableUsers, BonusCalculationContext, BonusDetalle, comisionUsuarioFilter, commissionStore, ConfirmActionOptions, ContableAreaSummary, ContableHotelSummary (+22 more)
+Nodes (31): availableContableUsers, BonusCalculationContext, BonusDetalle, comisionUsuarioFilter, commissionStore, ConfirmActionOptions, ContableAreaSummary, ContableHotelSummary (+23 more)
 
 ### Community 92 - "CalendarEventCard.vue"
 Cohesion: 0.29
@@ -503,19 +502,19 @@ Cohesion: 0.83
 Nodes (3): calendarioLaboralRoutes(), formatDateToIsoString(), parseDateOnly()
 
 ## Knowledge Gaps
-- **778 isolated node(s):** `DEFAULT_GLOBAL_CONFIG`, `ComisionDTO`, `ContableHotelSummary`, `ContableAreaSummary`, `BonusDetalle` (+773 more)
+- **779 isolated node(s):** `ContableHotelSummary`, `ContableAreaSummary`, `BonusDetalle`, `EmpleadoComisionResumen`, `props` (+774 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `AvatarCropperDialog.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `SaleAppointmentFormView.vue`, `SupervisorHotelGoalCard.vue`, `ContableEstadisticasTab.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `AgendadorHotelGoalCard.vue`, `useSaleAppointmentForm.ts`, `DirectSaleFormDesktop.vue`, `CalendarHeader.vue`, `ConfiguracionView.vue`, `DirectSaleFormMobile.vue`, `useDashboard.ts`, `ContableComisionesTab.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `LoginView.vue`, `GoalProgressCard.vue`, `useLocale.ts`, `auth.store.ts`, `HotelCalendarView.vue`?**
-  _High betweenness centrality (0.402) - this node is a cross-community bridge._
+  _High betweenness centrality (0.396) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
   _High betweenness centrality (0.011) - this node is a cross-community bridge._
-- **What connects `DEFAULT_GLOBAL_CONFIG`, `ComisionDTO`, `ContableHotelSummary` to the rest of the system?**
-  _778 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `ContableHotelSummary`, `ContableAreaSummary`, `BonusDetalle` to the rest of the system?**
+  _779 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**

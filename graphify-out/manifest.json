@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "backend/src/features/commissions/infrastructure/commission.routes.ts": {
-    "mtime": 1792881992.2058744,
-    "ast_hash": "dcd72889dd918cda54be344b5195da9a",
+    "mtime": 1792948762.9834664,
+    "ast_hash": "16d801cc5a024beda5421178f5581d53",
     "semantic_hash": ""
   },
   "backend/src/features/countries/infrastructure/country.routes.ts": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "backend/src/features/goals/infrastructure/goal.routes.ts": {
-    "mtime": 1792795716.2557995,
-    "ast_hash": "f04ec881bf54a437c14c2f0679c2dc30",
+    "mtime": 1792948819.3113222,
+    "ast_hash": "cd2bfeab38b7fb91c8a326fe7e8f35e9",
     "semantic_hash": ""
   },
   "backend/src/features/hotels/infrastructure/hotel.routes.ts": {
@@ -150,8 +150,8 @@
     "semantic_hash": "0fc2164ef77bcca3697dea2ff7126a08"
   },
   "backend/src/features/photo-sessions/infrastructure/session.routes.ts": {
-    "mtime": 1790068420.2026129,
-    "ast_hash": "8f248363d8d088d33f4c7d94ddb74439",
+    "mtime": 1792948716.7036858,
+    "ast_hash": "1b787f0f417404928791a7a0ffc9923c",
     "semantic_hash": ""
   },
   "backend/src/features/project-management/application/ports/project.repository.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": "8b7fbbfd3c080a1fc2affb721c830dfc"
   },
   "backend/src/features/sales/infrastructure/sale.routes.ts": {
-    "mtime": 1792770417.0035782,
-    "ast_hash": "cc74e5539ed5eb9d1547e092ab75d8e9",
+    "mtime": 1792948668.9486268,
+    "ast_hash": "e35979037570449b236dc435f348a782",
     "semantic_hash": ""
   },
   "backend/src/features/users/infrastructure/calendario-laboral.routes.ts": {
@@ -185,8 +185,8 @@
     "semantic_hash": ""
   },
   "backend/src/index.ts": {
-    "mtime": 1790005017.587958,
-    "ast_hash": "b9669b06a79372bf3b28e8410bd9c139",
+    "mtime": 1792948597.0451162,
+    "ast_hash": "3d93c3576de7b5b7de6f089f9e0e041a",
     "semantic_hash": ""
   },
   "backend/src/scripts/migrate-encrypt-all.ts": {
@@ -305,8 +305,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/configuration/ui/ConfiguracionView.vue": {
-    "mtime": 1790079610.966757,
-    "ast_hash": "02df224a2d26d1416e511d253b2f7ef1",
+    "mtime": 1792949055.1536252,
+    "ast_hash": "aa087cc892c1f5653bccb6d85db346d8",
     "semantic_hash": ""
   },
   "frontend/src/features/countries/domain/country.model.ts": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1792885147.7734888,
-    "ast_hash": "7eb51cb4c28ab0fcb39c8921a2d4988b",
+    "mtime": 1792948915.6634724,
+    "ast_hash": "968d59b43414fdec4e0c336054b1d3ce",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1792885134.2426548,
-    "ast_hash": "14fbcdd83689a650fd186428721681d6",
+    "mtime": 1792948900.3270612,
+    "ast_hash": "3c7efaf88c885e2014b55e0e00581ecf",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1087,6 +1087,36 @@
   "backend/src/features/commissions/application/bonus-sync.service.ts": {
     "mtime": 1792883603.3517432,
     "ast_hash": "8ba0ed22d52417b91ffa09d8940c19c0",
+    "semantic_hash": ""
+  },
+  "backend/src/features/alerts/application/alert.service.ts": {
+    "mtime": 1792950346.6127193,
+    "ast_hash": "352bbf6372f8373436159d0cc8ec9c19",
+    "semantic_hash": ""
+  },
+  "backend/src/features/alerts/domain/alert.model.ts": {
+    "mtime": 1792948526.650571,
+    "ast_hash": "ecee76764880a2b7468a9cc7d98bab04",
+    "semantic_hash": ""
+  },
+  "backend/src/features/alerts/infrastructure/alert.routes.ts": {
+    "mtime": 1792950365.8034232,
+    "ast_hash": "7e2a3978b1b60a2e5fc9b4ad09f8e7da",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/alerts/domain/alert.model.ts": {
+    "mtime": 1792950378.6488612,
+    "ast_hash": "087e1c824ff43960aacc3dbd5710e542",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/alerts/stores/alert.store.ts": {
+    "mtime": 1792950415.6772137,
+    "ast_hash": "bd22182c8906583a0c8e5f92624fd669",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/configuration/ui/AlertConfigTab.vue": {
+    "mtime": 1792950448.481386,
+    "ast_hash": "e4373e080c4c4799a2103bc2951f6a9c",
     "semantic_hash": ""
   }
 }
