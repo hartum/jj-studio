@@ -9,7 +9,8 @@ import { useGoalStore } from '@/features/goals/stores/goal.store'
 import { formatCurrency, formatMxn } from '@/shared/formatters'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 import { InfoFilled, Edit } from '@element-plus/icons-vue'
-import { RotateCcw, Award, Lock } from '@lucide/vue'
+import { RotateCcw, Award, Lock, FileSpreadsheet } from '@lucide/vue'
+import { exportComisionesToExcel } from '@/features/commissions/services/commission-excel-export.service'
 import type { Comision } from '@/features/commissions/domain/commission.model'
 import type { Meta } from '@/features/goals/domain/goal.model'
 
@@ -1185,6 +1186,42 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
   })
 }
 
+// --- Exportación a Excel ---
+const isExportingExcel = ref(false)
+
+async function handleExportExcel() {
+  if (resumenUsuariosComision.value.length === 0) {
+    ElMessage.warning(t('dashboard.exportExcelEmpty') || 'No hay datos de comisiones para exportar en este período.')
+    return
+  }
+
+  isExportingExcel.value = true
+  try {
+    let hotelNames = ''
+    if (props.selectedHotelFilters && props.selectedHotelFilters.length > 0) {
+      hotelNames = props.selectedHotelFilters
+        .map((id) => props.contableHotels.find((h) => h.id === id)?.nombre)
+        .filter(Boolean)
+        .join(', ')
+    }
+
+    await exportComisionesToExcel({
+      usuarios: resumenUsuariosComision.value,
+      getDetalleData: getDetalleTableData,
+      dateRange: props.commissionDateRange,
+      tipoCambio: tipoCambioMxn.value,
+      hotelNames,
+    })
+
+    ElMessage.success(t('dashboard.exportExcelSuccess') || 'Archivo Excel generado y descargado correctamente.')
+  } catch (error) {
+    console.error('Error al exportar comisiones a Excel:', error)
+    ElMessage.error(t('dashboard.exportExcelError') || 'Ocurrió un error al generar el archivo Excel.')
+  } finally {
+    isExportingExcel.value = false
+  }
+}
+
 </script>
 
 <template>
@@ -1267,6 +1304,20 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
                 </div>
               </el-option>
             </el-select>
+
+            <!-- Botón Exportar a Excel -->
+            <el-button
+              type="success"
+              plain
+              size="default"
+              :icon="FileSpreadsheet"
+              :loading="isExportingExcel"
+              :disabled="resumenUsuariosComision.length === 0"
+              class="excel-export-btn"
+              @click="handleExportExcel"
+            >
+              {{ $t('dashboard.exportExcel') }}
+            </el-button>
           </div>
         </div>
       </template>
@@ -2071,6 +2122,15 @@ function getDetalleVentasSummaries(param: DetalleSummaryMethodProps): string[] {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+}
+
+.excel-export-btn {
+  font-weight: 600;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
 }
 
 .tab-content-fade {

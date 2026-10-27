@@ -258,6 +258,11 @@
     "noPendingSelected": "None of the selected commissions are pending approval.",
     "noApprovableSelected": "None of the selected commissions are ready to be paid.",
     "bulkUpdateSuccess": "{count} commissions updated to {status}",
+    "exportExcel": "Export to Excel",
+    "exportingExcel": "Generating Excel...",
+    "exportExcelSuccess": "Excel file generated and downloaded successfully.",
+    "exportExcelEmpty": "No commission data to export for this period.",
+    "exportExcelError": "An error occurred while generating the Excel file.",
     "commissions": {
       "formulaGerente": "{pct}% × (Sales − {tax}% tax)",
       "formulaSupervisor": "{pct}% hotel + {fotoPct}% photos + {ventaPct}% sales",
