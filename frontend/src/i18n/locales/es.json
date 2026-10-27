@@ -263,6 +263,7 @@
     "exportExcelSuccess": "Archivo Excel generado y descargado correctamente.",
     "exportExcelEmpty": "No hay datos de comisiones para exportar en este período.",
     "exportExcelError": "Ocurrió un error al generar el archivo Excel.",
+    "loadingCommissions": "Cargando comisiones...",
     "commissions": {
       "formulaGerente": "{pct}% × (Ventas − {tax}% impuestos)",
       "formulaSupervisor": "{pct}% hotel + {fotoPct}% fotos + {ventaPct}% ventas",

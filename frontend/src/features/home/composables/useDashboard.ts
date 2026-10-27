@@ -574,7 +574,11 @@ export function useDashboard() {
   })
 
   watch(selectedHotelFilters, async () => {
-    await loadGoalsData()
+    if (userRole.value === 'CONTABLE') {
+      await Promise.all([loadCommissionsData(), loadGoalsData()])
+    } else {
+      await loadGoalsData()
+    }
   })
 
   watch(

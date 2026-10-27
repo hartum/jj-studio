@@ -1312,7 +1312,7 @@ async function handleExportExcel() {
               size="default"
               :icon="FileSpreadsheet"
               :loading="isExportingExcel"
-              :disabled="resumenUsuariosComision.length === 0"
+              :disabled="resumenUsuariosComision.length === 0 || commissionStore.isLoading"
               class="excel-export-btn"
               @click="handleExportExcel"
             >
@@ -1322,13 +1322,10 @@ async function handleExportExcel() {
         </div>
       </template>
 
-      <div v-if="resumenUsuariosComision.length === 0" class="empty-hint p-4 text-center">
-        {{ $t('dashboard.noCommissionRecords') }}
-      </div>
-
       <el-table
-        v-else
         ref="usuariosTableRef"
+        v-loading="commissionStore.isLoading"
+        :element-loading-text="$t('dashboard.loadingCommissions')"
         :data="resumenUsuariosComision"
         row-key="usuarioId"
         :expand-row-keys="expandedRowKeys"
@@ -1345,6 +1342,11 @@ async function handleExportExcel() {
         @expand-change="handleExpandChange"
         @sort-change="handleSortChange"
       >
+        <template #empty>
+          <div class="empty-hint p-4 text-center">
+            {{ $t('dashboard.noCommissionRecords') }}
+          </div>
+        </template>
         <el-table-column type="selection" width="36" align="center" fixed="left" />
 
         <!-- Desglose expandible de ventas individuales por empleado -->

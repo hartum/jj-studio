@@ -263,6 +263,7 @@
     "exportExcelSuccess": "Excel file generated and downloaded successfully.",
     "exportExcelEmpty": "No commission data to export for this period.",
     "exportExcelError": "An error occurred while generating the Excel file.",
+    "loadingCommissions": "Loading commissions...",
     "commissions": {
       "formulaGerente": "{pct}% × (Sales − {tax}% tax)",
       "formulaSupervisor": "{pct}% hotel + {fotoPct}% photos + {ventaPct}% sales",
