@@ -25,11 +25,33 @@ async function runAvatarMigration() {
 
     console.log(`👥 Total de usuarios analizados: ${usuarios.length}`)
 
+    // Usuarios con URL antigua /uploads/avatars/ que deben migrar a /api/uploads/avatars/
+    const usuariosConUrlAntigua = usuarios.filter(
+      (u) => u.imagen && u.imagen.startsWith('/uploads/avatars/')
+    )
+
+    if (usuariosConUrlAntigua.length > 0) {
+      console.log(`🔄 Actualizando ${usuariosConUrlAntigua.length} usuarios con prefijo legacy /uploads/ a /api/uploads/...`)
+      for (const u of usuariosConUrlAntigua) {
+        const nuevaUrl = u.imagen!.replace('/uploads/avatars/', '/api/uploads/avatars/')
+        await prisma.usuario.update({
+          where: { id: u.id },
+          data: { imagen: nuevaUrl },
+        })
+        console.log(`  ↪️ Usuario ${u.id}: ${u.imagen} -> ${nuevaUrl}`)
+      }
+      console.log('✅ Prefijos legacy actualizados correctamente.\n')
+    }
+
     const usuariosConBase64 = usuarios.filter(
       (u) => u.imagen && u.imagen.startsWith('data:image/')
     )
     const usuariosConUrl = usuarios.filter(
-      (u) => u.imagen && (u.imagen.startsWith('/uploads/') || u.imagen.startsWith('http'))
+      (u) =>
+        u.imagen &&
+        (u.imagen.startsWith('/api/uploads/') ||
+          u.imagen.startsWith('/uploads/') ||
+          u.imagen.startsWith('http'))
     )
     const usuariosSinImagen = usuarios.filter((u) => !u.imagen)
 
@@ -83,7 +105,7 @@ async function runAvatarMigration() {
           throw new Error(`El archivo ${filename} se creó con tamaño 0`)
         }
 
-        const relativeUrl = `/uploads/avatars/${filename}`
+        const relativeUrl = `/api/uploads/avatars/${filename}`
 
         // Actualizar registro en la base de datos
         await prisma.usuario.update({

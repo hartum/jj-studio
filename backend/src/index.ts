@@ -39,13 +39,23 @@ await fastify.register(jwt, {
   secret: process.env.JWT_SECRET || 'super-secret-key-jj-studio-2026',
 })
 
-// Servir archivos estáticos subidos (/uploads/*)
+// Servir archivos estáticos subidos (/api/uploads/* y fallback /uploads/*)
 await ensureAvatarsDir()
+const uploadsRoot = path.resolve(__dirname, '../uploads')
+
 await fastify.register(fastifyStatic, {
-  root: path.resolve(__dirname, '../uploads'),
+  root: uploadsRoot,
+  prefix: '/api/uploads/',
+  maxAge: '1d',
+  immutable: false,
+})
+
+await fastify.register(fastifyStatic, {
+  root: uploadsRoot,
   prefix: '/uploads/',
   maxAge: '1d',
   immutable: false,
+  decorateReply: false,
 })
 
 // Register feature routes

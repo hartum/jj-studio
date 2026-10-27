@@ -29,7 +29,12 @@ export async function saveAvatarFromBase64(
   oldAvatarUrl?: string | null
 ): Promise<string> {
   // Si ya es una URL relativa o remota, no procesar
-  if (base64Data.startsWith('/uploads/') || base64Data.startsWith('http://') || base64Data.startsWith('https://')) {
+  if (
+    base64Data.startsWith('/api/uploads/') ||
+    base64Data.startsWith('/uploads/') ||
+    base64Data.startsWith('http://') ||
+    base64Data.startsWith('https://')
+  ) {
     return base64Data
   }
 
@@ -68,14 +73,17 @@ export async function saveAvatarFromBase64(
 
   await fs.writeFile(targetPath, buffer)
 
-  return `/uploads/avatars/${filename}`
+  return `/api/uploads/avatars/${filename}`
 }
 
 /**
- * Elimina de forma segura un archivo de avatar del disco dado su path relativo (/uploads/avatars/...)
+ * Elimina de forma segura un archivo de avatar del disco dado su path relativo (/api/uploads/avatars/... o /uploads/avatars/...)
  */
 export async function deleteAvatarFile(relativeUrl?: string | null): Promise<void> {
-  if (!relativeUrl || !relativeUrl.startsWith('/uploads/avatars/')) {
+  if (
+    !relativeUrl ||
+    (!relativeUrl.startsWith('/api/uploads/avatars/') && !relativeUrl.startsWith('/uploads/avatars/'))
+  ) {
     return
   }
 
