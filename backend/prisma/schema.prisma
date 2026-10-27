@@ -183,6 +183,9 @@ model SesionFotografica {
   creador   Usuario    @relation("CreadorSesiones", fields: [creadorId], references: [id])
   citaVenta CitaVenta?
 
+  @@index([hotelId, fechaHoraInicio])
+  @@index([fechaHoraInicio])
+  @@index([estado])
   @@map("sesiones_fotograficas")
 }
 
@@ -213,6 +216,9 @@ model CitaVenta {
   comisiones Comision[]
   pagos      PagoCitaVenta[]
 
+  @@index([hotelId, fechaHoraCita])
+  @@index([fechaHoraCita])
+  @@index([estado])
   @@map("citas_venta")
 }
 
@@ -250,6 +256,8 @@ model Meta {
   comisiones Comision[]
 
   @@unique([hotelId, usuarioId, anio, mes, alcanceTipo])
+  @@index([anio, mes])
+  @@index([usuarioId, anio, mes])
   @@map("metas")
 }
 
@@ -318,6 +326,10 @@ model Comision {
   meta      Meta?      @relation(fields: [metaId], references: [id], onDelete: SetNull)
 
   @@unique([citaVentaId, usuarioId, rolEnVenta])
+  @@index([hotelId, fechaVenta])
+  @@index([usuarioId, fechaVenta])
+  @@index([fechaVenta])
+  @@index([estado])
   @@map("comisiones")
 }
 

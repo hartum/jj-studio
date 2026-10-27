@@ -1,6 +1,32 @@
 import { prisma } from '../../../shared/db.js'
 
-export async function syncMonthlyBonuses(
+// Cache de sincronizaciones en vuelo para evitar ejecuciones concurrentes duplicadas
+const inFlightSyncs = new Map<string, Promise<number>>()
+
+export function syncMonthlyBonuses(
+  anio: number,
+  mes: number,
+  targetHotelIds?: number[] | null,
+): Promise<number> {
+  const hotelKey = targetHotelIds && targetHotelIds.length > 0
+    ? [...targetHotelIds].sort((a, b) => a - b).join(',')
+    : 'all'
+  const lockKey = `${anio}-${mes}-${hotelKey}`
+
+  const existing = inFlightSyncs.get(lockKey)
+  if (existing) {
+    return existing
+  }
+
+  const promise = doSyncMonthlyBonuses(anio, mes, targetHotelIds).finally(() => {
+    inFlightSyncs.delete(lockKey)
+  })
+
+  inFlightSyncs.set(lockKey, promise)
+  return promise
+}
+
+async function doSyncMonthlyBonuses(
   anio: number,
   mes: number,
   targetHotelIds?: number[] | null,
@@ -42,10 +68,6 @@ export async function syncMonthlyBonuses(
 
   if (metas.length === 0) return 0
 
-  const hotelIds = Array.from(new Set(metas.map((m) => m.hotelId)))
-
-  let createdCount = 0
-
   // 2. Obtener todas las comisiones no rechazadas del periodo para calcular ventas de colaboradores y hoteles
   const comisionesPeriodo = await prisma.comision.findMany({
     where: {
@@ -54,10 +76,37 @@ export async function syncMonthlyBonuses(
       rolEnVenta: { not: 'BONO' },
       deletedAt: null,
     },
-    include: {
-      citaVenta: true,
+    select: {
+      citaVentaId: true,
+      usuarioId: true,
+      hotelId: true,
+      baseCalculoUsd: true,
+      citaVenta: {
+        select: {
+          totalVentaUsd: true,
+        },
+      },
     },
   })
+
+  // 3. OPTIMIZACIÓN LOTE: Precargar todos los bonos ya existentes en el periodo en 1 sola consulta
+  const bonosExistentes = await prisma.comision.findMany({
+    where: {
+      rolEnVenta: 'BONO',
+      fechaVenta: { gte: startDate, lt: endDate },
+      deletedAt: null,
+    },
+    select: {
+      hotelId: true,
+      usuarioId: true,
+      tipoBonus: true,
+    },
+  })
+
+  // Set en memoria O(1) para verificar si ya existe un bono
+  const existingBonusKeys = new Set(
+    bonosExistentes.map((b) => `${b.hotelId}:${b.usuarioId}:${b.tipoBonus}`),
+  )
 
   // Ventas deduplicadas por colaborador en el periodo
   const ventasPorUsuario = new Map<string, number>()
@@ -77,7 +126,22 @@ export async function syncMonthlyBonuses(
     }
   }
 
-  // 3. Procesar Metas Individuales (alcanceTipo: 'USUARIO')
+  const bonusesToCreate: Array<{
+    hotelId: number
+    usuarioId: string
+    rolEnVenta: string
+    tipoBonus: string
+    metaId: number
+    tipoContrato: string
+    porcentajeAplicado: number
+    baseCalculoUsd: number
+    importeComisionUsd: number
+    estado: string
+    fechaVenta: Date
+    descripcion: string
+  }> = []
+
+  // 4. Procesar Metas Individuales (alcanceTipo: 'USUARIO')
   const userMetas = metas.filter(
     (m) =>
       m.alcanceTipo === 'USUARIO' &&
@@ -98,41 +162,28 @@ export async function syncMonthlyBonuses(
     const totalVentasUser = Math.max(ventasHotel, ventasGlobal)
 
     if (totalVentasUser >= umbral) {
-      // Verificar si ya existe el bono individual para este usuario, hotel, año y mes
-      const existing = await prisma.comision.findFirst({
-        where: {
+      const bonusKey = `${meta.hotelId}:${userId}:INDIVIDUAL`
+      if (!existingBonusKeys.has(bonusKey)) {
+        existingBonusKeys.add(bonusKey)
+        bonusesToCreate.push({
           hotelId: meta.hotelId,
           usuarioId: userId,
           rolEnVenta: 'BONO',
           tipoBonus: 'INDIVIDUAL',
-          fechaVenta: { gte: startDate, lt: endDate },
-          deletedAt: null,
-        },
-      })
-
-      if (!existing) {
-        await prisma.comision.create({
-          data: {
-            hotelId: meta.hotelId,
-            usuarioId: userId,
-            rolEnVenta: 'BONO',
-            tipoBonus: 'INDIVIDUAL',
-            metaId: meta.id,
-            tipoContrato: meta.usuario?.tipoContrato || 'ASALARIADO',
-            porcentajeAplicado: 0,
-            baseCalculoUsd: 0,
-            importeComisionUsd: premio,
-            estado: 'PENDIENTE',
-            fechaVenta: fechaBono,
-            descripcion: `Bono Individual (${meta.hotel.nombre}): Ventas de $${totalVentasUser.toFixed(2)} USD superan meta de $${umbral.toFixed(2)} USD`,
-          },
+          metaId: meta.id,
+          tipoContrato: meta.usuario?.tipoContrato || 'ASALARIADO',
+          porcentajeAplicado: 0,
+          baseCalculoUsd: 0,
+          importeComisionUsd: premio,
+          estado: 'PENDIENTE',
+          fechaVenta: fechaBono,
+          descripcion: `Bono Individual (${meta.hotel.nombre}): Ventas de $${totalVentasUser.toFixed(2)} USD superan meta de $${umbral.toFixed(2)} USD`,
         })
-        createdCount++
       }
     }
   }
 
-  // 4. Procesar Metas Grupales (alcanceTipo: 'HOTEL' sin usuarioId)
+  // 5. Procesar Metas Grupales (alcanceTipo: 'HOTEL' sin usuarioId)
   const hotelMetas = metas.filter(
     (m) =>
       m.alcanceTipo === 'HOTEL' &&
@@ -168,7 +219,6 @@ export async function syncMonthlyBonuses(
     const alcanzoBono = ventasHotel >= meta.importeObjetivo || totalVentasGlobal >= meta.importeObjetivo
 
     if (alcanzoBono) {
-      // Determinar colaboradores elegibles asignados al hotel
       const asignados = meta.hotel.usuariosAsignados
         .map((ua) => ua.usuario)
         .filter((u) => u && !u.deletedAt)
@@ -182,39 +232,34 @@ export async function syncMonthlyBonuses(
       const share = Math.round((meta.valorBonus! / teamCount) * 100) / 100
 
       for (const member of elegibles) {
-        const existing = await prisma.comision.findFirst({
-          where: {
+        const bonusKey = `${meta.hotelId}:${member.id}:GRUPAL`
+        if (!existingBonusKeys.has(bonusKey)) {
+          existingBonusKeys.add(bonusKey)
+          bonusesToCreate.push({
             hotelId: meta.hotelId,
             usuarioId: member.id,
             rolEnVenta: 'BONO',
             tipoBonus: 'GRUPAL',
-            fechaVenta: { gte: startDate, lt: endDate },
-            deletedAt: null,
-          },
-        })
-
-        if (!existing) {
-          await prisma.comision.create({
-            data: {
-              hotelId: meta.hotelId,
-              usuarioId: member.id,
-              rolEnVenta: 'BONO',
-              tipoBonus: 'GRUPAL',
-              metaId: meta.id,
-              tipoContrato: member.tipoContrato || 'ASALARIADO',
-              porcentajeAplicado: 0,
-              baseCalculoUsd: 0,
-              importeComisionUsd: share,
-              estado: 'PENDIENTE',
-              fechaVenta: fechaBono,
-              descripcion: `Bono Grupal (${meta.hotel.nombre}): Meta de $${meta.importeObjetivo.toFixed(2)} USD alcanzada ($${meta.valorBonus!.toFixed(2)} USD ÷ ${teamCount} colaboradores)`,
-            },
+            metaId: meta.id,
+            tipoContrato: member.tipoContrato || 'ASALARIADO',
+            porcentajeAplicado: 0,
+            baseCalculoUsd: 0,
+            importeComisionUsd: share,
+            estado: 'PENDIENTE',
+            fechaVenta: fechaBono,
+            descripcion: `Bono Grupal (${meta.hotel.nombre}): Meta de $${meta.importeObjetivo.toFixed(2)} USD alcanzada ($${meta.valorBonus!.toFixed(2)} USD ÷ ${teamCount} colaboradores)`,
           })
-          createdCount++
         }
       }
     }
   }
 
-  return createdCount
+  // 6. Inserción en lote si hay nuevos bonos
+  if (bonusesToCreate.length > 0) {
+    await prisma.comision.createMany({
+      data: bonusesToCreate,
+    })
+  }
+
+  return bonusesToCreate.length
 }
