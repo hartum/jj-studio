@@ -15,9 +15,9 @@
     "semantic_hash": ""
   },
   "backend/package.json": {
-    "mtime": 1788334509.5092025,
-    "ast_hash": "034ea24c5ad8e05246870a8096e138b9",
-    "semantic_hash": "034ea24c5ad8e05246870a8096e138b9"
+    "mtime": 1793120179.645634,
+    "ast_hash": "a4bf5eb9f985409d5b24a49fa2acad1a",
+    "semantic_hash": ""
   },
   "frontend/env.d.ts": {
     "mtime": 1785346017.7569923,
@@ -65,9 +65,9 @@
     "semantic_hash": "71f05a3eb52ee484e78a2232e3650c0b"
   },
   "frontend/vite.config.ts": {
-    "mtime": 1786463069.6575284,
-    "ast_hash": "001dee714b0b706ef068e1f1539eeb7c",
-    "semantic_hash": "001dee714b0b706ef068e1f1539eeb7c"
+    "mtime": 1793119917.810219,
+    "ast_hash": "eff973b50509b2fb0ef13b6bc29956ce",
+    "semantic_hash": ""
   },
   "backend/prisma/seed.ts": {
     "mtime": 1787505534.2014081,
@@ -180,13 +180,13 @@
     "semantic_hash": "98f1082b51cd0cbe84ef491c7a8e7c78"
   },
   "backend/src/features/users/infrastructure/user.routes.ts": {
-    "mtime": 1792680666.2634528,
-    "ast_hash": "d8bd4e3c128489996ae1737a8354d563",
+    "mtime": 1793120088.330519,
+    "ast_hash": "2dd3b2ede343f34326b2e2742b8aa9d1",
     "semantic_hash": ""
   },
   "backend/src/index.ts": {
-    "mtime": 1792948597.0451162,
-    "ast_hash": "3d93c3576de7b5b7de6f089f9e0e041a",
+    "mtime": 1793119984.69483,
+    "ast_hash": "f3cfd65388e4f88dd552a8904f8a68f7",
     "semantic_hash": ""
   },
   "backend/src/scripts/migrate-encrypt-all.ts": {
@@ -1122,6 +1122,16 @@
   "frontend/src/features/commissions/services/commission-excel-export.service.ts": {
     "mtime": 1793112058.7938218,
     "ast_hash": "6705568984874b9c08d38f77767c7f07",
+    "semantic_hash": ""
+  },
+  "backend/src/features/users/application/avatar-storage.service.ts": {
+    "mtime": 1793119971.4716816,
+    "ast_hash": "7c3abee8d19568f9a42f7a03bb615cb1",
+    "semantic_hash": ""
+  },
+  "backend/src/scripts/migrate-avatars-to-disk.ts": {
+    "mtime": 1793120164.201804,
+    "ast_hash": "646bd9c191b3006f43d1949f877ae522",
     "semantic_hash": ""
   }
 }

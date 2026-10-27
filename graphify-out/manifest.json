@@ -185,8 +185,8 @@
     "semantic_hash": ""
   },
   "backend/src/index.ts": {
-    "mtime": 1793119984.69483,
-    "ast_hash": "f3cfd65388e4f88dd552a8904f8a68f7",
+    "mtime": 1793122753.085472,
+    "ast_hash": "98323beb6c37c110de6c11c0d2fa22be",
     "semantic_hash": ""
   },
   "backend/src/scripts/migrate-encrypt-all.ts": {
@@ -1125,13 +1125,13 @@
     "semantic_hash": ""
   },
   "backend/src/features/users/application/avatar-storage.service.ts": {
-    "mtime": 1793119971.4716816,
-    "ast_hash": "7c3abee8d19568f9a42f7a03bb615cb1",
+    "mtime": 1793122744.7271929,
+    "ast_hash": "a77cb0d4cf72af531736df7b964ad1df",
     "semantic_hash": ""
   },
   "backend/src/scripts/migrate-avatars-to-disk.ts": {
-    "mtime": 1793120164.201804,
-    "ast_hash": "646bd9c191b3006f43d1949f877ae522",
+    "mtime": 1793122782.2159684,
+    "ast_hash": "a274b66c4920930efae5fa52019c62f8",
     "semantic_hash": ""
   }
 }
