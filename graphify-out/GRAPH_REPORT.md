@@ -1,16 +1,16 @@
-# Graph Report - JJ Studio  (2026-10-27)
+# Graph Report - JJ Studio  (2026-10-28)
 
 ## Corpus Check
-- 165 files · ~284,682 words
+- 165 files · ~285,688 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1556 nodes · 2125 edges · 115 communities (86 shown, 29 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.5)
+- 1556 nodes · 2126 edges · 116 communities (86 shown, 30 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `980ba874`
+- Built from commit: `e278c23f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -111,6 +111,7 @@
 - session.routes.ts
 - CalendarDeleteConfirmPopover.vue
 - email.service.ts
+- DirectSaleFormView.vue
 - exceljs
 - @fullcalendar/daygrid
 - @fullcalendar/list
@@ -136,6 +137,8 @@
 10. `syncCitaVentaToGoogle()` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `useSaleAppointmentForm()` --indirect_call--> `handleSave()`  [INFERRED]
+  frontend/src/features/sales/composables/useSaleAppointmentForm.ts → frontend/src/features/photo-sessions/ui/PhotoSessionFormMobile.vue
 - `runAvatarMigration()` --calls--> `ensureAvatarsDir()`  [EXTRACTED]
   backend/src/scripts/migrate-avatars-to-disk.ts → backend/src/features/users/application/avatar-storage.service.ts
 - `commissionRoutes()` --calls--> `registrarAlerta()`  [EXTRACTED]
@@ -144,13 +147,11 @@
   backend/src/features/goals/infrastructure/goal.routes.ts → backend/src/features/alerts/application/alert.service.ts
 - `alertRoutes()` --calls--> `evaluarCaso1SesionesSospechosas()`  [EXTRACTED]
   backend/src/features/alerts/infrastructure/alert.routes.ts → backend/src/features/alerts/application/alert.service.ts
-- `sessionRoutes()` --calls--> `evaluarCaso1SesionesSospechosas()`  [EXTRACTED]
-  backend/src/features/photo-sessions/infrastructure/session.routes.ts → backend/src/features/alerts/application/alert.service.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (115 total, 29 thin omitted)
+## Communities (116 total, 30 thin omitted)
 
 ### Community 0 - "encryption.ts"
 Cohesion: 0.21
@@ -179,7 +180,7 @@ Nodes (39): AgendaMobileSavedState, {
 
 ### Community 5 - "PhotoSessionFormMobile.vue"
 Cohesion: 0.06
-Nodes (24): estadoOptions, handleAccordionChange(), handleSave(), minuteSlots, mobileCheckoutPreview, mobileCitaVentaPreview, mobileSessionPreview, motivoOptions (+16 more)
+Nodes (25): estadoOptions, handleAccordionChange(), handleSave(), minuteSlots, mobileCheckoutPreview, mobileCitaVentaPreview, mobileSessionPreview, motivoOptions (+17 more)
 
 ### Community 6 - "HotelFormView.vue"
 Cohesion: 0.06
@@ -302,10 +303,6 @@ Nodes (13): confirmPassword, isCheckingToken, isCompleted, isLoading, isTokenVal
 Cohesion: 0.14
 Nodes (13): currentDayjs, emit, endDayNumber, endOfWeek, formattedDayNumber, formattedMonth, formattedWeekday, isWeekMode (+5 more)
 
-### Community 35 - "SaleAppointmentFormView.vue"
-Cohesion: 0.40
-Nodes (3): useSaleAppointmentForm(), form, isMobile
-
 ### Community 36 - "Guía de Estilo y Patrones Globales de UX/UI (JJ Studio)"
 Cohesion: 0.15
 Nodes (12): 1. Filosofía de Diseño: *Clean, Minimalist & Data-First*, 2. Anatomía Estándar de una Pantalla, 3. Jerarquía Visual y Datos Protagonistas (*Data-First*), 4. Paleta de Colores y Tokens Semánticos, 5. Convenciones de Stack y Componentes, 6. Reglas Críticas de Intervención en CSS y Componentes, A. Cabecera de Página (`.page-header`), B. Barra de Filtros y Herramientas (`.toolbar-bar` / `.toolbar-card`) (+4 more)
@@ -416,12 +413,12 @@ Cohesion: 0.38
 Nodes (6): AreaNode, CountryNode, emit, handleHotelClick(), handleNavClick(), HotelNode
 
 ### Community 56 - "useSaleAppointmentForm.ts"
-Cohesion: 0.18
-Nodes (14): FormPagoItem, SaleAppointmentFormContext, SaleAppointmentFormData, SessionContextInfo, VendedorDisponibilidadItem, VendedoresDisponibilidadResponse, CitaVenta, ConflictoCitaVenta (+6 more)
+Cohesion: 0.15
+Nodes (18): DirectSaleFormData, SellerUser, FormPagoItem, SaleAppointmentFormContext, SaleAppointmentFormData, SessionContextInfo, VendedorDisponibilidadItem, VendedoresDisponibilidadResponse (+10 more)
 
 ### Community 57 - "DirectSaleFormDesktop.vue"
-Cohesion: 0.10
-Nodes (13): DirectSaleFormContext, DirectSaleFormData, SellerUser, useDirectSaleForm(), CreateVentaDirectaPayload, MODO_COBRO_OPTIONS, isPhotographerColored, isSellerPhotographer (+5 more)
+Cohesion: 0.17
+Nodes (6): DirectSaleFormContext, isPhotographerColored, isSellerPhotographer, props, showPhotographersList, showSellersList
 
 ### Community 59 - "vue"
 Cohesion: 0.09
@@ -515,25 +512,29 @@ Nodes (5): getAuthUserId(), getHotelAvailability(), parseDateOnly(), parseLocalD
 Cohesion: 0.53
 Nodes (5): escapeHtml(), getAppBaseUrl(), getMailTransporter(), sendPasswordResetEmail(), SendPasswordResetParams
 
+### Community 103 - "DirectSaleFormView.vue"
+Cohesion: 0.40
+Nodes (3): useDirectSaleForm(), form, isMobile
+
 ## Knowledge Gaps
-- **806 isolated node(s):** `__filename`, `__dirname`, `AVATARS_DIR`, `__filename`, `__dirname` (+801 more)
+- **806 isolated node(s):** `HotelDisponibilidad`, `props`, `{ t }`, `sessionsCountByHour`, `minuteSlots` (+801 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **29 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **30 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `AvatarCropperDialog.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `usePhotoSessionForm.ts`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `SaleAppointmentFormView.vue`, `SupervisorHotelGoalCard.vue`, `ContableEstadisticasTab.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `AgendadorHotelGoalCard.vue`, `useSaleAppointmentForm.ts`, `DirectSaleFormDesktop.vue`, `frontend/src/features/alerts/domain/alert.model.ts`, `AlertConfigTab.vue`, `DirectSaleFormMobile.vue`, `CalendarAlertsPanel.vue`, `ContableComisionesTab.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `LoginView.vue`, `GoalProgressCard.vue`?**
-  _High betweenness centrality (0.344) - this node is a cross-community bridge._
+- **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `AvatarCropperDialog.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `usePhotoSessionForm.ts`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `SaleAppointmentFormView.vue`, `SupervisorHotelGoalCard.vue`, `ContableEstadisticasTab.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `AgendadorHotelGoalCard.vue`, `useSaleAppointmentForm.ts`, `DirectSaleFormDesktop.vue`, `frontend/src/features/alerts/domain/alert.model.ts`, `AlertConfigTab.vue`, `DirectSaleFormMobile.vue`, `CalendarAlertsPanel.vue`, `ContableComisionesTab.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `LoginView.vue`, `GoalProgressCard.vue`, `DirectSaleFormView.vue`?**
+  _High betweenness centrality (0.321) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
   _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `frontend/package.json`, `eslint-config-prettier`, `eslint-plugin-oxlint`, `oxlint`, `prettier`, `@tsconfig/node24`, `typescript`, `vue-eslint-parser`, `vue-tsc`, `@vue/tsconfig`, `jiti`, `eslint`, `devDependencies`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **What connects `__filename`, `__dirname`, `AVATARS_DIR` to the rest of the system?**
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+- **What connects `HotelDisponibilidad`, `props`, `{ t }` to the rest of the system?**
   _806 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
 - **Should `HotelCalendarMobile.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.05391120507399577 - nodes in this community are weakly interconnected._
 - **Should `PhotoSessionFormMobile.vue` be split into smaller, more focused modules?**
-  _Cohesion score 0.06050420168067227 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05873015873015873 - nodes in this community are weakly interconnected._
