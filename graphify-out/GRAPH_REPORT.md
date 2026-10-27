@@ -1,16 +1,16 @@
 # Graph Report - JJ Studio  (2026-10-27)
 
 ## Corpus Check
-- 163 files · ~283,594 words
+- 165 files · ~284,575 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1542 nodes · 2096 edges · 110 communities (87 shown, 23 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.69)
+- 1555 nodes · 2124 edges · 117 communities (86 shown, 31 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.57)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1e3de7a9`
+- Built from commit: `4f97e92c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -62,7 +62,7 @@
 - JJ Studio
 - PhotographerHotelGoalCard.vue
 - google-calendar.service.ts
-- backend/package.json
+- typescript
 - AgendadorHotelGoalCard.vue
 - Guía de Uso de Iconos Lucide (`@lucide/vue`)
 - confirmAction
@@ -73,7 +73,7 @@
 - user-avatar.ts
 - useSaleAppointmentForm.ts
 - DirectSaleFormDesktop.vue
-- scripts
+- eslint
 - CalendarHeader.vue
 - frontend/src/features/alerts/domain/alert.model.ts
 - AlertConfigTab.vue
@@ -86,8 +86,8 @@
 - frontend/package.json
 - dayjs
 - frontend/tsconfig.json
-- googleapis
-- node-cron
+- eslint-config-prettier
+- eslint-plugin-oxlint
 - @element-plus/icons-vue
 - useDashboard.ts
 - commission-excel-export.service.ts
@@ -96,6 +96,7 @@
 - vue
 - vue-advanced-cropper
 - vue-i18n
+- jiti
 - vue-router
 - LanguageSelector.vue
 - ContableComisionesTab.vue
@@ -117,10 +118,16 @@
 - @fullcalendar/list
 - CURRENCY_SUMMARY_PROPERTIES
 - getDetalleTableData
+- oxlint
+- prettier
+- @tsconfig/node24
+- vue-eslint-parser
+- vue-tsc
+- @vue/tsconfig
 
 ## God Nodes (most connected - your core abstractions)
 1. `vue` - 68 edges
-2. `prisma` - 28 edges
+2. `prisma` - 29 edges
 3. `decryptUser()` - 23 edges
 4. `encrypt()` - 20 edges
 5. `decrypt()` - 19 edges
@@ -131,6 +138,8 @@
 10. `syncCitaVentaToGoogle()` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `runAvatarMigration()` --calls--> `ensureAvatarsDir()`  [EXTRACTED]
+  backend/src/scripts/migrate-avatars-to-disk.ts → backend/src/features/users/application/avatar-storage.service.ts
 - `commissionRoutes()` --calls--> `registrarAlerta()`  [EXTRACTED]
   backend/src/features/commissions/infrastructure/commission.routes.ts → backend/src/features/alerts/application/alert.service.ts
 - `goalRoutes()` --calls--> `registrarAlerta()`  [EXTRACTED]
@@ -139,13 +148,11 @@
   backend/src/features/alerts/infrastructure/alert.routes.ts → backend/src/features/alerts/application/alert.service.ts
 - `sessionRoutes()` --calls--> `evaluarCaso1SesionesSospechosas()`  [EXTRACTED]
   backend/src/features/photo-sessions/infrastructure/session.routes.ts → backend/src/features/alerts/application/alert.service.ts
-- `registrarAudit()` --calls--> `decrypt()`  [EXTRACTED]
-  backend/src/features/audit-log/application/audit-log.service.ts → backend/src/shared/encryption.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (110 total, 23 thin omitted)
+## Communities (117 total, 31 thin omitted)
 
 ### Community 0 - "encryption.ts"
 Cohesion: 0.21
@@ -160,8 +167,8 @@ Cohesion: 0.04
 Nodes (40): activeTab, assignableProfiles, assignedAreaIdsByOtherRoleUsers, assignedAreaNames, assignedHotelIdsByOtherSupervisores, assignedHotelNames, assignedNames, authStore (+32 more)
 
 ### Community 3 - "devDependencies"
-Cohesion: 0.05
-Nodes (37): eslint, eslint-config-prettier, eslint-plugin-oxlint, eslint-plugin-vue, devDependencies, eslint, eslint-config-prettier, eslint-plugin-oxlint (+29 more)
+Cohesion: 0.15
+Nodes (13): eslint-plugin-vue, devDependencies, eslint-plugin-vue, npm-run-all2, vite, vite-plugin-vue-devtools, @vitejs/plugin-vue, @vue/eslint-config-typescript (+5 more)
 
 ### Community 4 - "HotelCalendarMobile.vue"
 Cohesion: 0.05
@@ -254,8 +261,8 @@ Cohesion: 0.18
 Nodes (9): UserRepositoryPort, Perfil, TipoContrato, User, UserInput, UserStatus, UserWithProfile, useProfileStore (+1 more)
 
 ### Community 24 - "dependencies"
-Cohesion: 0.12
-Nodes (17): dependencies, bcryptjs, dotenv, fastify, @fastify/cors, @fastify/jwt, nodemailer, @prisma/client (+9 more)
+Cohesion: 0.05
+Nodes (38): author, dependencies, bcryptjs, dotenv, fastify, @fastify/cors, @fastify/jwt, @fastify/static (+30 more)
 
 ### Community 25 - "goal.routes.ts"
 Cohesion: 0.20
@@ -270,8 +277,8 @@ Cohesion: 0.12
 Nodes (15): 1. Gestión de `.env` (NUNCA SUBIR A GIT):, 2. Configuración de Proxy Vite (Prevenir Error 502):, 3. Pipeline CI/CD GitHub Actions (`deploy.yml`):, 4. Cabeceras HTTP en Frontend y Fastify 5 (Prevenir Error 400 `FST_ERR_CTP_EMPTY_JSON_BODY`):, AGENTS.md - Proyecto JJ Studio, 📚 Base de Conocimiento del Proyecto (`docs/`), 🛠️ Comandos Principales, 🧼 Disciplina de Código, No-Sobreingeniería y Cero Código Muerto (Reglas Obligatorias) (+7 more)
 
 ### Community 28 - "devDependencies"
-Cohesion: 0.13
-Nodes (15): devDependencies, prisma, tsx, @types/bcryptjs, @types/node, @types/node-cron, @types/nodemailer, typescript (+7 more)
+Cohesion: 0.14
+Nodes (14): devDependencies, prisma, tsx, @types/bcryptjs, @types/node, @types/node-cron, @types/nodemailer, @types/node (+6 more)
 
 ### Community 29 - "GoalEvolutionChart.vue"
 Cohesion: 0.13
@@ -382,9 +389,9 @@ Nodes (10): FotografoProgreso, displayHotelTitle, fotografoSubtitle, groupBonusS
 Cohesion: 0.21
 Nodes (19): googleCalendarRoutes(), deleteCitaVentaFromGoogle(), deleteSesionFromGoogle(), __dirname, __filename, formatDateLongSpanish(), formatEmailHtml(), formatPaxDisplay() (+11 more)
 
-### Community 47 - "backend/package.json"
-Cohesion: 0.22
-Nodes (8): author, description, keywords, license, main, name, type, version
+### Community 47 - "typescript"
+Cohesion: 0.67
+Nodes (3): typescript, typescript, typescript
 
 ### Community 48 - "AgendadorHotelGoalCard.vue"
 Cohesion: 0.15
@@ -417,10 +424,6 @@ Nodes (14): FormPagoItem, SaleAppointmentFormContext, SaleAppointmentFormData, S
 ### Community 57 - "DirectSaleFormDesktop.vue"
 Cohesion: 0.10
 Nodes (13): DirectSaleFormContext, DirectSaleFormData, SellerUser, useDirectSaleForm(), CreateVentaDirectaPayload, MODO_COBRO_OPTIONS, isPhotographerColored, isSellerPhotographer (+5 more)
-
-### Community 58 - "scripts"
-Cohesion: 0.33
-Nodes (6): scripts, build, db:push, db:seed, dev, start
 
 ### Community 59 - "CalendarHeader.vue"
 Cohesion: 0.33
@@ -487,16 +490,16 @@ Cohesion: 0.22
 Nodes (7): authStore, email, isLoading, password, rememberMe, router, { t }
 
 ### Community 96 - "src/index.ts"
-Cohesion: 0.13
-Nodes (20): alertRoutes(), getAuthUserId(), verifySuperOrAdmin(), AuditParams, DIAS_SEMANA, formatAuditDateTime(), formatCreadorOriginal(), MESES (+12 more)
+Cohesion: 0.12
+Nodes (22): alertRoutes(), getAuthUserId(), verifySuperOrAdmin(), AuditParams, DIAS_SEMANA, formatAuditDateTime(), formatCreadorOriginal(), MESES (+14 more)
 
 ### Community 97 - "sale.routes.ts"
 Cohesion: 0.18
 Nodes (17): evaluarCaso1SesionesSospechosas(), registrarAlerta(), RegistrarAlertaParams, AlertaFilterQuery, AlertaItem, AlertaListResponse, GravedadAlerta, TipoCasoAlerta (+9 more)
 
 ### Community 98 - "user.routes.ts"
-Cohesion: 0.33
-Nodes (8): getAuthUser(), userRoutes(), canDeleteUser(), canEditUser(), getRolePermissions(), PERMISSION_MATRIX, RoleCode, RoleConfig
+Cohesion: 0.18
+Nodes (16): AVATARS_DIR, deleteAvatarFile(), __dirname, ensureAvatarsDir(), __filename, getAvatarsDir(), saveAvatarFromBase64(), getAuthUser() (+8 more)
 
 ### Community 99 - "GoalProgressCard.vue"
 Cohesion: 0.20
@@ -515,24 +518,24 @@ Cohesion: 0.53
 Nodes (5): escapeHtml(), getAppBaseUrl(), getMailTransporter(), sendPasswordResetEmail(), SendPasswordResetParams
 
 ## Knowledge Gaps
-- **802 isolated node(s):** `inFlightSyncs`, `name`, `version`, `private`, `type` (+797 more)
+- **805 isolated node(s):** `name`, `version`, `description`, `main`, `dev` (+800 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **31 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `AvatarCropperDialog.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `SaleAppointmentFormView.vue`, `SupervisorHotelGoalCard.vue`, `ContableEstadisticasTab.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `AgendadorHotelGoalCard.vue`, `useSaleAppointmentForm.ts`, `DirectSaleFormDesktop.vue`, `CalendarHeader.vue`, `frontend/src/features/alerts/domain/alert.model.ts`, `AlertConfigTab.vue`, `DirectSaleFormMobile.vue`, `useDashboard.ts`, `ContableComisionesTab.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `LoginView.vue`, `GoalProgressCard.vue`, `useLocale.ts`, `auth.store.ts`, `HotelCalendarView.vue`?**
-  _High betweenness centrality (0.325) - this node is a cross-community bridge._
+  _High betweenness centrality (0.343) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
   _High betweenness centrality (0.010) - this node is a cross-community bridge._
-- **Why does `devDependencies` connect `devDependencies` to `frontend/package.json`?**
-  _High betweenness centrality (0.002) - this node is a cross-community bridge._
-- **What connects `inFlightSyncs`, `name`, `version` to the rest of the system?**
-  _802 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `devDependencies` connect `devDependencies` to `frontend/package.json`, `eslint-config-prettier`, `eslint-plugin-oxlint`, `oxlint`, `prettier`, `@tsconfig/node24`, `typescript`, `vue-eslint-parser`, `vue-tsc`, `@vue/tsconfig`, `jiti`, `eslint`, `devDependencies`?**
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+- **What connects `name`, `version`, `description` to the rest of the system?**
+  _805 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
-- **Should `devDependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
 - **Should `HotelCalendarMobile.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.05391120507399577 - nodes in this community are weakly interconnected._
+- **Should `PhotoSessionFormMobile.vue` be split into smaller, more focused modules?**
+  _Cohesion score 0.06050420168067227 - nodes in this community are weakly interconnected._
