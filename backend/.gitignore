@@ -4,3 +4,8 @@ dist/
 *.log
 google-service-account.json
 *credentials*.json
+
+# User uploads (keep directory structure, ignore uploaded files)
+uploads/**/*
+!uploads/**/
+!uploads/**/.gitkeep

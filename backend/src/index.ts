@@ -17,6 +17,14 @@ import { auditLogRoutes } from './features/audit-log/infrastructure/audit-log.ro
 import { alertRoutes } from './features/alerts/infrastructure/alert.routes.js'
 import { migrateLegacyPayments } from './features/sales/infrastructure/sale.migration.js'
 
+import fastifyStatic from '@fastify/static'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { ensureAvatarsDir } from './features/users/application/avatar-storage.service.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 const fastify = Fastify({
   logger: true,
 })
@@ -29,6 +37,15 @@ await fastify.register(cors, {
 
 await fastify.register(jwt, {
   secret: process.env.JWT_SECRET || 'super-secret-key-jj-studio-2026',
+})
+
+// Servir archivos estáticos subidos (/uploads/*)
+await ensureAvatarsDir()
+await fastify.register(fastifyStatic, {
+  root: path.resolve(__dirname, '../uploads'),
+  prefix: '/uploads/',
+  maxAge: '1d',
+  immutable: false,
 })
 
 // Register feature routes

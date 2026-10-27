@@ -14,6 +14,10 @@ import {
   registrarAudit,
   formatAuditDateTime,
 } from '../../audit-log/application/audit-log.service.js'
+import {
+  saveAvatarFromBase64,
+  deleteAvatarFile,
+} from '../application/avatar-storage.service.js'
 
 async function getAuthUser(request: any) {
   try {
@@ -514,15 +518,26 @@ export async function userRoutes(fastify: FastifyInstance) {
         }
       }
 
+      const newUserId = crypto.randomUUID()
+      let avatarUrl: string | null = null
+      if (body.imagen) {
+        if (body.imagen.startsWith('data:image/')) {
+          avatarUrl = await saveAvatarFromBase64(newUserId, body.imagen)
+        } else {
+          avatarUrl = body.imagen
+        }
+      }
+
       const nuevo = await prisma.usuario.create({
         data: {
+          id: newUserId,
           nombre: encrypt(body.nombre.trim()) || '',
           apellidos: encrypt(body.apellidos ? body.apellidos.trim() : '') || '',
           email: encrypt(normalizedEmail) || '',
           emailHash,
           telefono: body.telefono ? encrypt(body.telefono.trim()) : null,
           passwordHash,
-          imagen: body.imagen || null,
+          imagen: avatarUrl,
           roleId: Number(body.profileId),
           tipoContrato: body.tipoContrato === 'SIN_SALARIO' ? 'SIN_SALARIO' : 'ASALARIADO',
           fechaContratacion: body.fechaContratacion ? new Date(body.fechaContratacion) : null,
@@ -757,6 +772,18 @@ export async function userRoutes(fastify: FastifyInstance) {
         }
       }
 
+      let finalAvatar: string | null | undefined = undefined
+      if (body.imagen !== undefined) {
+        if (!body.imagen) {
+          await deleteAvatarFile(currentUserRaw.imagen)
+          finalAvatar = null
+        } else if (body.imagen.startsWith('data:image/')) {
+          finalAvatar = await saveAvatarFromBase64(id, body.imagen, currentUserRaw.imagen)
+        } else {
+          finalAvatar = body.imagen
+        }
+      }
+
       const dataToUpdate: any = {
         ...(body.nombre && { nombre: encrypt(body.nombre.trim()) }),
         ...(body.apellidos !== undefined && { apellidos: encrypt(body.apellidos.trim()) }),
@@ -765,7 +792,7 @@ export async function userRoutes(fastify: FastifyInstance) {
           telefono: body.telefono ? encrypt(body.telefono.trim()) : null,
         }),
         ...(passwordHash && { passwordHash }),
-        ...(body.imagen !== undefined && { imagen: body.imagen }),
+        ...(finalAvatar !== undefined && { imagen: finalAvatar }),
         ...(body.profileId !== undefined && { roleId: Number(body.profileId) }),
         ...(body.tipoContrato !== undefined && { tipoContrato: body.tipoContrato }),
         ...(body.fechaContratacion !== undefined && {
@@ -905,9 +932,29 @@ export async function userRoutes(fastify: FastifyInstance) {
           .send({ error: 'No tienes permisos para cambiar la foto de este usuario' })
       }
 
+      const targetUser = await prisma.usuario.findUnique({
+        where: { id },
+        select: { id: true, imagen: true },
+      })
+      if (!targetUser) {
+        return reply.status(404).send({ error: 'Usuario no encontrado' })
+      }
+
+      let finalImagen: string | null = null
+      if (imagen) {
+        if (imagen.startsWith('data:image/')) {
+          finalImagen = await saveAvatarFromBase64(id, imagen, targetUser.imagen)
+        } else {
+          finalImagen = imagen
+        }
+      } else {
+        await deleteAvatarFile(targetUser.imagen)
+        finalImagen = null
+      }
+
       const updated = await prisma.usuario.update({
         where: { id },
-        data: { imagen: imagen ?? null },
+        data: { imagen: finalImagen },
       })
 
       if (executor) {
