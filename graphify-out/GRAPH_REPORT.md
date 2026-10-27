@@ -1,16 +1,16 @@
-# Graph Report - JJ Studio  (2026-10-25)
+# Graph Report - JJ Studio  (2026-10-27)
 
 ## Corpus Check
-- 162 files · ~280,256 words
+- 163 files · ~283,451 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1530 nodes · 2081 edges · 106 communities (86 shown, 20 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.71)
+- 1540 nodes · 2093 edges · 111 communities (87 shown, 24 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.69)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `985b2a4b`
+- Built from commit: `95cf81ed`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -90,13 +90,13 @@
 - node-cron
 - @element-plus/icons-vue
 - useDashboard.ts
-- @fullcalendar/core
+- commission-excel-export.service.ts
 - @fullcalendar/interaction
 - pinia
 - vue
 - vue-advanced-cropper
 - vue-i18n
-- vue-ios-style-datepicker
+- CalendarDeleteConfirmPopover.vue
 - vue-router
 - LanguageSelector.vue
 - ContableComisionesTab.vue
@@ -112,7 +112,12 @@
 - useLocale.ts
 - email.service.ts
 - auth.store.ts
+- exceljs
 - HotelCalendarView.vue
+- @fullcalendar/daygrid
+- @fullcalendar/list
+- CURRENCY_SUMMARY_PROPERTIES
+- getDetalleTableData
 
 ## God Nodes (most connected - your core abstractions)
 1. `vue` - 68 edges
@@ -141,7 +146,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (106 total, 20 thin omitted)
+## Communities (111 total, 24 thin omitted)
 
 ### Community 0 - "encryption.ts"
 Cohesion: 0.21
@@ -149,7 +154,7 @@ Nodes (18): main(), prisma, seedUser(), migrateAll(), migrateSessions(), migrate
 
 ### Community 1 - "dependencies"
 Cohesion: 0.15
-Nodes (13): element-plus, dependencies, element-plus, @fullcalendar/daygrid, @fullcalendar/list, @fullcalendar/timegrid, @fullcalendar/vue3, @lucide/vue (+5 more)
+Nodes (13): element-plus, dependencies, element-plus, @fullcalendar/core, @fullcalendar/timegrid, @fullcalendar/vue3, @lucide/vue, vue-ios-style-datepicker (+5 more)
 
 ### Community 2 - "UsuarioFormView.vue"
 Cohesion: 0.04
@@ -182,12 +187,12 @@ Nodes (32): activePhotographersCount, AreaGroup, assignedTeamMembers, authStore,
 
 ### Community 8 - "HotelCalendarDesktop.vue"
 Cohesion: 0.05
-Nodes (33): useCalendarScope(), emit, Props, AgendaSavedState, {
+Nodes (32): useCalendarEvents(), useCalendarScope(), AgendaSavedState, {
   calendarEvents,
   highlightEventAndAssociated,
   clearEventHighlights,
   canEditCalendarEvent,
-}, calendarOptions, calendarRef, canCreateDirectSale (+25 more)
+}, calendarOptions, calendarRef, canCreateDirectSale, canCreateEvents (+24 more)
 
 ### Community 9 - "EmailTemplatesView.vue"
 Cohesion: 0.08
@@ -227,7 +232,7 @@ Nodes (18): 1. Requisitos Funcionales, 2. Requisitos Técnicos y de Arquitectura
 
 ### Community 18 - "vue"
 Cohesion: 0.12
-Nodes (20): useCalendarAlerts(), DeletableCalendarEvent, useCalendarDelete(), EventTooltipInfo, ExtendedEventProps, useCalendarEvents(), HotelDisponibilidad, usePhotoSessionForm() (+12 more)
+Nodes (19): useCalendarAlerts(), DeletableCalendarEvent, useCalendarDelete(), EventTooltipInfo, ExtendedEventProps, HotelDisponibilidad, usePhotoSessionForm(), CreateSesionPayload (+11 more)
 
 ### Community 19 - "PhotoSessionFormDesktop.vue"
 Cohesion: 0.10
@@ -458,6 +463,10 @@ Nodes (3): devDependencies, @types/node, @types/node
 Cohesion: 0.29
 Nodes (6): engines, node, name, private, type, version
 
+### Community 82 - "commission-excel-export.service.ts"
+Cohesion: 0.40
+Nodes (5): BORDER_THIN, BORDER_TOTAL, CommissionExcelExportOptions, exportComisionesToExcel(), getAvatarImageForExcel()
+
 ### Community 91 - "ContableComisionesTab.vue"
 Cohesion: 0.04
 Nodes (31): availableContableUsers, BonusCalculationContext, BonusDetalle, comisionUsuarioFilter, commissionStore, ConfirmActionOptions, ContableAreaSummary, ContableHotelSummary (+23 more)
@@ -507,24 +516,24 @@ Cohesion: 0.53
 Nodes (5): escapeHtml(), getAppBaseUrl(), getMailTransporter(), sendPasswordResetEmail(), SendPasswordResetParams
 
 ## Knowledge Gaps
-- **797 isolated node(s):** `AlertaItem`, `AlertaListResponse`, `AlertaFilterQuery`, `MESES_NOMBRES`, `PagoInput` (+792 more)
+- **801 isolated node(s):** `name`, `version`, `private`, `type`, `dev` (+796 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **24 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `AvatarCropperDialog.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `SaleAppointmentFormView.vue`, `SupervisorHotelGoalCard.vue`, `ContableEstadisticasTab.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `AgendadorHotelGoalCard.vue`, `useSaleAppointmentForm.ts`, `DirectSaleFormDesktop.vue`, `CalendarHeader.vue`, `frontend/src/features/alerts/domain/alert.model.ts`, `AlertConfigTab.vue`, `DirectSaleFormMobile.vue`, `useDashboard.ts`, `ContableComisionesTab.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `LoginView.vue`, `GoalProgressCard.vue`, `useLocale.ts`, `auth.store.ts`, `HotelCalendarView.vue`?**
-  _High betweenness centrality (0.384) - this node is a cross-community bridge._
+  _High betweenness centrality (0.319) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
   _High betweenness centrality (0.010) - this node is a cross-community bridge._
-- **What connects `AlertaItem`, `AlertaListResponse`, `AlertaFilterQuery` to the rest of the system?**
-  _797 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `devDependencies` connect `devDependencies` to `frontend/package.json`?**
+  _High betweenness centrality (0.003) - this node is a cross-community bridge._
+- **What connects `name`, `version`, `private` to the rest of the system?**
+  _801 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
 - **Should `HotelCalendarMobile.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.05391120507399577 - nodes in this community are weakly interconnected._
-- **Should `PhotoSessionFormMobile.vue` be split into smaller, more focused modules?**
-  _Cohesion score 0.06050420168067227 - nodes in this community are weakly interconnected._
