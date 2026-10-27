@@ -81,13 +81,13 @@
   "79": "eslint.config.ts",
   "80": ".$locale",
   "81": "vite.config.ts",
-  "82": "@fullcalendar/core",
+  "82": "commission-excel-export.service.ts",
   "83": "@fullcalendar/interaction",
   "84": "pinia",
   "85": "vue",
   "86": "vue-advanced-cropper",
   "87": "vue-i18n",
-  "88": "vue-ios-style-datepicker",
+  "88": "CalendarDeleteConfirmPopover.vue",
   "89": "vue-router",
   "90": "LanguageSelector.vue",
   "91": "ContableComisionesTab.vue",
@@ -103,6 +103,11 @@
   "101": "useLocale.ts",
   "102": "email.service.ts",
   "103": "auth.store.ts",
+  "104": "exceljs",
   "105": "HotelCalendarView.vue",
-  "106": "formatters.ts"
+  "106": "formatters.ts",
+  "107": "@fullcalendar/daygrid",
+  "108": "@fullcalendar/list",
+  "109": "CURRENCY_SUMMARY_PROPERTIES",
+  "110": "getDetalleTableData"
 }
