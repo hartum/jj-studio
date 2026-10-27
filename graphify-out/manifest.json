@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1792885622.4394045,
-    "ast_hash": "442f5d9e457104ca9d3842dfebafd62b",
+    "mtime": 1793117427.7315588,
+    "ast_hash": "02181d2e208c6df50eb13e6e699f38e6",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/InicioView.vue": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1793112092.4341612,
-    "ast_hash": "a318fffd97408d65fcda50b44c904b94",
+    "mtime": 1793117403.198416,
+    "ast_hash": "b971c6e5d2207d9dc000f01b1567c8c8",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1793112078.7733257,
-    "ast_hash": "bda3e09f73622f82318c7d36235cc26e",
+    "mtime": 1793117380.7116513,
+    "ast_hash": "e6e95237372089bf3072953fecc36bce",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1075,8 +1075,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1793112176.4644926,
-    "ast_hash": "ea30b0f0ef5c02361a9f7b2a9d8d4fe5",
+    "mtime": 1793117456.7004979,
+    "ast_hash": "855dc89fa0b1e4a09f7a06bf7c1a77cd",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {
