@@ -316,6 +316,47 @@ export function useSaleAppointmentForm() {
     return sellers.value.find((s) => String(s.id) === String(formData.value.vendedorId)) || null
   })
 
+  // Agendador de la sesión asociada / creador
+  const bookerUser = computed(() => {
+    if (formData.value.sesionId) {
+      const session = sessionStore.sessions.find(
+        (s) => Number(s.id) === Number(formData.value.sesionId),
+      )
+      if (session?.creadorId) {
+        const found = userStore.usersWithProfile.find(
+          (u) => String(u.id) === String(session.creadorId),
+        )
+        if (found) return found
+      }
+    }
+    if (formData.value.vendedorId) {
+      const found = userStore.usersWithProfile.find(
+        (u) => String(u.id) === String(formData.value.vendedorId),
+      )
+      if (found) return found
+    }
+    if (isDirectSale.value && currentUser.value) {
+      const foundCurrent = userStore.usersWithProfile.find(
+        (u) => String(u.id) === String(currentUser.value?.id),
+      )
+      return foundCurrent || currentUser.value
+    }
+    return null
+  })
+
+  const bookerName = computed(() => {
+    if (!bookerUser.value) return t('sessions.summary.unassigned')
+    return `${bookerUser.value.nombre} ${bookerUser.value.apellidos}`.trim()
+  })
+
+  const bookerRoleName = computed(() => {
+    if (!bookerUser.value) return ''
+    const p =
+      (bookerUser.value as any).perfil ||
+      profileStore.getProfileById((bookerUser.value as any).profileId)
+    return p?.name || (bookerUser.value as any).roleName || ''
+  })
+
   const timeSlots = [
     '00:00',
     '01:00',
@@ -718,7 +759,10 @@ export function useSaleAppointmentForm() {
           fechaHoraInicio: session.fechaHoraInicio,
           hotelNombre: hotelStore.hotels.find((h) => h.id === session.hotelId)?.nombre || '',
         }
-        if (!isEditing.value && !formData.value.vendedorId && currentUser.value) {
+        // Cuando se asigna la cita de fotos a la cita de ventas se asigna automáticamente el agendador de la venta
+        if (session.creadorId) {
+          formData.value.vendedorId = String(session.creadorId)
+        } else if (!isEditing.value && !formData.value.vendedorId && currentUser.value) {
           const role = currentUser.value.roleCode?.toUpperCase() || ''
           const isSellerRole = ['AGENDADOR', 'SUPERVISOR'].includes(role)
           if (
@@ -966,6 +1010,9 @@ export function useSaleAppointmentForm() {
     photographerName,
     sellers,
     selectedSeller,
+    bookerUser,
+    bookerName,
+    bookerRoleName,
     vendedoresDisponibilidad,
     isCheckingVendedoresDisponibilidad,
     checkDisponibilidadVendedores,

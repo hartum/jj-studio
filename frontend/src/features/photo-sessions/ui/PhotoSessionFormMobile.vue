@@ -40,6 +40,9 @@ const {
   getFotografoCellClassName,
   handlePanelChange,
   selectedPhotographer,
+  bookerUser,
+  bookerName,
+  bookerRoleName,
   isFotografoAusente,
   disponibilidadHotel,
   isTopeAlcanzado,
@@ -949,9 +952,45 @@ function handleSave() {
         </el-collapse-item>
       </el-collapse>
 
-      <!-- 3 Elige fotógrafo -->
-      <div class="mobile-card-section-label mobile-card-section-label--photographer">
+      <!-- 3 Agendador Informativo -->
+      <div class="mobile-card-section-label mobile-card-section-label--booker">
         <span class="step-badge-num">3</span>
+        <span>{{ $t('sessions.summary.booker') }}</span>
+      </div>
+
+      <div class="mobile-booker-info-card">
+        <div class="booker-card-main">
+          <div class="booker-avatar-circle">
+            <el-avatar
+              :src="bookerUser?.imagen || undefined"
+              :size="44"
+              :style="{
+                backgroundColor: bookerUser?.color
+                  ? getUserBgColor(bookerUser.color)
+                  : '#3b82f6',
+                color: '#ffffff',
+                fontWeight: '700',
+                fontSize: '14px',
+              }"
+              class="booker-avatar"
+            >
+              {{
+                bookerUser
+                  ? getUserInitials(bookerUser.nombre, bookerUser.apellidos)
+                  : '?'
+              }}
+            </el-avatar>
+          </div>
+          <div class="booker-info-box">
+            <span class="booker-title-label">{{ bookerName }}</span>
+            <span v-if="bookerRoleName" class="booker-subtitle-label">{{ bookerRoleName }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Elige fotógrafo -->
+      <div class="mobile-card-section-label mobile-card-section-label--photographer">
+        <span class="step-badge-num">4</span>
         <span>{{ $t('sessions.schedule.choosePhotographer') }}</span>
       </div>
 
@@ -1145,9 +1184,9 @@ function handleSave() {
         </el-collapse-transition>
       </div>
 
-      <!-- 4 Otros datos -->
+      <!-- 5 Otros datos -->
       <div class="mobile-card-section-label mobile-card-section-label--details">
-        <span class="step-badge-num">4</span>
+        <span class="step-badge-num">5</span>
         <span>{{ $t('sessions.details.otherData') }}</span>
       </div>
 
@@ -1189,9 +1228,9 @@ function handleSave() {
         </div>
       </div>
 
-      <!-- 5 Estado de la cita -->
+      <!-- 6 Estado de la cita -->
       <div class="mobile-card-section-label mobile-card-section-label--status">
-        <span class="step-badge-num">5</span>
+        <span class="step-badge-num">6</span>
         <span>{{ $t('sessions.status.appointmentStatus') }}</span>
       </div>
 
@@ -1854,6 +1893,11 @@ html.dark
   margin-bottom: 0.65rem;
 }
 
+.mobile-card-section-label--booker {
+  margin-top: 2.75rem;
+  margin-bottom: 0.65rem;
+}
+
 .mobile-card-section-label--photographer {
   margin-top: 2.75rem;
   margin-bottom: 0.65rem;
@@ -1994,6 +2038,56 @@ html.dark
   color: #ffffff !important;
   font-weight: 700;
   box-shadow: 0 2px 6px rgba(59, 130, 246, 0.35);
+}
+
+/* Card Informativa de Agendador (Móvil) */
+.mobile-booker-info-card {
+  background: var(--toolbar-bg, #ffffff);
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.mobile-booker-info-card .booker-card-main {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.95rem 1rem;
+}
+
+.mobile-booker-info-card .booker-avatar-circle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-booker-info-card .booker-avatar {
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-booker-info-card .booker-info-box {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.mobile-booker-info-card .booker-title-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--heading-color, #0f172a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-booker-info-card .booker-subtitle-label {
+  font-size: 0.78rem;
+  color: var(--nav-link-color, #64748b);
+  margin-top: 0.15rem;
 }
 
 /* Card Selector de Fotógrafos Desplegable */

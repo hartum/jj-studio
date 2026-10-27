@@ -40,6 +40,9 @@ const {
   photographerName,
   sellers,
   selectedSeller,
+  bookerUser,
+  bookerName,
+  bookerRoleName,
   getSellerStatus,
   estadoOptions,
   modoCobroOptions,
@@ -260,6 +263,40 @@ const isSellerPhotographer = computed(() => {
         </h1>
       </div>
       <div class="header-placeholder"></div>
+    </div>
+
+    <!-- Tarjeta Informativa de Agendador (Móvil) -->
+    <div class="mobile-card-section-label">
+      <span>{{ $t('sessions.summary.booker') }}</span>
+    </div>
+    <div class="mobile-booker-info-card">
+      <div class="booker-card-main">
+        <div class="booker-avatar-circle">
+          <el-avatar
+            :src="bookerUser?.imagen || undefined"
+            :size="44"
+            :style="{
+              backgroundColor: bookerUser?.color
+                ? getUserBgColor(bookerUser.color)
+                : '#3b82f6',
+              color: '#ffffff',
+              fontWeight: '700',
+              fontSize: '14px',
+            }"
+            class="booker-avatar"
+          >
+            {{
+              bookerUser
+                ? getUserInitials(bookerUser.nombre, bookerUser.apellidos)
+                : '?'
+            }}
+          </el-avatar>
+        </div>
+        <div class="booker-info-box">
+          <span class="booker-title-label">{{ bookerName }}</span>
+          <span v-if="bookerRoleName" class="booker-subtitle-label">{{ bookerRoleName }}</span>
+        </div>
+      </div>
     </div>
 
     <!-- Selector de Citas Estilo Card (Móvil) -->
@@ -1064,6 +1101,57 @@ const isSellerPhotographer = computed(() => {
   margin-top: 0.25rem;
   margin-bottom: 0.45rem;
   margin-left: 0.2rem;
+}
+
+/* Card Informativa de Agendador (Móvil) */
+.mobile-booker-info-card {
+  background: var(--toolbar-bg, #ffffff);
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  margin-bottom: 1rem;
+}
+
+.mobile-booker-info-card .booker-card-main {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.95rem 1rem;
+}
+
+.mobile-booker-info-card .booker-avatar-circle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-booker-info-card .booker-avatar {
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-booker-info-card .booker-info-box {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.mobile-booker-info-card .booker-title-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--heading-color, #0f172a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-booker-info-card .booker-subtitle-label {
+  font-size: 0.78rem;
+  color: var(--nav-link-color, #64748b);
+  margin-top: 0.15rem;
 }
 
 /* Card Selector de Sesiones */

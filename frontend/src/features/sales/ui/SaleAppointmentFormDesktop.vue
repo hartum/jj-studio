@@ -42,6 +42,9 @@ const {
   photographerName,
   sellers,
   selectedSeller,
+  bookerUser,
+  bookerName,
+  bookerRoleName,
   getSellerStatus,
   estadoOptions,
   modoCobroOptions,
@@ -543,7 +546,37 @@ const formattedSelectedSaleDateTime = computed(() => {
 
       <!-- Columna Derecha: Sidebar con Sesión Asociada y Estado de la Cita -->
       <div class="form-sidebar-col">
-        <!-- Selector de Sesión Fotográfica Asociada (Card con lista desplegable) -->
+        <!-- 1. Tarjeta Informativa de Agendador (Antes del Fotógrafo) -->
+        <div class="booker-summary-card">
+          <div class="booker-card-main">
+            <el-avatar
+              :src="bookerUser?.imagen || undefined"
+              :size="42"
+              :style="{
+                backgroundColor: bookerUser?.color
+                  ? getUserBgColor(bookerUser.color)
+                  : '#3b82f6',
+                color: '#ffffff',
+                fontWeight: '700',
+                fontSize: '14px',
+              }"
+              class="booker-avatar"
+            >
+              {{
+                bookerUser
+                  ? getUserInitials(bookerUser.nombre, bookerUser.apellidos)
+                  : '?'
+              }}
+            </el-avatar>
+            <div class="booker-meta">
+              <span class="booker-label">{{ $t('sessions.summary.booker') }}</span>
+              <span class="booker-name">{{ bookerName }}</span>
+              <span v-if="bookerRoleName" class="booker-role">{{ bookerRoleName }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Selector de Sesión Fotográfica Asociada (Card con lista desplegable) -->
         <div
           class="desktop-session-selector-card"
           :class="{
@@ -1670,6 +1703,60 @@ const formattedSelectedSaleDateTime = computed(() => {
   display: flex;
   gap: 0.75rem;
   margin-top: 1.5rem;
+}
+
+/* Booker Summary Card in Sidebar */
+.booker-summary-card {
+  background: var(--toolbar-bg, #ffffff);
+  border: 1px solid var(--toolbar-border, #e2e8f0);
+  border-radius: 12px;
+  padding: 0.95rem 1.15rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.booker-card-main {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.booker-avatar {
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.booker-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.booker-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--nav-link-color, #64748b);
+  text-transform: uppercase;
+}
+
+.booker-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--heading-color, #0f172a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.booker-role {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--nav-link-color, #64748b);
 }
 
 /* Card Selector de Sesiones en Columna Derecha */

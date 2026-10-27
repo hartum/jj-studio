@@ -506,6 +506,7 @@
       "noShowShort": "No vino"
     },
     "summary": {
+      "booker": "AGENDADOR",
       "assignedPhotographer": "FOTÓGRAFO ASIGNADO",
       "selectPhotographer": "Selecciona fotógrafo",
       "choosePhotographerDesc": "Elige un fotógrafo para la sesión",

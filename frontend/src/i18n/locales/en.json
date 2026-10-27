@@ -506,6 +506,7 @@
       "noShowShort": "No show"
     },
     "summary": {
+      "booker": "BOOKER",
       "assignedPhotographer": "ASSIGNED PHOTOGRAPHER",
       "selectPhotographer": "Select photographer",
       "choosePhotographerDesc": "Choose a photographer for this session",

@@ -505,6 +505,36 @@ export function usePhotoSessionForm() {
     return p ? `${p.nombre} ${p.apellidos}`.trim() : t('sessions.summary.thePhotographer')
   })
 
+  // Agendador / Creador de la cita (informativo)
+  const bookerUser = computed(() => {
+    if (isEditing.value && loadedSession.value?.creadorId) {
+      const found = userStore.usersWithProfile.find(
+        (u) => String(u.id) === String(loadedSession.value?.creadorId),
+      )
+      if (found) return found
+    }
+    if (currentUser.value) {
+      const foundCurrent = userStore.usersWithProfile.find(
+        (u) => String(u.id) === String(currentUser.value?.id),
+      )
+      return foundCurrent || currentUser.value
+    }
+    return null
+  })
+
+  const bookerName = computed(() => {
+    if (!bookerUser.value) return t('sessions.summary.unassigned')
+    return `${bookerUser.value.nombre} ${bookerUser.value.apellidos}`.trim()
+  })
+
+  const bookerRoleName = computed(() => {
+    if (!bookerUser.value) return ''
+    const p =
+      (bookerUser.value as any).perfil ||
+      profileStore.getProfileById((bookerUser.value as any).profileId)
+    return p?.name || (bookerUser.value as any).roleName || ''
+  })
+
   // Obtener estado individual y disponibilidad para cada fotógrafo
   function getPhotographerStatus(photographerId: string | number) {
     const pIdStr = String(photographerId)
@@ -1066,6 +1096,9 @@ export function usePhotoSessionForm() {
     fotografoAusencias,
     selectedPhotographer,
     selectedPhotographerName,
+    bookerUser,
+    bookerName,
+    bookerRoleName,
     getPhotographerStatus,
     ausenciaFotografoActual,
     isFotografoAusente,
