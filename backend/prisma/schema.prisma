@@ -28,7 +28,7 @@ model Usuario {
   emailHash             String?             @unique @map("email_hash")
   telefono              String?             @db.VarChar(512)
   passwordHash          String?             @map("password_hash")
-  imagen                String?             @db.LongText
+  imagen                String?             @db.VarChar(500)
   tipoContrato          String              @default("ASALARIADO") @map("tipo_contrato")
   fechaContratacion     DateTime?           @map("fecha_contratacion")
   activo                Boolean             @default(true)
