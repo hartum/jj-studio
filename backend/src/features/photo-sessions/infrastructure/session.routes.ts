@@ -369,14 +369,6 @@ export async function sessionRoutes(fastify: FastifyInstance) {
       const estado = body.estado || 'PROGRAMADA'
       const fechaHoraInicioDate = parseLocalDateTime(body.fechaHoraInicio)
 
-      const todayBeginning = new Date()
-      todayBeginning.setHours(0, 0, 0, 0)
-      if (fechaHoraInicioDate < todayBeginning) {
-        return reply.status(400).send({
-          error: 'No se pueden crear sesiones fotográficas en fechas anteriores al día actual',
-        })
-      }
-
       // Validar tope de sesiones si se intenta programar la sesión
       if (estado === 'PROGRAMADA') {
         const avail = await getHotelAvailability(Number(body.hotelId), fechaHoraInicioDate)
