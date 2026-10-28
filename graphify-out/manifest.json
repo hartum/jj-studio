@@ -450,8 +450,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarEvents.ts": {
-    "mtime": 1792769445.5317914,
-    "ast_hash": "546bd8cc35f0d0edd4c8e964091a1f9e",
+    "mtime": 1793200875.8876462,
+    "ast_hash": "08d41ea5cad70b3839a64fbc268d09ef",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarScope.ts": {
@@ -460,8 +460,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/usePhotoSessionForm.ts": {
-    "mtime": 1793199331.1330109,
-    "ast_hash": "686d72ccd0881d6129a0288d0a9920de",
+    "mtime": 1793200876.1125562,
+    "ast_hash": "b109f29f6a9b1b86b95dbc16ca01db30",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/domain/session.model.ts": {
@@ -555,13 +555,13 @@
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue": {
-    "mtime": 1793199009.3580747,
-    "ast_hash": "a710201efe51bb760e8e6e44f898cf15",
+    "mtime": 1793200876.7213824,
+    "ast_hash": "80cee79d0bc207e8bfc1d4c78f00a402",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue": {
-    "mtime": 1793199009.6482775,
-    "ast_hash": "aa2190b4b4ef31917469157ac92a735f",
+    "mtime": 1793200877.2055151,
+    "ast_hash": "1ef6f9937b03c901746a96f8a92c2793",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormView.vue": {
@@ -1137,6 +1137,11 @@
   "frontend/src/features/sales/composables/miscelaneo-tag.helper.ts": {
     "mtime": 1793199008.2224119,
     "ast_hash": "c747392fad3956d08de02f3af63df214",
+    "semantic_hash": ""
+  },
+  "frontend/src/shared/date-utils.ts": {
+    "mtime": 1793200877.2708356,
+    "ast_hash": "a61864696d955a52656822cc870f10fa",
     "semantic_hash": ""
   }
 }
