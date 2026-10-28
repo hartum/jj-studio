@@ -184,7 +184,7 @@ export async function exportComisionesToExcel(
     'IVA / Retención USD',
     'Base Neta USD',
     'Comisión Foto USD',
-    'Comisión Venta USD',
+    'Comisión Agenda USD',
     'Otras Comis. USD',
     'Total Comisiones USD',
     'Total a Pagar MXN',

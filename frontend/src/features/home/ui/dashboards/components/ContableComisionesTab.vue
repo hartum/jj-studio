@@ -1820,7 +1820,7 @@ async function handleExportExcel() {
           </template>
         </el-table-column>
 
-        <!-- Columna 7: Comisión Vendedor -->
+        <!-- Columna 7: Comisión Agenda / Agendador -->
         <el-table-column
           prop="comisionVendedorUsd"
           :label="$t('dashboard.table.sellerCommission')"

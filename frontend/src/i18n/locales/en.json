@@ -325,7 +325,7 @@
       "vatTooltip": "VAT applied according to country",
       "netBaseTooltip": "Gross sales - VAT",
       "photographerCommission": "Photo Comm.",
-      "sellerCommission": "Sales Comm.",
+      "sellerCommission": "Booking Comm.",
       "otherCommission": "Other Comm.",
       "totalCommissionsUsd": "Total Comm. (USD)",
       "totalToPayMxn": "Total to Pay (MXN)",
