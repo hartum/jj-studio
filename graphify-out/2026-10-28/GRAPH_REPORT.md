@@ -1,7 +1,7 @@
-# Graph Report - JJ Studio  (2026-10-27)
+# Graph Report - JJ Studio  (2026-10-28)
 
 ## Corpus Check
-- 165 files · ~285,625 words
+- 165 files · ~285,805 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ceecc7ad`
+- Built from commit: `ade13c77`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -529,7 +529,7 @@ Cohesion: 0.83
 Nodes (3): calendarioLaboralRoutes(), formatDateToIsoString(), parseDateOnly()
 
 ## Knowledge Gaps
-- **806 isolated node(s):** `PagoInput`, `HotelDisponibilidad`, `props`, `{ t }`, `sessionsCountByHour` (+801 more)
+- **806 isolated node(s):** `HotelDisponibilidad`, `props`, `{ t }`, `sessionsCountByHour`, `minuteSlots` (+801 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **32 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -537,12 +537,12 @@ Nodes (3): calendarioLaboralRoutes(), formatDateToIsoString(), parseDateOnly()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `AvatarCropperDialog.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `SaleAppointmentFormView.vue`, `SupervisorHotelGoalCard.vue`, `ContableEstadisticasTab.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `AgendadorHotelGoalCard.vue`, `useSaleAppointmentForm.ts`, `DirectSaleFormDesktop.vue`, `CalendarHeader.vue`, `frontend/src/features/alerts/domain/alert.model.ts`, `AlertConfigTab.vue`, `DirectSaleFormMobile.vue`, `CalendarAlertsPanel.vue`, `ContableComisionesTab.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `LoginView.vue`, `GoalProgressCard.vue`, `DirectSaleFormView.vue`, `useLocale.ts`, `useDashboard.ts`, `HotelCalendarView.vue`?**
-  _High betweenness centrality (0.321) - this node is a cross-community bridge._
+  _High betweenness centrality (0.327) - this node is a cross-community bridge._
 - **Why does `plugins` connect `plugins` to `vue`?**
   _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `frontend/package.json`, `eslint-config-prettier`, `eslint-plugin-oxlint`, `oxlint`, `prettier`, `@tsconfig/node24`, `typescript`, `vue-eslint-parser`, `vue-tsc`, `@vue/tsconfig`, `jiti`, `eslint`, `devDependencies`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **What connects `PagoInput`, `HotelDisponibilidad`, `props` to the rest of the system?**
+- **What connects `HotelDisponibilidad`, `props`, `{ t }` to the rest of the system?**
   _806 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
