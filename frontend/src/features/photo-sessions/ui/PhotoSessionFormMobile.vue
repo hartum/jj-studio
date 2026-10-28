@@ -68,6 +68,8 @@ const {
   summaryFormattedDate,
   selectedHotelDisplayName,
   summaryPersonas,
+  assignedCitaVentaId,
+  router,
 } = props.form
 
 // Formato compacto para las etiquetas de la cabecera en móvil (evita que el texto se corte)
@@ -1042,6 +1044,16 @@ function handleSave() {
               {{ $t('sessions.summary.choosePhotographerDesc') }}
             </span>
           </div>
+
+          <el-button
+            v-if="assignedCitaVentaId"
+            type="primary"
+            size="small"
+            class="session-view-action-btn-selected"
+            @click.stop="router.push(`/ventas/${assignedCitaVentaId}/editar`)"
+          >
+            {{ $t('sessions.summary.viewSale') }}
+          </el-button>
         </div>
 
         <!-- Resumen de la sesión dentro de la tarjeta al haber fotógrafo asignado -->
@@ -2174,6 +2186,24 @@ html.dark
 
 .photographer-subtitle-label.text-white-subtle {
   color: rgba(255, 255, 255, 0.85);
+}
+
+.session-view-action-btn-selected {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  padding: 4px 10px;
+  backdrop-filter: blur(4px);
+  margin-left: auto;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.session-view-action-btn-selected:hover {
+  background: rgba(255, 255, 255, 0.35) !important;
 }
 
 .photographer-selected-divider {

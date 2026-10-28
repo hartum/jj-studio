@@ -667,6 +667,7 @@ const formattedSelectedSaleDateTime = computed(() => {
               </div>
 
               <el-button
+                v-if="isEditing"
                 type="primary"
                 size="small"
                 class="session-view-action-btn-selected"

@@ -508,6 +508,7 @@
     "summary": {
       "booker": "AGENDADOR",
       "assignedPhotographer": "FOTÓGRAFO ASIGNADO",
+      "viewSale": "Ir a la cita",
       "selectPhotographer": "Selecciona fotógrafo",
       "choosePhotographerDesc": "Elige un fotógrafo para la sesión",
       "unassigned": "Sin asignar",
@@ -626,7 +627,7 @@
       "noSessionAssociated": "SIN SESIÓN ASOCIADA",
       "chooseSession": "Elige una sesión de fotos",
       "assignedPhotographer": "FOTÓGRAFO ASIGNADO",
-      "viewSession": "Ver sesión",
+      "viewSession": "Ir a la sesión",
       "hideSessions": "OCULTAR SESIONES",
       "viewSessions": "VER SESIONES",
       "noPendingSessions": "No hay sesiones fotográficas pendientes de agendar cita de venta.",

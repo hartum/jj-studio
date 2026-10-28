@@ -508,6 +508,7 @@
     "summary": {
       "booker": "BOOKER",
       "assignedPhotographer": "ASSIGNED PHOTOGRAPHER",
+      "viewSale": "Go to appointment",
       "selectPhotographer": "Select photographer",
       "choosePhotographerDesc": "Choose a photographer for this session",
       "unassigned": "Unassigned",
@@ -626,7 +627,7 @@
       "noSessionAssociated": "NO ASSOCIATED SESSION",
       "chooseSession": "Choose a photo session",
       "assignedPhotographer": "ASSIGNED PHOTOGRAPHER",
-      "viewSession": "View session",
+      "viewSession": "Go to session",
       "hideSessions": "HIDE SESSIONS",
       "viewSessions": "VIEW SESSIONS",
       "noPendingSessions": "There are no pending photo sessions to schedule a sales appointment.",

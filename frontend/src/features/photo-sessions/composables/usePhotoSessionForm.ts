@@ -678,6 +678,20 @@ export function usePhotoSessionForm() {
     return formData.value.concepto?.trim() || t('sessions.summary.unspecified')
   })
 
+  // ID de la cita de venta asignada a esta sesión (si existe)
+  const assignedCitaVentaId = computed<number | null>(() => {
+    if (loadedSession.value?.citaVenta?.id) {
+      return loadedSession.value.citaVenta.id
+    }
+    if (loadedSession.value?.id) {
+      const matched = saleStore.citasVenta.find(
+        (c) => Number(c.sesionId) === Number(loadedSession.value?.id),
+      )
+      if (matched?.id) return matched.id
+    }
+    return null
+  })
+
   // Mes visible actualmente en el panel del calendario
   const currentVisibleMonth = ref<Date>(new Date())
 
@@ -1106,6 +1120,7 @@ export function usePhotoSessionForm() {
     selectedHotelDisplayName,
     summaryFormattedDate,
     appointmentSummaryCardStyle,
+    assignedCitaVentaId,
     summaryPersonas,
     summaryClienteNombre,
     summaryMotivo,
