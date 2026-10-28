@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1793117427.7315588,
-    "ast_hash": "02181d2e208c6df50eb13e6e699f38e6",
+    "mtime": 1793201628.046874,
+    "ast_hash": "d4b0ffd898ea74aa3da607dcd9c9d690",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/InicioView.vue": {
@@ -440,9 +440,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarAlerts.ts": {
-    "mtime": 1787593474.6762462,
-    "ast_hash": "0a8effa46ab27f211f151abd4237cd0b",
-    "semantic_hash": "0a8effa46ab27f211f151abd4237cd0b"
+    "mtime": 1793201628.1185143,
+    "ast_hash": "e4a45092e816e83ea2857b274a0c7551",
+    "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/useCalendarDelete.ts": {
     "mtime": 1791027435.2946482,
@@ -460,8 +460,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/usePhotoSessionForm.ts": {
-    "mtime": 1793200876.1125562,
-    "ast_hash": "b109f29f6a9b1b86b95dbc16ca01db30",
+    "mtime": 1793201628.3199403,
+    "ast_hash": "079812d9c44d0f56a9e0761fda89a01c",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/domain/session.model.ts": {
@@ -475,13 +475,13 @@
     "semantic_hash": "f5149dbf22b1fc42c4c476a58cdc56df"
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarDesktop.vue": {
-    "mtime": 1792860612.0838315,
-    "ast_hash": "852ba2b038c53b92103f3388db239b52",
+    "mtime": 1793201628.542798,
+    "ast_hash": "c9c0b997e2ba7aed117a6e5c68da7a00",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarMobile.vue": {
-    "mtime": 1792860633.3974917,
-    "ast_hash": "b5b6495eaecfc4f195d56fc5a0d49d85",
+    "mtime": 1793201628.7053046,
+    "ast_hash": "c692441b270f8ed70cfdc4b9ff716070",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/HotelCalendarView.vue": {
@@ -540,8 +540,8 @@
     "semantic_hash": "16440f1ecb1ffdb79be1ccf3070cfcde"
   },
   "frontend/src/features/sales/composables/useSaleAppointmentForm.ts": {
-    "mtime": 1793199331.413426,
-    "ast_hash": "2febe8a619dfbf1591fec3cad5bda77a",
+    "mtime": 1793201628.801621,
+    "ast_hash": "575eae1a709f55b4db0973d7faf45e39",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/domain/sale.model.ts": {
@@ -1140,8 +1140,8 @@
     "semantic_hash": ""
   },
   "frontend/src/shared/date-utils.ts": {
-    "mtime": 1793200877.2708356,
-    "ast_hash": "a61864696d955a52656822cc870f10fa",
+    "mtime": 1793201278.020189,
+    "ast_hash": "6da4818899682307480f022d3994f4df",
     "semantic_hash": ""
   }
 }
