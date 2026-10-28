@@ -3,9 +3,10 @@ import { useRoute, useRouter } from 'vue-router'
 import { useSessionStore } from '../stores/session.store'
 import { useSaleStore } from '@/features/sales/stores/sale.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
-import { useAuthStore } from '@/features/auth/stores/auth.store'
+import { useAuthStore, type AuthUser } from '@/features/auth/stores/auth.store'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { useProfileStore } from '@/features/users/stores/profile.store'
+import type { UserWithProfile } from '@/features/users/domain/user.model'
 import { useCalendarioLaboralStore } from '@/features/users/stores/calendario-laboral.store'
 import type { CreateSesionPayload, EstadoSesion, SesionFotografica } from '../domain/session.model'
 import type { ConflictoCitaVenta } from '@/features/sales/domain/sale.model'
@@ -506,7 +507,7 @@ export function usePhotoSessionForm() {
   })
 
   // Agendador / Creador de la cita (informativo)
-  const bookerUser = computed(() => {
+  const bookerUser = computed<UserWithProfile | AuthUser | null>(() => {
     if (isEditing.value && loadedSession.value?.creadorId) {
       const found = userStore.usersWithProfile.find(
         (u) => String(u.id) === String(loadedSession.value?.creadorId),
@@ -528,11 +529,19 @@ export function usePhotoSessionForm() {
   })
 
   const bookerRoleName = computed(() => {
-    if (!bookerUser.value) return ''
-    const p =
-      (bookerUser.value as any).perfil ||
-      profileStore.getProfileById((bookerUser.value as any).profileId)
-    return p?.name || (bookerUser.value as any).roleName || ''
+    const user = bookerUser.value
+    if (!user) return ''
+    if ('perfil' in user && user.perfil?.name) {
+      return user.perfil.name
+    }
+    const profile = profileStore.getProfileById(user.profileId)
+    if (profile?.name) {
+      return profile.name
+    }
+    if ('roleName' in user && user.roleName) {
+      return user.roleName
+    }
+    return ''
   })
 
   // Obtener estado individual y disponibilidad para cada fotógrafo

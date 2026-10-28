@@ -7,6 +7,7 @@ import { useHotelStore } from '@/features/hotels/stores/hotel.store'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { useProfileStore } from '@/features/users/stores/profile.store'
 import { useAuthStore } from '@/features/auth/stores/auth.store'
+import { cleanNumericTags } from './miscelaneo-tag.helper'
 import { MODO_COBRO_OPTIONS, type CreateVentaDirectaPayload } from '../domain/sale.model'
 import type { Hotel } from '@/features/hotels/domain/hotel.model'
 
@@ -33,6 +34,7 @@ export interface SellerUser {
 
 export interface DirectSaleFormContext {
   formData: Ref<DirectSaleFormData>
+  miscelaneoTags: Ref<string[]>
   isSaving: Ref<boolean>
   userHotels: ComputedRef<Hotel[]>
   selectedHotel: ComputedRef<Hotel | undefined>
@@ -65,6 +67,22 @@ export function useDirectSaleForm(): DirectSaleFormContext {
   const authStore = useAuthStore()
 
   const isSaving = ref(false)
+  const miscelaneoTags = ref<string[]>([])
+
+  watch(
+    miscelaneoTags,
+    (tags) => {
+      const cleaned = cleanNumericTags(tags)
+      if (
+        cleaned.length !== tags.length ||
+        cleaned.some((val, idx) => val !== tags[idx])
+      ) {
+        miscelaneoTags.value = cleaned
+      }
+      formData.value.numeroMiscelaneo = cleaned.join(', ')
+    },
+    { deep: true },
+  )
 
   const formData = ref<DirectSaleFormData>({
     hotelId: 0,
@@ -288,7 +306,7 @@ export function useDirectSaleForm(): DirectSaleFormContext {
     if (!formData.value.vendedorId) return true
     if (!formData.value.fotografoId) return true
     if (!formData.value.numFotosVendidas || formData.value.numFotosVendidas < 1) return true
-    if (!formData.value.numeroMiscelaneo || !/^\d+$/.test(formData.value.numeroMiscelaneo.trim())) return true
+    if (miscelaneoTags.value.length === 0) return true
     if (!pagosValidos.value) return true
     return false
   })
@@ -308,7 +326,7 @@ export function useDirectSaleForm(): DirectSaleFormContext {
         fotografoId: formData.value.fotografoId ? String(formData.value.fotografoId) : null,
         numFotosVendidas: Number(formData.value.numFotosVendidas),
         totalVentaUsd: totalCalculado.value,
-        numeroMiscelaneo: formData.value.numeroMiscelaneo.trim(),
+        numeroMiscelaneo: miscelaneoTags.value.length > 0 ? miscelaneoTags.value.join(', ') : null,
         pagos: (formData.value.pagos || []).map((p) => ({
           metodoPago: p.metodoPago,
           importeUsd: Number(p.importeUsd) || 0,
@@ -345,6 +363,7 @@ export function useDirectSaleForm(): DirectSaleFormContext {
 
   return {
     formData,
+    miscelaneoTags,
     isSaving,
     userHotels,
     selectedHotel,

@@ -17,6 +17,7 @@ export interface AlertaItem {
   hotelNombre?: string | null
   entidad?: string | null
   entidadId?: string | null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadatos?: Record<string, any> | null
   leida: boolean
   leidaAt?: string | null

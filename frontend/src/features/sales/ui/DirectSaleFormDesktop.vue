@@ -4,6 +4,12 @@ import type { DirectSaleFormContext } from '../composables/useDirectSaleForm'
 import { ArrowLeft, Check, Close, Plus, Delete, User, Money } from '@element-plus/icons-vue'
 import { Building2, Zap, ChevronDown } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
+import {
+  MISCELANEO_DELIMITERS,
+  handleMiscelaneoKeydown,
+  handleMiscelaneoInput,
+  handleMiscelaneoPaste,
+} from '../composables/miscelaneo-tag.helper'
 import iconoVentaDirecta from '@/assets/icono_venta_directa.png'
 
 const props = defineProps<{
@@ -12,6 +18,7 @@ const props = defineProps<{
 
 const {
   formData,
+  miscelaneoTags,
   isSaving,
   userHotels,
   sellers,
@@ -380,18 +387,24 @@ function getRoleTagType(role?: string): 'success' | 'primary' | 'warning' | 'inf
             </div>
           </div>
 
-          <!-- Número de Miscelánea -->
+          <!-- Número(s) de Miscelánea -->
           <div class="form-field">
             <label class="field-label">
               {{ t('sales.form.miscelaneo') }}
               <span class="required-star">*</span>
             </label>
-            <el-input
-              v-model="formData.numeroMiscelaneo"
+            <el-input-tag
+              v-model="miscelaneoTags"
               :placeholder="t('sales.form.miscelaneoPlaceholder')"
+              :delimiter="MISCELANEO_DELIMITERS"
               inputmode="numeric"
               clearable
-              @input="(val: string) => { formData.numeroMiscelaneo = val.replace(/\D/g, '') }"
+              tag-type="primary"
+              tag-effect="plain"
+              class="w-full"
+              @keydown="handleMiscelaneoKeydown"
+              @input="handleMiscelaneoInput"
+              @paste="handleMiscelaneoPaste($event, miscelaneoTags)"
             />
           </div>
 

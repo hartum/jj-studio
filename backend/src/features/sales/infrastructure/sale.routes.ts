@@ -60,6 +60,59 @@ function deriveModoCobro(pagos?: Array<{ metodoPago: string; importeUsd: number 
   return 'mixto'
 }
 
+function parseAndValidateNumeroMiscelaneo(
+  value: unknown,
+  required: boolean,
+): { valid: boolean; error?: string; normalized: string | null } {
+  if (value === undefined || value === null || value === '') {
+    if (required) {
+      return {
+        valid: false,
+        error: 'Para completar la cita, el número de miscelánea es obligatorio',
+        normalized: null,
+      }
+    }
+    return { valid: true, normalized: null }
+  }
+
+  let rawList: string[] = []
+  if (Array.isArray(value)) {
+    rawList = value.map((v) => String(v ?? '').trim()).filter(Boolean)
+  } else if (typeof value === 'string') {
+    rawList = value
+      .split(',')
+      .map((v) => v.trim())
+      .filter(Boolean)
+  } else if (typeof value === 'number') {
+    rawList = [String(value).trim()]
+  }
+
+  if (required && rawList.length === 0) {
+    return {
+      valid: false,
+      error: 'Para completar la cita, el número de miscelánea es obligatorio',
+      normalized: null,
+    }
+  }
+
+  if (rawList.length === 0) {
+    return { valid: true, normalized: null }
+  }
+
+  for (const item of rawList) {
+    if (!/^\d+$/.test(item)) {
+      return {
+        valid: false,
+        error: 'Cada número de miscelánea debe ser un valor numérico',
+        normalized: null,
+      }
+    }
+  }
+
+  const uniqueItems = Array.from(new Set(rawList))
+  return { valid: true, normalized: uniqueItems.join(', ') }
+}
+
 async function findConflicts(hotelId: number, fechaHoraCita: Date, excludeId?: number) {
   const rangeStart = new Date(fechaHoraCita.getTime() - SALES_APPOINTMENT_DURATION_MS)
   const rangeEnd = new Date(fechaHoraCita.getTime() + SALES_APPOINTMENT_DURATION_MS)
@@ -424,7 +477,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas?: number | null
         totalVentaUsd?: number | null
         modoCobro?: string | null
-        numeroMiscelaneo?: string | null
+        numeroMiscelaneo?: string | string[] | null
         pagos?: Array<{ metodoPago: string; importeUsd: number }>
         notas?: string
       }
@@ -489,6 +542,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       // Validate sales fields when creating as COMPLETADA
       const targetEstado = (body.estado as any) || 'PROGRAMADA'
+      let normalizedMiscelaneo: string | null = null
       if (targetEstado === 'COMPLETADA') {
         if (!body.sesionId) {
           return reply
@@ -505,17 +559,11 @@ export async function saleRoutes(fastify: FastifyInstance) {
             .status(400)
             .send({ error: 'Para completar la cita, debes indicar el nº de fotos vendidas' })
         }
-        const miscStr = body.numeroMiscelaneo ? String(body.numeroMiscelaneo).trim() : ''
-        if (!miscStr) {
-          return reply
-            .status(400)
-            .send({ error: 'Para completar la cita, el número de miscelánea es obligatorio' })
+        const miscCheck = parseAndValidateNumeroMiscelaneo(body.numeroMiscelaneo, true)
+        if (!miscCheck.valid) {
+          return reply.status(400).send({ error: miscCheck.error })
         }
-        if (!/^\d+$/.test(miscStr)) {
-          return reply
-            .status(400)
-            .send({ error: 'El número de miscelánea debe ser un valor numérico' })
-        }
+        normalizedMiscelaneo = miscCheck.normalized
         if (incomingPagos.length === 0) {
           return reply
             .status(400)
@@ -533,6 +581,12 @@ export async function saleRoutes(fastify: FastifyInstance) {
               .send({ error: 'El importe de cada método de pago debe ser mayor a 0' })
           }
         }
+      } else {
+        const miscCheck = parseAndValidateNumeroMiscelaneo(body.numeroMiscelaneo, false)
+        if (!miscCheck.valid) {
+          return reply.status(400).send({ error: miscCheck.error })
+        }
+        normalizedMiscelaneo = miscCheck.normalized
       }
 
       // Auto-calculate total from payments
@@ -555,7 +609,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
             numFotosVendidas: body.numFotosVendidas ?? null,
             totalVentaUsd: calculatedTotalUsd,
             modoCobro: derivedModoCobro,
-            numeroMiscelaneo: body.numeroMiscelaneo ? body.numeroMiscelaneo.trim() : null,
+            numeroMiscelaneo: normalizedMiscelaneo,
             notas: body.notas ? body.notas.trim() : null,
             deletedAt: null,
           },
@@ -582,7 +636,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
             numFotosVendidas: body.numFotosVendidas ?? null,
             totalVentaUsd: calculatedTotalUsd,
             modoCobro: derivedModoCobro,
-            numeroMiscelaneo: body.numeroMiscelaneo ? body.numeroMiscelaneo.trim() : null,
+            numeroMiscelaneo: normalizedMiscelaneo,
             notas: body.notas ? body.notas.trim() : null,
             ...(incomingPagos.length > 0
               ? {
@@ -709,7 +763,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas: number
         totalVentaUsd?: number | null
         modoCobro?: string | null
-        numeroMiscelaneo?: string | null
+        numeroMiscelaneo?: string | string[] | null
         pagos: Array<{ metodoPago: string; importeUsd: number }>
         notas?: string
       }
@@ -720,13 +774,11 @@ export async function saleRoutes(fastify: FastifyInstance) {
       if (!body.vendedorId) {
         return reply.status(400).send({ error: 'El vendedor es obligatorio' })
       }
-      const directMiscStr = body.numeroMiscelaneo ? String(body.numeroMiscelaneo).trim() : ''
-      if (!directMiscStr) {
-        return reply.status(400).send({ error: 'El número de miscelánea es obligatorio' })
+      const directMiscCheck = parseAndValidateNumeroMiscelaneo(body.numeroMiscelaneo, true)
+      if (!directMiscCheck.valid) {
+        return reply.status(400).send({ error: directMiscCheck.error })
       }
-      if (!/^\d+$/.test(directMiscStr)) {
-        return reply.status(400).send({ error: 'El número de miscelánea debe ser un valor numérico' })
-      }
+      const directMiscStr = directMiscCheck.normalized!
       if (!body.numFotosVendidas || body.numFotosVendidas < 1) {
         return reply.status(400).send({ error: 'Debes indicar al menos 1 foto vendida' })
       }
@@ -910,7 +962,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         numFotosVendidas?: number | null
         totalVentaUsd?: number | null
         modoCobro?: string | null
-        numeroMiscelaneo?: string | null
+        numeroMiscelaneo?: string | string[] | null
         pagos?: Array<{ metodoPago: string; importeUsd: number }>
         notas?: string
       }
@@ -984,6 +1036,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       // Validate sales fields when transitioning to COMPLETADA
       const targetPutEstado = body.estado || existing.estado
+      let normalizedMiscelaneo: string | null | undefined = undefined
       if (targetPutEstado === 'COMPLETADA') {
         const sesionId = existing.sesionId
         const vendedorId = body.vendedorId !== undefined ? body.vendedorId : existing.vendedorId
@@ -1003,17 +1056,14 @@ export async function saleRoutes(fastify: FastifyInstance) {
             .status(400)
             .send({ error: 'Para completar la cita, debes indicar el nº de fotos vendidas' })
         }
-        const miscelaneoVal = body.numeroMiscelaneo !== undefined ? body.numeroMiscelaneo : existing.numeroMiscelaneo
-        const putMiscStr = miscelaneoVal ? String(miscelaneoVal).trim() : ''
-        if (!putMiscStr) {
-          return reply
-            .status(400)
-            .send({ error: 'Para completar la cita, el número de miscelánea es obligatorio' })
+        const miscelaneoVal =
+          body.numeroMiscelaneo !== undefined ? body.numeroMiscelaneo : existing.numeroMiscelaneo
+        const miscCheck = parseAndValidateNumeroMiscelaneo(miscelaneoVal, true)
+        if (!miscCheck.valid) {
+          return reply.status(400).send({ error: miscCheck.error })
         }
-        if (!/^\d+$/.test(putMiscStr)) {
-          return reply
-            .status(400)
-            .send({ error: 'El número de miscelánea debe ser un valor numérico' })
+        if (body.numeroMiscelaneo !== undefined) {
+          normalizedMiscelaneo = miscCheck.normalized
         }
 
         if (incomingPagos !== undefined) {
@@ -1042,6 +1092,12 @@ export async function saleRoutes(fastify: FastifyInstance) {
               .send({ error: 'Para completar la cita, debes registrar al menos un método de pago' })
           }
         }
+      } else if (body.numeroMiscelaneo !== undefined) {
+        const miscCheck = parseAndValidateNumeroMiscelaneo(body.numeroMiscelaneo, false)
+        if (!miscCheck.valid) {
+          return reply.status(400).send({ error: miscCheck.error })
+        }
+        normalizedMiscelaneo = miscCheck.normalized
       }
 
       const data: any = {}
@@ -1052,8 +1108,8 @@ export async function saleRoutes(fastify: FastifyInstance) {
       }
       if (body.estado !== undefined) data.estado = body.estado
       if (body.numFotosVendidas !== undefined) data.numFotosVendidas = body.numFotosVendidas
-      if (body.numeroMiscelaneo !== undefined) {
-        data.numeroMiscelaneo = body.numeroMiscelaneo ? body.numeroMiscelaneo.trim() : null
+      if (normalizedMiscelaneo !== undefined) {
+        data.numeroMiscelaneo = normalizedMiscelaneo
       }
       if (body.notas !== undefined) data.notas = body.notas ? body.notas.trim() : null
 

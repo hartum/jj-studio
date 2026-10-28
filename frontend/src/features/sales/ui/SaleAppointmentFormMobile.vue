@@ -15,6 +15,12 @@ import {
 } from '@element-plus/icons-vue'
 import { ChevronDown } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
+import {
+  MISCELANEO_DELIMITERS,
+  handleMiscelaneoKeydown,
+  handleMiscelaneoInput,
+  handleMiscelaneoPaste,
+} from '../composables/miscelaneo-tag.helper'
 import iconoCita from '@/assets/icono_cita.png'
 
 const props = defineProps<{
@@ -26,6 +32,7 @@ const { t, locale } = useLocale()
 
 const {
   formData,
+  miscelaneoTags,
   sessionInfo,
   isEditing,
   isSaving,
@@ -964,7 +971,7 @@ const isSellerPhotographer = computed(() => {
           </div>
         </div>
 
-        <!-- Número de Miscelánea -->
+        <!-- Número(s) de Miscelánea -->
         <div>
           <div class="mobile-card-section-label">
             <span class="step-badge-num">7</span>
@@ -972,14 +979,20 @@ const isSellerPhotographer = computed(() => {
             <span v-if="formData.estado === 'COMPLETADA'" class="required-star">*</span>
           </div>
           <el-form-item>
-            <el-input
-              v-model="formData.numeroMiscelaneo"
+            <el-input-tag
+              v-model="miscelaneoTags"
               :placeholder="$t('sales.form.miscelaneoPlaceholder')"
+              :delimiter="MISCELANEO_DELIMITERS"
               inputmode="numeric"
               clearable
               size="large"
               :disabled="isReadOnly"
-              @input="(val: string) => { formData.numeroMiscelaneo = val.replace(/\D/g, '') }"
+              tag-type="primary"
+              tag-effect="plain"
+              class="w-full"
+              @keydown="handleMiscelaneoKeydown"
+              @input="handleMiscelaneoInput"
+              @paste="handleMiscelaneoPaste($event, miscelaneoTags)"
             />
           </el-form-item>
         </div>

@@ -1380,7 +1380,7 @@ async function handleExportExcel() {
                 <el-table-column
                   prop="numeroMiscelaneo"
                   :label="$t('dashboard.table.voucherFolio')"
-                  width="155"
+                  min-width="155"
                 >
                   <template #default="{ row: subRow }">
                     <!-- Fila de Separación -->

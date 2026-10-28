@@ -4,9 +4,11 @@ import { useLocale } from '@/i18n/useLocale'
 import { useSaleStore } from '../stores/sale.store'
 import { useSessionStore } from '@/features/photo-sessions/stores/session.store'
 import { useHotelStore } from '@/features/hotels/stores/hotel.store'
-import { useAuthStore } from '@/features/auth/stores/auth.store'
+import { useAuthStore, type AuthUser } from '@/features/auth/stores/auth.store'
 import { useUserStore } from '@/features/users/stores/user.store'
 import { useProfileStore } from '@/features/users/stores/profile.store'
+import type { UserWithProfile } from '@/features/users/domain/user.model'
+import { cleanNumericTags, parseNumericTags } from './miscelaneo-tag.helper'
 import {
   type CitaVenta,
   type UpdateCitaVentaPayload,
@@ -87,6 +89,22 @@ export function useSaleAppointmentForm() {
   const isSaving = ref(false)
   const conflicts = ref<ConflictoCitaVenta[]>([])
   const loadedCita = ref<CitaVenta | null>(null)
+  const miscelaneoTags = ref<string[]>([])
+
+  watch(
+    miscelaneoTags,
+    (tags) => {
+      const cleaned = cleanNumericTags(tags)
+      if (
+        cleaned.length !== tags.length ||
+        cleaned.some((val, idx) => val !== tags[idx])
+      ) {
+        miscelaneoTags.value = cleaned
+      }
+      formData.value.numeroMiscelaneo = cleaned.join(', ')
+    },
+    { deep: true },
+  )
 
   // Form data
   const formData = ref<SaleAppointmentFormData>({
@@ -317,7 +335,7 @@ export function useSaleAppointmentForm() {
   })
 
   // Agendador de la sesión asociada / creador
-  const bookerUser = computed(() => {
+  const bookerUser = computed<UserWithProfile | AuthUser | null>(() => {
     if (formData.value.sesionId) {
       const session = sessionStore.sessions.find(
         (s) => Number(s.id) === Number(formData.value.sesionId),
@@ -350,11 +368,19 @@ export function useSaleAppointmentForm() {
   })
 
   const bookerRoleName = computed(() => {
-    if (!bookerUser.value) return ''
-    const p =
-      (bookerUser.value as any).perfil ||
-      profileStore.getProfileById((bookerUser.value as any).profileId)
-    return p?.name || (bookerUser.value as any).roleName || ''
+    const user = bookerUser.value
+    if (!user) return ''
+    if ('perfil' in user && user.perfil?.name) {
+      return user.perfil.name
+    }
+    const profile = profileStore.getProfileById(user.profileId)
+    if (profile?.name) {
+      return profile.name
+    }
+    if ('roleName' in user && user.roleName) {
+      return user.roleName
+    }
+    return ''
   })
 
   const timeSlots = [
@@ -477,7 +503,7 @@ export function useSaleAppointmentForm() {
     if (formData.value.estado === 'COMPLETADA') {
       if (!formData.value.vendedorId) return true
       if (formData.value.numFotosVendidas == null) return true
-      if (!formData.value.numeroMiscelaneo || !/^\d+$/.test(formData.value.numeroMiscelaneo.trim())) return true
+      if (miscelaneoTags.value.length === 0) return true
       if (!pagosValidos.value) return true
     }
     return false
@@ -806,6 +832,8 @@ export function useSaleAppointmentForm() {
               ? [{ metodoPago: existing.modoCobro, importeUsd: existing.totalVentaUsd ?? null }]
               : [{ metodoPago: 'tarjeta', importeUsd: null }]
 
+        const loadedTags = parseNumericTags(existing.numeroMiscelaneo)
+
         formData.value = {
           sesionId: existing.sesionId ?? null,
           hotelId: existing.hotelId,
@@ -816,10 +844,11 @@ export function useSaleAppointmentForm() {
           numFotosVendidas: existing.numFotosVendidas ?? null,
           totalVentaUsd: existing.totalVentaUsd ?? null,
           modoCobro: existing.modoCobro || null,
-          numeroMiscelaneo: existing.numeroMiscelaneo || '',
+          numeroMiscelaneo: loadedTags.join(', '),
           pagos: loadedPagos,
           notas: existing.notas || '',
         }
+        miscelaneoTags.value = loadedTags
         if (existing.fechaHoraCita) {
           const parts = existing.fechaHoraCita.split('T')
           rawDate.value = parts[0] || ''
@@ -919,7 +948,7 @@ export function useSaleAppointmentForm() {
         ElMessage.warning(t('sales.toasts.completeAmountsRequired'))
         return
       }
-      if (!formData.value.numeroMiscelaneo || !/^\d+$/.test(formData.value.numeroMiscelaneo.trim())) {
+      if (miscelaneoTags.value.length === 0) {
         ElMessage.warning(t('sales.toasts.completeMiscelaneoRequired'))
         return
       }
@@ -946,7 +975,7 @@ export function useSaleAppointmentForm() {
           estado: formData.value.estado,
           numFotosVendidas: formData.value.numFotosVendidas,
           totalVentaUsd: totalCalculado.value > 0 ? totalCalculado.value : null,
-          numeroMiscelaneo: formData.value.numeroMiscelaneo ? formData.value.numeroMiscelaneo.trim() : null,
+          numeroMiscelaneo: miscelaneoTags.value.length > 0 ? miscelaneoTags.value.join(', ') : null,
           pagos: cleanPagos,
           notas: formData.value.notas ? formData.value.notas.trim() : null,
         }
@@ -967,7 +996,7 @@ export function useSaleAppointmentForm() {
           estado: formData.value.estado,
           numFotosVendidas: formData.value.numFotosVendidas,
           totalVentaUsd: totalCalculado.value > 0 ? totalCalculado.value : null,
-          numeroMiscelaneo: formData.value.numeroMiscelaneo ? formData.value.numeroMiscelaneo.trim() : null,
+          numeroMiscelaneo: miscelaneoTags.value.length > 0 ? miscelaneoTags.value.join(', ') : null,
           pagos: cleanPagos,
           notas: formData.value.notas ? formData.value.notas.trim() : null,
         })
@@ -999,6 +1028,7 @@ export function useSaleAppointmentForm() {
     conflicts,
     loadedCita,
     formData,
+    miscelaneoTags,
     sessionInfo,
     currentUser,
     userHotels,

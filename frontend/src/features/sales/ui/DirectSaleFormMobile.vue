@@ -11,6 +11,12 @@ import {
 } from '@element-plus/icons-vue'
 import { Zap, ChevronDown } from '@lucide/vue'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
+import {
+  MISCELANEO_DELIMITERS,
+  handleMiscelaneoKeydown,
+  handleMiscelaneoInput,
+  handleMiscelaneoPaste,
+} from '../composables/miscelaneo-tag.helper'
 import iconoVentaDirecta from '@/assets/icono_venta_directa.png'
 
 const props = defineProps<{
@@ -19,6 +25,7 @@ const props = defineProps<{
 
 const {
   formData,
+  miscelaneoTags,
   isSaving,
   userHotels,
   sellers,
@@ -493,20 +500,26 @@ function getRoleTagType(role?: string): 'success' | 'primary' | 'warning' | 'inf
         </div>
       </section>
 
-      <!-- Número de Miscelánea -->
+      <!-- Número(s) de Miscelánea -->
       <section class="mobile-section-block">
         <div class="mobile-card-section-label">
           <span class="step-badge-num">{{ stepMiscelaneo }}</span>
           <span>{{ t('sales.form.miscelaneo') }}</span>
           <span class="required-star">*</span>
         </div>
-        <el-input
-          v-model="formData.numeroMiscelaneo"
+        <el-input-tag
+          v-model="miscelaneoTags"
           :placeholder="t('sales.form.miscelaneoPlaceholder')"
+          :delimiter="MISCELANEO_DELIMITERS"
           inputmode="numeric"
           clearable
           size="large"
-          @input="(val: string) => { formData.numeroMiscelaneo = val.replace(/\D/g, '') }"
+          tag-type="primary"
+          tag-effect="plain"
+          class="w-full"
+          @keydown="handleMiscelaneoKeydown"
+          @input="handleMiscelaneoInput"
+          @paste="handleMiscelaneoPaste($event, miscelaneoTags)"
         />
       </section>
 
