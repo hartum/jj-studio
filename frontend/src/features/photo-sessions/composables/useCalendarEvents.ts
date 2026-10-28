@@ -9,6 +9,11 @@ import { useAuthStore } from '@/features/auth/stores/auth.store'
 import type { SesionFotografica } from '../domain/session.model'
 import type { CitaVenta } from '@/features/sales/domain/sale.model'
 import type { Hotel } from '@/features/hotels/domain/hotel.model'
+import {
+  formatEventHeaderDate,
+  formatDateDisplay,
+  formatDateTimeDisplay,
+} from '@/shared/date-utils'
 
 export interface ExtendedEventProps {
   type?: 'session' | 'sale' | 'direct-sale'
@@ -350,61 +355,17 @@ export function useCalendarEvents(
     })
   }
 
-  function formatEventHeaderDate(dateStr?: string | null): string {
-    if (!dateStr) return '-'
-    const d = new Date(dateStr)
-    if (isNaN(d.getTime())) return dateStr
-
-    const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
-    const meses = [
-      'enero',
-      'febrero',
-      'marzo',
-      'abril',
-      'mayo',
-      'junio',
-      'julio',
-      'agosto',
-      'septiembre',
-      'octubre',
-      'noviembre',
-      'diciembre',
-    ]
-
-    const diaSemana = dias[d.getDay()]
-    const diaMes = d.getDate()
-    const mes = meses[d.getMonth()]
-    const horas = d.getHours()
-    const minutos = String(d.getMinutes()).padStart(2, '0')
-
-    return `${diaSemana}, ${diaMes} ${mes} - ${horas}:${minutos}`
-  }
-
   function formatDateTime(dateStr?: string | null): string {
     if (!dateStr) return '-'
     return dateStr.replace('T', ' ').slice(0, 16)
   }
 
   function formatDateStr(dateStr?: string | null): string {
-    if (!dateStr) return '-'
-    const d = new Date(dateStr)
-    if (isNaN(d.getTime())) return dateStr
-    const day = String(d.getDate()).padStart(2, '0')
-    const month = String(d.getMonth() + 1).padStart(2, '0')
-    const year = d.getFullYear()
-    return `${day}/${month}/${year}`
+    return formatDateDisplay(dateStr)
   }
 
   function formatDateTimeStr(dateStr?: string | null): string {
-    if (!dateStr) return '-'
-    const d = new Date(dateStr)
-    if (isNaN(d.getTime())) return dateStr
-    const day = String(d.getDate()).padStart(2, '0')
-    const month = String(d.getMonth() + 1).padStart(2, '0')
-    const year = d.getFullYear()
-    const hours = String(d.getHours()).padStart(2, '0')
-    const minutes = String(d.getMinutes()).padStart(2, '0')
-    return `${day}/${month}/${year} ${hours}:${minutes}`
+    return formatDateTimeDisplay(dateStr)
   }
 
   function buildTooltipInfo(extendedProps: ExtendedEventProps): EventTooltipInfo {

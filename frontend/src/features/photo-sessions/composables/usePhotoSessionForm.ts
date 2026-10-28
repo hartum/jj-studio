@@ -16,6 +16,7 @@ import { UserX, Calendar } from '@lucide/vue'
 import { ElMessage } from 'element-plus'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 import { useLocale } from '@/i18n/useLocale'
+import { parseLocalDate } from '@/shared/date-utils'
 
 export interface HotelDisponibilidad {
   hotelId: number
@@ -831,8 +832,7 @@ export function usePhotoSessionForm() {
   const mobileDateValue = computed<Date>({
     get() {
       if (!formData.value.fechaHoraInicio) return new Date()
-      const d = new Date(formData.value.fechaHoraInicio)
-      return isNaN(d.getTime()) ? new Date() : d
+      return parseLocalDate(formData.value.fechaHoraInicio) || new Date()
     },
     set(val: Date | null | undefined) {
       if (val && val instanceof Date && !isNaN(val.getTime())) {
@@ -850,8 +850,7 @@ export function usePhotoSessionForm() {
   const mobileFechaSalidaValue = computed<Date>({
     get() {
       if (!formData.value.fechaSalida) return new Date()
-      const d = new Date(formData.value.fechaSalida)
-      return isNaN(d.getTime()) ? new Date() : d
+      return parseLocalDate(formData.value.fechaSalida) || new Date()
     },
     set(val: Date | null | undefined) {
       if (val && val instanceof Date && !isNaN(val.getTime())) {
@@ -867,8 +866,7 @@ export function usePhotoSessionForm() {
   const mobileCitaVentaValue = computed<Date>({
     get() {
       if (!fechaHoraCitaVenta.value) return new Date()
-      const d = new Date(fechaHoraCitaVenta.value)
-      return isNaN(d.getTime()) ? new Date() : d
+      return parseLocalDate(fechaHoraCitaVenta.value) || new Date()
     },
     set(val: Date | null | undefined) {
       if (val && val instanceof Date && !isNaN(val.getTime())) {

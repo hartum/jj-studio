@@ -23,6 +23,7 @@ import {
   handleMiscelaneoInput,
   handleMiscelaneoPaste,
 } from '../composables/miscelaneo-tag.helper'
+import { formatLocalDate, formatLocalTime } from '@/shared/date-utils'
 import iconoCita from '@/assets/icono_cita.png'
 
 const props = defineProps<{
@@ -88,29 +89,11 @@ function getPhotographer(fotografoId?: string | null) {
 }
 
 function formatSessionDate(dateStr?: string | null): string {
-  if (!dateStr) return '-'
-  try {
-    const d = new Date(dateStr)
-    const loc = locale.value === 'en' ? 'en-US' : 'es-ES'
-    return d.toLocaleDateString(loc, {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  } catch {
-    return dateStr
-  }
+  return formatLocalDate(dateStr, locale.value)
 }
 
 function formatSessionTime(dateStr?: string | null): string {
-  if (!dateStr) return '-'
-  try {
-    const parts = dateStr.split('T')
-    return (parts[1] ?? dateStr.slice(11)).slice(0, 5)
-  } catch {
-    return dateStr
-  }
+  return formatLocalTime(dateStr)
 }
 
 function formatPersonas(adultos: number = 1, ninos: number = 0): string {
