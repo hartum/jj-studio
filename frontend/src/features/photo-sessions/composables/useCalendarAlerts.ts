@@ -1,6 +1,7 @@
 import { ref, computed, type Ref, type ComputedRef } from 'vue'
 import { useSessionStore } from '../stores/session.store'
 import type { Hotel } from '@/features/hotels/domain/hotel.model'
+import { parseLocalDate } from '@/shared/date-utils'
 
 export function useCalendarAlerts(
   userHotels: Ref<Hotel[]> | ComputedRef<Hotel[]>,
@@ -20,7 +21,9 @@ export function useCalendarAlerts(
       ) {
         return false
       }
-      return s.estado === 'PROGRAMADA' && new Date(s.fechaHoraInicio) < now
+      if (s.estado !== 'PROGRAMADA' || !s.fechaHoraInicio) return false
+      const sDate = parseLocalDate(s.fechaHoraInicio)
+      return Boolean(sDate && sDate < now)
     })
   })
 
@@ -51,7 +54,9 @@ export function useCalendarAlerts(
         return false
       }
       if (!s.citaVenta) return false
-      return s.citaVenta.estado === 'PROGRAMADA' && new Date(s.citaVenta.fechaHoraCita) < now
+      if (s.citaVenta.estado !== 'PROGRAMADA' || !s.citaVenta.fechaHoraCita) return false
+      const cDate = parseLocalDate(s.citaVenta.fechaHoraCita)
+      return Boolean(cDate && cDate < now)
     })
   })
 

@@ -16,7 +16,7 @@ import { UserX, Calendar } from '@lucide/vue'
 import { ElMessage } from 'element-plus'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
 import { useLocale } from '@/i18n/useLocale'
-import { parseLocalDate } from '@/shared/date-utils'
+import { parseLocalDate, getTodayLocalDateIso } from '@/shared/date-utils'
 
 export interface HotelDisponibilidad {
   hotelId: number
@@ -118,7 +118,7 @@ export function usePhotoSessionForm() {
       return parts[1] ? parts[1].substring(0, 5) : ''
     },
     set: (val: string) => {
-      const currentDate = selectedDateOnly.value || new Date().toISOString().split('T')[0]
+      const currentDate = selectedDateOnly.value || getTodayLocalDateIso()
       formData.value.fechaHoraInicio = `${currentDate}T${val}`
     },
   })
@@ -183,7 +183,7 @@ export function usePhotoSessionForm() {
       return parts[1] ? parts[1].substring(0, 5) : ''
     },
     set: (val: string) => {
-      const currentDate = selectedCitaVentaDateOnly.value || new Date().toISOString().split('T')[0]
+      const currentDate = selectedCitaVentaDateOnly.value || getTodayLocalDateIso()
       fechaHoraCitaVenta.value = `${currentDate}T${val}`
     },
   })
@@ -715,8 +715,8 @@ export function usePhotoSessionForm() {
     () => formData.value.fechaHoraInicio,
     (newVal) => {
       if (newVal && newVal.length >= 10) {
-        const d = new Date(newVal)
-        if (!isNaN(d.getTime())) {
+        const d = parseLocalDate(newVal)
+        if (d && !isNaN(d.getTime())) {
           currentVisibleMonth.value = d
         }
       }
@@ -979,15 +979,17 @@ export function usePhotoSessionForm() {
 
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-    if (!isEditing.value && new Date(formData.value.fechaHoraInicio) < today) {
+    const fechaInicioDate = parseLocalDate(formData.value.fechaHoraInicio)
+    if (!isEditing.value && fechaInicioDate && fechaInicioDate < today) {
       ElMessage.error(t('sessions.toasts.pastDateSessionError'))
       return
     }
 
+    const fechaCitaDate = parseLocalDate(fechaHoraCitaVenta.value)
     if (
       !isEditing.value &&
-      fechaHoraCitaVenta.value &&
-      new Date(fechaHoraCitaVenta.value) < today
+      fechaCitaDate &&
+      fechaCitaDate < today
     ) {
       ElMessage.error(t('sessions.toasts.pastDateSaleError'))
       return

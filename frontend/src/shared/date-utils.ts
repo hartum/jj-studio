@@ -139,3 +139,26 @@ export function formatEventHeaderDate(dateStr?: string | null): string {
 
   return `${diaSemana}, ${diaMes} ${mes} - ${horas}:${minutos}`
 }
+
+/**
+ * Obtiene la fecha de hoy en formato ISO (YYYY-MM-DD) según el reloj LOCAL del ordenador.
+ * NUNCA usa toISOString() para evitar que horas nocturnas en husos negativos avancen al día siguiente.
+ */
+export function getTodayLocalDateIso(): string {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+/**
+ * Convierte un objeto Date a formato YYYY-MM-DD según sus componentes LOCALES.
+ */
+export function formatLocalDateIso(d: Date): string {
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+

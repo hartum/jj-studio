@@ -14,6 +14,7 @@ import type { FotografoProgreso, HotelProgresoResumen } from '@/features/goals/d
 import type { Comision, ResumenComisiones } from '@/features/commissions/domain/commission.model'
 import { ElMessage } from 'element-plus'
 import { formatCurrency } from '@/shared/formatters'
+import { getTodayLocalDateIso } from '@/shared/date-utils'
 
 export interface PhotographerHotelData {
   id: number
@@ -622,7 +623,7 @@ export function useDashboard() {
 
   // --- Helpers de hoy ---
   function getTodaySessionsForHotel(hotelId: number) {
-    const today = new Date().toISOString().split('T')[0]
+    const today = getTodayLocalDateIso()
     return sessionStore.sessions.filter((s) => {
       if (s.hotelId !== hotelId) return false
       const sDate = s.fechaHoraInicio ? s.fechaHoraInicio.split('T')[0] : ''
@@ -631,7 +632,7 @@ export function useDashboard() {
   }
 
   function getTodaySalesForHotel(hotelId: number) {
-    const today = new Date().toISOString().split('T')[0]
+    const today = getTodayLocalDateIso()
     return saleStore.citasVenta.filter((c) => {
       if (c.hotelId !== hotelId) return false
       const cDate = c.fechaHoraCita ? c.fechaHoraCita.split('T')[0] : ''

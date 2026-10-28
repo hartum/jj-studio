@@ -8,6 +8,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import { ElMessage } from 'element-plus'
+import { parseLocalDate } from '@/shared/date-utils'
 
 import type { DatesSetArg, EventClickArg, CalendarOptions } from '@fullcalendar/core'
 
@@ -253,7 +254,7 @@ function handleDateSelect(selectInfo: { startStr: string }) {
   if (!canCreateEvents.value) return
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  const selectedDate = new Date(selectInfo.startStr)
+  const selectedDate = parseLocalDate(selectInfo.startStr) || new Date(selectInfo.startStr)
   if (selectedDate < today) {
     ElMessage.warning(t('calendar.cannotCreatePastEvent'))
     return

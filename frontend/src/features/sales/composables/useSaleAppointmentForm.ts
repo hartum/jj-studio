@@ -18,6 +18,7 @@ import {
 import { Calendar, Check, Close } from '@element-plus/icons-vue'
 import { UserX } from '@lucide/vue'
 import { ElMessage } from 'element-plus'
+import { parseLocalDate } from '@/shared/date-utils'
 
 export interface FormPagoItem {
   metodoPago: string
@@ -930,7 +931,8 @@ export function useSaleAppointmentForm() {
 
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-    if (!isEditing.value && new Date(formData.value.fechaHoraCita) < today) {
+    const fechaCitaDate = parseLocalDate(formData.value.fechaHoraCita)
+    if (!isEditing.value && fechaCitaDate && fechaCitaDate < today) {
       ElMessage.error(t('sales.toasts.pastDateError'))
       return
     }
