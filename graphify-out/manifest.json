@@ -460,8 +460,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/usePhotoSessionForm.ts": {
-    "mtime": 1793146084.9930713,
-    "ast_hash": "2ada25a228a3e23c73e47d25cca4950f",
+    "mtime": 1793194141.4202528,
+    "ast_hash": "6a50be14f4aef9b32b0af81f18e47443",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/domain/session.model.ts": {
@@ -490,13 +490,13 @@
     "semantic_hash": "a1e0041f3a0b621eb90bfaa442116397"
   },
   "frontend/src/features/photo-sessions/ui/PhotoSessionFormDesktop.vue": {
-    "mtime": 1793146084.9934626,
-    "ast_hash": "394d1b81352da56deac7179f9c093df6",
+    "mtime": 1793194087.5664535,
+    "ast_hash": "b8c3bb4aa5ef57e63a99ffce91b1ec8e",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/PhotoSessionFormMobile.vue": {
-    "mtime": 1793141623.9321136,
-    "ast_hash": "64b1fdbdf61319c8a4f98913175cff9a",
+    "mtime": 1793194123.6521516,
+    "ast_hash": "a002187ed90fec22965d0df41770a163",
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/ui/PhotoSessionFormView.vue": {
@@ -555,13 +555,13 @@
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue": {
-    "mtime": 1793143070.9750583,
-    "ast_hash": "f67cdde21e03873ac8a5edf4ae68784a",
+    "mtime": 1793194680.486468,
+    "ast_hash": "d50129e9b3821ce56ff3189e85331b0a",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormMobile.vue": {
-    "mtime": 1793143138.057176,
-    "ast_hash": "704eca941ed2539f1dbb4d361f6640ab",
+    "mtime": 1793194686.942567,
+    "ast_hash": "19449986ce648aba29b246ffd6e3b22d",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormView.vue": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1793141407.1388814,
-    "ast_hash": "b3dbdde9954daf69c9ecb46152042b78",
+    "mtime": 1793194488.1961083,
+    "ast_hash": "7bc386c3182b1758c404b585043fb856",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1793141399.5668938,
-    "ast_hash": "5c5c0bd9e92849cb80203df61d8eb53e",
+    "mtime": 1793194488.26387,
+    "ast_hash": "52d2591e35f55096c37cb4c95866646e",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
