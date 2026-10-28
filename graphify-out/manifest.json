@@ -150,8 +150,8 @@
     "semantic_hash": "0fc2164ef77bcca3697dea2ff7126a08"
   },
   "backend/src/features/photo-sessions/infrastructure/session.routes.ts": {
-    "mtime": 1792948716.7036858,
-    "ast_hash": "1b787f0f417404928791a7a0ffc9923c",
+    "mtime": 1793149846.0763373,
+    "ast_hash": "ecb1fd1e3e445f87ba4d7c786d963111",
     "semantic_hash": ""
   },
   "backend/src/features/project-management/application/ports/project.repository.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": "8b7fbbfd3c080a1fc2affb721c830dfc"
   },
   "backend/src/features/sales/infrastructure/sale.routes.ts": {
-    "mtime": 1792948668.9486268,
-    "ast_hash": "e35979037570449b236dc435f348a782",
+    "mtime": 1793149852.3065858,
+    "ast_hash": "e64b451bdad2ba0df8a4e58d0ba3654f",
     "semantic_hash": ""
   },
   "backend/src/features/users/infrastructure/calendario-laboral.routes.ts": {
@@ -460,7 +460,7 @@
     "semantic_hash": ""
   },
   "frontend/src/features/photo-sessions/composables/usePhotoSessionForm.ts": {
-    "mtime": 1793141435.1401882,
+    "mtime": 1793146084.9930713,
     "ast_hash": "2ada25a228a3e23c73e47d25cca4950f",
     "semantic_hash": ""
   },
@@ -490,7 +490,7 @@
     "semantic_hash": "a1e0041f3a0b621eb90bfaa442116397"
   },
   "frontend/src/features/photo-sessions/ui/PhotoSessionFormDesktop.vue": {
-    "mtime": 1793141489.2835033,
+    "mtime": 1793146084.9934626,
     "ast_hash": "394d1b81352da56deac7179f9c093df6",
     "semantic_hash": ""
   },
