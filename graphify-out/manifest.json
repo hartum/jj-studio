@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1793199009.7133281,
-    "ast_hash": "df97f0c77de80c89ace25b1df2ff1f8c",
+    "mtime": 1793202998.289738,
+    "ast_hash": "6dc72cebb1bedc708f74f14b5a8ab767",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1793199009.800571,
-    "ast_hash": "1ed969a9a04fc2246eb6f2117f6addd3",
+    "mtime": 1793202998.3404248,
+    "ast_hash": "5c789c6cb744e3db1e56e017009f6e03",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1075,8 +1075,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1793196755.1890054,
-    "ast_hash": "76360a3313ac01065dff7937089f3ef5",
+    "mtime": 1793202998.2398493,
+    "ast_hash": "eadcd7d53a927b0453d4c4e204f5cef4",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {
@@ -1120,8 +1120,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/commissions/services/commission-excel-export.service.ts": {
-    "mtime": 1793112058.7938218,
-    "ast_hash": "6705568984874b9c08d38f77767c7f07",
+    "mtime": 1793202997.8824341,
+    "ast_hash": "f79dc7b88740bcfe34e34d69d1982fda",
     "semantic_hash": ""
   },
   "backend/src/features/users/application/avatar-storage.service.ts": {
