@@ -125,8 +125,8 @@
     "semantic_hash": ""
   },
   "backend/src/features/integrations/google-calendar/google-calendar.service.ts": {
-    "mtime": 1792025840.0914066,
-    "ast_hash": "3ec53f4ad4ffd7d88586930078a9b5fe",
+    "mtime": 1793296687.3481448,
+    "ast_hash": "18ec91fb2bae0665035b4e1b7ffb5657",
     "semantic_hash": ""
   },
   "backend/src/features/notifications/application/reminder.service.ts": {
@@ -1147,6 +1147,11 @@
   "frontend/src/features/home/ui/dashboards/components/ContableVentasTab.vue": {
     "mtime": 1793283366.5457222,
     "ast_hash": "ffecb9f79c2f9cda5cfb418ec203a2bf",
+    "semantic_hash": ""
+  },
+  "backend/src/features/integrations/google-calendar/google-calendar.service.test.ts": {
+    "mtime": 1793296687.2376645,
+    "ast_hash": "32f596b2052381f4c2948e4b75869b7f",
     "semantic_hash": ""
   }
 }

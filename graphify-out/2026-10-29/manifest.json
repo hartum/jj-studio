@@ -170,8 +170,8 @@
     "semantic_hash": "8b7fbbfd3c080a1fc2affb721c830dfc"
   },
   "backend/src/features/sales/infrastructure/sale.routes.ts": {
-    "mtime": 1793198232.8338616,
-    "ast_hash": "2e636285db824cb6eb7b387c9500957f",
+    "mtime": 1793280988.1615956,
+    "ast_hash": "1753a7e1132089e340179aa0bbd65bc8",
     "semantic_hash": ""
   },
   "backend/src/features/users/infrastructure/calendario-laboral.routes.ts": {
@@ -370,8 +370,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/composables/useDashboard.ts": {
-    "mtime": 1793201628.046874,
-    "ast_hash": "d4b0ffd898ea74aa3da607dcd9c9d690",
+    "mtime": 1793280988.3163044,
+    "ast_hash": "6bc1a9abe861316477a18e6fe0789f89",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/InicioView.vue": {
@@ -390,8 +390,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/ContableDashboard.vue": {
-    "mtime": 1792885635.5683465,
-    "ast_hash": "06e5edecdf1be2a785f458890a9904fd",
+    "mtime": 1793280988.4124649,
+    "ast_hash": "a4af887649756ede7274fde254a69216",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/FotografoDashboard.vue": {
@@ -545,13 +545,13 @@
     "semantic_hash": ""
   },
   "frontend/src/features/sales/domain/sale.model.ts": {
-    "mtime": 1793196755.6380568,
-    "ast_hash": "30a5a1ac90bdb6528ac387fe3f7e1f19",
+    "mtime": 1793280988.474473,
+    "ast_hash": "c83a5d19f07a34c0683b4f855b8e31a0",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/stores/sale.store.ts": {
-    "mtime": 1791027063.3290126,
-    "ast_hash": "861771c1a53a597a7cba4c5280b3cb73",
+    "mtime": 1793280988.7219,
+    "ast_hash": "7ee8a0bcbbf45b1773ba01db0482832c",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/ui/SaleAppointmentFormDesktop.vue": {
@@ -1020,13 +1020,13 @@
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/en.json": {
-    "mtime": 1793202998.289738,
-    "ast_hash": "6dc72cebb1bedc708f74f14b5a8ab767",
+    "mtime": 1793280718.3812017,
+    "ast_hash": "aae1fc8e0e37e0b1fd10d8d7a0cc4804",
     "semantic_hash": ""
   },
   "frontend/src/i18n/locales/es.json": {
-    "mtime": 1793202998.3404248,
-    "ast_hash": "5c789c6cb744e3db1e56e017009f6e03",
+    "mtime": 1793280707.0140202,
+    "ast_hash": "1b9cab08b1d2594e32b220098a9ecfdb",
     "semantic_hash": ""
   },
   "backend/src/features/sales/infrastructure/sale.migration.ts": {
@@ -1075,8 +1075,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableComisionesTab.vue": {
-    "mtime": 1793202998.2398493,
-    "ast_hash": "eadcd7d53a927b0453d4c4e204f5cef4",
+    "mtime": 1793281792.2927592,
+    "ast_hash": "39fe47c52b8ae2ae086db2dc0a8c08e0",
     "semantic_hash": ""
   },
   "frontend/src/features/home/ui/dashboards/components/ContableEstadisticasTab.vue": {
@@ -1142,6 +1142,11 @@
   "frontend/src/shared/date-utils.ts": {
     "mtime": 1793201278.020189,
     "ast_hash": "6da4818899682307480f022d3994f4df",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/home/ui/dashboards/components/ContableVentasTab.vue": {
+    "mtime": 1793283366.5457222,
+    "ast_hash": "ffecb9f79c2f9cda5cfb418ec203a2bf",
     "semantic_hash": ""
   }
 }
