@@ -246,6 +246,101 @@ function formatEmailHtml(email?: string | null): string {
   return `<a href="mailto:${clean}">${clean}</a>`
 }
 
+// Cache en memoria de zonas horarias de Google Calendar por calendarId
+const calendarTimeZoneCache = new Map<string, string>()
+
+/**
+ * Convierte un Date o string a formato ISO local (YYYY-MM-DDTHH:mm:ss)
+ * SIN la 'Z' ni sufijos de offset UTC, permitiendo que Google Calendar
+ * interprete la hora exacta en la zona horaria del hotel.
+ */
+export function formatToLocalIsoString(dateOrStr: Date | string): string {
+  if (typeof dateOrStr === 'string') {
+    let s = dateOrStr.trim().replace(' ', 'T')
+    s = s.replace(/Z$/, '').replace(/[+-]\d{2}:\d{2}$/, '')
+    if (s.length === 10) return `${s}T00:00:00`
+    if (s.length === 16) return `${s}:00`
+    if (s.length >= 19) return s.slice(0, 19)
+    return s
+  }
+  return dateOrStr.toISOString().slice(0, 19)
+}
+
+/**
+ * Determina la zona horaria operacional para un hotel según su país y área.
+ * Todos los hoteles de JJ Studio están ubicados en México, Jamaica o Rep. Dominicana.
+ * - México (Cancún, Riviera Maya): America/Cancun (GMT-05)
+ * - México (Vallarta): America/Bahia_Banderas (GMT-06)
+ * - México (Los Cabos): America/Mazatlan (GMT-07)
+ * - Jamaica (Costa Norte): America/Jamaica (GMT-05)
+ * - República Dominicana (Punta Cana): America/Santo_Domingo (GMT-04)
+ */
+export function getHotelTimeZone(hotelInfo?: {
+  areaNombre?: string | null
+  paisNombre?: string | null
+}): string {
+  const pais = (hotelInfo?.paisNombre || '').toLowerCase()
+  const area = (hotelInfo?.areaNombre || '').toLowerCase()
+
+  if (pais.includes('jamaica')) {
+    return 'America/Jamaica'
+  }
+  if (pais.includes('dominicana') || pais.includes('dominican')) {
+    return 'America/Santo_Domingo'
+  }
+  if (area.includes('cabos')) {
+    return 'America/Mazatlan'
+  }
+  if (area.includes('vallarta')) {
+    return 'America/Bahia_Banderas'
+  }
+  return 'America/Cancun'
+}
+
+/**
+ * Obtiene y cachea la zona horaria para sincronizar con Google Calendar.
+ * Si el calendario de Google tiene una zona americana válida (ej. America/Cancun), se respeta.
+ * Si el calendario fue creado con zona por defecto de Europa (ej. Europe/Madrid) o UTC,
+ * se utiliza la zona horaria real del hotel para evitar desfases.
+ */
+export async function getCalendarTimeZone(
+  client: { calendar: any; calendarId: string },
+  hotelFallbackInfo?: { areaNombre?: string | null; paisNombre?: string | null },
+): Promise<string> {
+  const hotelTz = getHotelTimeZone(hotelFallbackInfo)
+
+  const cached = calendarTimeZoneCache.get(client.calendarId)
+  if (cached) return cached
+
+  try {
+    const res = await client.calendar.calendars.get({
+      calendarId: client.calendarId,
+    })
+    const tz = res.data.timeZone
+    if (
+      tz &&
+      typeof tz === 'string' &&
+      tz.trim() &&
+      !tz.startsWith('Europe/') &&
+      !tz.startsWith('Africa/') &&
+      !tz.startsWith('Asia/') &&
+      tz !== 'UTC'
+    ) {
+      const cleanTz = tz.trim()
+      calendarTimeZoneCache.set(client.calendarId, cleanTz)
+      return cleanTz
+    }
+  } catch (err: any) {
+    console.warn(
+      `[GoogleCalendar] No se pudo obtener la zona horaria de Google para ${client.calendarId}:`,
+      err?.message || err,
+    )
+  }
+
+  calendarTimeZoneCache.set(client.calendarId, hotelTz)
+  return hotelTz
+}
+
 /**
  * Sincroniza una Sesión Fotográfica hacia Google Calendar (Crear o Actualizar)
  */
@@ -253,7 +348,15 @@ export async function syncSesionToGoogle(sesionId: number): Promise<string | nul
   const sesion = await prisma.sesionFotografica.findUnique({
     where: { id: sesionId },
     include: {
-      hotel: true,
+      hotel: {
+        include: {
+          area: {
+            include: {
+              pais: true,
+            },
+          },
+        },
+      },
       fotografo: {
         include: { colorAsignado: true },
       },
@@ -270,6 +373,11 @@ export async function syncSesionToGoogle(sesionId: number): Promise<string | nul
     // Si el hotel no tiene Google Calendar configurado, se omite silenciosamente
     return null
   }
+
+  const calendarTimeZone = await getCalendarTimeZone(client, {
+    areaNombre: sesion.hotel?.area?.nombre,
+    paisNombre: sesion.hotel?.area?.pais?.nombre,
+  })
 
   const hotelName = sesion.hotel?.nombre || 'Hotel'
   const clienteNombre = decrypt(sesion.clienteNombre) || 'Cliente'
@@ -289,9 +397,11 @@ export async function syncSesionToGoogle(sesionId: number): Promise<string | nul
   const fotografoColorHex = sesion.fotografo?.colorAsignado?.color || null
   const colorId = sesion.fotografo ? mapHexToGoogleColorId(fotografoColorHex) : '8'
 
-  // Fechas y horas
+  // Fechas y horas (en formato local wall-clock sin offset UTC 'Z')
   const startDateTime = sesion.fechaHoraInicio
   const endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000) // 1 hora de duración
+  const startIso = formatToLocalIsoString(startDateTime)
+  const endIso = formatToLocalIsoString(endDateTime)
 
   const checkoutFormatted = formatDateLongSpanish(sesion.fechaSalida)
   const roomValue = formatRoomDisplay(sesion.numeroHabitacion)
@@ -321,10 +431,12 @@ export async function syncSesionToGoogle(sesionId: number): Promise<string | nul
     description,
     colorId,
     start: {
-      dateTime: startDateTime.toISOString(),
+      dateTime: startIso,
+      timeZone: calendarTimeZone,
     },
     end: {
-      dateTime: endDateTime.toISOString(),
+      dateTime: endIso,
+      timeZone: calendarTimeZone,
     },
     reminders: {
       useDefault: false,
@@ -434,7 +546,15 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
   const cita = await prisma.citaVenta.findUnique({
     where: { id: citaVentaId },
     include: {
-      hotel: true,
+      hotel: {
+        include: {
+          area: {
+            include: {
+              pais: true,
+            },
+          },
+        },
+      },
       vendedor: {
         include: { colorAsignado: true },
       },
@@ -443,6 +563,15 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
       },
       sesion: {
         include: {
+          hotel: {
+            include: {
+              area: {
+                include: {
+                  pais: true,
+                },
+              },
+            },
+          },
           fotografo: {
             include: { colorAsignado: true },
           },
@@ -460,6 +589,12 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
   if (!client) {
     return null
   }
+
+  const hotelArea = cita.hotel?.area || cita.sesion?.hotel?.area
+  const calendarTimeZone = await getCalendarTimeZone(client, {
+    areaNombre: hotelArea?.nombre,
+    paisNombre: hotelArea?.pais?.nombre,
+  })
 
   const hotelName = cita.hotel?.nombre || 'Hotel'
   const clienteNombre = decrypt(cita.sesion?.clienteNombre) || 'Cliente'
@@ -493,6 +628,8 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
 
   const startDateTime = cita.fechaHoraCita
   const endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000)
+  const startIso = formatToLocalIsoString(startDateTime)
+  const endIso = formatToLocalIsoString(endDateTime)
 
   const checkoutFormatted = formatDateLongSpanish(cita.sesion?.fechaSalida)
   const roomValue = formatRoomDisplay(cita.sesion?.numeroHabitacion)
@@ -528,10 +665,12 @@ export async function syncCitaVentaToGoogle(citaVentaId: number): Promise<string
     description,
     colorId,
     start: {
-      dateTime: startDateTime.toISOString(),
+      dateTime: startIso,
+      timeZone: calendarTimeZone,
     },
     end: {
-      dateTime: endDateTime.toISOString(),
+      dateTime: endIso,
+      timeZone: calendarTimeZone,
     },
     reminders: {
       useDefault: false,
@@ -640,6 +779,10 @@ export async function testGoogleCalendarConnection(
     const res = await client.calendar.calendars.get({
       calendarId: client.calendarId,
     })
+
+    if (res.data.timeZone && typeof res.data.timeZone === 'string') {
+      calendarTimeZoneCache.set(client.calendarId, res.data.timeZone.trim())
+    }
 
     return {
       success: true,
