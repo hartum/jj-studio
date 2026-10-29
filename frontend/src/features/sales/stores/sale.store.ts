@@ -26,13 +26,35 @@ export const useSaleStore = defineStore('sales', () => {
   const citasVenta = ref<CitaVenta[]>([])
   const isLoading = ref(false)
 
-  async function fetchCitasVenta(hotelId?: number) {
+  async function fetchCitasVenta(
+    options?:
+      | number
+      | {
+          hotelId?: number
+          hotelIds?: number[]
+          fechaDesde?: string
+          fechaHasta?: string
+          estado?: string
+        },
+  ) {
     isLoading.value = true
     try {
-      const url = hotelId
-        ? `${API_URL}/citas-venta?hotelId=${hotelId}`
-        : `${API_URL}/citas-venta`
-      const res = await fetch(url, { headers: getAuthHeaders() })
+      let url = `${API_URL}/citas-venta`
+      if (typeof options === 'number') {
+        url = `${API_URL}/citas-venta?hotelId=${options}`
+      } else if (options && typeof options === 'object') {
+        const params = new URLSearchParams()
+        if (options.hotelId) params.append('hotelId', String(options.hotelId))
+        if (options.hotelIds && options.hotelIds.length > 0) {
+          params.append('hotelIds', options.hotelIds.join(','))
+        }
+        if (options.fechaDesde) params.append('fechaDesde', options.fechaDesde)
+        if (options.fechaHasta) params.append('fechaHasta', options.fechaHasta)
+        if (options.estado) params.append('estado', options.estado)
+        const qs = params.toString()
+        if (qs) url = `${url}?${qs}`
+      }
+      const res = await fetch(url, { headers: getAuthHeaders(false) })
       if (res.ok) {
         citasVenta.value = await res.json()
       }
@@ -45,7 +67,7 @@ export const useSaleStore = defineStore('sales', () => {
 
   async function fetchCitaVenta(id: number): Promise<CitaVenta | null> {
     try {
-      const res = await fetch(`${API_URL}/citas-venta/${id}`, { headers: getAuthHeaders() })
+      const res = await fetch(`${API_URL}/citas-venta/${id}`, { headers: getAuthHeaders(false) })
       if (res.ok) {
         return await res.json()
       }
@@ -139,7 +161,7 @@ export const useSaleStore = defineStore('sales', () => {
       if (excludeId) params.set('excludeId', String(excludeId))
 
       const res = await fetch(`${API_URL}/citas-venta/conflictos?${params}`, {
-        headers: getAuthHeaders(),
+        headers: getAuthHeaders(false),
       })
       if (res.ok) {
         return await res.json()

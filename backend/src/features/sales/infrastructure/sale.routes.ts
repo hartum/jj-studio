@@ -289,44 +289,80 @@ export async function saleRoutes(fastify: FastifyInstance) {
   // GET /api/citas-venta - List sales appointments
   fastify.get('/api/citas-venta', async (request, reply) => {
     try {
-      const { hotelId } = request.query as { hotelId?: string }
+      const { hotelId, hotelIds, fechaDesde, fechaHasta, estado } = request.query as {
+        hotelId?: string
+        hotelIds?: string
+        fechaDesde?: string
+        fechaHasta?: string
+        estado?: string
+      }
       const where: any = { deletedAt: null }
 
       const userId = getAuthUserId(request)
+      let allowedHotelIds: number[] | null = null
       if (userId) {
-        const allowedHotelIds = await getAllowedHotelIds(userId)
-        if (allowedHotelIds !== null) {
-          if (hotelId) {
-            const reqHotelId = Number(hotelId)
-            if (!allowedHotelIds.includes(reqHotelId)) {
-              return reply.send([])
-            }
-            where.hotelId = reqHotelId
-          } else {
-            where.hotelId = { in: allowedHotelIds }
-          }
-        } else if (hotelId) {
-          where.hotelId = Number(hotelId)
+        allowedHotelIds = await getAllowedHotelIds(userId)
+      }
+
+      const rawHotelIds = hotelIds || hotelId
+      let reqIds: number[] | null = null
+      if (rawHotelIds) {
+        if (Array.isArray(rawHotelIds)) {
+          reqIds = rawHotelIds.map(Number).filter((n) => !isNaN(n))
+        } else if (typeof rawHotelIds === 'string') {
+          reqIds = rawHotelIds
+            .split(',')
+            .map((s) => Number(s.trim()))
+            .filter((n) => !isNaN(n))
         }
-      } else if (hotelId) {
-        where.hotelId = Number(hotelId)
+      }
+
+      if (reqIds && reqIds.length > 0) {
+        if (allowedHotelIds !== null) {
+          const valid = reqIds.filter((id) => allowedHotelIds.includes(id))
+          where.hotelId = { in: valid }
+        } else {
+          where.hotelId = { in: reqIds }
+        }
+      } else if (allowedHotelIds !== null) {
+        where.hotelId = { in: allowedHotelIds }
+      }
+
+      if (estado) {
+        where.estado = estado
+      }
+
+      if (fechaDesde || fechaHasta) {
+        where.fechaHoraCita = {}
+        if (fechaDesde) {
+          where.fechaHoraCita.gte = new Date(`${fechaDesde}T00:00:00.000Z`)
+        }
+        if (fechaHasta) {
+          where.fechaHoraCita.lte = new Date(`${fechaHasta}T23:59:59.999Z`)
+        }
       }
 
       const citas = await prisma.citaVenta.findMany({
         where,
         include: {
-          sesion: { include: { fotografo: true } },
+          sesion: {
+            include: {
+              fotografo: { include: { colorAsignado: true } },
+              creador: { include: { colorAsignado: true } },
+            },
+          },
           hotel: true,
-          vendedor: true,
+          vendedor: { include: { colorAsignado: true } },
           fotografo: { include: { colorAsignado: true } },
           pagos: true,
         },
-        orderBy: { fechaHoraCita: 'asc' },
+        orderBy: { fechaHoraCita: 'desc' },
       })
 
       const mapped = citas.map((c) => {
         const v = decryptUser(c.vendedor)
         const f = decryptUser(c.fotografo || c.sesion?.fotografo)
+        const a = decryptUser(c.sesion?.creador)
         return {
           id: c.id,
           tipo: c.tipo || 'CITA_VENTA',
@@ -335,8 +371,16 @@ export async function saleRoutes(fastify: FastifyInstance) {
           hotelNombre: c.hotel?.nombre || '',
           vendedorId: c.vendedorId || null,
           vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
+          vendedorImagen: v?.imagen || null,
+          vendedorColor: v?.colorAsignado?.color || null,
           fotografoId: c.fotografoId || c.sesion?.fotografoId || null,
           fotografoNombre: f ? `${f.nombre} ${f.apellidos}`.trim() : null,
+          fotografoImagen: f?.imagen || null,
+          fotografoColor: f?.colorAsignado?.color || null,
+          agendadorId: c.sesion?.creadorId || null,
+          agendadorNombre: a ? `${a.nombre} ${a.apellidos}`.trim() : null,
+          agendadorImagen: a?.imagen || null,
+          agendadorColor: a?.colorAsignado?.color || null,
           fechaHoraCita: c.fechaHoraCita.toISOString().slice(0, 16),
           estado: c.estado,
           numFotosVendidas: c.numFotosVendidas,

@@ -6,6 +6,7 @@ import { Location } from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
 import ContableEstadisticasTab from './components/ContableEstadisticasTab.vue'
 import ContableComisionesTab from './components/ContableComisionesTab.vue'
+import ContableVentasTab from './components/ContableVentasTab.vue'
 
 const LOCAL_STORAGE_KEY_TAB = 'jj_studio_contable_active_tab'
 const LOCAL_STORAGE_KEY_DATES = 'jj_studio_contable_date_range'
@@ -28,14 +29,17 @@ const {
   commissionDateShortcuts,
   loadCommissionsData,
   loadGoalsData,
+  loadVentasData,
   getProgressColor,
   getSemaforoTagType,
   getSemaforoText,
 } = useDashboard()
 
 // 1. Restaurar pestaña activa guardada
-const savedTab = localStorage.getItem(LOCAL_STORAGE_KEY_TAB) as 'estadisticas' | 'comisiones' | null
-const activeTab = ref<'estadisticas' | 'comisiones'>(savedTab === 'comisiones' ? 'comisiones' : 'estadisticas')
+const savedTab = localStorage.getItem(LOCAL_STORAGE_KEY_TAB) as 'estadisticas' | 'comisiones' | 'ventas' | null
+const activeTab = ref<'estadisticas' | 'comisiones' | 'ventas'>(
+  savedTab === 'comisiones' ? 'comisiones' : savedTab === 'ventas' ? 'ventas' : 'estadisticas',
+)
 
 // 2. Restaurar rango de fechas guardado para el contable
 try {
@@ -69,6 +73,8 @@ watch(activeTab, (tab) => {
     loadCommissionsData()
   } else if (tab === 'estadisticas') {
     loadGoalsData()
+  } else if (tab === 'ventas') {
+    loadVentasData()
   }
 })
 
@@ -134,6 +140,7 @@ const groupedContableHotelsByCountry = computed<CountryGroup[]>(() => {
       <el-tabs v-model="activeTab" type="card" class="contable-tabs">
         <el-tab-pane :label="$t('dashboard.statsTab')" name="estadisticas" />
         <el-tab-pane :label="$t('dashboard.commissionsTab')" name="comisiones" />
+        <el-tab-pane :label="$t('dashboard.salesTab') || 'Ventas'" name="ventas" />
       </el-tabs>
 
       <div class="header-controls">
@@ -231,6 +238,14 @@ const groupedContableHotelsByCountry = computed<CountryGroup[]>(() => {
       :global-monthly-commissions="globalMonthlyCommissions"
       :on-update-commission-status="handleUpdateCommissionStatus"
       :on-update-commissions-status-masivo="handleUpdateCommissionsStatusMasivo"
+    />
+
+    <!-- PESTAÑA 3: VENTAS -->
+    <ContableVentasTab
+      v-else-if="activeTab === 'ventas'"
+      :selected-hotel-filters="selectedHotelFilters"
+      :contable-hotels="contableHotels"
+      :commission-date-range="commissionDateRange"
     />
   </div>
 </template>

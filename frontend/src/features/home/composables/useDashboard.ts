@@ -244,6 +244,30 @@ export function useDashboard() {
     }
   }
 
+  async function loadVentasData() {
+    const hotelIdsParam =
+      selectedHotelFilters.value.length > 0 ? selectedHotelFilters.value : undefined
+
+    let fechaDesde: string | undefined = undefined
+    let fechaHasta: string | undefined = undefined
+    if (
+      commissionDateRange.value &&
+      commissionDateRange.value.length === 2 &&
+      commissionDateRange.value[0] &&
+      commissionDateRange.value[1]
+    ) {
+      fechaDesde = commissionDateRange.value[0]
+      fechaHasta = commissionDateRange.value[1]
+    }
+
+    await saleStore.fetchCitasVenta({
+      hotelIds: hotelIdsParam,
+      fechaDesde,
+      fechaHasta,
+      estado: 'COMPLETADA',
+    })
+  }
+
   // --- Carga de datos ---
   async function loadCommissionConfigForUser() {
     let paisId: number | undefined = undefined
@@ -576,7 +600,7 @@ export function useDashboard() {
 
   watch(selectedHotelFilters, async () => {
     if (userRole.value === 'CONTABLE') {
-      await Promise.all([loadCommissionsData(), loadGoalsData()])
+      await Promise.all([loadCommissionsData(), loadGoalsData(), loadVentasData()])
     } else {
       await loadGoalsData()
     }
@@ -615,7 +639,7 @@ export function useDashboard() {
           isInternalSync = false
         }
 
-        await Promise.all([loadCommissionsData(), loadGoalsData()])
+        await Promise.all([loadCommissionsData(), loadGoalsData(), loadVentasData()])
       }
     },
     { deep: true },
@@ -1170,5 +1194,6 @@ export function useDashboard() {
     commissionDateShortcuts,
     loadCommissionsData,
     loadGoalsData,
+    loadVentasData,
   }
 }

@@ -8,7 +8,7 @@ import { useCommissionStore } from '@/features/commissions/stores/commission.sto
 import { useGoalStore } from '@/features/goals/stores/goal.store'
 import { formatCurrency, formatMxn } from '@/shared/formatters'
 import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-avatar'
-import { InfoFilled, Edit } from '@element-plus/icons-vue'
+import { InfoFilled, Search } from '@element-plus/icons-vue'
 import { RotateCcw, Award, Lock, FileSpreadsheet } from '@lucide/vue'
 import { exportComisionesToExcel } from '@/features/commissions/services/commission-excel-export.service'
 import type { Comision } from '@/features/commissions/domain/commission.model'
@@ -1417,7 +1417,7 @@ async function handleExportExcel() {
                       :title="$t('common.edit') + ' ' + (subRow.numeroMiscelaneo || '')"
                       @click.stop="goToEditSale(subRow.citaVentaId)"
                     >
-                      <el-icon :size="13"><Edit /></el-icon>
+                      <el-icon :size="13"><Search /></el-icon>
                       <span class="font-mono text-xs">
                         {{ subRow.numeroMiscelaneo || $t('dashboard.table.noVoucherFolio') }}
                       </span>

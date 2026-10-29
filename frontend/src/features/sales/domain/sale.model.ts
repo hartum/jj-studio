@@ -22,6 +22,16 @@ export interface CitaVenta {
   hotelId: number
   vendedorId?: string | null
   vendedorNombre?: string | null
+  vendedorImagen?: string | null
+  vendedorColor?: string | null
+  fotografoId?: string | null
+  fotografoNombre?: string | null
+  fotografoImagen?: string | null
+  fotografoColor?: string | null
+  agendadorId?: string | null
+  agendadorNombre?: string | null
+  agendadorImagen?: string | null
+  agendadorColor?: string | null
   fechaHoraCita: string
   estado: EstadoCitaVenta
   numFotosVendidas?: number | null
@@ -35,8 +45,6 @@ export interface CitaVenta {
   clienteEmail?: string | null
   clienteTelefono?: string | null
   numeroHabitacion?: string | null
-  fotografoId?: string | null
-  fotografoNombre?: string | null
   numAdultos?: number
   numNinos?: number
   concepto?: string | null
