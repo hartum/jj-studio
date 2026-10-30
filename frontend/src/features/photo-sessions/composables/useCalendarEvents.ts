@@ -134,6 +134,7 @@ export function useCalendarEvents(
         hotelId: number
         vendedorId?: string | null
         fotografoId?: string | null
+        agendadorId?: string | null
         fechaHoraCita: string
         estado: string
         totalVentaUsd?: number | null
@@ -157,6 +158,7 @@ export function useCalendarEvents(
         hotelId: effectiveHotelId,
         vendedorId: c.vendedorId || parentSession?.citaVenta?.vendedorId || null,
         fotografoId: c.fotografoId || parentSession?.fotografoId || null,
+        agendadorId: c.agendadorId || parentSession?.creadorId || null,
         fechaHoraCita: c.fechaHoraCita,
         estado: c.estado,
         totalVentaUsd: c.totalVentaUsd ?? parentSession?.citaVenta?.totalVentaUsd ?? null,
@@ -178,6 +180,7 @@ export function useCalendarEvents(
             hotelId: Number(s.hotelId),
             vendedorId: s.citaVenta.vendedorId || null,
             fotografoId: s.fotografoId || null,
+            agendadorId: s.creadorId || null,
             fechaHoraCita: s.citaVenta.fechaHoraCita,
             estado: s.citaVenta.estado,
             totalVentaUsd: s.citaVenta.totalVentaUsd ?? null,
@@ -487,6 +490,7 @@ export function useCalendarEvents(
     if (isSale) {
       const fotografoId = props.rawSale?.fotografoId || null
       const vendedorId = props.rawSale?.vendedorId || null
+      const agendadorId = props.rawSale?.agendadorId || (props.rawSale as any)?.sesion?.creadorId || null
 
       const isAssignedFotografo = Boolean(
         fotografoId && String(fotografoId) === String(currentUser.id),
@@ -494,10 +498,13 @@ export function useCalendarEvents(
       const isAssignedVendedor = Boolean(
         vendedorId && String(vendedorId) === String(currentUser.id),
       )
+      const isCurrentAgendador = Boolean(
+        agendadorId && String(agendadorId) === String(currentUser.id),
+      )
       const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
 
       if (fotografoId || vendedorId) {
-        if (!isAssignedFotografo && !isAssignedVendedor && !isPrivileged) {
+        if (!isAssignedFotografo && !isAssignedVendedor && !isCurrentAgendador && !isPrivileged) {
           return false
         }
       }
@@ -506,10 +513,12 @@ export function useCalendarEvents(
 
     // Si es un evento de Sesión de Fotos:
     const fotografoId = props.rawSession?.fotografoId || null
+    const creadorId = props.rawSession?.creadorId || null
     if (fotografoId) {
       const isAssignedFotografo = String(fotografoId) === String(currentUser.id)
+      const isCurrentAgendador = Boolean(creadorId && String(creadorId) === String(currentUser.id))
       const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
-      if (!isAssignedFotografo && !isPrivileged) {
+      if (!isAssignedFotografo && !isCurrentAgendador && !isPrivileged) {
         return false
       }
     }

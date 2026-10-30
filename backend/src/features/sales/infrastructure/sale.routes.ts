@@ -516,6 +516,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         sesionId: number
         hotelId: number
         vendedorId?: string | null
+        agendadorId?: string | null
         fechaHoraCita: string
         estado?: string
         numFotosVendidas?: number | null
@@ -564,6 +565,25 @@ export async function saleRoutes(fastify: FastifyInstance) {
             error: 'Los fotógrafos solo pueden crear citas de venta de sus propias sesiones de fotos',
           })
         }
+      }
+
+      if (body.agendadorId && body.agendadorId !== sesion.creadorId) {
+        if (!userId) {
+          return reply.status(403).send({ error: 'No autorizado para editar el agendador' })
+        }
+        const isPrivileged = ['GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role || '')
+        const isCurrentAgendador = String(userId) === String(sesion.creadorId)
+        if (!isPrivileged && !isCurrentAgendador) {
+          return reply.status(403).send({
+            error:
+              'Solo el agendador actual o administradores/gerentes pueden transferir la autoría del agendador.',
+          })
+        }
+        await prisma.sesionFotografica.update({
+          where: { id: sesion.id },
+          data: { creadorId: body.agendadorId },
+        })
+        sesion.creadorId = body.agendadorId
       }
 
       const fechaCita = parseLocalDateTime(body.fechaHoraCita)
@@ -757,12 +777,24 @@ export async function saleRoutes(fastify: FastifyInstance) {
         },
       })
 
+      const creadorUsuario = sesion.creadorId
+        ? await prisma.usuario.findUnique({
+            where: { id: sesion.creadorId },
+            include: { colorAsignado: true },
+          })
+        : null
+      const agDec = creadorUsuario ? decryptUser(creadorUsuario) : null
+
       const response: any = {
         id: nueva.id,
         sesionId: nueva.sesionId,
         hotelId: nueva.hotelId,
         vendedorId: nueva.vendedorId || null,
         vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
+        agendadorId: sesion.creadorId || null,
+        agendadorNombre: agDec ? `${agDec.nombre} ${agDec.apellidos}`.trim() : null,
+        agendadorImagen: agDec?.imagen || null,
+        agendadorColor: creadorUsuario?.colorAsignado?.color || null,
         fechaHoraCita: nueva.fechaHoraCita.toISOString().slice(0, 16),
         estado: nueva.estado,
         numFotosVendidas: nueva.numFotosVendidas,
@@ -1001,6 +1033,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const body = request.body as {
         vendedorId?: string | null
         fotografoId?: string | null
+        agendadorId?: string | null
         fechaHoraCita?: string
         estado?: string
         numFotosVendidas?: number | null
@@ -1043,23 +1076,90 @@ export async function saleRoutes(fastify: FastifyInstance) {
         }
       } else {
         // 2. If cita is PROGRAMADA and the associated session has an assigned photographer or the cita has an assigned seller:
-        // Only assigned photographer, assigned seller, supervisor, gerente, contable, admin, and superusuario can edit.
+        // Assigned photographer, assigned seller, current agendador, supervisor, gerente, contable, admin, and superusuario can edit.
         const fotografoId = existing.fotografoId || existing.sesion?.fotografoId
         const vendedorId = existing.vendedorId
+        const agendadorId = existing.sesion?.creadorId
         if (fotografoId || vendedorId) {
           if (!userId) {
             return reply.status(403).send({ error: 'No autorizado para editar esta cita de venta' })
           }
           const isAssignedFotografo = Boolean(fotografoId && userId === fotografoId)
           const isAssignedVendedor = Boolean(vendedorId && userId === vendedorId)
+          const isCurrentAgendador = Boolean(agendadorId && userId === agendadorId)
           const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role || '')
-          if (!isAssignedFotografo && !isAssignedVendedor && !isPrivileged) {
+          if (!isAssignedFotografo && !isAssignedVendedor && !isCurrentAgendador && !isPrivileged) {
             return reply.status(403).send({
               error:
-                'Esta cita ya tiene un fotógrafo o vendedor asignado. Solo el fotógrafo asignado, vendedor asignado, supervisores, gerentes, contables o administradores pueden editarla.',
+                'Esta cita ya tiene un fotógrafo o vendedor asignado. Solo el fotógrafo asignado, vendedor asignado, el agendador o supervisores/administradores pueden editarla.',
             })
           }
         }
+      }
+
+      // Verificación de blindaje del fotógrafo asignado:
+      const currentFotografoId = existing.fotografoId || existing.sesion?.fotografoId
+      if (
+        body.fotografoId !== undefined &&
+        body.fotografoId !== currentFotografoId &&
+        currentFotografoId
+      ) {
+        if (!userId) {
+          return reply.status(403).send({ error: 'No autorizado para cambiar el fotógrafo asignado' })
+        }
+        const isAssignedFotografo = userId === currentFotografoId
+        const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role || '')
+        if (!isAssignedFotografo && !isPrivileged) {
+          return reply.status(403).send({
+            error:
+              'Solo el fotógrafo asignado o un supervisor/administrador pueden cambiar o desasignar al fotógrafo.',
+          })
+        }
+      }
+
+      // Verificación de blindaje del vendedor asignado:
+      if (
+        body.vendedorId !== undefined &&
+        body.vendedorId !== existing.vendedorId &&
+        existing.vendedorId
+      ) {
+        if (!userId) {
+          return reply.status(403).send({ error: 'No autorizado para cambiar el vendedor asignado' })
+        }
+        const isAssignedVendedor = userId === existing.vendedorId
+        const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role || '')
+        if (!isAssignedVendedor && !isPrivileged) {
+          return reply.status(403).send({
+            error:
+              'Solo el vendedor asignado o un supervisor/administrador pueden cambiar o desasignar al vendedor.',
+          })
+        }
+      }
+
+      // Verificación de permisos para editar el agendador:
+      // 1. Si es SUPERUSUARIO, ADMIN, CONTABLE o GERENTE: siempre puede editar el agendador.
+      // 2. Si es FOTOGRAFO, SUPERVISOR o AGENDADOR: solo puede editarlo si el agendador actual es él mismo.
+      if (
+        body.agendadorId &&
+        existing.sesionId &&
+        existing.sesion &&
+        body.agendadorId !== existing.sesion.creadorId
+      ) {
+        if (!userId) {
+          return reply.status(403).send({ error: 'No autorizado para editar el agendador' })
+        }
+        const isPrivileged = ['GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role || '')
+        const isCurrentAgendador = String(userId) === String(existing.sesion.creadorId)
+        if (!isPrivileged && !isCurrentAgendador) {
+          return reply.status(403).send({
+            error:
+              'Solo el agendador actual o administradores/gerentes pueden transferir la autoría del agendador.',
+          })
+        }
+        await prisma.sesionFotografica.update({
+          where: { id: existing.sesionId },
+          data: { creadorId: body.agendadorId },
+        })
       }
 
       let incomingPagos: PagoInput[] | undefined = undefined
@@ -1259,6 +1359,24 @@ export async function saleRoutes(fastify: FastifyInstance) {
         metadatos.fotografoNuevo = actualFot ? `${actualFot.nombre} ${actualFot.apellidos}`.trim() : 'Sin asignar'
       }
 
+      if (
+        body.agendadorId &&
+        existing.sesion &&
+        body.agendadorId !== existing.sesion.creadorId
+      ) {
+        const existAg = existing.sesion.creador ? decryptUser(existing.sesion.creador) : null
+        const existAgNombre = existAg
+          ? `${existAg.nombre} ${existAg.apellidos}`.trim()
+          : existing.sesion.creadorId
+        const nuevoAgUser = await prisma.usuario.findUnique({ where: { id: body.agendadorId } })
+        const nuevoAgDec = nuevoAgUser ? decryptUser(nuevoAgUser) : null
+        const nuevoAgNombre = nuevoAgDec
+          ? `${nuevoAgDec.nombre} ${nuevoAgDec.apellidos}`.trim()
+          : body.agendadorId
+        metadatos.agendadorAnterior = existAgNombre
+        metadatos.agendadorNuevo = nuevoAgNombre
+      }
+
       if (existing.totalVentaUsd !== actualizada.totalVentaUsd) {
         metadatos.totalVentaUsdAnterior = existing.totalVentaUsd
         metadatos.totalVentaUsdNuevo = actualizada.totalVentaUsd
@@ -1344,6 +1462,16 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const v = decryptUser(actualizada.vendedor)
       const fot = decryptUser(actualizada.fotografo)
+
+      const finalAgendadorId = body.agendadorId !== undefined ? body.agendadorId : (actualizada.sesion?.creadorId || existing.sesion?.creadorId || null)
+      const creadorUsuario = finalAgendadorId
+        ? await prisma.usuario.findUnique({
+            where: { id: finalAgendadorId },
+            include: { colorAsignado: true },
+          })
+        : null
+      const agDec = creadorUsuario ? decryptUser(creadorUsuario) : null
+
       const response: any = {
         id: actualizada.id,
         tipo: actualizada.tipo || 'CITA_VENTA',
@@ -1353,6 +1481,10 @@ export async function saleRoutes(fastify: FastifyInstance) {
         vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
         fotografoId: actualizada.fotografoId || actualizada.sesion?.fotografoId || null,
         fotografoNombre: fot ? `${fot.nombre} ${fot.apellidos}`.trim() : null,
+        agendadorId: finalAgendadorId,
+        agendadorNombre: agDec ? `${agDec.nombre} ${agDec.apellidos}`.trim() : null,
+        agendadorImagen: agDec?.imagen || null,
+        agendadorColor: creadorUsuario?.colorAsignado?.color || null,
         fechaHoraCita: actualizada.fechaHoraCita.toISOString().slice(0, 16),
         estado: actualizada.estado,
         numFotosVendidas: actualizada.numFotosVendidas,

@@ -155,6 +155,7 @@ export function usePhotoSessionForm() {
   }
 
   const selectPhotographerCard = (id: string | number) => {
+    if (!canEditFotografo.value || isReadOnly.value) return
     const status = getPhotographerStatus(id)
     if (status.disabled) return
 
@@ -281,7 +282,7 @@ export function usePhotoSessionForm() {
   const currentUser = computed(() => authStore.user)
 
   // Lock due to assigned photographer:
-  // Once a session has an assigned photographer, only the assigned photographer,
+  // Once a session has an assigned photographer, the assigned photographer, current agendador (creadorId),
   // supervisor, gerente, admin, and superusuario can edit it.
   const isLockedByPhotographer = computed(() => {
     if (!isEditing.value || !loadedSession.value) return false
@@ -290,8 +291,22 @@ export function usePhotoSessionForm() {
     const role = currentUser.value?.roleCode?.toUpperCase() || ''
     const currentUserId = currentUser.value?.id
     const isAssignedFotografo = String(loadedSession.value.fotografoId) === String(currentUserId)
+    const isCurrentAgendador = Boolean(
+      loadedSession.value.creadorId && String(loadedSession.value.creadorId) === String(currentUserId),
+    )
     const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)
-    return !isAssignedFotografo && !isPrivileged
+    return !isAssignedFotografo && !isCurrentAgendador && !isPrivileged
+  })
+
+  // Permiso para cambiar o desasignar al fotógrafo:
+  // Si la sesión en edición ya tiene fotógrafo asignado:
+  // Solo el propio fotógrafo asignado o roles privilegiados pueden cambiarlo.
+  const canEditFotografo = computed(() => {
+    if (isReadOnly.value) return false
+    if (!isEditing.value || !loadedSession.value?.fotografoId) return true
+    const role = currentUser.value?.roleCode?.toUpperCase() || ''
+    if (['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(role)) return true
+    return String(loadedSession.value.fotografoId) === String(currentUser.value?.id)
   })
 
   // Role-based edit lock
@@ -507,19 +522,115 @@ export function usePhotoSessionForm() {
     return p ? `${p.nombre} ${p.apellidos}`.trim() : t('sessions.summary.thePhotographer')
   })
 
-  // Agendador / Creador de la cita (informativo)
-  const bookerUser = computed<UserWithProfile | AuthUser | null>(() => {
-    if (isEditing.value && loadedSession.value?.creadorId) {
-      const found = userStore.usersWithProfile.find(
-        (u) => String(u.id) === String(loadedSession.value?.creadorId),
-      )
-      if (found) return found
+  // Agendador / Creador de la sesión
+  const bookers = computed(() => {
+    const selectedHotelId = Number(formData.value.hotelId)
+    if (!selectedHotelId) return []
+
+    const list: Array<{
+      id: string
+      nombre: string
+      apellidos: string
+      imagen?: string | null
+      color?: string | null
+      perfilNombre: string
+      roleCode: string
+    }> = []
+    const seenIds = new Set<string>()
+
+    const candidates = userStore.usersWithProfile.filter((u) => {
+      if (u.status === 'Inactivo') return false
+      const perfilCode =
+        u.perfil?.code?.toUpperCase() ||
+        profileStore.getProfileById(u.profileId)?.code?.toUpperCase()
+      const isAllowedRole = ['AGENDADOR', 'FOTOGRAFO', 'SUPERVISOR'].includes(perfilCode || '')
+      if (!isAllowedRole) return false
+      const assignedHotelIds = u.hotelIds || []
+      return assignedHotelIds.some((hId) => Number(hId) === selectedHotelId)
+    })
+
+    for (const u of candidates) {
+      seenIds.add(String(u.id))
+      const perfil = u.perfil || profileStore.getProfileById(u.profileId)
+      list.push({
+        id: String(u.id),
+        nombre: u.nombre,
+        apellidos: u.apellidos,
+        imagen: u.imagen,
+        color: u.color,
+        perfilNombre: perfil?.name || '',
+        roleCode: perfil?.code?.toUpperCase() || '',
+      })
     }
-    if (currentUser.value) {
-      const foundCurrent = userStore.usersWithProfile.find(
-        (u) => String(u.id) === String(currentUser.value?.id),
-      )
-      return foundCurrent || currentUser.value
+
+    // Always include current creator/selected booker or currentUser if not in list
+    const currentBookerId =
+      formData.value.creadorId || loadedSession.value?.creadorId || currentUser.value?.id
+    if (currentBookerId && !seenIds.has(String(currentBookerId))) {
+      const u = userStore.usersWithProfile.find((x) => String(x.id) === String(currentBookerId))
+      if (u) {
+        const perfil = u.perfil || profileStore.getProfileById(u.profileId)
+        list.push({
+          id: String(u.id),
+          nombre: u.nombre,
+          apellidos: u.apellidos,
+          imagen: u.imagen,
+          color: u.color,
+          perfilNombre: perfil?.name || '',
+          roleCode: perfil?.code?.toUpperCase() || '',
+        })
+      } else if (currentUser.value && String(currentUser.value.id) === String(currentBookerId)) {
+        list.push({
+          id: String(currentUser.value.id),
+          nombre: currentUser.value.nombre,
+          apellidos: currentUser.value.apellidos,
+          imagen: currentUser.value.imagen,
+          color: currentUser.value.color,
+          perfilNombre: currentUser.value.roleName || '',
+          roleCode: currentUser.value.roleCode?.toUpperCase() || '',
+        })
+      }
+    }
+
+    return list
+  })
+
+  // Permisos para editar agendador:
+  // 1. Superadmin, admin, contable o gerente siempre pueden editar el agendador.
+  // 2. Fotógrafo, supervisor o agendador solo pueden si el agendador actual es él mismo.
+  const canEditAgendador = computed(() => {
+    if (isReadOnly.value) return false
+    if (!isEditing.value) return true
+    const role = currentUser.value?.roleCode?.toUpperCase() || ''
+    if (['SUPERUSUARIO', 'ADMIN', 'CONTABLE', 'GERENTE'].includes(role)) {
+      return true
+    }
+    const currentUserId = currentUser.value?.id
+    const currentBookerId = loadedSession.value?.creadorId
+    if (currentUserId && currentBookerId && String(currentUserId) === String(currentBookerId)) {
+      return true
+    }
+    return false
+  })
+
+  const selectedBookerId = computed(() => {
+    return (
+      formData.value.creadorId ||
+      loadedSession.value?.creadorId ||
+      currentUser.value?.id ||
+      ''
+    )
+  })
+
+  const bookerUser = computed<UserWithProfile | AuthUser | any | null>(() => {
+    const id = selectedBookerId.value
+    if (!id) return null
+    const fromList = bookers.value.find((b) => String(b.id) === String(id))
+    if (fromList) return fromList
+    const fromStore = userStore.usersWithProfile.find((u) => String(u.id) === String(id))
+    if (fromStore) return fromStore
+    if (currentUser.value && String(currentUser.value.id) === String(id)) {
+      return currentUser.value
     }
     return null
   })
@@ -532,10 +643,13 @@ export function usePhotoSessionForm() {
   const bookerRoleName = computed(() => {
     const user = bookerUser.value
     if (!user) return ''
+    if ('perfilNombre' in user && user.perfilNombre) {
+      return user.perfilNombre
+    }
     if ('perfil' in user && user.perfil?.name) {
       return user.perfil.name
     }
-    const profile = profileStore.getProfileById(user.profileId)
+    const profile = 'profileId' in user ? profileStore.getProfileById(user.profileId) : null
     if (profile?.name) {
       return profile.name
     }
@@ -544,6 +658,27 @@ export function usePhotoSessionForm() {
     }
     return ''
   })
+
+  const isBookerColored = computed(() => {
+    return !!(bookerUser.value?.color && bookerUser.value.color.trim())
+  })
+
+  const showBookersList = ref(false)
+
+  const toggleBookersList = () => {
+    if (!canEditAgendador.value || isReadOnly.value) return
+    showBookersList.value = !showBookersList.value
+  }
+
+  const selectBooker = (id: string) => {
+    if (!canEditAgendador.value || isReadOnly.value) return
+    formData.value.creadorId = id
+    showBookersList.value = false
+  }
+
+  const isCurrentSelectedBooker = (id: string) => {
+    return String(selectedBookerId.value) === String(id)
+  }
 
   // Obtener estado individual y disponibilidad para cada fotógrafo
   function getPhotographerStatus(photographerId: string | number) {
@@ -912,6 +1047,7 @@ export function usePhotoSessionForm() {
         formData.value = {
           hotelId: existing.hotelId,
           fotografoId: existing.fotografoId || '',
+          creadorId: existing.creadorId || '',
           clienteNombre: existing.clienteNombre,
           numeroHabitacion: existing.numeroHabitacion || '',
           clienteEmail: existing.clienteEmail || '',
@@ -940,6 +1076,8 @@ export function usePhotoSessionForm() {
       } else if (userHotels.value.length > 0) {
         formData.value.hotelId = userHotels.value[0]?.id ?? 0
       }
+
+      formData.value.creadorId = currentUser.value?.id || ''
 
       // Prefill start date/time only if explicitly provided with time in route query (e.g. from calendar slot click)
       const queryStart = route.query.start ? String(route.query.start) : ''
@@ -1040,6 +1178,7 @@ export function usePhotoSessionForm() {
           fechaSalida: formData.value.fechaSalida ? formData.value.fechaSalida : null,
           concepto: formData.value.concepto ? formData.value.concepto.trim() : null,
           fechaHoraInicio: formData.value.fechaHoraInicio,
+          creadorId: formData.value.creadorId || undefined,
           estado: formData.value.estado,
           notas: formData.value.notas ? formData.value.notas.trim() : null,
         })
@@ -1047,7 +1186,7 @@ export function usePhotoSessionForm() {
       } else {
         const created = await sessionStore.addSession({
           ...formData.value,
-          creadorId: currentUser.value?.id,
+          creadorId: formData.value.creadorId || currentUser.value?.id,
         })
         savedSessionId = created.id
         ElMessage.success(t('sessions.toasts.sessionCreated'))
@@ -1122,6 +1261,14 @@ export function usePhotoSessionForm() {
     bookerUser,
     bookerName,
     bookerRoleName,
+    isBookerColored,
+    bookers,
+    canEditAgendador,
+    canEditFotografo,
+    showBookersList,
+    toggleBookersList,
+    selectBooker,
+    isCurrentSelectedBooker,
     getPhotographerStatus,
     ausenciaFotografoActual,
     isFotografoAusente,

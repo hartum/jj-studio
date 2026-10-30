@@ -2,7 +2,7 @@
 import { ref, computed, watch, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { PhotoSessionFormContext } from '../composables/usePhotoSessionForm'
-import { ArrowLeft, Close, Message, Phone, Check } from '@element-plus/icons-vue'
+import { ArrowLeft, Close, Message, Phone, Check, Lock } from '@element-plus/icons-vue'
 import {
   User,
   Camera,
@@ -43,6 +43,14 @@ const {
   bookerUser,
   bookerName,
   bookerRoleName,
+  isBookerColored,
+  bookers,
+  canEditAgendador,
+  canEditFotografo,
+  showBookersList,
+  toggleBookersList,
+  selectBooker,
+  isCurrentSelectedBooker,
   isFotografoAusente,
   disponibilidadHotel,
   isTopeAlcanzado,
@@ -163,12 +171,12 @@ const showAllCitaVentaTimeSlots = ref(false)
 const showPhotographersList = ref(false)
 
 function togglePhotographersList() {
-  if (isReadOnly.value) return
+  if (!canEditFotografo.value || isReadOnly.value) return
   showPhotographersList.value = !showPhotographersList.value
 }
 
 function handleSelectPhotographer(id: string | number) {
-  if (isReadOnly.value) return
+  if (!canEditFotografo.value || isReadOnly.value) return
   if (getPhotographerStatus(id).disabled) return
   if (String(formData.value.fotografoId) === String(id)) {
     formData.value.fotografoId = ''
@@ -954,45 +962,9 @@ function handleSave() {
         </el-collapse-item>
       </el-collapse>
 
-      <!-- 3 Agendador Informativo -->
-      <div class="mobile-card-section-label mobile-card-section-label--booker">
-        <span class="step-badge-num">3</span>
-        <span>{{ $t('sessions.summary.booker') }}</span>
-      </div>
-
-      <div class="mobile-booker-info-card">
-        <div class="booker-card-main">
-          <div class="booker-avatar-circle">
-            <el-avatar
-              :src="bookerUser?.imagen || undefined"
-              :size="44"
-              :style="{
-                backgroundColor: bookerUser?.color
-                  ? getUserBgColor(bookerUser.color)
-                  : '#3b82f6',
-                color: '#ffffff',
-                fontWeight: '700',
-                fontSize: '14px',
-              }"
-              class="booker-avatar"
-            >
-              {{
-                bookerUser
-                  ? getUserInitials(bookerUser.nombre, bookerUser.apellidos)
-                  : '?'
-              }}
-            </el-avatar>
-          </div>
-          <div class="booker-info-box">
-            <span class="booker-title-label">{{ bookerName }}</span>
-            <span v-if="bookerRoleName" class="booker-subtitle-label">{{ bookerRoleName }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4 Elige fotógrafo -->
+      <!-- 3 Elige fotógrafo -->
       <div class="mobile-card-section-label mobile-card-section-label--photographer">
-        <span class="step-badge-num">4</span>
+        <span class="step-badge-num">3</span>
         <span>{{ $t('sessions.schedule.choosePhotographer') }}</span>
       </div>
 
@@ -1043,6 +1015,17 @@ function handleSave() {
             <span v-if="!selectedPhotographer" class="photographer-subtitle-label">
               {{ $t('sessions.summary.choosePhotographerDesc') }}
             </span>
+          </div>
+
+          <div v-if="!canEditFotografo" class="booker-lock-badge" style="margin-left: auto;">
+            <el-tooltip
+              :content="$t('sessions.schedule.photographerLockedTooltip')"
+              placement="top"
+            >
+              <el-icon class="booker-lock-icon text-white-subtle">
+                <Lock />
+              </el-icon>
+            </el-tooltip>
           </div>
 
           <el-button
@@ -1117,6 +1100,7 @@ function handleSave() {
 
         <!-- Barra toggle VER / OCULTAR FOTÓGRAFOS -->
         <div
+          v-if="canEditFotografo"
           class="photographer-toggle-bar"
           :class="{
             'is-open': showPhotographersList,
@@ -1135,7 +1119,7 @@ function handleSave() {
         </div>
 
         <!-- Lista colapsable de fotógrafos -->
-        <el-collapse-transition>
+        <el-collapse-transition v-if="canEditFotografo">
           <div v-if="showPhotographersList" class="photographer-dropdown-container">
             <div v-if="!formData.hotelId" class="photographer-empty-state">
               {{ $t('sessions.schedule.selectHotelFirst') }}
@@ -1189,6 +1173,151 @@ function handleSave() {
 
                 <div class="pick-item-tags">
                   <el-tag size="small" type="success" effect="light">{{ $t('sessions.schedule.photographerRole') }}</el-tag>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-collapse-transition>
+      </div>
+
+      <!-- 4 Agendador Informativo -->
+      <div class="mobile-card-section-label mobile-card-section-label--booker">
+        <span class="step-badge-num">4</span>
+        <span>{{ $t('sessions.summary.booker') }}</span>
+      </div>
+
+      <div
+        class="mobile-booker-info-card"
+        :class="{ 'is-booker-colored': isBookerColored }"
+        :style="
+          isBookerColored
+            ? { backgroundColor: getUserBgColor(bookerUser?.color) || '#3b82f6' }
+            : {}
+        "
+      >
+        <div class="booker-card-main">
+          <div class="booker-avatar-circle">
+            <el-avatar
+              :src="bookerUser?.imagen || undefined"
+              :size="44"
+              :style="{
+                backgroundColor: isBookerColored
+                  ? 'rgba(255, 255, 255, 0.25)'
+                  : (getUserBgColor(bookerUser?.color) || '#3b82f6'),
+                color: '#ffffff',
+                fontWeight: '700',
+                fontSize: '14px',
+              }"
+              :class="isBookerColored ? 'booker-avatar-colored' : 'booker-avatar'"
+            >
+              {{
+                bookerUser
+                  ? getUserInitials(bookerUser.nombre, bookerUser.apellidos)
+                  : '?'
+              }}
+            </el-avatar>
+          </div>
+          <div class="booker-info-box">
+            <span class="booker-title-label" :class="{ 'text-white': isBookerColored }">{{ bookerName }}</span>
+            <span
+              v-if="bookerRoleName"
+              class="booker-subtitle-label"
+              :class="{ 'text-white-subtle': isBookerColored }"
+            >
+              {{ bookerRoleName }}
+            </span>
+          </div>
+          <div v-if="!canEditAgendador" class="booker-lock-badge">
+            <el-tooltip
+              :content="$t('sessions.bookerPicker.cannotEditTooltip')"
+              placement="top"
+            >
+              <el-icon
+                class="booker-lock-icon"
+                :class="{ 'text-white-subtle': isBookerColored }"
+              >
+                <Lock />
+              </el-icon>
+            </el-tooltip>
+          </div>
+        </div>
+
+        <!-- Barra toggle VER AGENDADORES -->
+        <div
+          v-if="canEditAgendador"
+          class="booker-toggle-bar"
+          :class="{ 'is-open': showBookersList, 'is-selected-toggle': isBookerColored }"
+          role="button"
+          tabindex="0"
+          @click="toggleBookersList"
+        >
+          <span class="toggle-text">
+            {{
+              showBookersList
+                ? $t('sessions.bookerPicker.hideBookers')
+                : $t('sessions.bookerPicker.viewBookers')
+            }}
+          </span>
+          <el-icon class="toggle-icon" :class="{ 'is-rotated': showBookersList }">
+            <ChevronDown :size="18" />
+          </el-icon>
+        </div>
+
+        <!-- Lista colapsable de agendadores -->
+        <el-collapse-transition v-if="canEditAgendador">
+          <div v-if="showBookersList" class="booker-dropdown-container">
+            <div v-if="!formData.hotelId" class="booker-empty-state">
+              {{ $t('sessions.bookerPicker.selectHotelFirst') }}
+            </div>
+            <div v-else-if="bookers.length === 0" class="booker-empty-state">
+              {{ $t('sessions.bookerPicker.noBookersInHotel') }}
+            </div>
+            <div v-else class="booker-dropdown-list">
+              <div
+                v-for="b in bookers"
+                :key="b.id"
+                class="booker-pick-item"
+                :class="{
+                  'is-selected': isCurrentSelectedBooker(b.id),
+                }"
+                @click="selectBooker(b.id)"
+              >
+                <div class="pick-item-left">
+                  <el-avatar
+                    :src="b.imagen || undefined"
+                    :size="36"
+                    :style="{
+                      backgroundColor: getUserBgColor(b.color) || '#3b82f6',
+                      color: '#ffffff',
+                      fontWeight: '600',
+                      fontSize: '11px',
+                    }"
+                    class="pick-booker-avatar"
+                  >
+                    {{ getUserInitials(b.nombre, b.apellidos) }}
+                  </el-avatar>
+
+                  <div class="pick-item-info">
+                    <div class="pick-item-client">{{ b.nombre }} {{ b.apellidos }}</div>
+                    <div class="pick-item-meta">
+                      <el-tag
+                        size="small"
+                        :type="
+                          b.roleCode === 'SUPERVISOR' ||
+                          b.perfilNombre.toUpperCase().includes('SUPERVISOR')
+                            ? 'warning'
+                            : b.roleCode === 'AGENDADOR' ||
+                                b.perfilNombre.toUpperCase().includes('AGENDADOR')
+                              ? 'primary'
+                              : 'success'
+                        "
+                        effect="light"
+                        class="booker-role-tag"
+                      >
+                        {{ b.perfilNombre }}
+                      </el-tag>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2059,6 +2188,15 @@ html.dark
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.mobile-booker-info-card.is-booker-colored {
+  border: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  color: #ffffff;
 }
 
 .mobile-booker-info-card .booker-card-main {
@@ -2080,6 +2218,11 @@ html.dark
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
+.mobile-booker-info-card .booker-avatar-colored {
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
 .mobile-booker-info-card .booker-info-box {
   display: flex;
   flex-direction: column;
@@ -2096,10 +2239,121 @@ html.dark
   text-overflow: ellipsis;
 }
 
+.mobile-booker-info-card .booker-title-label.text-white {
+  color: #ffffff !important;
+}
+
 .mobile-booker-info-card .booker-subtitle-label {
   font-size: 0.78rem;
   color: var(--nav-link-color, #64748b);
   margin-top: 0.15rem;
+}
+
+.mobile-booker-info-card .booker-subtitle-label.text-white-subtle {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.mobile-booker-info-card .booker-lock-badge {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nav-link-color, #94a3b8);
+  font-size: 1.1rem;
+}
+
+.mobile-booker-info-card .booker-lock-icon.text-white-subtle {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.mobile-booker-info-card .booker-toggle-bar {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--toolbar-border, #f1f5f9);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(0, 0, 0, 0.02);
+  transition: background 0.15s ease;
+}
+
+.mobile-booker-info-card .booker-toggle-bar:active {
+  background: var(--el-fill-color-light, #f8fafc);
+}
+
+.mobile-booker-info-card .booker-toggle-bar.is-selected-toggle {
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.mobile-booker-info-card .booker-toggle-bar.is-selected-toggle .toggle-text,
+.mobile-booker-info-card .booker-toggle-bar.is-selected-toggle .toggle-icon {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.mobile-booker-info-card .booker-dropdown-container {
+  padding: 0.75rem 0.85rem;
+  background: var(--toolbar-bg, #ffffff);
+  border-top: 1px solid var(--toolbar-border, #e2e8f0);
+}
+
+.mobile-booker-info-card .booker-empty-state {
+  text-align: center;
+  padding: 1rem;
+  color: var(--nav-link-color, #64748b);
+  font-size: 0.85rem;
+}
+
+.mobile-booker-info-card .booker-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.mobile-booker-info-card .booker-pick-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.mobile-booker-info-card .booker-pick-item:hover,
+.mobile-booker-info-card .booker-pick-item:active {
+  background: rgba(64, 158, 255, 0.08);
+}
+
+.mobile-booker-info-card .booker-pick-item.is-selected {
+  background: rgba(64, 158, 255, 0.12);
+  border-color: rgba(64, 158, 255, 0.35);
+}
+
+.mobile-booker-info-card .pick-booker-avatar {
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-booker-info-card .booker-role-tag {
+  font-weight: 600;
+  font-size: 0.72rem;
+}
+
+html.dark .mobile-booker-info-card .booker-toggle-bar {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--toolbar-border, #363637);
+}
+
+html.dark .mobile-booker-info-card .booker-dropdown-container {
+  background: var(--toolbar-bg, #1d1e1f);
+  border-color: var(--toolbar-border, #363637);
 }
 
 /* Card Selector de Fotógrafos Desplegable */

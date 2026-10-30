@@ -510,6 +510,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
       const body = request.body as {
         hotelId?: number
         fotografoId?: string | null
+        creadorId?: string | null
         clienteNombre?: string
         clienteEmail?: string
         clienteTelefono?: string
@@ -556,20 +557,59 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         }
       } else {
         // 2. If session in DB is PROGRAMADA and already has an assigned photographer:
-        // Only assigned photographer, supervisor, gerente, admin, and superusuario can edit.
-        // Other photographers, agendadores, and unauthorized profiles cannot edit.
+        // Assigned photographer, current agendador (creadorId), supervisor, gerente, admin, and superusuario can edit.
+        // Other photographers and unauthorized profiles cannot edit.
         if (existing.fotografoId) {
           if (!userId) {
             return reply.status(403).send({ error: 'No autorizado para editar esta sesión' })
           }
           const isAssignedFotografo = userId === existing.fotografoId
+          const isCurrentAgendador = String(userId) === String(existing.creadorId)
           const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(userRole || '')
-          if (!isAssignedFotografo && !isPrivileged) {
+          if (!isAssignedFotografo && !isCurrentAgendador && !isPrivileged) {
             return reply.status(403).send({
               error:
-                'Esta sesión ya tiene un fotógrafo asignado. Solo el fotógrafo asignado, supervisores, gerentes o administradores pueden editarla.',
+                'Esta sesión ya tiene un fotógrafo asignado. Solo el fotógrafo asignado, el agendador o supervisores/administradores pueden editarla.',
             })
           }
+        }
+      }
+
+      // Verificación de blindaje del fotógrafo asignado:
+      // Si la sesión ya tiene un fotógrafo asignado y se intenta cambiar o desasignar:
+      // Solo el fotógrafo asignado actual o supervisores/gerentes/administradores pueden cambiarlo.
+      if (
+        body.fotografoId !== undefined &&
+        body.fotografoId !== existing.fotografoId &&
+        existing.fotografoId
+      ) {
+        if (!userId) {
+          return reply.status(403).send({ error: 'No autorizado para cambiar el fotógrafo asignado' })
+        }
+        const isAssignedFotografo = userId === existing.fotografoId
+        const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO'].includes(userRole || '')
+        if (!isAssignedFotografo && !isPrivileged) {
+          return reply.status(403).send({
+            error:
+              'Solo el fotógrafo asignado o un supervisor/administrador pueden cambiar o desasignar al fotógrafo.',
+          })
+        }
+      }
+
+      // Verificación de permisos para editar el agendador (creadorId):
+      // 1. Si es SUPERUSUARIO, ADMIN, CONTABLE o GERENTE: puede editar siempre al agendador.
+      // 2. Si es FOTOGRAFO, SUPERVISOR o AGENDADOR: solo puede editarlo si el agendador actual es él mismo.
+      if (body.creadorId && body.creadorId !== existing.creadorId) {
+        if (!userId) {
+          return reply.status(403).send({ error: 'No autorizado para editar el agendador' })
+        }
+        const isPrivileged = ['GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(userRole || '')
+        const isCurrentAgendador = String(userId) === String(existing.creadorId)
+        if (!isPrivileged && !isCurrentAgendador) {
+          return reply.status(403).send({
+            error:
+              'Solo el agendador actual o administradores/gerentes pueden transferir la autoría del agendador.',
+          })
         }
       }
 
@@ -634,6 +674,7 @@ export async function sessionRoutes(fastify: FastifyInstance) {
           ...(body.fotografoId !== undefined && {
             fotografoId: body.fotografoId ? body.fotografoId : null,
           }),
+          ...(body.creadorId ? { creadorId: body.creadorId } : {}),
           ...(body.clienteNombre && { clienteNombre: encrypt(body.clienteNombre.trim()) || '' }),
           ...(body.clienteEmail !== undefined && {
             clienteEmail: body.clienteEmail ? encrypt(body.clienteEmail.trim()) : null,
@@ -703,6 +744,16 @@ export async function sessionRoutes(fastify: FastifyInstance) {
       if (existing.notas !== actualizada.notas) {
         metadatos.notasAnteriores = existing.notas || ''
         metadatos.notasNuevas = actualizada.notas || ''
+      }
+
+      if (body.creadorId && body.creadorId !== existing.creadorId) {
+        const existCreador = existing.creador ? decryptUser(existing.creador) : null
+        const existCreadorNombre = existCreador ? `${existCreador.nombre} ${existCreador.apellidos}`.trim() : existing.creadorId
+        const nuevoCreadorUser = await prisma.usuario.findUnique({ where: { id: body.creadorId } })
+        const nuevoCreadorDec = nuevoCreadorUser ? decryptUser(nuevoCreadorUser) : null
+        const nuevoCreadorNombre = nuevoCreadorDec ? `${nuevoCreadorDec.nombre} ${nuevoCreadorDec.apellidos}`.trim() : body.creadorId
+        metadatos.agendadorAnterior = existCreadorNombre
+        metadatos.agendadorNuevo = nuevoCreadorNombre
       }
 
       registrarAudit({

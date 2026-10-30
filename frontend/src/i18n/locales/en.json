@@ -453,6 +453,7 @@
       "availableSchedule": "Available time slots",
       "stepPhotographer": "AVAILABLE PHOTOGRAPHER",
       "choosePhotographer": "Choose photographer",
+      "photographerLockedTooltip": "Only the assigned photographer or a supervisor/admin can change the assigned photographer.",
       "selectHotelFirst": "Select a hotel first to check availability.",
       "noPhotographersInHotel": "No active photographers in this hotel.",
       "selected": "Selected",
@@ -507,6 +508,15 @@
       "completedShort": "Completed",
       "cancelledShort": "Cancelled",
       "noShowShort": "No show"
+    },
+    "bookerPicker": {
+      "selectBooker": "Select booker",
+      "hideBookers": "HIDE BOOKERS",
+      "viewBookers": "VIEW BOOKERS",
+      "selectSessionFirst": "Select a session first to view its bookers.",
+      "selectHotelFirst": "Select a session first to view its bookers.",
+      "noBookersInHotel": "No bookers, photographers, or supervisors assigned to this hotel.",
+      "cannotEditTooltip": "Only the current booker or managers can edit this field."
     },
     "summary": {
       "booker": "BOOKER",
@@ -642,6 +652,7 @@
       "viewSellers": "VIEW SELLERS",
       "selectSessionFirst": "Select a photo session first to view sellers for that hotel.",
       "noSellersInHotel": "No sellers or photographers assigned to this hotel.",
+      "cannotEditTooltip": "Only the assigned seller or a supervisor/admin can change the assigned seller.",
       "statusChooseDateTime": "Choose date & time",
       "statusAvailable": "Available",
       "statusAbsent": "Absent{motivo}",
@@ -652,7 +663,8 @@
       "selectPhotographer": "Select photographer",
       "hidePhotographers": "HIDE PHOTOGRAPHERS",
       "viewPhotographers": "VIEW PHOTOGRAPHERS",
-      "noPhotographersInHotel": "No photographers assigned to this hotel."
+      "noPhotographersInHotel": "No photographers assigned to this hotel.",
+      "cannotEditTooltip": "Only the assigned photographer or a supervisor/admin can change the assigned photographer."
     },
     "form": {
       "photosSold": "Photos Sold",
@@ -686,6 +698,15 @@
       "completed": "Completed",
       "cancelled": "Cancelled",
       "noShow": "No show"
+    },
+    "bookerPicker": {
+      "selectBooker": "Select booker",
+      "hideBookers": "HIDE BOOKERS",
+      "viewBookers": "VIEW BOOKERS",
+      "selectSessionFirst": "Select a session first to view its bookers.",
+      "selectHotelFirst": "Select a session first to view its bookers.",
+      "noBookersInHotel": "No bookers, photographers, or supervisors assigned to this hotel.",
+      "cannotEditTooltip": "Only the current booker or managers can edit this field."
     },
     "summary": {
       "hotel": "Hotel:",

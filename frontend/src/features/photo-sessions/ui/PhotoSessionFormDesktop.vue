@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { PhotoSessionFormContext } from '../composables/usePhotoSessionForm'
-import { User, Message, Phone, Check, ArrowLeft, Close, Edit } from '@element-plus/icons-vue'
+import { User, Message, Phone, Check, ArrowLeft, Close, Edit, Lock } from '@element-plus/icons-vue'
 import {
   Building2,
   PlaneTakeoff,
@@ -12,6 +12,7 @@ import {
   Balloon,
   Sparkles,
   Gem,
+  ChevronDown,
 } from '@lucide/vue'
 
 import { useLocale } from '@/i18n/useLocale'
@@ -57,6 +58,14 @@ const {
   bookerUser,
   bookerName,
   bookerRoleName,
+  isBookerColored,
+  bookers,
+  canEditAgendador,
+  canEditFotografo,
+  showBookersList,
+  toggleBookersList,
+  selectBooker,
+  isCurrentSelectedBooker,
   getPhotographerStatus,
   ausenciaFotografoActual,
   isFotografoAusente,
@@ -679,9 +688,10 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
                             class="photographer-selection-card"
                             :class="{
                               selected: String(formData.fotografoId) === String(photographer.id),
-                              disabled: getPhotographerStatus(photographer.id).disabled,
+                              disabled: !canEditFotografo || getPhotographerStatus(photographer.id).disabled,
                             }"
                             @click="
+                              canEditFotografo &&
                               !getPhotographerStatus(photographer.id).disabled &&
                               selectPhotographerCard(photographer.id)
                             "
@@ -964,37 +974,7 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
 
       <!-- Columna Derecha: Sidebar con Información de la Sesión y Estado -->
       <div class="form-sidebar-col">
-        <!-- 1. Tarjeta Informativa de Agendador (Antes del Fotógrafo) -->
-        <div class="booker-summary-card">
-          <div class="booker-card-main">
-            <el-avatar
-              :src="bookerUser?.imagen || undefined"
-              :size="42"
-              :style="{
-                backgroundColor: bookerUser?.color
-                  ? getUserBgColor(bookerUser.color)
-                  : '#3b82f6',
-                color: '#ffffff',
-                fontWeight: '700',
-                fontSize: '14px',
-              }"
-              class="booker-avatar"
-            >
-              {{
-                bookerUser
-                  ? getUserInitials(bookerUser.nombre, bookerUser.apellidos)
-                  : '?'
-              }}
-            </el-avatar>
-            <div class="booker-meta">
-              <span class="booker-label">{{ $t('sessions.summary.booker') }}</span>
-              <span class="booker-name">{{ bookerName }}</span>
-              <span v-if="bookerRoleName" class="booker-role">{{ bookerRoleName }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. Tarjeta Resumen / Info de la Sesión -->
+        <!-- 1. Tarjeta Resumen / Info de la Sesión -->
         <div class="appointment-summary-card" :style="appointmentSummaryCardStyle">
           <div class="summary-photographer-row">
             <el-avatar
@@ -1022,6 +1002,17 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
               <span class="summary-photographer-name">
                 {{ selectedPhotographerName || $t('sessions.summary.unassigned') }}
               </span>
+            </div>
+
+            <div v-if="!canEditFotografo" class="booker-lock-badge" style="margin-left: auto;">
+              <el-tooltip
+                :content="$t('sessions.schedule.photographerLockedTooltip')"
+                placement="top"
+              >
+                <el-icon class="booker-lock-icon text-white-subtle">
+                  <Lock />
+                </el-icon>
+              </el-tooltip>
             </div>
 
             <el-button
@@ -1063,7 +1054,155 @@ function getCitaVentaTimeSlotStatusClass(time: string): string {
           </div>
         </div>
 
-        <!-- 2. Tarjeta de Estado de Sesión -->
+        <!-- 2. Selector de Agendador Estilo Card (Desktop) -->
+        <div
+          class="desktop-booker-selector-card"
+          :class="{ 'is-booker-colored': isBookerColored }"
+          :style="
+            isBookerColored
+              ? { backgroundColor: getUserBgColor(bookerUser?.color) || '#3b82f6' }
+              : {}
+          "
+        >
+          <div class="booker-card-main">
+            <div class="booker-avatar-circle">
+              <el-avatar
+                v-if="bookerUser"
+                :src="bookerUser.imagen || undefined"
+                :size="44"
+                :style="{
+                  backgroundColor: isBookerColored
+                    ? 'rgba(255, 255, 255, 0.25)'
+                    : (getUserBgColor(bookerUser.color) || '#3b82f6'),
+                  color: '#ffffff',
+                  fontWeight: '600',
+                  fontSize: '13px',
+                }"
+                :class="isBookerColored ? 'booker-header-avatar-colored' : 'booker-header-avatar'"
+              >
+                {{ getUserInitials(bookerUser.nombre, bookerUser.apellidos) }}
+              </el-avatar>
+              <div v-else class="booker-default-circle">
+                <el-icon :size="22"><User /></el-icon>
+              </div>
+            </div>
+            <div class="booker-info-box">
+              <span
+                class="booker-subtitle-label"
+                :class="{ 'text-white-subtle': isBookerColored }"
+              >
+                {{ $t('sessions.summary.booker') }}
+              </span>
+              <span class="booker-title-label" :class="{ 'text-white': isBookerColored }">
+                {{ bookerName }}
+              </span>
+              <span
+                v-if="bookerRoleName"
+                class="booker-role-desc"
+                :class="{ 'text-white-subtle': isBookerColored }"
+              >
+                {{ bookerRoleName }}
+              </span>
+            </div>
+            <div v-if="!canEditAgendador" class="booker-lock-badge">
+              <el-tooltip
+                :content="$t('sessions.bookerPicker.cannotEditTooltip')"
+                placement="top"
+              >
+                <el-icon
+                  class="booker-lock-icon"
+                  :class="{ 'text-white-subtle': isBookerColored }"
+                >
+                  <Lock />
+                </el-icon>
+              </el-tooltip>
+            </div>
+          </div>
+
+          <!-- Barra toggle VER AGENDADORES -->
+          <div
+            v-if="canEditAgendador"
+            class="booker-toggle-bar"
+            :class="{ 'is-open': showBookersList, 'is-selected-toggle': isBookerColored }"
+            role="button"
+            tabindex="0"
+            @click="toggleBookersList"
+          >
+            <span class="toggle-text">
+              {{
+                showBookersList
+                  ? $t('sessions.bookerPicker.hideBookers')
+                  : $t('sessions.bookerPicker.viewBookers')
+              }}
+            </span>
+            <el-icon class="toggle-icon" :class="{ 'is-rotated': showBookersList }">
+              <ChevronDown :size="18" />
+            </el-icon>
+          </div>
+
+          <!-- Lista colapsable de agendadores -->
+          <el-collapse-transition v-if="canEditAgendador">
+            <div v-if="showBookersList" class="booker-dropdown-container">
+              <div v-if="!formData.hotelId" class="booker-empty-state">
+                {{ $t('sessions.bookerPicker.selectHotelFirst') }}
+              </div>
+              <div v-else-if="bookers.length === 0" class="booker-empty-state">
+                {{ $t('sessions.bookerPicker.noBookersInHotel') }}
+              </div>
+              <div v-else class="booker-dropdown-list">
+                <div
+                  v-for="b in bookers"
+                  :key="b.id"
+                  class="booker-pick-item"
+                  :class="{
+                    'is-selected': isCurrentSelectedBooker(b.id),
+                  }"
+                  @click="selectBooker(b.id)"
+                >
+                  <div class="pick-item-left">
+                    <el-avatar
+                      :src="b.imagen || undefined"
+                      :size="36"
+                      :style="{
+                        backgroundColor: getUserBgColor(b.color) || '#3b82f6',
+                        color: '#ffffff',
+                        fontWeight: '600',
+                        fontSize: '11px',
+                      }"
+                      class="pick-booker-avatar"
+                    >
+                      {{ getUserInitials(b.nombre, b.apellidos) }}
+                    </el-avatar>
+
+                    <div class="pick-item-info">
+                      <div class="pick-item-client">{{ b.nombre }} {{ b.apellidos }}</div>
+                      <div class="pick-item-meta">
+                        <el-tag
+                          size="small"
+                          :type="
+                            b.roleCode === 'SUPERVISOR' ||
+                            b.perfilNombre.toUpperCase().includes('SUPERVISOR')
+                              ? 'warning'
+                              : b.roleCode === 'AGENDADOR' ||
+                                  b.perfilNombre.toUpperCase().includes('AGENDADOR')
+                                ? 'primary'
+                                : 'success'
+                          "
+                          effect="light"
+                          class="booker-role-tag"
+                        >
+                          {{ b.perfilNombre }}
+                        </el-tag>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </el-collapse-transition>
+        </div>
+
+        <!-- 3. Tarjeta de Estado de Sesión -->
         <el-card class="status-card" shadow="never">
           <div class="status-card-header">
             <span class="status-card-title">{{ $t('sessions.status.sessionStatus') }}</span>
@@ -1846,47 +1985,80 @@ html.dark .status-grid-btn:hover:not(:disabled):not(.is-active) {
   background: rgba(59, 130, 246, 0.1);
 }
 
-/* Booker Summary Card in Sidebar */
-.booker-summary-card {
+/* Desktop Booker Selector Card in Sidebar */
+.desktop-booker-selector-card {
   background: var(--toolbar-bg, #ffffff);
   border: 1px solid var(--toolbar-border, #e2e8f0);
-  border-radius: 12px;
-  padding: 0.95rem 1.15rem;
+  border-radius: 14px;
+  overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  transition:
-    background-color 0.25s ease,
-    border-color 0.25s ease;
+  transition: all 0.3s ease;
 }
 
-.booker-card-main {
+.desktop-booker-selector-card.is-booker-colored {
+  border: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  color: #ffffff;
+}
+
+.desktop-booker-selector-card .booker-card-main {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 0.95rem;
+  padding: 1.15rem 1.25rem;
 }
 
-.booker-avatar {
+.booker-avatar-circle {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.booker-default-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nav-link-color, #64748b);
+  border: 1px dashed var(--toolbar-border, #cbd5e1);
+}
+
+.booker-header-avatar {
   border: 2px solid rgba(255, 255, 255, 0.85);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-.booker-meta {
+.booker-header-avatar-colored {
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.booker-info-box {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
   min-width: 0;
+  flex: 1;
 }
 
-.booker-label {
-  font-size: 0.68rem;
+.booker-subtitle-label {
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  color: var(--nav-link-color, #64748b);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: var(--nav-link-color, #64748b);
+  margin-bottom: 0.2rem;
 }
 
-.booker-name {
-  font-size: 1rem;
+.booker-subtitle-label.text-white-subtle {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.booker-title-label {
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--heading-color, #0f172a);
   white-space: nowrap;
@@ -1894,10 +2066,174 @@ html.dark .status-grid-btn:hover:not(:disabled):not(.is-active) {
   text-overflow: ellipsis;
 }
 
-.booker-role {
+.booker-title-label.text-white {
+  color: #ffffff !important;
+}
+
+.booker-role-desc {
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--nav-link-color, #64748b);
+  margin-top: 0.1rem;
+}
+
+.booker-role-desc.text-white-subtle {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.booker-lock-badge {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nav-link-color, #94a3b8);
+  font-size: 1.1rem;
+}
+
+.booker-lock-icon.text-white-subtle {
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+.booker-toggle-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1.25rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-top: 1px solid var(--toolbar-border, #e2e8f0);
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--nav-link-color, #64748b);
+  transition: all 0.2s ease;
+}
+
+.booker-toggle-bar:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--heading-color, #0f172a);
+}
+
+.booker-toggle-bar.is-selected-toggle {
+  background: rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.booker-toggle-bar.is-selected-toggle .toggle-text,
+.booker-toggle-bar.is-selected-toggle .toggle-icon {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.booker-dropdown-container {
+  padding: 0.85rem;
+  background: var(--toolbar-bg, #ffffff);
+  border-top: 1px solid var(--toolbar-border, #e2e8f0);
+}
+
+.booker-empty-state {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  color: var(--nav-link-color, #64748b);
+  font-size: 0.85rem;
+}
+
+.booker-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.booker-pick-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.booker-pick-item:hover {
+  background: rgba(64, 158, 255, 0.08);
+}
+
+.booker-pick-item.is-selected {
+  background: rgba(64, 158, 255, 0.12);
+  border-color: rgba(64, 158, 255, 0.35);
+}
+
+.pick-booker-avatar {
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.pick-item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.pick-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.pick-item-client {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--heading-color, #0f172a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pick-item-meta {
+  font-size: 0.75rem;
+  color: var(--nav-link-color, #64748b);
+  margin-top: 2px;
+}
+
+.booker-role-tag {
+  font-weight: 600;
+  font-size: 0.72rem;
+}
+
+html.dark .desktop-booker-selector-card {
+  background: var(--toolbar-bg, #1d1e1f);
+  border-color: var(--toolbar-border, #363637);
+}
+
+html.dark .booker-toggle-bar {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--toolbar-border, #363637);
+}
+
+html.dark .booker-toggle-bar:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .booker-dropdown-container {
+  background: var(--toolbar-bg, #1d1e1f);
+  border-color: var(--toolbar-border, #363637);
+}
+
+html.dark .booker-pick-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .booker-pick-item.is-selected {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
 }
 
 /* Appointment Summary Card in Sidebar */

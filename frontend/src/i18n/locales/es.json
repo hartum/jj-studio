@@ -453,6 +453,7 @@
       "availableSchedule": "Horario disponible",
       "stepPhotographer": "FOTÓGRAFO DISPONIBLE",
       "choosePhotographer": "Elige fotógrafo",
+      "photographerLockedTooltip": "Solo el fotógrafo asignado o un supervisor/administrador pueden cambiar el fotógrafo asignado.",
       "selectHotelFirst": "Selecciona un hotel primero para consultar disponibilidad.",
       "noPhotographersInHotel": "No hay fotógrafos activos en este hotel.",
       "selected": "Seleccionado",
@@ -507,6 +508,15 @@
       "completedShort": "Completada",
       "cancelledShort": "Cancelada",
       "noShowShort": "No vino"
+    },
+    "bookerPicker": {
+      "selectBooker": "Selecciona agendador",
+      "hideBookers": "OCULTAR AGENDADORES",
+      "viewBookers": "VER AGENDADORES",
+      "selectSessionFirst": "Selecciona primero una sesión para ver los agendadores.",
+      "selectHotelFirst": "Selecciona primero una sesión para ver los agendadores.",
+      "noBookersInHotel": "No hay agendadores, fotógrafos o supervisores asignados a este hotel.",
+      "cannotEditTooltip": "Solo el agendador actual o administradores/gerentes pueden transferir la autoría del agendador."
     },
     "summary": {
       "booker": "AGENDADOR",
@@ -642,6 +652,7 @@
       "viewSellers": "VER VENDEDORES",
       "selectSessionFirst": "Selecciona primero una sesión de fotos para ver los vendedores de su hotel.",
       "noSellersInHotel": "No hay agendadores o fotógrafos asignados a este hotel.",
+      "cannotEditTooltip": "Solo el vendedor asignado o un supervisor/administrador pueden cambiar el vendedor asignado.",
       "statusChooseDateTime": "Elige fecha y hora",
       "statusAvailable": "Disponible",
       "statusAbsent": "Ausente{motivo}",
@@ -652,7 +663,8 @@
       "selectPhotographer": "Selecciona fotógrafo",
       "hidePhotographers": "OCULTAR FOTÓGRAFOS",
       "viewPhotographers": "VER FOTÓGRAFOS",
-      "noPhotographersInHotel": "No hay fotógrafos asignados a este hotel."
+      "noPhotographersInHotel": "No hay fotógrafos asignados a este hotel.",
+      "cannotEditTooltip": "Solo el fotógrafo asignado o un supervisor/administrador pueden cambiar el fotógrafo asignado."
     },
     "form": {
       "photosSold": "Fotos Vendidas",
@@ -686,6 +698,15 @@
       "completed": "Completada",
       "cancelled": "Cancelada",
       "noShow": "No vino"
+    },
+    "bookerPicker": {
+      "selectBooker": "Selecciona agendador",
+      "hideBookers": "OCULTAR AGENDADORES",
+      "viewBookers": "VER AGENDADORES",
+      "selectSessionFirst": "Selecciona primero una sesión para ver los agendadores.",
+      "selectHotelFirst": "Selecciona primero una sesión para ver los agendadores.",
+      "noBookersInHotel": "No hay agendadores, fotógrafos o supervisores asignados a este hotel.",
+      "cannotEditTooltip": "Solo el agendador actual o administradores/gerentes pueden transferir la autoría del agendador."
     },
     "summary": {
       "hotel": "Hotel:",

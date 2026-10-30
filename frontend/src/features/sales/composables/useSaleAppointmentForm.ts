@@ -30,6 +30,7 @@ export interface SaleAppointmentFormData {
   hotelId: number
   vendedorId: string | null
   fotografoId?: string | null
+  agendadorId?: string | null
   fechaHoraCita: string
   estado: EstadoCitaVenta
   numFotosVendidas: number | null
@@ -46,6 +47,7 @@ export interface SessionContextInfo {
   clienteTelefono: string
   numeroHabitacion: string
   fotografoId: string
+  creadorId?: string
   numAdultos: number
   numNinos: number
   concepto: string
@@ -113,6 +115,7 @@ export function useSaleAppointmentForm() {
     hotelId: 0,
     vendedorId: null,
     fotografoId: null,
+    agendadorId: null,
     fechaHoraCita: '',
     estado: 'PROGRAMADA',
     numFotosVendidas: null,
@@ -161,12 +164,13 @@ export function useSaleAppointmentForm() {
 
   // Lock due to assigned photographer/seller:
   // Once a session/appointment has an assigned photographer or seller, only the
-  // assigned photographer, assigned seller, supervisor, gerente, admin, and superusuario can edit it.
+  // assigned photographer, assigned seller, current agendador, supervisor, gerente, admin, and superusuario can edit it.
   const isLockedByPhotographer = computed(() => {
     if (!isEditing.value || !loadedCita.value) return false
     if (loadedCita.value.estado !== 'PROGRAMADA') return false
     const fotografoId = loadedCita.value.fotografoId || sessionInfo.value.fotografoId
     const vendedorId = loadedCita.value.vendedorId || formData.value.vendedorId
+    const agendadorId = loadedCita.value.agendadorId || sessionInfo.value.creadorId
     if (!fotografoId && !vendedorId) return false
     const role = currentUser.value?.roleCode?.toUpperCase() || ''
     const currentUserId = currentUser.value?.id
@@ -176,8 +180,11 @@ export function useSaleAppointmentForm() {
     const isAssignedVendedor = Boolean(
       vendedorId && String(vendedorId) === String(currentUserId),
     )
+    const isCurrentAgendador = Boolean(
+      agendadorId && String(agendadorId) === String(currentUserId),
+    )
     const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role)
-    return !isAssignedFotografo && !isAssignedVendedor && !isPrivileged
+    return !isAssignedFotografo && !isAssignedVendedor && !isCurrentAgendador && !isPrivileged
   })
 
   // Role-based edit lock
@@ -335,30 +342,140 @@ export function useSaleAppointmentForm() {
     return sellers.value.find((s) => String(s.id) === String(formData.value.vendedorId)) || null
   })
 
-  // Agendador de la sesión asociada / creador
-  const bookerUser = computed<UserWithProfile | AuthUser | null>(() => {
-    if (formData.value.sesionId) {
-      const session = sessionStore.sessions.find(
-        (s) => Number(s.id) === Number(formData.value.sesionId),
-      )
-      if (session?.creadorId) {
-        const found = userStore.usersWithProfile.find(
-          (u) => String(u.id) === String(session.creadorId),
-        )
-        if (found) return found
+  // Lista de agendadores disponibles para este hotel (Fotógrafos, Agendadores, Supervisores)
+  const bookers = computed(() => {
+    const selectedHotelId = Number(formData.value.hotelId)
+    if (!selectedHotelId) return []
+
+    const list: Array<{
+      id: string
+      nombre: string
+      apellidos: string
+      imagen?: string | null
+      color?: string | null
+      perfilNombre: string
+      roleCode: string
+    }> = []
+    const seenIds = new Set<string>()
+
+    const candidates = userStore.usersWithProfile.filter((u) => {
+      if (u.status === 'Inactivo') return false
+      const perfilCode =
+        u.perfil?.code?.toUpperCase() ||
+        profileStore.getProfileById(u.profileId)?.code?.toUpperCase()
+      const isAllowedRole = ['AGENDADOR', 'FOTOGRAFO', 'SUPERVISOR'].includes(perfilCode || '')
+      if (!isAllowedRole) return false
+      const assignedHotelIds = u.hotelIds || []
+      return assignedHotelIds.some((hId) => Number(hId) === selectedHotelId)
+    })
+
+    for (const u of candidates) {
+      seenIds.add(String(u.id))
+      const perfil = u.perfil || profileStore.getProfileById(u.profileId)
+      list.push({
+        id: String(u.id),
+        nombre: u.nombre,
+        apellidos: u.apellidos,
+        imagen: u.imagen,
+        color: u.color,
+        perfilNombre: perfil?.name || '',
+        roleCode: perfil?.code?.toUpperCase() || '',
+      })
+    }
+
+    // Always include current agendador or currentUser if not in list
+    const currentBookerId =
+      formData.value.agendadorId ||
+      loadedCita.value?.agendadorId ||
+      sessionInfo.value.creadorId ||
+      currentUser.value?.id
+    if (currentBookerId && !seenIds.has(String(currentBookerId))) {
+      const u = userStore.usersWithProfile.find((x) => String(x.id) === String(currentBookerId))
+      if (u) {
+        const perfil = u.perfil || profileStore.getProfileById(u.profileId)
+        list.push({
+          id: String(u.id),
+          nombre: u.nombre,
+          apellidos: u.apellidos,
+          imagen: u.imagen,
+          color: u.color,
+          perfilNombre: perfil?.name || '',
+          roleCode: perfil?.code?.toUpperCase() || '',
+        })
+      } else if (currentUser.value && String(currentUser.value.id) === String(currentBookerId)) {
+        list.push({
+          id: String(currentUser.value.id),
+          nombre: currentUser.value.nombre,
+          apellidos: currentUser.value.apellidos,
+          imagen: currentUser.value.imagen,
+          color: currentUser.value.color,
+          perfilNombre: currentUser.value.roleName || '',
+          roleCode: currentUser.value.roleCode?.toUpperCase() || '',
+        })
       }
     }
-    if (formData.value.vendedorId) {
-      const found = userStore.usersWithProfile.find(
-        (u) => String(u.id) === String(formData.value.vendedorId),
-      )
-      if (found) return found
+
+    return list
+  })
+
+  // Permisos para editar agendador en cita de ventas:
+  // 1. Superadmin, admin, contable o gerente siempre pueden editar el agendador.
+  // 2. Fotógrafo, supervisor o agendador solo pueden si el agendador actual es él mismo.
+  const canEditAgendador = computed(() => {
+    if (isReadOnly.value) return false
+    const role = currentUser.value?.roleCode?.toUpperCase() || ''
+    if (['SUPERUSUARIO', 'ADMIN', 'CONTABLE', 'GERENTE'].includes(role)) {
+      return true
     }
-    if (isDirectSale.value && currentUser.value) {
-      const foundCurrent = userStore.usersWithProfile.find(
-        (u) => String(u.id) === String(currentUser.value?.id),
-      )
-      return foundCurrent || currentUser.value
+    const currentUserId = currentUser.value?.id
+    const currentBookerId =
+      formData.value.agendadorId ||
+      loadedCita.value?.agendadorId ||
+      sessionInfo.value.creadorId
+    if (currentUserId && currentBookerId && String(currentUserId) === String(currentBookerId)) {
+      return true
+    }
+    return false
+  })
+
+  // Permiso para cambiar o desasignar el fotógrafo / sesión asociada:
+  const canEditFotografo = computed(() => {
+    if (isReadOnly.value) return false
+    const existingFotografoId = loadedCita.value?.fotografoId || sessionInfo.value.fotografoId
+    if (!isEditing.value || !existingFotografoId) return true
+    const role = currentUser.value?.roleCode?.toUpperCase() || ''
+    if (['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role)) return true
+    return String(existingFotografoId) === String(currentUser.value?.id)
+  })
+
+  // Permiso para cambiar o desasignar el vendedor asignado:
+  const canEditVendedor = computed(() => {
+    if (isReadOnly.value) return false
+    const existingVendedorId = loadedCita.value?.vendedorId
+    if (!isEditing.value || !existingVendedorId) return true
+    const role = currentUser.value?.roleCode?.toUpperCase() || ''
+    if (['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role)) return true
+    return String(existingVendedorId) === String(currentUser.value?.id)
+  })
+
+  const selectedBookerId = computed(() => {
+    return (
+      formData.value.agendadorId ||
+      loadedCita.value?.agendadorId ||
+      sessionInfo.value.creadorId ||
+      ''
+    )
+  })
+
+  const bookerUser = computed<any>(() => {
+    const id = selectedBookerId.value
+    if (!id) return null
+    const fromList = bookers.value.find((b) => String(b.id) === String(id))
+    if (fromList) return fromList
+    const fromStore = userStore.usersWithProfile.find((u) => String(u.id) === String(id))
+    if (fromStore) return fromStore
+    if (currentUser.value && String(currentUser.value.id) === String(id)) {
+      return currentUser.value
     }
     return null
   })
@@ -371,10 +488,13 @@ export function useSaleAppointmentForm() {
   const bookerRoleName = computed(() => {
     const user = bookerUser.value
     if (!user) return ''
+    if ('perfilNombre' in user && user.perfilNombre) {
+      return user.perfilNombre
+    }
     if ('perfil' in user && user.perfil?.name) {
       return user.perfil.name
     }
-    const profile = profileStore.getProfileById(user.profileId)
+    const profile = 'profileId' in user ? profileStore.getProfileById(user.profileId) : null
     if (profile?.name) {
       return profile.name
     }
@@ -383,6 +503,27 @@ export function useSaleAppointmentForm() {
     }
     return ''
   })
+
+  const isBookerColored = computed(() => {
+    return !!(bookerUser.value?.color && bookerUser.value.color.trim())
+  })
+
+  const showBookersList = ref(false)
+
+  const toggleBookersList = () => {
+    if (!canEditAgendador.value || isReadOnly.value) return
+    showBookersList.value = !showBookersList.value
+  }
+
+  const selectBooker = (id: string) => {
+    if (!canEditAgendador.value || isReadOnly.value) return
+    formData.value.agendadorId = id
+    showBookersList.value = false
+  }
+
+  const isCurrentSelectedBooker = (id: string) => {
+    return String(selectedBookerId.value) === String(id)
+  }
 
   const timeSlots = [
     '00:00',
@@ -774,12 +915,14 @@ export function useSaleAppointmentForm() {
       const session = sessionStore.sessions.find((s) => s.id === newVal)
       if (session) {
         formData.value.hotelId = session.hotelId
+        formData.value.agendadorId = session.creadorId || null
         sessionInfo.value = {
           clienteNombre: session.clienteNombre,
           clienteEmail: session.clienteEmail || '',
           clienteTelefono: session.clienteTelefono || '',
           numeroHabitacion: session.numeroHabitacion || '',
           fotografoId: session.fotografoId || '',
+          creadorId: session.creadorId || '',
           numAdultos: session.numAdultos ?? 1,
           numNinos: session.numNinos ?? 0,
           concepto: session.concepto || '',
@@ -840,6 +983,7 @@ export function useSaleAppointmentForm() {
           hotelId: existing.hotelId,
           vendedorId: existing.vendedorId || null,
           fotografoId: existing.fotografoId || null,
+          agendadorId: existing.agendadorId || null,
           fechaHoraCita: existing.fechaHoraCita,
           estado: existing.estado,
           numFotosVendidas: existing.numFotosVendidas ?? null,
@@ -861,6 +1005,7 @@ export function useSaleAppointmentForm() {
           clienteTelefono: existing.clienteTelefono || '',
           numeroHabitacion: existing.numeroHabitacion || '',
           fotografoId: existing.fotografoId || '',
+          creadorId: existing.agendadorId || '',
           numAdultos: existing.numAdultos ?? 1,
           numNinos: existing.numNinos ?? 0,
           concepto: existing.concepto || '',
@@ -973,6 +1118,7 @@ export function useSaleAppointmentForm() {
         const payload: UpdateCitaVentaPayload = {
           vendedorId: formData.value.vendedorId || null,
           fotografoId: isDirectSale.value ? (formData.value.fotografoId || null) : undefined,
+          agendadorId: formData.value.agendadorId || undefined,
           fechaHoraCita: formData.value.fechaHoraCita,
           estado: formData.value.estado,
           numFotosVendidas: formData.value.numFotosVendidas,
@@ -994,6 +1140,7 @@ export function useSaleAppointmentForm() {
           sesionId: Number(formData.value.sesionId),
           hotelId: formData.value.hotelId,
           vendedorId: formData.value.vendedorId || null,
+          agendadorId: formData.value.agendadorId || undefined,
           fechaHoraCita: formData.value.fechaHoraCita,
           estado: formData.value.estado,
           numFotosVendidas: formData.value.numFotosVendidas,
@@ -1045,6 +1192,15 @@ export function useSaleAppointmentForm() {
     bookerUser,
     bookerName,
     bookerRoleName,
+    isBookerColored,
+    bookers,
+    canEditAgendador,
+    canEditFotografo,
+    canEditVendedor,
+    showBookersList,
+    toggleBookersList,
+    selectBooker,
+    isCurrentSelectedBooker,
     vendedoresDisponibilidad,
     isCheckingVendedoresDisponibilidad,
     checkDisponibilidadVendedores,

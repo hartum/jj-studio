@@ -59,6 +59,7 @@ export interface CreateCitaVentaPayload {
   sesionId: number
   hotelId: number
   vendedorId?: string | null
+  agendadorId?: string | null
   fechaHoraCita: string
   estado?: EstadoCitaVenta
   numFotosVendidas?: number | null
@@ -84,6 +85,7 @@ export interface CreateVentaDirectaPayload {
 export interface UpdateCitaVentaPayload {
   vendedorId?: string | null
   fotografoId?: string | null
+  agendadorId?: string | null
   fechaHoraCita?: string
   estado?: EstadoCitaVenta
   numFotosVendidas?: number | null
