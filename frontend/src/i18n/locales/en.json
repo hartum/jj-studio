@@ -516,7 +516,7 @@
       "selectSessionFirst": "Select a session first to view its bookers.",
       "selectHotelFirst": "Select a session first to view its bookers.",
       "noBookersInHotel": "No bookers, photographers, or supervisors assigned to this hotel.",
-      "cannotEditTooltip": "Only the current booker or managers can edit this field."
+      "cannotEditTooltip": "Only the current booker or supervisors/managers/admins can transfer booker authorship."
     },
     "summary": {
       "booker": "BOOKER",
@@ -706,7 +706,7 @@
       "selectSessionFirst": "Select a session first to view its bookers.",
       "selectHotelFirst": "Select a session first to view its bookers.",
       "noBookersInHotel": "No bookers, photographers, or supervisors assigned to this hotel.",
-      "cannotEditTooltip": "Only the current booker or managers can edit this field."
+      "cannotEditTooltip": "Only the current booker or supervisors/managers/admins can transfer booker authorship."
     },
     "summary": {
       "hotel": "Hotel:",

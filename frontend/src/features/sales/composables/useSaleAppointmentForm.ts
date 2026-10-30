@@ -419,12 +419,12 @@ export function useSaleAppointmentForm() {
   })
 
   // Permisos para editar agendador en cita de ventas:
-  // 1. Superadmin, admin, contable o gerente siempre pueden editar el agendador.
-  // 2. Fotógrafo, supervisor o agendador solo pueden si el agendador actual es él mismo.
+  // 1. Superadmin, admin, contable, gerente o supervisor siempre pueden editar el agendador.
+  // 2. Fotógrafo o agendador solo pueden si el agendador actual es él mismo.
   const canEditAgendador = computed(() => {
     if (isReadOnly.value) return false
     const role = currentUser.value?.roleCode?.toUpperCase() || ''
-    if (['SUPERUSUARIO', 'ADMIN', 'CONTABLE', 'GERENTE'].includes(role)) {
+    if (['SUPERVISOR', 'SUPERUSUARIO', 'ADMIN', 'CONTABLE', 'GERENTE'].includes(role)) {
       return true
     }
     const currentUserId = currentUser.value?.id

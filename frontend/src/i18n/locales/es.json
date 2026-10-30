@@ -516,7 +516,7 @@
       "selectSessionFirst": "Selecciona primero una sesión para ver los agendadores.",
       "selectHotelFirst": "Selecciona primero una sesión para ver los agendadores.",
       "noBookersInHotel": "No hay agendadores, fotógrafos o supervisores asignados a este hotel.",
-      "cannotEditTooltip": "Solo el agendador actual o administradores/gerentes pueden transferir la autoría del agendador."
+      "cannotEditTooltip": "Solo el agendador actual o supervisores/administradores/gerentes pueden transferir la autoría del agendador."
     },
     "summary": {
       "booker": "AGENDADOR",
@@ -706,7 +706,7 @@
       "selectSessionFirst": "Selecciona primero una sesión para ver los agendadores.",
       "selectHotelFirst": "Selecciona primero una sesión para ver los agendadores.",
       "noBookersInHotel": "No hay agendadores, fotógrafos o supervisores asignados a este hotel.",
-      "cannotEditTooltip": "Solo el agendador actual o administradores/gerentes pueden transferir la autoría del agendador."
+      "cannotEditTooltip": "Solo el agendador actual o supervisores/administradores/gerentes pueden transferir la autoría del agendador."
     },
     "summary": {
       "hotel": "Hotel:",

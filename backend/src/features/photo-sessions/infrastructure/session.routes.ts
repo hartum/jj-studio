@@ -597,18 +597,18 @@ export async function sessionRoutes(fastify: FastifyInstance) {
       }
 
       // Verificación de permisos para editar el agendador (creadorId):
-      // 1. Si es SUPERUSUARIO, ADMIN, CONTABLE o GERENTE: puede editar siempre al agendador.
-      // 2. Si es FOTOGRAFO, SUPERVISOR o AGENDADOR: solo puede editarlo si el agendador actual es él mismo.
+      // 1. Si es SUPERUSUARIO, ADMIN, CONTABLE, GERENTE o SUPERVISOR: puede editar siempre al agendador.
+      // 2. Si es FOTOGRAFO o AGENDADOR: solo puede editarlo si el agendador actual es él mismo.
       if (body.creadorId && body.creadorId !== existing.creadorId) {
         if (!userId) {
           return reply.status(403).send({ error: 'No autorizado para editar el agendador' })
         }
-        const isPrivileged = ['GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(userRole || '')
+        const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(userRole || '')
         const isCurrentAgendador = String(userId) === String(existing.creadorId)
         if (!isPrivileged && !isCurrentAgendador) {
           return reply.status(403).send({
             error:
-              'Solo el agendador actual o administradores/gerentes pueden transferir la autoría del agendador.',
+              'Solo el agendador actual o supervisores/administradores/gerentes pueden transferir la autoría del agendador.',
           })
         }
       }

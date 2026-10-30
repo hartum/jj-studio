@@ -1137,8 +1137,8 @@ export async function saleRoutes(fastify: FastifyInstance) {
       }
 
       // Verificación de permisos para editar el agendador:
-      // 1. Si es SUPERUSUARIO, ADMIN, CONTABLE o GERENTE: siempre puede editar el agendador.
-      // 2. Si es FOTOGRAFO, SUPERVISOR o AGENDADOR: solo puede editarlo si el agendador actual es él mismo.
+      // 1. Si es SUPERUSUARIO, ADMIN, CONTABLE, GERENTE o SUPERVISOR: siempre puede editar el agendador.
+      // 2. Si es FOTOGRAFO o AGENDADOR: solo puede editarlo si el agendador actual es él mismo.
       if (
         body.agendadorId &&
         existing.sesionId &&
@@ -1148,12 +1148,12 @@ export async function saleRoutes(fastify: FastifyInstance) {
         if (!userId) {
           return reply.status(403).send({ error: 'No autorizado para editar el agendador' })
         }
-        const isPrivileged = ['GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role || '')
+        const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role || '')
         const isCurrentAgendador = String(userId) === String(existing.sesion.creadorId)
         if (!isPrivileged && !isCurrentAgendador) {
           return reply.status(403).send({
             error:
-              'Solo el agendador actual o administradores/gerentes pueden transferir la autoría del agendador.',
+              'Solo el agendador actual o supervisores/administradores/gerentes pueden transferir la autoría del agendador.',
           })
         }
         await prisma.sesionFotografica.update({
