@@ -30,6 +30,7 @@ import {
   type ExtendedEventProps,
 } from '../composables/useCalendarEvents'
 import { useCalendarDelete } from '../composables/useCalendarDelete'
+import { canDeleteCalendarEvents } from '@/shared/permissions'
 
 import CalendarHeader from './components/CalendarHeader.vue'
 import CalendarAlertsPanel from './components/CalendarAlertsPanel.vue'
@@ -207,8 +208,7 @@ const canCreateDirectSale = computed(() => {
 })
 
 const canDeleteEvents = computed(() => {
-  const roleCode = currentUser.value?.roleCode?.toUpperCase()
-  return roleCode === 'ADMIN' || roleCode === 'SUPERUSUARIO'
+  return canDeleteCalendarEvents(currentUser.value?.roleCode)
 })
 
 function navigateToNewSessionForm(startIso?: string) {

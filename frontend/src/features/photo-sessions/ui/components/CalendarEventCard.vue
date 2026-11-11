@@ -150,7 +150,7 @@ const eventStatus = computed<StatusConfig>(() => {
         </div>
       </div>
 
-      <!-- Icono Cubo de Basura (Solo ADMIN y SUPERUSUARIO) -->
+      <!-- Icono Cubo de Basura (ADMIN, SUPERUSUARIO, GERENTE y CONTABLE) -->
       <div v-if="canDelete" class="jj-event-delete-wrapper" @click.stop>
         <button
           type="button"

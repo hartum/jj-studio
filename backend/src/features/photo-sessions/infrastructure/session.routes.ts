@@ -8,7 +8,7 @@ import {
 } from '../../integrations/google-calendar/google-calendar.service.js'
 import { registrarAudit, formatCreadorOriginal } from '../../audit-log/application/audit-log.service.js'
 import { calculateAndSaveCommissionsForSale } from '../../commissions/application/commission.service.js'
-import { evaluarCaso1SesionesSospechosas } from '../../alerts/application/alert.service.js'
+import { registrarAlerta, evaluarCaso1SesionesSospechosas } from '../../alerts/application/alert.service.js'
 
 function parseLocalDateTime(dateStr: string): Date {
   if (!dateStr) return new Date()
@@ -847,23 +847,72 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         return reply.status(404).send({ error: 'Sesión no encontrada' })
       }
 
+      const deleteAuthUserId = getAuthUserId(request)
+      if (!deleteAuthUserId) {
+        return reply.status(401).send({ error: 'No autenticado' })
+      }
+
+      const userRaw = await prisma.usuario.findUnique({
+        where: { id: deleteAuthUserId },
+        include: {
+          role: true,
+          hotelesAsignados: true,
+          areasAsignadas: true,
+        },
+      })
+
+      if (!userRaw) {
+        return reply.status(401).send({ error: 'Usuario no encontrado' })
+      }
+
+      const user = decryptUser(userRaw)
+      const userRole = user?.role?.codigo?.toUpperCase() || ''
+
+      const allowedRoles = ['SUPERUSUARIO', 'ADMIN', 'GERENTE', 'CONTABLE']
+      if (!allowedRoles.includes(userRole)) {
+        return reply.status(403).send({
+          error: 'Solo administradores, superusuarios, gerentes y contables pueden eliminar sesiones',
+        })
+      }
+
+      if (userRole === 'GERENTE' || userRole === 'CONTABLE') {
+        const areaIds = userRaw.areasAsignadas.map((a) => a.areaId)
+        const hotelsInAreas = await prisma.hotel.findMany({
+          where: { areaId: { in: areaIds }, deletedAt: null },
+          select: { id: true },
+        })
+        const allowedHotelIds = Array.from(
+          new Set([
+            ...hotelsInAreas.map((h) => h.id),
+            ...userRaw.hotelesAsignados.map((h) => h.hotelId),
+          ])
+        )
+        if (!allowedHotelIds.includes(sesion.hotelId)) {
+          return reply.status(403).send({ error: 'No tienes permisos sobre el hotel de esta sesión' })
+        }
+      }
+
       await prisma.sesionFotografica.update({
         where: { id },
         data: { deletedAt: new Date() },
       })
 
-      const deleteAuthUserId = getAuthUserId(request)
       const delClienteNombre = decrypt(sesion.clienteNombre) || ''
       const fotografoDesc = sesion.fotografo ? decryptUser(sesion.fotografo) : null
       const fotografoNombre = fotografoDesc
         ? `${fotografoDesc.nombre} ${fotografoDesc.apellidos}`.trim()
         : 'Sin asignar'
+      const operUserNombre = user ? `${user.nombre} ${user.apellidos}`.trim() : 'Usuario'
+      const operUserRol = user?.role?.nombre || (userRole === 'GERENTE' ? 'Gerente' : 'Contable')
+      const isGerenteOrContable = userRole === 'GERENTE' || userRole === 'CONTABLE'
 
       registrarAudit({
         accion: 'ELIMINAR',
         entidad: 'SESION',
         entidadId: id,
-        usuarioId: deleteAuthUserId || sesion.creadorId,
+        usuarioId: deleteAuthUserId,
+        usuarioNombre: operUserNombre,
+        usuarioRol: operUserRol,
         hotelId: sesion.hotelId,
         hotelNombre: sesion.hotel?.nombre,
         clienteNombre: delClienteNombre,
@@ -878,6 +927,45 @@ export async function sessionRoutes(fastify: FastifyInstance) {
           concepto: sesion.concepto,
         },
       })
+
+      // Alerta para Gerente o Contable que elimina una sesión
+      if (isGerenteOrContable) {
+        const isClosed = sesion.estado === 'COMPLETADA'
+        registrarAlerta({
+          tipoCaso: 2,
+          titulo: isClosed
+            ? 'Alerta Crítica: Eliminación de sesión de fotos completada'
+            : `Alerta: Eliminación de sesión de fotos por ${operUserRol}`,
+          descripcion: `El ${operUserRol} ${operUserNombre} eliminó la sesión de fotos (${sesion.estado})${delClienteNombre ? ` para el cliente ${delClienteNombre}` : ''} en ${sesion.hotel?.nombre || 'Hotel'}.`,
+          gravedad: isClosed ? 'CRITICA' : 'ALTA',
+          usuarioOrigenId: deleteAuthUserId,
+          usuarioOrigenNombre: operUserNombre,
+          usuarioOrigenRol: operUserRol,
+          usuarioAfectadoId: sesion.fotografoId || null,
+          usuarioAfectadoNombre: `Fotógrafo: ${fotografoNombre}`,
+          hotelId: sesion.hotelId,
+          hotelNombre: sesion.hotel?.nombre,
+          entidad: 'SESION',
+          entidadId: sesion.id,
+          metadatos: {
+            accion: 'ELIMINAR_SESION',
+            estadoPrevio: sesion.estado,
+            clienteNombre: delClienteNombre,
+            eliminadoPorRol: operUserRol,
+            fechaHoraInicio: sesion.fechaHoraInicio.toISOString().slice(0, 16).replace('T', ' '),
+            cambios: {
+              'Acción': `Eliminación de sesión (${sesion.estado})`,
+              'Eliminado por': `${operUserNombre} (${operUserRol})`,
+              'Cliente': delClienteNombre || 'Sin nombre',
+              'Hotel': sesion.hotel?.nombre || 'Hotel',
+              'Fecha y Hora': sesion.fechaHoraInicio.toISOString().slice(0, 16).replace('T', ' '),
+              'Fotógrafo asignado': fotografoNombre,
+              'Habitación': sesion.numeroHabitacion || 'No especificada',
+              'Concepto': sesion.concepto || 'Sin concepto',
+            },
+          },
+        })
+      }
 
       // Eliminar evento de Google Calendar
       if (sesion.googleCalendarEventId) {
@@ -898,6 +986,51 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         if (sesion.citaVenta.googleCalendarEventId) {
           deleteCitaVentaFromGoogle(sesion.citaVenta.googleCalendarEventId, sesion.citaVenta.hotelId || sesion.hotelId).catch((gErr) => {
             fastify.log.error(gErr, 'Error al eliminar cita de venta de Google Calendar')
+          })
+        }
+
+        const isCitaClosed = ['COMPLETADA', 'NO_SHOW', 'CANCELADA'].includes(sesion.citaVenta.estado)
+        if (isGerenteOrContable || isCitaClosed) {
+          const citaVendedorRaw = sesion.citaVenta.vendedorId
+            ? await prisma.usuario.findUnique({ where: { id: sesion.citaVenta.vendedorId }, include: { role: true } })
+            : null
+          const decVendedor = citaVendedorRaw ? decryptUser(citaVendedorRaw) : null
+          const citaVendedorNombre = decVendedor ? `${decVendedor.nombre} ${decVendedor.apellidos}`.trim() : 'Sin asignar'
+
+          registrarAlerta({
+            tipoCaso: 2,
+            titulo: isCitaClosed
+              ? 'Alerta Crítica: Eliminación de cita de ventas cerrada'
+              : `Alerta: Eliminación de cita de ventas por ${operUserRol}`,
+            descripcion: isCitaClosed
+              ? `Se eliminó una cita de ventas que ya estaba cerrada en estado ${sesion.citaVenta.estado}${sesion.citaVenta.totalVentaUsd ? ` con un importe de $${sesion.citaVenta.totalVentaUsd} USD` : ''} en ${sesion.hotel?.nombre || 'Hotel'}.`
+              : `El ${operUserRol} ${operUserNombre} eliminó la cita de ventas asociada (${sesion.citaVenta.estado}) para el cliente ${delClienteNombre} en ${sesion.hotel?.nombre || 'Hotel'}.`,
+            gravedad: isCitaClosed ? 'CRITICA' : 'ALTA',
+            usuarioOrigenId: deleteAuthUserId,
+            usuarioOrigenNombre: operUserNombre,
+            usuarioOrigenRol: operUserRol,
+            usuarioAfectadoId: sesion.citaVenta.vendedorId || null,
+            usuarioAfectadoNombre: `Vendedor: ${citaVendedorNombre}`,
+            hotelId: sesion.citaVenta.hotelId || sesion.hotelId,
+            hotelNombre: sesion.hotel?.nombre,
+            entidad: 'CITA_VENTA',
+            entidadId: sesion.citaVenta.id,
+            metadatos: {
+              accion: 'ELIMINAR_CITA_ASOCIADA',
+              estadoPrevio: sesion.citaVenta.estado,
+              totalVentaUsd: sesion.citaVenta.totalVentaUsd,
+              clienteNombre: delClienteNombre,
+              eliminadoPorRol: operUserRol,
+              cambios: {
+                'Acción': `Eliminación de cita asociada (${sesion.citaVenta.estado})`,
+                'Eliminado por': `${operUserNombre} (${operUserRol})`,
+                'Cliente': delClienteNombre || 'Sin nombre',
+                'Hotel': sesion.hotel?.nombre || 'Hotel',
+                'Fecha y Hora': sesion.citaVenta.fechaHoraCita.toISOString().slice(0, 16).replace('T', ' '),
+                'Vendedor asignado': citaVendedorNombre,
+                ...(sesion.citaVenta.totalVentaUsd !== null && sesion.citaVenta.totalVentaUsd !== undefined ? { 'Total Venta USD': `$${sesion.citaVenta.totalVentaUsd}` } : {}),
+              },
+            },
           })
         }
       }

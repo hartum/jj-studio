@@ -1123,13 +1123,13 @@
       "cases": {
         "allCases": "All alert types",
         "case1": "Case 1: Sessions without sale (Suspected external sale)",
-        "case2": "Case 2: Closed sales appointment modified",
+        "case2": "Case 2: Sales appointment or session modified / deleted",
         "case3": "Case 3: Closed commission entry modified",
         "case4": "Case 4: Monthly goals altered"
       },
       "caseTags": {
         "case1": "External Sale",
-        "case2": "Closed Sale",
+        "case2": "Sale / Session",
         "case3": "Closed Commission",
         "case4": "Altered Goals"
       },

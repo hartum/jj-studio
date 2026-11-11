@@ -110,3 +110,13 @@ export function canDeleteUser(
   if (executorId === targetUserId) return false // Cannot delete self
   return canEditUser(executorRoleCode, targetUserRoleCode, executorId, targetUserId)
 }
+
+export function canDeleteCalendarEvents(roleCode: string | undefined): boolean {
+  const code = roleCode?.toUpperCase()
+  return (
+    code === 'SUPERUSUARIO' ||
+    code === 'ADMIN' ||
+    code === 'GERENTE' ||
+    code === 'CONTABLE'
+  )
+}

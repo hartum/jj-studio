@@ -1123,13 +1123,13 @@
       "cases": {
         "allCases": "Todos los tipos de alertas",
         "case1": "Caso 1: Sesiones sin venta (Sospecha venta externa)",
-        "case2": "Caso 2: Cita de venta cerrada modificada",
+        "case2": "Caso 2: Cita de venta o sesión modificada / eliminada",
         "case3": "Caso 3: Apunte contable cerrado modificado",
         "case4": "Caso 4: Metas mensuales alteradas"
       },
       "caseTags": {
         "case1": "Venta Externa",
-        "case2": "Cita Cerrada",
+        "case2": "Cita / Sesión",
         "case3": "Comisión Cerrada",
         "case4": "Metas Alteradas"
       },
