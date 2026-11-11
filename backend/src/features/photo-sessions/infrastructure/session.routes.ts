@@ -779,8 +779,30 @@ export async function sessionRoutes(fastify: FastifyInstance) {
         fastify.log.error(gErr, 'Error al actualizar sesión en Google Calendar')
       }
 
-      // Si la sesión tiene una cita de venta asociada y cambió el fotógrafo o el hotel, recalcular comisiones
-      if (existing.fotografoId !== actualizada.fotografoId || existing.hotelId !== actualizada.hotelId) {
+      // Si la sesión tiene una cita de venta asociada y cambió el agendador/creador, sincronizar vendedorId
+      if (body.creadorId && body.creadorId !== existing.creadorId) {
+        const citaAsociada = await prisma.citaVenta.findUnique({
+          where: { sesionId: actualizada.id },
+        })
+        if (citaAsociada) {
+          const fotId = citaAsociada.fotografoId || actualizada.fotografoId
+          if (!citaAsociada.vendedorId || citaAsociada.vendedorId === existing.creadorId || citaAsociada.vendedorId === fotId) {
+            await prisma.citaVenta.update({
+              where: { id: citaAsociada.id },
+              data: { vendedorId: body.creadorId },
+            }).catch((err) => {
+              fastify.log.error(err, 'Error al sincronizar vendedorId en cita de venta asociada')
+            })
+          }
+        }
+      }
+
+      // Si la sesión tiene una cita de venta asociada y cambió el fotógrafo, el creador/agendador o el hotel, recalcular comisiones
+      if (
+        existing.fotografoId !== actualizada.fotografoId ||
+        existing.hotelId !== actualizada.hotelId ||
+        existing.creadorId !== actualizada.creadorId
+      ) {
         const citaAsociada = await prisma.citaVenta.findUnique({
           where: { sesionId: actualizada.id },
         })

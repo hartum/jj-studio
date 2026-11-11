@@ -451,7 +451,18 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const cita = await prisma.citaVenta.findUnique({
         where: { id },
-        include: { sesion: { include: { fotografo: true } }, hotel: true, vendedor: true, fotografo: true, pagos: true },
+        include: {
+          sesion: {
+            include: {
+              fotografo: { include: { colorAsignado: true } },
+              creador: { include: { colorAsignado: true } },
+            },
+          },
+          hotel: true,
+          vendedor: { include: { colorAsignado: true } },
+          fotografo: { include: { colorAsignado: true } },
+          pagos: true,
+        },
       })
 
       if (!cita || cita.deletedAt) {
@@ -468,6 +479,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
 
       const v = decryptUser(cita.vendedor)
       const f = decryptUser(cita.fotografo || cita.sesion?.fotografo)
+      const a = decryptUser(cita.sesion?.creador)
       return reply.send({
         id: cita.id,
         tipo: cita.tipo || 'CITA_VENTA',
@@ -475,8 +487,16 @@ export async function saleRoutes(fastify: FastifyInstance) {
         hotelId: cita.hotelId,
         vendedorId: cita.vendedorId || null,
         vendedorNombre: v ? `${v.nombre} ${v.apellidos}`.trim() : null,
+        vendedorImagen: v?.imagen || null,
+        vendedorColor: cita.vendedor?.colorAsignado?.color || null,
         fotografoId: cita.fotografoId || cita.sesion?.fotografoId || null,
         fotografoNombre: f ? `${f.nombre} ${f.apellidos}`.trim() : null,
+        fotografoImagen: f?.imagen || null,
+        fotografoColor: (cita.fotografo || cita.sesion?.fotografo)?.colorAsignado?.color || null,
+        agendadorId: cita.sesion?.creadorId || null,
+        agendadorNombre: a ? `${a.nombre} ${a.apellidos}`.trim() : null,
+        agendadorImagen: a?.imagen || null,
+        agendadorColor: cita.sesion?.creador?.colorAsignado?.color || null,
         fechaHoraCita: cita.fechaHoraCita.toISOString().slice(0, 16),
         estado: cita.estado,
         numFotosVendidas: cita.numFotosVendidas,
@@ -571,7 +591,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
         if (!userId) {
           return reply.status(403).send({ error: 'No autorizado para editar el agendador' })
         }
-        const isPrivileged = ['GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role || '')
+        const isPrivileged = ['SUPERVISOR', 'GERENTE', 'ADMIN', 'SUPERUSUARIO', 'CONTABLE'].includes(role || '')
         const isCurrentAgendador = String(userId) === String(sesion.creadorId)
         if (!isPrivileged && !isCurrentAgendador) {
           return reply.status(403).send({
@@ -658,6 +678,13 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const calculatedTotalUsd = incomingPagos.length > 0 ? Math.round(totalCalculado * 100) / 100 : (body.totalVentaUsd ?? null)
       const derivedModoCobro = deriveModoCobro(incomingPagos) || (body.modoCobro ? body.modoCobro.trim() : null)
 
+      // Resolver vendedor de la cita: si no se especifica o coincide con el fotógrafo, priorizar al agendador
+      let resolvedVendedorId = body.vendedorId || null
+      const fotografoIdRef = sesion.fotografoId
+      if (!resolvedVendedorId || resolvedVendedorId === fotografoIdRef) {
+        resolvedVendedorId = body.agendadorId || sesion.creadorId || resolvedVendedorId
+      }
+
       // Check conflicts using session's hotelId
       const conflicts = await findConflicts(sesion.hotelId, fechaCita)
 
@@ -667,7 +694,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           where: { id: sesion.citaVenta.id },
           data: {
             hotelId: sesion.hotelId,
-            vendedorId: body.vendedorId || null,
+            vendedorId: resolvedVendedorId,
             fechaHoraCita: fechaCita,
             estado: targetEstado,
             numFotosVendidas: body.numFotosVendidas ?? null,
@@ -694,7 +721,7 @@ export async function saleRoutes(fastify: FastifyInstance) {
           data: {
             sesionId: body.sesionId,
             hotelId: sesion.hotelId,
-            vendedorId: body.vendedorId || null,
+            vendedorId: resolvedVendedorId,
             fechaHoraCita: fechaCita,
             estado: targetEstado,
             numFotosVendidas: body.numFotosVendidas ?? null,
@@ -1245,7 +1272,22 @@ export async function saleRoutes(fastify: FastifyInstance) {
       }
 
       const data: any = {}
-      if (body.vendedorId !== undefined) data.vendedorId = body.vendedorId || null
+      const fotografoIdRef = existing.fotografoId || existing.sesion?.fotografoId
+      let targetVendedorId = body.vendedorId !== undefined ? body.vendedorId : existing.vendedorId
+
+      // Si se transfirió el agendador y el vendedor asignado era el fotógrafo, el creador anterior o null,
+      // sincronizar el vendedor de la cita con el nuevo agendador
+      if (body.agendadorId && existing.sesion && body.agendadorId !== existing.sesion.creadorId) {
+        if (
+          !targetVendedorId ||
+          targetVendedorId === fotografoIdRef ||
+          targetVendedorId === existing.sesion.creadorId
+        ) {
+          targetVendedorId = body.agendadorId
+        }
+      }
+
+      if (targetVendedorId !== undefined) data.vendedorId = targetVendedorId || null
       if (body.fotografoId !== undefined) data.fotografoId = body.fotografoId || null
       if (body.fechaHoraCita !== undefined) {
         data.fechaHoraCita = parseLocalDateTime(body.fechaHoraCita)

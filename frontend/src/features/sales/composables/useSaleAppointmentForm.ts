@@ -518,6 +518,16 @@ export function useSaleAppointmentForm() {
   const selectBooker = (id: string) => {
     if (!canEditAgendador.value || isReadOnly.value) return
     formData.value.agendadorId = id
+    // Si el vendedor asignado era el fotógrafo, el creador previo o estaba vacío,
+    // sincronizar vendedorId con el nuevo agendador
+    if (
+      !formData.value.vendedorId ||
+      formData.value.vendedorId === formData.value.fotografoId ||
+      formData.value.vendedorId === sessionInfo.value.fotografoId ||
+      formData.value.vendedorId === sessionInfo.value.creadorId
+    ) {
+      formData.value.vendedorId = id
+    }
     showBookersList.value = false
   }
 

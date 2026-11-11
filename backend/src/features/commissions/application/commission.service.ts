@@ -448,7 +448,27 @@ export async function calculateAndSaveCommissionsForSale(citaVentaId: number): P
   }
 
   // 2. Vendedor / Agendador Commission (asignado a la cita o creador de la sesión)
-  const vendedorUsuarioId = cita.vendedorId || cita.sesion?.creadorId
+  const agendadorSesionId = cita.sesion?.creadorId || null
+  let vendedorUsuarioId = cita.vendedorId || agendadorSesionId
+
+  // Si la sesión tiene un agendador y el vendedorId de la cita es nulo o coincide con el fotógrafo
+  // (caso típico cuando se transfirió la cita al agendador), la comisión de VENDEDOR le corresponde al agendador.
+  if (agendadorSesionId && (!cita.vendedorId || cita.vendedorId === fotografoUsuarioId)) {
+    vendedorUsuarioId = agendadorSesionId
+  }
+
+  // Sincronizar citaVenta.vendedorId en base de datos si estaba asignado al fotógrafo o nulo
+  if (
+    vendedorUsuarioId &&
+    cita.vendedorId !== vendedorUsuarioId &&
+    (!cita.vendedorId || cita.vendedorId === fotografoUsuarioId)
+  ) {
+    await prisma.citaVenta.update({
+      where: { id: cita.id },
+      data: { vendedorId: vendedorUsuarioId },
+    }).catch(() => {})
+  }
+
   if (vendedorUsuarioId) {
     const vendedor = await prisma.usuario.findUnique({
       where: { id: vendedorUsuarioId },
