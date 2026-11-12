@@ -104,6 +104,7 @@
   "102": "alert.service.ts",
   "103": "useDirectSaleForm.ts",
   "104": "exceljs",
+  "105": "CalendarAlertsPanel.vue",
   "106": "formatters.ts",
   "107": "@fullcalendar/daygrid",
   "108": "@fullcalendar/list",
@@ -117,7 +118,12 @@
   "116": "@vue/tsconfig",
   "117": "calendario-laboral.routes.ts",
   "118": "CalendarHeader.vue",
+  "119": "PhotoSessionFormView.vue",
   "120": "useLocale.ts",
   "121": "useDashboard.ts",
-  "123": "HotelCalendarView.vue"
+  "122": "auth.store.ts",
+  "123": "HotelCalendarView.vue",
+  "124": "CalendarDeleteConfirmPopover.vue",
+  "125": "handleAccordionChange",
+  "126": "handleSave"
 }

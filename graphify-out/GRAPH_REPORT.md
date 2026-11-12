@@ -1,16 +1,16 @@
 # Graph Report - JJ Studio  (2026-11-11)
 
 ## Corpus Check
-- 169 files · ~296,829 words
+- 169 files · ~297,243 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1616 nodes · 2228 edges · 127 communities (93 shown, 34 thin omitted)
+- 1616 nodes · 2230 edges · 127 communities (93 shown, 34 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a25cba47`
+- Built from commit: `6d5a0b7d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -145,19 +145,19 @@
 7. `syncSesionToGoogle()` - 14 edges
 8. `blindIndex()` - 14 edges
 9. `syncCitaVentaToGoogle()` - 13 edges
-10. `compilerOptions` - 11 edges
+10. `saleRoutes()` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `sessionRoutes()` --calls--> `calculateAndSaveCommissionsForSale()`  [EXTRACTED]
+  backend/src/features/photo-sessions/infrastructure/session.routes.ts → backend/src/features/commissions/application/commission.service.ts
+- `saleRoutes()` --calls--> `calculateAndSaveCommissionsForSale()`  [EXTRACTED]
+  backend/src/features/sales/infrastructure/sale.routes.ts → backend/src/features/commissions/application/commission.service.ts
 - `useDirectSaleForm()` --calls--> `cleanNumericTags()`  [EXTRACTED]
   frontend/src/features/sales/composables/useDirectSaleForm.ts → frontend/src/features/sales/composables/miscelaneo-tag.helper.ts
 - `runAvatarMigration()` --calls--> `ensureAvatarsDir()`  [EXTRACTED]
   backend/src/scripts/migrate-avatars-to-disk.ts → backend/src/features/users/application/avatar-storage.service.ts
 - `goalRoutes()` --calls--> `registrarAlerta()`  [EXTRACTED]
   backend/src/features/goals/infrastructure/goal.routes.ts → backend/src/features/alerts/application/alert.service.ts
-- `registrarAudit()` --calls--> `decrypt()`  [EXTRACTED]
-  backend/src/features/audit-log/application/audit-log.service.ts → backend/src/shared/encryption.ts
-- `registrarAudit()` --calls--> `decryptUser()`  [EXTRACTED]
-  backend/src/features/audit-log/application/audit-log.service.ts → backend/src/shared/encryption.ts
 
 ## Import Cycles
 - None detected.
@@ -556,7 +556,7 @@ Cohesion: 0.40
 Nodes (3): EP_LOCALES, FC_LOCALES, SupportedLocale
 
 ## Knowledge Gaps
-- **827 isolated node(s):** `PagoInput`, `router`, `hotelStore`, `userStore`, `profileStore` (+822 more)
+- **827 isolated node(s):** `DEFAULT_GLOBAL_CONFIG`, `PagoInput`, `FormPagoItem`, `SaleAppointmentFormData`, `SessionContextInfo` (+822 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **34 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -564,10 +564,10 @@ Nodes (3): EP_LOCALES, FC_LOCALES, SupportedLocale
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `vue` connect `vue` to `UsuarioFormView.vue`, `HotelCalendarMobile.vue`, `PhotoSessionFormMobile.vue`, `HotelFormView.vue`, `GoalFormView.vue`, `HotelCalendarDesktop.vue`, `EmailTemplatesView.vue`, `AvatarCropperDialog.vue`, `PaisesConfig.vue`, `SaleAppointmentFormMobile.vue`, `AuditLogTab.vue`, `SaleAppointmentFormDesktop.vue`, `ComisionesConfig.vue`, `App.vue`, `PhotoSessionFormDesktop.vue`, `CalendarioLaboral.vue`, `user.model.ts`, `GoalEvolutionChart.vue`, `UsuariosView.vue`, `ResetPasswordView.vue`, `CalendarMobileDateNavigator.vue`, `SaleAppointmentFormView.vue`, `SupervisorHotelGoalCard.vue`, `ContableEstadisticasTab.vue`, `frontend/src/features/goals/domain/goal.model.ts`, `plugins`, `PhotographerHotelGoalCard.vue`, `AgendadorHotelGoalCard.vue`, `useSaleAppointmentForm.ts`, `DirectSaleFormDesktop.vue`, `ContableVentasTab.vue`, `frontend/src/features/alerts/domain/alert.model.ts`, `AlertConfigTab.vue`, `DirectSaleFormMobile.vue`, `ContableComisionesTab.vue`, `CalendarEventCard.vue`, `ForgotPasswordView.vue`, `LoginView.vue`, `GoalProgressCard.vue`, `useDirectSaleForm.ts`, `CalendarAlertsPanel.vue`, `CalendarHeader.vue`, `PhotoSessionFormView.vue`, `useLocale.ts`, `useDashboard.ts`, `auth.store.ts`, `HotelCalendarView.vue`?**
-  _High betweenness centrality (0.355) - this node is a cross-community bridge._
+  _High betweenness centrality (0.397) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `frontend/package.json`, `eslint-config-prettier`, `eslint-plugin-oxlint`, `oxlint`, `prettier`, `@tsconfig/node24`, `typescript`, `vue-eslint-parser`, `vue-tsc`, `@vue/tsconfig`, `jiti`, `eslint`, `devDependencies`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **What connects `PagoInput`, `router`, `hotelStore` to the rest of the system?**
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+- **What connects `DEFAULT_GLOBAL_CONFIG`, `PagoInput`, `FormPagoItem` to the rest of the system?**
   _827 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `UsuarioFormView.vue` be split into smaller, more focused modules?**
   _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._

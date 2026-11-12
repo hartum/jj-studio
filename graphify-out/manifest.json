@@ -85,8 +85,8 @@
     "semantic_hash": "cf8cd866d45ae3dfd5e008bbbeef80d5"
   },
   "backend/src/features/commissions/application/commission.service.ts": {
-    "mtime": 1792882058.6744804,
-    "ast_hash": "260f0e22af648f4b43d6e15c1ca8f6f8",
+    "mtime": 1794438504.0838094,
+    "ast_hash": "7cbdc4712bd11399e5ffab38938d5bf1",
     "semantic_hash": ""
   },
   "backend/src/features/commissions/domain/commission.model.ts": {
@@ -150,8 +150,8 @@
     "semantic_hash": "0fc2164ef77bcca3697dea2ff7126a08"
   },
   "backend/src/features/photo-sessions/infrastructure/session.routes.ts": {
-    "mtime": 1794435915.0932546,
-    "ast_hash": "a421c1e53529b04acad7a257aa38d2bd",
+    "mtime": 1794438504.203027,
+    "ast_hash": "f334b5abd8af31368b7772862e07e6b5",
     "semantic_hash": ""
   },
   "backend/src/features/project-management/application/ports/project.repository.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": "8b7fbbfd3c080a1fc2affb721c830dfc"
   },
   "backend/src/features/sales/infrastructure/sale.routes.ts": {
-    "mtime": 1794435915.2798378,
-    "ast_hash": "0ade522acacc9dcb7209c37b482938eb",
+    "mtime": 1794438504.3307161,
+    "ast_hash": "f417790dc2f0e57c59cb2a573a4938cf",
     "semantic_hash": ""
   },
   "backend/src/features/users/infrastructure/calendario-laboral.routes.ts": {
@@ -540,8 +540,8 @@
     "semantic_hash": "16440f1ecb1ffdb79be1ccf3070cfcde"
   },
   "frontend/src/features/sales/composables/useSaleAppointmentForm.ts": {
-    "mtime": 1793325441.3314033,
-    "ast_hash": "7dcfa4e07838961abf2a893910e07cfd",
+    "mtime": 1794438223.5369968,
+    "ast_hash": "816a0041d68c0df7c62cc05a4a45077f",
     "semantic_hash": ""
   },
   "frontend/src/features/sales/domain/sale.model.ts": {
