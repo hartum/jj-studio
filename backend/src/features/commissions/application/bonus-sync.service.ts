@@ -206,17 +206,13 @@ async function doSyncMonthlyBonuses(
     }
   }
 
-  let totalVentasGlobal = 0
-  for (const v of ventasPorHotel.values()) {
-    totalVentasGlobal += v
-  }
-
   const ROLES_ELEGIBLES = ['FOTOGRAFO', 'AGENDADOR', 'VENDEDOR', 'SUPERVISOR']
   const ROLES_EXCLUIDOS = ['GERENTE', 'ADMIN', 'ADMINISTRADOR', 'SUPERUSUARIO', 'CONTABLE']
 
   for (const meta of hotelMetas) {
     const ventasHotel = ventasPorHotel.get(meta.hotelId) || 0
-    const alcanzoBono = ventasHotel >= meta.importeObjetivo || totalVentasGlobal >= meta.importeObjetivo
+    // Solo las ventas propias del hotel determinan si se alcanzó el bono grupal
+    const alcanzoBono = ventasHotel >= meta.importeObjetivo
 
     if (alcanzoBono) {
       const asignados = meta.hotel.usuariosAsignados
@@ -251,6 +247,19 @@ async function doSyncMonthlyBonuses(
           })
         }
       }
+    } else {
+      // Limpiar bonos grupales PENDIENTES creados por error si el hotel NO alcanzó la meta
+      await prisma.comision.deleteMany({
+        where: {
+          hotelId: meta.hotelId,
+          rolEnVenta: 'BONO',
+          tipoBonus: 'GRUPAL',
+          metaId: meta.id,
+          estado: 'PENDIENTE',
+          fechaVenta: { gte: startDate, lt: endDate },
+          deletedAt: null,
+        },
+      })
     }
   }
 
