@@ -1,7 +1,7 @@
-# Graph Report - JJ Studio  (2026-11-11)
+# Graph Report - JJ Studio  (2026-11-12)
 
 ## Corpus Check
-- 169 files · ~297,243 words
+- 169 files · ~297,210 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6d5a0b7d`
+- Built from commit: `f241b575`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

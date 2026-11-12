@@ -85,8 +85,8 @@
     "semantic_hash": "cf8cd866d45ae3dfd5e008bbbeef80d5"
   },
   "backend/src/features/commissions/application/commission.service.ts": {
-    "mtime": 1794438504.0838094,
-    "ast_hash": "7cbdc4712bd11399e5ffab38938d5bf1",
+    "mtime": 1794501771.6773531,
+    "ast_hash": "afbffdbf86b48ee0265e89bdc4e8dfed",
     "semantic_hash": ""
   },
   "backend/src/features/commissions/domain/commission.model.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": "8b7fbbfd3c080a1fc2affb721c830dfc"
   },
   "backend/src/features/sales/infrastructure/sale.routes.ts": {
-    "mtime": 1794438504.3307161,
-    "ast_hash": "f417790dc2f0e57c59cb2a573a4938cf",
+    "mtime": 1794501771.8174677,
+    "ast_hash": "25167d3130f161b90b26c690a3833c35",
     "semantic_hash": ""
   },
   "backend/src/features/users/infrastructure/calendario-laboral.routes.ts": {

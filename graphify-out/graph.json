@@ -128,7 +128,7 @@
       "label": "recalculateCommissionsForUser()",
       "file_type": "code",
       "source_file": "backend/src/features/commissions/application/commission.service.ts",
-      "source_location": "L651",
+      "source_location": "L632",
       "_origin": "ast",
       "id": "backend_src_features_commissions_application_commission_service_recalculatecommissionsforuser",
       "community": 41,
@@ -139,78 +139,12 @@
       "label": "getResumenComisiones()",
       "file_type": "code",
       "source_file": "backend/src/features/commissions/application/commission.service.ts",
-      "source_location": "L708",
+      "source_location": "L689",
       "_origin": "ast",
       "id": "backend_src_features_commissions_application_commission_service_getresumencomisiones",
       "community": 41,
       "community_name": "commission.routes.ts",
       "norm_label": "getresumencomisiones()"
-    },
-    {
-      "label": "session.routes.ts",
-      "file_type": "code",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "community": 100,
-      "community_name": "session.routes.ts",
-      "norm_label": "session.routes.ts"
-    },
-    {
-      "label": "parseLocalDateTime()",
-      "file_type": "code",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L13",
-      "_origin": "ast",
-      "id": "backend_src_features_photo_sessions_infrastructure_session_routes_parselocaldatetime",
-      "community": 100,
-      "community_name": "session.routes.ts",
-      "norm_label": "parselocaldatetime()"
-    },
-    {
-      "label": "getAuthUserId()",
-      "file_type": "code",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L27",
-      "_origin": "ast",
-      "id": "backend_src_features_photo_sessions_infrastructure_session_routes_getauthuserid",
-      "community": 100,
-      "community_name": "session.routes.ts",
-      "norm_label": "getauthuserid()"
-    },
-    {
-      "label": "parseDateOnly()",
-      "file_type": "code",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L39",
-      "_origin": "ast",
-      "id": "backend_src_features_photo_sessions_infrastructure_session_routes_parsedateonly",
-      "community": 100,
-      "community_name": "session.routes.ts",
-      "norm_label": "parsedateonly()"
-    },
-    {
-      "label": "getHotelAvailability()",
-      "file_type": "code",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L47",
-      "_origin": "ast",
-      "id": "backend_src_features_photo_sessions_infrastructure_session_routes_gethotelavailability",
-      "community": 100,
-      "community_name": "session.routes.ts",
-      "norm_label": "gethotelavailability()"
-    },
-    {
-      "label": "sessionRoutes()",
-      "file_type": "code",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L138",
-      "_origin": "ast",
-      "id": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
-      "community": 100,
-      "community_name": "session.routes.ts",
-      "norm_label": "sessionroutes()"
     },
     {
       "label": "sale.routes.ts",
@@ -334,15 +268,81 @@
       "norm_label": "saleroutes()"
     },
     {
+      "label": "session.routes.ts",
+      "file_type": "code",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "session.routes.ts",
+      "norm_label": "session.routes.ts",
+      "id": "backend_src_features_photo_sessions_infrastructure_session_routes"
+    },
+    {
+      "label": "parseLocalDateTime()",
+      "file_type": "code",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L13",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "session.routes.ts",
+      "norm_label": "parselocaldatetime()",
+      "id": "backend_src_features_photo_sessions_infrastructure_session_routes_parselocaldatetime"
+    },
+    {
+      "label": "getAuthUserId()",
+      "file_type": "code",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L27",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "session.routes.ts",
+      "norm_label": "getauthuserid()",
+      "id": "backend_src_features_photo_sessions_infrastructure_session_routes_getauthuserid"
+    },
+    {
+      "label": "parseDateOnly()",
+      "file_type": "code",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L39",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "session.routes.ts",
+      "norm_label": "parsedateonly()",
+      "id": "backend_src_features_photo_sessions_infrastructure_session_routes_parsedateonly"
+    },
+    {
+      "label": "getHotelAvailability()",
+      "file_type": "code",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L47",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "session.routes.ts",
+      "norm_label": "gethotelavailability()",
+      "id": "backend_src_features_photo_sessions_infrastructure_session_routes_gethotelavailability"
+    },
+    {
+      "label": "sessionRoutes()",
+      "file_type": "code",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L138",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "session.routes.ts",
+      "norm_label": "sessionroutes()",
+      "id": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes"
+    },
+    {
       "label": "useSaleAppointmentForm.ts",
       "file_type": "code",
       "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform",
       "community": 56,
       "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "usesaleappointmentform.ts"
+      "norm_label": "usesaleappointmentform.ts",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform"
     },
     {
       "label": "FormPagoItem",
@@ -350,10 +350,10 @@
       "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_formpagoitem",
       "community": 56,
       "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "formpagoitem"
+      "norm_label": "formpagoitem",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_formpagoitem"
     },
     {
       "label": "SaleAppointmentFormData",
@@ -361,10 +361,10 @@
       "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
       "source_location": "L28",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformdata",
       "community": 56,
       "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "saleappointmentformdata"
+      "norm_label": "saleappointmentformdata",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformdata"
     },
     {
       "label": "SessionContextInfo",
@@ -372,10 +372,10 @@
       "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
       "source_location": "L44",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_sessioncontextinfo",
       "community": 56,
       "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "sessioncontextinfo"
+      "norm_label": "sessioncontextinfo",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_sessioncontextinfo"
     },
     {
       "label": "VendedorDisponibilidadItem",
@@ -383,10 +383,10 @@
       "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
       "source_location": "L58",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_vendedordisponibilidaditem",
       "community": 56,
       "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "vendedordisponibilidaditem"
+      "norm_label": "vendedordisponibilidaditem",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_vendedordisponibilidaditem"
     },
     {
       "label": "VendedoresDisponibilidadResponse",
@@ -394,10 +394,10 @@
       "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
       "source_location": "L69",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_vendedoresdisponibilidadresponse",
       "community": 56,
       "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "vendedoresdisponibilidadresponse"
+      "norm_label": "vendedoresdisponibilidadresponse",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_vendedoresdisponibilidadresponse"
     },
     {
       "label": "useSaleAppointmentForm()",
@@ -405,10 +405,10 @@
       "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
       "source_location": "L79",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_usesaleappointmentform",
       "community": 35,
       "community_name": "SaleAppointmentFormView.vue",
-      "norm_label": "usesaleappointmentform()"
+      "norm_label": "usesaleappointmentform()",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_usesaleappointmentform"
     },
     {
       "label": "SaleAppointmentFormContext",
@@ -416,10 +416,10 @@
       "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
       "source_location": "L1249",
       "_origin": "ast",
-      "id": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext",
       "community": 56,
       "community_name": "useSaleAppointmentForm.ts",
-      "norm_label": "saleappointmentformcontext"
+      "norm_label": "saleappointmentformcontext",
+      "id": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext"
     },
     {
       "label": "HotelCalendarDesktop.vue",
@@ -17730,7 +17730,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/features/commissions/application/commission.service.ts",
-      "source_location": "L708",
+      "source_location": "L689",
       "weight": 1.0,
       "_origin": "ast",
       "source": "backend_src_features_commissions_application_commission_service",
@@ -17752,7 +17752,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/features/commissions/application/commission.service.ts",
-      "source_location": "L651",
+      "source_location": "L632",
       "weight": 1.0,
       "_origin": "ast",
       "source": "backend_src_features_commissions_application_commission_service",
@@ -17897,9 +17897,9 @@
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_commissions_application_commission_service",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_application_commission_service"
     },
     {
       "relation": "imports_from",
@@ -18050,7 +18050,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/src/features/commissions/application/commission.service.ts",
-      "source_location": "L704",
+      "source_location": "L685",
       "weight": 1.0,
       "_origin": "ast",
       "source": "backend_src_features_commissions_application_commission_service_recalculatecommissionsforuser",
@@ -18065,9 +18065,9 @@
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_commissions_application_commission_service_calculateandsavecommissionsforsale",
-      "confidence_score": 1.0
+      "target": "backend_src_features_commissions_application_commission_service_calculateandsavecommissionsforsale"
     },
     {
       "relation": "calls",
@@ -18099,7 +18099,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/src/features/sales/infrastructure/sale.routes.ts",
-      "source_location": "L767",
+      "source_location": "L773",
       "weight": 1.0,
       "_origin": "ast",
       "source": "backend_src_features_sales_infrastructure_sale_routes_saleroutes",
@@ -18116,349 +18116,6 @@
       "confidence_score": 1.0,
       "source": "backend_src_features_commissions_infrastructure_commission_routes",
       "target": "backend_src_features_commissions_application_commission_service_getresumencomisiones"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_alerts_application_alert_service",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_alerts_application_alert_service_evaluarcaso1sesionessospechosas",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_alerts_application_alert_service_registraralerta",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_audit_log_application_audit_log_service",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_audit_log_application_audit_log_service_formatcreadororiginal",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_audit_log_application_audit_log_service_registraraudit",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_integrations_google_calendar_google_calendar_service",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_deletecitaventafromgoogle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_deletesesionfromgoogle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_syncsesiontogoogle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L27",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_getauthuserid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L47",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_gethotelavailability",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L39",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_parsedateonly",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L13",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_parselocaldatetime",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L138",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_shared_db",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_shared_db_prisma",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_shared_encryption",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_shared_encryption_decrypt",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_shared_encryption_decryptsesion",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_shared_encryption_decryptuser",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
-      "target": "backend_src_shared_encryption_encrypt",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L152",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_parselocaldatetime",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L169",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_getauthuserid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L53",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes_gethotelavailability",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_parsedateonly",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L391",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_parsedateonly",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
-      "source_location": "L155",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_gethotelavailability",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/src/index.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "confidence_score": 1.0,
-      "source": "backend_src_index",
-      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes"
     },
     {
       "relation": "imports_from",
@@ -18886,13 +18543,356 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_alerts_application_alert_service"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_alerts_application_alert_service_evaluarcaso1sesionessospechosas"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_alerts_application_alert_service_registraralerta"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_audit_log_application_audit_log_service"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_audit_log_application_audit_log_service_formatcreadororiginal"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_audit_log_application_audit_log_service_registraraudit"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_integrations_google_calendar_google_calendar_service"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_deletecitaventafromgoogle"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_deletesesionfromgoogle"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_integrations_google_calendar_google_calendar_service_syncsesiontogoogle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_getauthuserid"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_gethotelavailability"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_parsedateonly"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_parselocaldatetime"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L138",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_shared_db"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_shared_db_prisma"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_shared_encryption"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_shared_encryption_decrypt"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_shared_encryption_decryptsesion"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_shared_encryption_decryptuser"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes",
+      "target": "backend_src_shared_encryption_encrypt"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_index",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L152",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_parselocaldatetime"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L169",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_getauthuserid"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes_gethotelavailability",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_parsedateonly"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L391",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_parsedateonly"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/features/photo-sessions/infrastructure/session.routes.ts",
+      "source_location": "L155",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_gethotelavailability"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "confidence_score": 1.0,
+      "source": "backend_src_index",
+      "target": "backend_src_features_photo_sessions_infrastructure_session_routes_sessionroutes"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/features/sales/composables/useSaleAppointmentForm.ts",
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_miscelaneo_tag_helper",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_miscelaneo_tag_helper"
     },
     {
       "relation": "imports",
@@ -18902,9 +18902,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_miscelaneo_tag_helper_cleannumerictags",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_miscelaneo_tag_helper_cleannumerictags"
     },
     {
       "relation": "imports",
@@ -18914,9 +18914,9 @@
       "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_miscelaneo_tag_helper_parsenumerictags",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_miscelaneo_tag_helper_parsenumerictags"
     },
     {
       "relation": "contains",
@@ -18925,9 +18925,9 @@
       "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_formpagoitem",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_formpagoitem"
     },
     {
       "relation": "contains",
@@ -18936,9 +18936,9 @@
       "source_location": "L1249",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformcontext"
     },
     {
       "relation": "contains",
@@ -18947,9 +18947,9 @@
       "source_location": "L28",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformdata",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_saleappointmentformdata"
     },
     {
       "relation": "contains",
@@ -18958,9 +18958,9 @@
       "source_location": "L44",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_sessioncontextinfo",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_sessioncontextinfo"
     },
     {
       "relation": "contains",
@@ -18969,9 +18969,9 @@
       "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_usesaleappointmentform",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_usesaleappointmentform"
     },
     {
       "relation": "contains",
@@ -18980,9 +18980,9 @@
       "source_location": "L58",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_vendedordisponibilidaditem",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_vendedordisponibilidaditem"
     },
     {
       "relation": "contains",
@@ -18991,9 +18991,9 @@
       "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_composables_usesaleappointmentform_vendedoresdisponibilidadresponse",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_composables_usesaleappointmentform_vendedoresdisponibilidadresponse"
     },
     {
       "relation": "imports_from",
@@ -19003,9 +19003,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_domain_sale_model",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model"
     },
     {
       "relation": "imports",
@@ -19015,9 +19015,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_domain_sale_model_citaventa",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_citaventa"
     },
     {
       "relation": "imports",
@@ -19027,9 +19027,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_domain_sale_model_conflictocitaventa",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_conflictocitaventa"
     },
     {
       "relation": "imports",
@@ -19039,9 +19039,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_domain_sale_model_estadocitaventa",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_estadocitaventa"
     },
     {
       "relation": "imports",
@@ -19051,9 +19051,9 @@
       "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_domain_sale_model_updatecitaventapayload",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_domain_sale_model_updatecitaventapayload"
     },
     {
       "relation": "imports_from",
@@ -19063,9 +19063,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_stores_sale_store",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_stores_sale_store"
     },
     {
       "relation": "imports",
@@ -19075,9 +19075,9 @@
       "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "frontend_src_features_sales_stores_sale_store_usesalestore",
-      "confidence_score": 1.0
+      "target": "frontend_src_features_sales_stores_sale_store_usesalestore"
     },
     {
       "relation": "imports_from",
@@ -19087,9 +19087,9 @@
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
+      "confidence_score": 1.0,
       "source": "frontend_src_features_sales_composables_usesaleappointmentform",
-      "target": "ref_vue",
-      "confidence_score": 1.0
+      "target": "ref_vue"
     },
     {
       "relation": "imports_from",
@@ -42908,5 +42908,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6d5a0b7d4f0a42ebf0d1b2a33e797d123886f56c"
+  "built_at_commit": "f241b5759291705e296a45b17b28e54faa1c33ae"
 }
