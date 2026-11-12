@@ -678,11 +678,17 @@ export async function saleRoutes(fastify: FastifyInstance) {
       const calculatedTotalUsd = incomingPagos.length > 0 ? Math.round(totalCalculado * 100) / 100 : (body.totalVentaUsd ?? null)
       const derivedModoCobro = deriveModoCobro(incomingPagos) || (body.modoCobro ? body.modoCobro.trim() : null)
 
-      // Resolver vendedor de la cita: si no se especifica o coincide con el fotógrafo, priorizar al agendador
+      // Resolver vendedor de la cita:
+      // Si no se especifica vendedor y hay agendador distinto al fotógrafo, priorizar al agendador.
+      // Si se especifica vendedor explícitamente, respetar la decisión.
       let resolvedVendedorId = body.vendedorId || null
       const fotografoIdRef = sesion.fotografoId
-      if (!resolvedVendedorId || resolvedVendedorId === fotografoIdRef) {
-        resolvedVendedorId = body.agendadorId || sesion.creadorId || resolvedVendedorId
+      const agendadorIdRef = body.agendadorId || sesion.creadorId || null
+      if (!resolvedVendedorId && agendadorIdRef) {
+        resolvedVendedorId = agendadorIdRef
+      } else if (resolvedVendedorId === fotografoIdRef && agendadorIdRef && agendadorIdRef !== fotografoIdRef) {
+        // El frontend envió al fotógrafo como vendedor pero hay un agendador distinto: priorizar al agendador
+        resolvedVendedorId = agendadorIdRef
       }
 
       // Check conflicts using session's hotelId
