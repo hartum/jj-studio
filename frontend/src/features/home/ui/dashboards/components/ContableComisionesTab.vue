@@ -343,14 +343,10 @@ function calcularBonosEmpleado(
 
         const alcanzoBono =
           (metaImporte > 0 && ventasHotel >= metaImporte) ||
-          Boolean(hotelProg?.alcanzoBonoGrupal) ||
-          (props.selectedHotelFilters.length === 0 &&
-            metaImporte > 0 &&
-            ctx.totalVentasPeriodo >= metaImporte)
+          Boolean(hotelProg?.alcanzoBonoGrupal)
 
         if (alcanzoBono && valorBonoTotal > 0) {
-          const teamCount = ctx.teamCountPorHotel.get(metaHotel.hotelId) || 2
-          const share = Number((valorBonoTotal / teamCount).toFixed(2))
+          const share = Number(valorBonoTotal.toFixed(2))
           item.bonoGrupalUsd += share
           const hotelNom =
             metaHotel.hotelNombre ||
@@ -360,9 +356,9 @@ function calcularBonosEmpleado(
             tipo: 'GRUPAL',
             hotelNombre: hotelNom,
             metaObjetivo: metaImporte,
-            ventasAlcanzadas: Math.max(ventasHotel, ctx.totalVentasPeriodo),
+            ventasAlcanzadas: ventasHotel,
             montoBonus: share,
-            descripcion: `${t('dashboard.table.groupBonus')} (${hotelNom}): Meta de ${formatCurrency(metaImporte, 2)} alcanzada (${formatCurrency(valorBonoTotal, 2)} ÷ ${teamCount} colaboradores)`,
+            descripcion: `${t('dashboard.table.groupBonus')} (${hotelNom}): Meta de ${formatCurrency(metaImporte, 2)} alcanzada (${formatCurrency(valorBonoTotal, 2)} por colaborador)`,
           })
         }
       }

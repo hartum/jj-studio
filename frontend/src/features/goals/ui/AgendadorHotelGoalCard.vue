@@ -90,12 +90,8 @@ const hasGroupBonus = computed(() => {
 
 const hasAnyBonus = computed(() => hasIndividualBonus.value || hasGroupBonus.value)
 
-const teamMemberCount = computed(() => Math.max(1, props.hotelProgreso.fotografos?.length || 1))
-
 const groupBonusShare = computed(() => {
-  const total = props.hotelProgreso.valorBonoGrupal || 0
-  if (total <= 0) return 0
-  return Math.round((total / teamMemberCount.value) * 100) / 100
+  return props.hotelProgreso.valorBonoGrupal || 0
 })
 </script>
 

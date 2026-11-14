@@ -11,7 +11,7 @@ import { getUserInitials, getUserBgColor } from '@/features/users/utils/user-ava
 import { formatCurrency } from '@/shared/formatters'
 import { useLocale } from '@/i18n/useLocale'
 import { ElMessage } from 'element-plus'
-import { Location, User, Check, Share } from '@element-plus/icons-vue'
+import { Location, User, Check, Share, InfoFilled } from '@element-plus/icons-vue'
 import { Building2 } from '@lucide/vue'
 import type { Hotel } from '@/features/hotels/domain/hotel.model'
 
@@ -479,7 +479,15 @@ watch(
                 </span>
 
                 <div class="group-bonus-field">
-                  <label class="input-goal-label">{{ $t('goalsConfig.groupBonusValue') }}</label>
+                  <label class="input-goal-label label-with-tooltip">
+                    <span>{{ $t('goalsConfig.groupBonusValue') }}</span>
+                    <el-tooltip
+                      :content="$t('goalsConfig.groupBonusTooltip')"
+                      placement="top"
+                    >
+                      <el-icon class="label-info-icon"><InfoFilled /></el-icon>
+                    </el-tooltip>
+                  </label>
                   <el-input-number
                     v-model="hotelGroupBonusAmount"
                     :min="0"
@@ -753,6 +761,23 @@ watch(
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--heading-color, #0f172a);
+}
+
+.label-with-tooltip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.label-info-icon {
+  font-size: 0.95rem;
+  color: var(--el-color-info, #909399);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.label-info-icon:hover {
+  color: var(--el-color-primary, #409eff);
 }
 
 .target-input-number {

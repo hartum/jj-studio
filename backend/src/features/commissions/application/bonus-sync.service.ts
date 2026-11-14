@@ -224,8 +224,8 @@ async function doSyncMonthlyBonuses(
         return ROLES_ELEGIBLES.includes(rolCode) && !ROLES_EXCLUIDOS.includes(rolCode)
       })
 
+      const bonusPerMember = Math.round(meta.valorBonus! * 100) / 100
       const teamCount = Math.max(1, elegibles.length)
-      const share = Math.round((meta.valorBonus! / teamCount) * 100) / 100
 
       for (const member of elegibles) {
         const bonusKey = `${meta.hotelId}:${member.id}:GRUPAL`
@@ -240,10 +240,28 @@ async function doSyncMonthlyBonuses(
             tipoContrato: member.tipoContrato || 'ASALARIADO',
             porcentajeAplicado: 0,
             baseCalculoUsd: 0,
-            importeComisionUsd: share,
+            importeComisionUsd: bonusPerMember,
             estado: 'PENDIENTE',
             fechaVenta: fechaBono,
-            descripcion: `Bono Grupal (${meta.hotel.nombre}): Meta de $${meta.importeObjetivo.toFixed(2)} USD alcanzada ($${meta.valorBonus!.toFixed(2)} USD ÷ ${teamCount} colaboradores)`,
+            descripcion: `Bono Grupal (${meta.hotel.nombre}): Meta de $${meta.importeObjetivo.toFixed(2)} USD alcanzada ($${bonusPerMember.toFixed(2)} USD por colaborador)`,
+          })
+        } else {
+          // Si ya existe pero está PENDIENTE y el importe anterior era dividido, actualizar al importe por colaborador
+          await prisma.comision.updateMany({
+            where: {
+              hotelId: meta.hotelId,
+              usuarioId: member.id,
+              rolEnVenta: 'BONO',
+              tipoBonus: 'GRUPAL',
+              metaId: meta.id,
+              estado: 'PENDIENTE',
+              fechaVenta: { gte: startDate, lt: endDate },
+              importeComisionUsd: { not: bonusPerMember },
+            },
+            data: {
+              importeComisionUsd: bonusPerMember,
+              descripcion: `Bono Grupal (${meta.hotel.nombre}): Meta de $${meta.importeObjetivo.toFixed(2)} USD alcanzada ($${bonusPerMember.toFixed(2)} USD por colaborador)`,
+            },
           })
         }
       }
