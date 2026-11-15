@@ -118,12 +118,9 @@
   "116": "@vue/tsconfig",
   "117": "calendario-laboral.routes.ts",
   "118": "CalendarHeader.vue",
-  "119": "PhotoSessionFormView.vue",
   "120": "useLocale.ts",
   "121": "useDashboard.ts",
   "122": "auth.store.ts",
   "123": "HotelCalendarView.vue",
-  "124": "CalendarDeleteConfirmPopover.vue",
-  "125": "handleAccordionChange",
-  "126": "handleSave"
+  "124": "CalendarDeleteConfirmPopover.vue"
 }
