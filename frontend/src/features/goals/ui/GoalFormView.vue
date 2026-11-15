@@ -482,10 +482,19 @@ watch(
                   <label class="input-goal-label label-with-tooltip">
                     <span>{{ $t('goalsConfig.groupBonusValue') }}</span>
                     <el-tooltip
-                      :content="$t('goalsConfig.groupBonusTooltip')"
                       placement="top"
+                      effect="dark"
+                      :teleported="true"
+                      popper-class="vat-info-popper"
                     >
-                      <el-icon class="label-info-icon"><InfoFilled /></el-icon>
+                      <template #content>
+                        <div class="vat-tooltip-content">
+                          {{ $t('goalsConfig.groupBonusTooltip') }}
+                        </div>
+                      </template>
+                      <el-icon class="cursor-pointer text-muted hover:text-primary label-info-icon" :size="14">
+                        <InfoFilled />
+                      </el-icon>
                     </el-tooltip>
                   </label>
                   <el-input-number
@@ -885,5 +894,21 @@ watch(
   color: var(--heading-color, #0f172a);
   padding-top: 0.6rem;
   padding-bottom: 0.3rem;
+}
+</style>
+
+<style>
+.el-popper.vat-info-popper {
+  white-space: nowrap !important;
+  width: max-content !important;
+  min-width: 175px !important;
+  max-width: none !important;
+}
+
+.el-popper.vat-info-popper .vat-tooltip-content {
+  white-space: nowrap !important;
+  font-size: 12px !important;
+  text-align: center !important;
+  padding: 2px 4px !important;
 }
 </style>
