@@ -74,3 +74,12 @@ Al concebir, diseñar o maquetar nuevas pantallas, vistas o componentes en **JJ 
 * **Respeto a los Componentes Base:** Respetar la estructura y comportamiento nativo de los componentes de Element Plus (como `type="card"` en `el-tabs`). NUNCA desarmar sus bordes ni redefinir estilos internos a menos que se solicite un rediseño completo explícito.
 * **Verificación Visual Estricta:** Al validar cambios en navegador, verificar exhaustivamente que no se hayan roto o eliminado `border-radius`, bordes superiores/inferiores o alineaciones existentes en las áreas adyacentes.
 
+---
+
+## 7. Estándar de Implementación de Tooltips (`el-tooltip` Anti-Colapso)
+Para evitar que los tooltips colapsen en columnas verticales ultra-estrechas (palabra por línea):
+* **Atributos Obligatorios:** Asignar siempre `:teleported="true"`, `effect="dark"`, y un `popper-class="...-popper"`.
+* **Estructura Interna:** Usar siempre `<template #content><div class="...-content">{{ texto }}</div></template>` en vez del prop plano `content="..."`.
+* **Estilos en `<style>` NO Scoped:** Definir las reglas del popper (`white-space: nowrap !important; width: max-content !important; min-width: ... !important;`) en una etiqueta `<style>` global/no scoped, ya que el elemento se teleporta a `document.body` y queda fuera del alcance de los estilos `scoped`.
+* **Trigger Estándar:** Usar `<el-icon class="cursor-pointer text-muted hover:text-primary" :size="14"><InfoFilled /></el-icon>`.
+
