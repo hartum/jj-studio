@@ -350,8 +350,8 @@
     "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/GoalFormView.vue": {
-    "mtime": 1794679426.4862478,
-    "ast_hash": "c2183eed1bbdd99e0e65dd9c39526d32",
+    "mtime": 1794769231.7601328,
+    "ast_hash": "ce5528e88b627e02c3f5ede05dcd19e9",
     "semantic_hash": ""
   },
   "frontend/src/features/goals/ui/GoalProgressCard.vue": {
